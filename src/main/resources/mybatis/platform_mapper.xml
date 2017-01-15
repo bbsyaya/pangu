@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.turing.pangu.mapper.PlatformMapper" >
+  <resultMap id="BaseResultMap" type="org.turing.pangu.model.Platform" >
+    <id column="id" property="id" jdbcType="BIGINT" />       
+    <result column="name" property="name" jdbcType="VARCHAR" />          
+    <result column="introduce" property="introduce" jdbcType="VARCHAR" />          
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
+  </resultMap>   
+  <sql id="Base_Column_List" >
+    p.id,
+	p.name,
+	p.introduce,
+	p.create_date,
+	p.update_date
+  </sql>
+  <sql id="Base_Column_Value_List" >
+    #{name},
+	#{introduce},
+	#{createDate},
+	#{updateDate}
+  </sql>
+  <sql id="Base_Column_Update_List" >
+    name=#{name},
+	introduce=#{introduce},
+	create_date=#{createDate},
+	update_date=#{updateDate}
+  </sql> 
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from platform p
+    where p.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from platform p
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Platform" >
+    select 
+    <include refid="Base_Column_List" />
+    from platform p
+    where 1=1 
+    <if test="name != null" >and p.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="introduce != null" >and p.introduce= #{introduce,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and p.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and p.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Platform" >
+    select 
+    <include refid="Base_Column_List" />
+    from platform p
+    where 1=1 
+    <if test="name != null" >and p.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="introduce != null" >and p.introduce= #{introduce,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and p.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and p.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.ParamModel" >
+    select 
+    <include refid="Base_Column_List" />
+    from platform p
+    where 1=1 
+    <if test="model.name != null" >and p.name= #{model.name,jdbcType=VARCHAR}</if>
+    <if test="model.introduce != null" >and p.introduce= #{model.introduce,jdbcType=VARCHAR}</if>
+    <if test="model.createDate != null" >and p.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
+    <if test="model.updateDate != null" >and p.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="org.turing.pangu.model.Platform" >
+    select count(0) totalCount
+    from platform p
+    where 1=1 
+    <if test="name != null" >and p.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="introduce != null" >and p.introduce= #{introduce,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and p.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and p.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Long" >
+    delete from platform
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.turing.pangu.model.Platform" >
+    insert into platform 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        name,    
+        introduce,    
+        create_date,    
+        update_date,    
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{name,jdbcType=VARCHAR},  
+        #{introduce,jdbcType=VARCHAR},  
+        #{createDate,jdbcType=TIMESTAMP},  
+        #{updateDate,jdbcType=TIMESTAMP},  
+    </trim>
+  </insert>
+  <insert id="insertPlatformByTrim" parameterType="org.turing.pangu.model.Platform" >
+    insert into platform 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="name != null" >name,</if>
+        <if test="introduce != null" >introduce,</if>
+        <if test="createDate != null" >create_date,</if>
+        <if test="updateDate != null" >update_date,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="name != null" >#{name,jdbcType=VARCHAR},</if>  
+        <if test="introduce != null" >#{introduce,jdbcType=VARCHAR},</if>  
+        <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
+        <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
+    </trim>
+  </insert>
+  <update id="updatePlatformById" parameterType="org.turing.pangu.model.Platform" >
+    update platform set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        name=#{name,jdbcType=VARCHAR},    
+        introduce=#{introduce,jdbcType=VARCHAR},    
+        create_date=#{createDate,jdbcType=TIMESTAMP},    
+        update_date=#{updateDate,jdbcType=TIMESTAMP},    
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="org.turing.pangu.model.Platform" >
+    update platform set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="name != null" >name=#{name,jdbcType=VARCHAR},</if>
+        <if test="introduce != null" >introduce=#{introduce,jdbcType=VARCHAR},</if>
+        <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

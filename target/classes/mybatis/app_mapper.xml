@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.turing.pangu.mapper.AppMapper" >
+  <resultMap id="BaseResultMap" type="org.turing.pangu.model.App" >
+    <id column="id" property="id" jdbcType="BIGINT" />       
+    <result column="user_id" property="userId" jdbcType="BIGINT" />          
+    <result column="platform_id" property="platformId" jdbcType="BIGINT" />          
+    <result column="name" property="name" jdbcType="VARCHAR" />          
+    <result column="package_name" property="packageName" jdbcType="VARCHAR" />          
+    <result column="apk_path" property="apkPath" jdbcType="VARCHAR" />          
+    <result column="token" property="token" jdbcType="VARCHAR" />          
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
+  </resultMap>   
+  <sql id="Base_Column_List" >
+    a.id,
+	a.user_id,
+	a.platform_id,
+	a.name,
+	a.package_name,
+	a.apk_path,
+	a.token,
+	a.create_date,
+	a.update_date
+  </sql>
+  <sql id="Base_Column_Value_List" >
+    #{userId},
+	#{platformId},
+	#{name},
+	#{packageName},
+	#{apkPath},
+	#{token},
+	#{createDate},
+	#{updateDate}
+  </sql>
+  <sql id="Base_Column_Update_List" >
+    user_id=#{userId},
+	platform_id=#{platformId},
+	name=#{name},
+	package_name=#{packageName},
+	apk_path=#{apkPath},
+	token=#{token},
+	create_date=#{createDate},
+	update_date=#{updateDate}
+  </sql> 
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app a
+    where a.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from app a
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.App" >
+    select 
+    <include refid="Base_Column_List" />
+    from app a
+    where 1=1 
+    <if test="userId != null" >and a.user_id= #{userId,jdbcType=BIGINT}</if>
+    <if test="platformId != null" >and a.platform_id= #{platformId,jdbcType=BIGINT}</if>
+    <if test="name != null" >and a.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="packageName != null" >and a.package_name= #{packageName,jdbcType=VARCHAR}</if>
+    <if test="apkPath != null" >and a.apk_path= #{apkPath,jdbcType=VARCHAR}</if>
+    <if test="token != null" >and a.token= #{token,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and a.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and a.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.App" >
+    select 
+    <include refid="Base_Column_List" />
+    from app a
+    where 1=1 
+    <if test="userId != null" >and a.user_id= #{userId,jdbcType=BIGINT}</if>
+    <if test="platformId != null" >and a.platform_id= #{platformId,jdbcType=BIGINT}</if>
+    <if test="name != null" >and a.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="packageName != null" >and a.package_name= #{packageName,jdbcType=VARCHAR}</if>
+    <if test="apkPath != null" >and a.apk_path= #{apkPath,jdbcType=VARCHAR}</if>
+    <if test="token != null" >and a.token= #{token,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and a.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and a.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.ParamModel" >
+    select 
+    <include refid="Base_Column_List" />
+    from app a
+    where 1=1 
+    <if test="model.userId != null" >and a.user_id= #{model.userId,jdbcType=BIGINT}</if>
+    <if test="model.platformId != null" >and a.platform_id= #{model.platformId,jdbcType=BIGINT}</if>
+    <if test="model.name != null" >and a.name= #{model.name,jdbcType=VARCHAR}</if>
+    <if test="model.packageName != null" >and a.package_name= #{model.packageName,jdbcType=VARCHAR}</if>
+    <if test="model.apkPath != null" >and a.apk_path= #{model.apkPath,jdbcType=VARCHAR}</if>
+    <if test="model.token != null" >and a.token= #{model.token,jdbcType=VARCHAR}</if>
+    <if test="model.createDate != null" >and a.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
+    <if test="model.updateDate != null" >and a.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="org.turing.pangu.model.App" >
+    select count(0) totalCount
+    from app a
+    where 1=1 
+    <if test="userId != null" >and a.user_id= #{userId,jdbcType=BIGINT}</if>
+    <if test="platformId != null" >and a.platform_id= #{platformId,jdbcType=BIGINT}</if>
+    <if test="name != null" >and a.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="packageName != null" >and a.package_name= #{packageName,jdbcType=VARCHAR}</if>
+    <if test="apkPath != null" >and a.apk_path= #{apkPath,jdbcType=VARCHAR}</if>
+    <if test="token != null" >and a.token= #{token,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and a.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and a.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Long" >
+    delete from app
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.turing.pangu.model.App" >
+    insert into app 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        user_id,    
+        platform_id,    
+        name,    
+        package_name,    
+        apk_path,    
+        token,    
+        create_date,    
+        update_date,    
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{userId,jdbcType=BIGINT},  
+        #{platformId,jdbcType=BIGINT},  
+        #{name,jdbcType=VARCHAR},  
+        #{packageName,jdbcType=VARCHAR},  
+        #{apkPath,jdbcType=VARCHAR},  
+        #{token,jdbcType=VARCHAR},  
+        #{createDate,jdbcType=TIMESTAMP},  
+        #{updateDate,jdbcType=TIMESTAMP},  
+    </trim>
+  </insert>
+  <insert id="insertAppByTrim" parameterType="org.turing.pangu.model.App" >
+    insert into app 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="userId != null" >user_id,</if>
+        <if test="platformId != null" >platform_id,</if>
+        <if test="name != null" >name,</if>
+        <if test="packageName != null" >package_name,</if>
+        <if test="apkPath != null" >apk_path,</if>
+        <if test="token != null" >token,</if>
+        <if test="createDate != null" >create_date,</if>
+        <if test="updateDate != null" >update_date,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="userId != null" >#{userId,jdbcType=BIGINT},</if>  
+        <if test="platformId != null" >#{platformId,jdbcType=BIGINT},</if>  
+        <if test="name != null" >#{name,jdbcType=VARCHAR},</if>  
+        <if test="packageName != null" >#{packageName,jdbcType=VARCHAR},</if>  
+        <if test="apkPath != null" >#{apkPath,jdbcType=VARCHAR},</if>  
+        <if test="token != null" >#{token,jdbcType=VARCHAR},</if>  
+        <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
+        <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
+    </trim>
+  </insert>
+  <update id="updateAppById" parameterType="org.turing.pangu.model.App" >
+    update app set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        user_id=#{userId,jdbcType=BIGINT},    
+        platform_id=#{platformId,jdbcType=BIGINT},    
+        name=#{name,jdbcType=VARCHAR},    
+        package_name=#{packageName,jdbcType=VARCHAR},    
+        apk_path=#{apkPath,jdbcType=VARCHAR},    
+        token=#{token,jdbcType=VARCHAR},    
+        create_date=#{createDate,jdbcType=TIMESTAMP},    
+        update_date=#{updateDate,jdbcType=TIMESTAMP},    
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="org.turing.pangu.model.App" >
+    update app set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="userId != null" >user_id=#{userId,jdbcType=BIGINT},</if>
+        <if test="platformId != null" >platform_id=#{platformId,jdbcType=BIGINT},</if>
+        <if test="name != null" >name=#{name,jdbcType=VARCHAR},</if>
+        <if test="packageName != null" >package_name=#{packageName,jdbcType=VARCHAR},</if>
+        <if test="apkPath != null" >apk_path=#{apkPath,jdbcType=VARCHAR},</if>
+        <if test="token != null" >token=#{token,jdbcType=VARCHAR},</if>
+        <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

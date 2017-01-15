@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.turing.pangu.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="org.turing.pangu.model.User" >
+    <id column="id" property="id" jdbcType="BIGINT" />       
+    <result column="name" property="name" jdbcType="VARCHAR" />          
+    <result column="password" property="password" jdbcType="VARCHAR" />          
+    <result column="phone" property="phone" jdbcType="VARCHAR" />          
+    <result column="ip" property="ip" jdbcType="VARCHAR" />          
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
+  </resultMap>   
+  <sql id="Base_Column_List" >
+    u.id,
+	u.name,
+	u.password,
+	u.phone,
+	u.ip,
+	u.create_date,
+	u.update_date
+  </sql>
+  <sql id="Base_Column_Value_List" >
+    #{name},
+	#{password},
+	#{phone},
+	#{ip},
+	#{createDate},
+	#{updateDate}
+  </sql>
+  <sql id="Base_Column_Update_List" >
+    name=#{name},
+	password=#{password},
+	phone=#{phone},
+	ip=#{ip},
+	create_date=#{createDate},
+	update_date=#{updateDate}
+  </sql> 
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from user u
+    where u.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user u
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.User" >
+    select 
+    <include refid="Base_Column_List" />
+    from user u
+    where 1=1 
+    <if test="name != null" >and u.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="password != null" >and u.password= #{password,jdbcType=VARCHAR}</if>
+    <if test="phone != null" >and u.phone= #{phone,jdbcType=VARCHAR}</if>
+    <if test="ip != null" >and u.ip= #{ip,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and u.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and u.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.User" >
+    select 
+    <include refid="Base_Column_List" />
+    from user u
+    where 1=1 
+    <if test="name != null" >and u.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="password != null" >and u.password= #{password,jdbcType=VARCHAR}</if>
+    <if test="phone != null" >and u.phone= #{phone,jdbcType=VARCHAR}</if>
+    <if test="ip != null" >and u.ip= #{ip,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and u.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and u.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.ParamModel" >
+    select 
+    <include refid="Base_Column_List" />
+    from user u
+    where 1=1 
+    <if test="model.name != null" >and u.name= #{model.name,jdbcType=VARCHAR}</if>
+    <if test="model.password != null" >and u.password= #{model.password,jdbcType=VARCHAR}</if>
+    <if test="model.phone != null" >and u.phone= #{model.phone,jdbcType=VARCHAR}</if>
+    <if test="model.ip != null" >and u.ip= #{model.ip,jdbcType=VARCHAR}</if>
+    <if test="model.createDate != null" >and u.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
+    <if test="model.updateDate != null" >and u.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="org.turing.pangu.model.User" >
+    select count(0) totalCount
+    from user u
+    where 1=1 
+    <if test="name != null" >and u.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="password != null" >and u.password= #{password,jdbcType=VARCHAR}</if>
+    <if test="phone != null" >and u.phone= #{phone,jdbcType=VARCHAR}</if>
+    <if test="ip != null" >and u.ip= #{ip,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and u.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and u.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Long" >
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.turing.pangu.model.User" >
+    insert into user 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        name,    
+        password,    
+        phone,    
+        ip,    
+        create_date,    
+        update_date,    
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{name,jdbcType=VARCHAR},  
+        #{password,jdbcType=VARCHAR},  
+        #{phone,jdbcType=VARCHAR},  
+        #{ip,jdbcType=VARCHAR},  
+        #{createDate,jdbcType=TIMESTAMP},  
+        #{updateDate,jdbcType=TIMESTAMP},  
+    </trim>
+  </insert>
+  <insert id="insertUserByTrim" parameterType="org.turing.pangu.model.User" >
+    insert into user 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="name != null" >name,</if>
+        <if test="password != null" >password,</if>
+        <if test="phone != null" >phone,</if>
+        <if test="ip != null" >ip,</if>
+        <if test="createDate != null" >create_date,</if>
+        <if test="updateDate != null" >update_date,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="name != null" >#{name,jdbcType=VARCHAR},</if>  
+        <if test="password != null" >#{password,jdbcType=VARCHAR},</if>  
+        <if test="phone != null" >#{phone,jdbcType=VARCHAR},</if>  
+        <if test="ip != null" >#{ip,jdbcType=VARCHAR},</if>  
+        <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
+        <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
+    </trim>
+  </insert>
+  <update id="updateUserById" parameterType="org.turing.pangu.model.User" >
+    update user set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        name=#{name,jdbcType=VARCHAR},    
+        password=#{password,jdbcType=VARCHAR},    
+        phone=#{phone,jdbcType=VARCHAR},    
+        ip=#{ip,jdbcType=VARCHAR},    
+        create_date=#{createDate,jdbcType=TIMESTAMP},    
+        update_date=#{updateDate,jdbcType=TIMESTAMP},    
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="org.turing.pangu.model.User" >
+    update user set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="name != null" >name=#{name,jdbcType=VARCHAR},</if>
+        <if test="password != null" >password=#{password,jdbcType=VARCHAR},</if>
+        <if test="phone != null" >phone=#{phone,jdbcType=VARCHAR},</if>
+        <if test="ip != null" >ip=#{ip,jdbcType=VARCHAR},</if>
+        <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

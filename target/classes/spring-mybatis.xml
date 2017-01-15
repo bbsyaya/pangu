@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx" xsi:schemaLocation="http://www.springframework.org/schema/beans 
+					http://www.springframework.org/schema/beans/spring-beans.xsd
+					http://www.springframework.org/schema/tx
+     				http://www.springframework.org/schema/tx/spring-tx.xsd ">
+
+	<!-- 配置数据源 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="${jdbc.driver}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialPoolSize" value="${connection_pools.initial_pool_size}" />
+		<property name="minPoolSize" value="${connection_pools.min_pool_size}" />
+		<property name="maxPoolSize" value="${connection_pools.max_pool_size}" />
+		<property name="maxIdleTime" value="${connection_pools.max_idle_time}" />
+		<property name="acquireIncrement" value="${connection_pools.acquire_increment}" />
+		<property name="checkoutTimeout" value="${connection_pools.checkout_timeout}" />
+		<property name="breakAfterAcquireFailure" value="false" />
+		<property name="testConnectionOnCheckout" value="true" />
+	</bean>
+
+	<!-- <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close"> <property name="poolProperties"> <bean class="org.apache.tomcat.jdbc.pool.PoolProperties"> <property name="driverClassName" value="${jdbc.driver}" /> <property name="url" value="${jdbc.url}" /> <property name="username" value="${jdbc.username}" /> <property name="password" value="${jdbc.password}" /> <property name="initialSize" value="${connection_pools.initial_pool_size}" /> <property name="maxActive" value="${connection_pools.max_pool_size}" /> <property name="minIdle" value="${connection_pools.min_idle}" /> <property name="maxWait" value="${connection_pools.checkout_timeout}" /> <property name="testWhileIdle" value="true" /> <property name="testOnBorrow" value="true" /> <property name="testOnReturn" value="false" /> <property name="validationInterval" value="15000" /> <property name="timeBetweenEvictionRunsMillis" value="3600" /> <property name="validationQuery" value="SELECT 1" /> <property 
+		name="logAbandoned" value="false" /> <property name="removeAbandoned" value="true" /> <property name="removeAbandonedTimeout" value="600" /> <property name="jdbcInterceptors" value="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer" /> </bean> </property> </bean> -->
+
+	<!-- <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close"> <property name="driverClassName" value="${jdbc.driver}" /> <property name="url" value="${jdbc.url}" /> <property name="username" value="${jdbc.username}" /> <property name="password" value="${jdbc.password}" /> <property name="initialSize" value="${connection_pools.initial_pool_size}" /> <property name="maxActive" value="${connection_pools.max_pool_size}" /> <property name="minIdle" value="${connection_pools.min_idle}" /> <property name="maxWait" value="${connection_pools.checkout_timeout}" /> <property name="testWhileIdle" value="true" /> <property name="testOnBorrow" value="true" /> <property name="testOnReturn" value="false" /> <property name="validationQuery" value="SELECT 1" /> <property name="logAbandoned" value="false" /> <property name="removeAbandoned" value="true" /> <property name="removeAbandonedTimeout" value="30" /> </bean> -->
+
+	<!-- mybatis配置 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath:mybatis/**/*_mapper.xml" />
+	</bean>
+
+	<!-- Mapper接口所在包名，Spring会自动查找其下的Mapper -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="org.turing.pangu.mapper,org.turing.pangu.act.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+</beans>

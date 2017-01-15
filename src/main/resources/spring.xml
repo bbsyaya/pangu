@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xmlns:task="http://www.springframework.org/schema/task" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd" default-lazy-init="true">
+
+	<!-- 加载属性文件 -->
+	<context:property-placeholder location="classpath:/pangu.properties" ignore-resource-not-found="true" ignore-unresolvable="true" />
+
+	<context:component-scan base-package="org.turing.pangu.*">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+
+	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="${task.core_pool_size}" />
+		<property name="maxPoolSize" value="${task.max_pool_size}" />
+		<property name="queueCapacity" value="${task.queue_capacity}" />
+		<property name="keepAliveSeconds" value="${task.keep_alive_seconds}" />
+	</bean>
+
+	<task:annotation-driven />
+
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="cacheSeconds" value="${message.cache_seconds}" />
+		<property name="useCodeAsDefaultMessage" value="false" />
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="fallbackToSystemLocale" value="true" />
+		<property name="basenames">
+			<list>
+				<value>${message.common_path}</value>
+				<value>${message.phone_path}</value>
+				<value>${message.admin_path}</value>
+				<value>${message.sms_path}</value>
+				<value>${message.message_path}</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 验证数据 -->
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+		<property name="validationMessageSource" ref="messageSource" />
+	</bean>
+
+	<!-- 国际化 -->
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.FixedLocaleResolver">
+		<property name="defaultLocale" value="${locale}" />
+	</bean>
+
+	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="minIdle" value="${redis.minIdle}" />
+		<property name="maxIdle" value="${redis.maxIdle}" />
+		<property name="maxTotal" value="${redis.maxTotal}" />
+		<property name="maxWaitMillis" value="${redis.maxWaitMillis}" />
+		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
+		<property name="minEvictableIdleTimeMillis" value="${redis.minEvictableIdleTimeMillis}"></property>
+		<property name="numTestsPerEvictionRun" value="${redis.numTestsPerEvictionRun}"></property>
+		<property name="timeBetweenEvictionRunsMillis" value="${redis.timeBetweenEvictionRunsMillis}"></property>
+	</bean>
+
+	<bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="hostName" value="${redis.host}" />
+		<property name="port" value="${redis.port}" />
+		<property name="password" value="${redis.password}" />
+		<property name="timeout" value="${redis.timeout}" />
+		<property name="poolConfig" ref="poolConfig" />
+		<property name="usePool" value="true" />
+	</bean>
+
+	<!-- redis template definition -->
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory" ref="jedisConnFactory" />
+		<property name="keySerializer">
+			<bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="valueSerializer">
+			<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+		</property>
+		<property name="hashKeySerializer">
+			<bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="hashValueSerializer">
+			<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+		</property>
+	</bean>
+
+	<bean id="version" class="org.turing.pangu.model.Version">
+		<property name="number" value="${version.number}" />
+		<property name="download" value="${version.download}" />
+		<property name="description" value="${version.description}" />
+	</bean>
+
+	<bean id="tokenHandleImpl" class="org.turing.pangu.service.TokenHandleImpl">
+		<property name="OauthToken" value="${system.OauthToken}" />
+	</bean>
+
+	<bean id="thirdRequestSynchronization" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="quartzServiceImpl" />
+				</property>
+				<property name="targetMethod">
+					<value>reExecute</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression" value="0 30 23 ? * *"></property>
+	</bean>
+
+	<bean id="accountCheckingCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="quartzServiceImpl" />
+				</property>
+				<property name="targetMethod">
+					<value>accountChecking</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression" value="0 0 0 ? * *"></property>
+	</bean>
+
+	<bean id="drainProjectCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="quartzServiceImpl" />
+				</property>
+				<property name="targetMethod">
+					<value>drainProject</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression" value="0 0 1 ? * *"></property>
+	</bean>
+
+	<bean id="repayByPlanCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="quartzServiceImpl" />
+				</property>
+				<property name="targetMethod">
+					<value>repayByPlan</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression" value="0 30 1 ? * *"></property>
+	</bean>
+
+	<bean id="setProjectRepaidedCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="quartzServiceImpl" />
+				</property>
+				<property name="targetMethod">
+					<value>setProjectRepaided</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression" value="0 0 2 ? * *"></property>
+	</bean>
+
+	<bean id="giftGiveCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<ref bean="quartzServiceImpl" />
+				</property>
+				<property name="targetMethod">
+					<value>giftGive</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression" value="0 0 0/2 * * ?"></property>
+	</bean>
+
+	<bean id="springJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="accountCheckingCronTriggerBean" />
+				<ref bean="drainProjectCronTriggerBean" />
+				<ref bean="repayByPlanCronTriggerBean" />
+				<ref bean="setProjectRepaidedCronTriggerBean" />
+				<ref bean="giftGiveCronTriggerBean" />
+				<ref bean="thirdRequestSynchronization" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 上传文件 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+</beans>

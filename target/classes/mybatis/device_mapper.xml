@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.turing.pangu.mapper.DeviceMapper" >
+  <resultMap id="BaseResultMap" type="org.turing.pangu.model.Device" >
+    <id column="id" property="id" jdbcType="BIGINT" />       
+    <result column="token" property="token" jdbcType="VARCHAR" />          
+    <result column="device_type" property="deviceType" jdbcType="INTEGER" />          
+    <result column="android_id" property="androidId" jdbcType="VARCHAR" />          
+    <result column="android_serial" property="androidSerial" jdbcType="VARCHAR" />          
+    <result column="android_version" property="androidVersion" jdbcType="VARCHAR" />          
+    <result column="blue_tooth" property="blueTooth" jdbcType="VARCHAR" />          
+    <result column="board" property="board" jdbcType="VARCHAR" />          
+    <result column="brand" property="brand" jdbcType="VARCHAR" />          
+    <result column="bssid" property="bssid" jdbcType="VARCHAR" />          
+    <result column="carrier" property="carrier" jdbcType="VARCHAR" />          
+    <result column="carrier_code" property="carrierCode" jdbcType="VARCHAR" />          
+    <result column="country_code" property="countryCode" jdbcType="VARCHAR" />          
+    <result column="display" property="display" jdbcType="VARCHAR" />          
+    <result column="height" property="height" jdbcType="VARCHAR" />          
+    <result column="imei" property="imei" jdbcType="VARCHAR" />          
+    <result column="ip" property="ip" jdbcType="VARCHAR" />          
+    <result column="mac" property="mac" jdbcType="VARCHAR" />          
+    <result column="manufacture" property="manufacture" jdbcType="VARCHAR" />          
+    <result column="model" property="model" jdbcType="VARCHAR" />          
+    <result column="phone" property="phone" jdbcType="VARCHAR" />          
+    <result column="phone_status" property="phoneStatus" jdbcType="INTEGER" />          
+    <result column="sdk" property="sdk" jdbcType="INTEGER" />          
+    <result column="sim_serial" property="simSerial" jdbcType="VARCHAR" />          
+    <result column="sim_status" property="simStatus" jdbcType="INTEGER" />          
+    <result column="ssid" property="ssid" jdbcType="VARCHAR" />          
+    <result column="ua" property="ua" jdbcType="VARCHAR" />          
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
+  </resultMap>   
+  <sql id="Base_Column_List" >
+    d.id,
+	d.token,
+	d.device_type,
+	d.android_id,
+	d.android_serial,
+	d.android_version,
+	d.blue_tooth,
+	d.board,
+	d.brand,
+	d.bssid,
+	d.carrier,
+	d.carrier_code,
+	d.country_code,
+	d.display,
+	d.height,
+	d.imei,
+	d.ip,
+	d.mac,
+	d.manufacture,
+	d.model,
+	d.phone,
+	d.phone_status,
+	d.sdk,
+	d.sim_serial,
+	d.sim_status,
+	d.ssid,
+	d.ua,
+	d.create_date,
+	d.update_date
+  </sql>
+  <sql id="Base_Column_Value_List" >
+    #{token},
+	#{deviceType},
+	#{androidId},
+	#{androidSerial},
+	#{androidVersion},
+	#{blueTooth},
+	#{board},
+	#{brand},
+	#{bssid},
+	#{carrier},
+	#{carrierCode},
+	#{countryCode},
+	#{display},
+	#{height},
+	#{imei},
+	#{ip},
+	#{mac},
+	#{manufacture},
+	#{model},
+	#{phone},
+	#{phoneStatus},
+	#{sdk},
+	#{simSerial},
+	#{simStatus},
+	#{ssid},
+	#{ua},
+	#{createDate},
+	#{updateDate}
+  </sql>
+  <sql id="Base_Column_Update_List" >
+    token=#{token},
+	device_type=#{deviceType},
+	android_id=#{androidId},
+	android_serial=#{androidSerial},
+	android_version=#{androidVersion},
+	blue_tooth=#{blueTooth},
+	board=#{board},
+	brand=#{brand},
+	bssid=#{bssid},
+	carrier=#{carrier},
+	carrier_code=#{carrierCode},
+	country_code=#{countryCode},
+	display=#{display},
+	height=#{height},
+	imei=#{imei},
+	ip=#{ip},
+	mac=#{mac},
+	manufacture=#{manufacture},
+	model=#{model},
+	phone=#{phone},
+	phone_status=#{phoneStatus},
+	sdk=#{sdk},
+	sim_serial=#{simSerial},
+	sim_status=#{simStatus},
+	ssid=#{ssid},
+	ua=#{ua},
+	create_date=#{createDate},
+	update_date=#{updateDate}
+  </sql> 
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from device d
+    where d.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from device d
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Device" >
+    select 
+    <include refid="Base_Column_List" />
+    from device d
+    where 1=1 
+    <if test="token != null" >and d.token= #{token,jdbcType=VARCHAR}</if>
+    <if test="deviceType != null" >and d.device_type= #{deviceType,jdbcType=INTEGER}</if>
+    <if test="androidId != null" >and d.android_id= #{androidId,jdbcType=VARCHAR}</if>
+    <if test="androidSerial != null" >and d.android_serial= #{androidSerial,jdbcType=VARCHAR}</if>
+    <if test="androidVersion != null" >and d.android_version= #{androidVersion,jdbcType=VARCHAR}</if>
+    <if test="blueTooth != null" >and d.blue_tooth= #{blueTooth,jdbcType=VARCHAR}</if>
+    <if test="board != null" >and d.board= #{board,jdbcType=VARCHAR}</if>
+    <if test="brand != null" >and d.brand= #{brand,jdbcType=VARCHAR}</if>
+    <if test="bssid != null" >and d.bssid= #{bssid,jdbcType=VARCHAR}</if>
+    <if test="carrier != null" >and d.carrier= #{carrier,jdbcType=VARCHAR}</if>
+    <if test="carrierCode != null" >and d.carrier_code= #{carrierCode,jdbcType=VARCHAR}</if>
+    <if test="countryCode != null" >and d.country_code= #{countryCode,jdbcType=VARCHAR}</if>
+    <if test="display != null" >and d.display= #{display,jdbcType=VARCHAR}</if>
+    <if test="height != null" >and d.height= #{height,jdbcType=VARCHAR}</if>
+    <if test="imei != null" >and d.imei= #{imei,jdbcType=VARCHAR}</if>
+    <if test="ip != null" >and d.ip= #{ip,jdbcType=VARCHAR}</if>
+    <if test="mac != null" >and d.mac= #{mac,jdbcType=VARCHAR}</if>
+    <if test="manufacture != null" >and d.manufacture= #{manufacture,jdbcType=VARCHAR}</if>
+    <if test="model != null" >and d.model= #{model,jdbcType=VARCHAR}</if>
+    <if test="phone != null" >and d.phone= #{phone,jdbcType=VARCHAR}</if>
+    <if test="phoneStatus != null" >and d.phone_status= #{phoneStatus,jdbcType=INTEGER}</if>
+    <if test="sdk != null" >and d.sdk= #{sdk,jdbcType=INTEGER}</if>
+    <if test="simSerial != null" >and d.sim_serial= #{simSerial,jdbcType=VARCHAR}</if>
+    <if test="simStatus != null" >and d.sim_status= #{simStatus,jdbcType=INTEGER}</if>
+    <if test="ssid != null" >and d.ssid= #{ssid,jdbcType=VARCHAR}</if>
+    <if test="ua != null" >and d.ua= #{ua,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and d.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and d.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Device" >
+    select 
+    <include refid="Base_Column_List" />
+    from device d
+    where 1=1 
+    <if test="token != null" >and d.token= #{token,jdbcType=VARCHAR}</if>
+    <if test="deviceType != null" >and d.device_type= #{deviceType,jdbcType=INTEGER}</if>
+    <if test="androidId != null" >and d.android_id= #{androidId,jdbcType=VARCHAR}</if>
+    <if test="androidSerial != null" >and d.android_serial= #{androidSerial,jdbcType=VARCHAR}</if>
+    <if test="androidVersion != null" >and d.android_version= #{androidVersion,jdbcType=VARCHAR}</if>
+    <if test="blueTooth != null" >and d.blue_tooth= #{blueTooth,jdbcType=VARCHAR}</if>
+    <if test="board != null" >and d.board= #{board,jdbcType=VARCHAR}</if>
+    <if test="brand != null" >and d.brand= #{brand,jdbcType=VARCHAR}</if>
+    <if test="bssid != null" >and d.bssid= #{bssid,jdbcType=VARCHAR}</if>
+    <if test="carrier != null" >and d.carrier= #{carrier,jdbcType=VARCHAR}</if>
+    <if test="carrierCode != null" >and d.carrier_code= #{carrierCode,jdbcType=VARCHAR}</if>
+    <if test="countryCode != null" >and d.country_code= #{countryCode,jdbcType=VARCHAR}</if>
+    <if test="display != null" >and d.display= #{display,jdbcType=VARCHAR}</if>
+    <if test="height != null" >and d.height= #{height,jdbcType=VARCHAR}</if>
+    <if test="imei != null" >and d.imei= #{imei,jdbcType=VARCHAR}</if>
+    <if test="ip != null" >and d.ip= #{ip,jdbcType=VARCHAR}</if>
+    <if test="mac != null" >and d.mac= #{mac,jdbcType=VARCHAR}</if>
+    <if test="manufacture != null" >and d.manufacture= #{manufacture,jdbcType=VARCHAR}</if>
+    <if test="model != null" >and d.model= #{model,jdbcType=VARCHAR}</if>
+    <if test="phone != null" >and d.phone= #{phone,jdbcType=VARCHAR}</if>
+    <if test="phoneStatus != null" >and d.phone_status= #{phoneStatus,jdbcType=INTEGER}</if>
+    <if test="sdk != null" >and d.sdk= #{sdk,jdbcType=INTEGER}</if>
+    <if test="simSerial != null" >and d.sim_serial= #{simSerial,jdbcType=VARCHAR}</if>
+    <if test="simStatus != null" >and d.sim_status= #{simStatus,jdbcType=INTEGER}</if>
+    <if test="ssid != null" >and d.ssid= #{ssid,jdbcType=VARCHAR}</if>
+    <if test="ua != null" >and d.ua= #{ua,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and d.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and d.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.ParamModel" >
+    select 
+    <include refid="Base_Column_List" />
+    from device d
+    where 1=1 
+    <if test="model.token != null" >and d.token= #{model.token,jdbcType=VARCHAR}</if>
+    <if test="model.deviceType != null" >and d.device_type= #{model.deviceType,jdbcType=INTEGER}</if>
+    <if test="model.androidId != null" >and d.android_id= #{model.androidId,jdbcType=VARCHAR}</if>
+    <if test="model.androidSerial != null" >and d.android_serial= #{model.androidSerial,jdbcType=VARCHAR}</if>
+    <if test="model.androidVersion != null" >and d.android_version= #{model.androidVersion,jdbcType=VARCHAR}</if>
+    <if test="model.blueTooth != null" >and d.blue_tooth= #{model.blueTooth,jdbcType=VARCHAR}</if>
+    <if test="model.board != null" >and d.board= #{model.board,jdbcType=VARCHAR}</if>
+    <if test="model.brand != null" >and d.brand= #{model.brand,jdbcType=VARCHAR}</if>
+    <if test="model.bssid != null" >and d.bssid= #{model.bssid,jdbcType=VARCHAR}</if>
+    <if test="model.carrier != null" >and d.carrier= #{model.carrier,jdbcType=VARCHAR}</if>
+    <if test="model.carrierCode != null" >and d.carrier_code= #{model.carrierCode,jdbcType=VARCHAR}</if>
+    <if test="model.countryCode != null" >and d.country_code= #{model.countryCode,jdbcType=VARCHAR}</if>
+    <if test="model.display != null" >and d.display= #{model.display,jdbcType=VARCHAR}</if>
+    <if test="model.height != null" >and d.height= #{model.height,jdbcType=VARCHAR}</if>
+    <if test="model.imei != null" >and d.imei= #{model.imei,jdbcType=VARCHAR}</if>
+    <if test="model.ip != null" >and d.ip= #{model.ip,jdbcType=VARCHAR}</if>
+    <if test="model.mac != null" >and d.mac= #{model.mac,jdbcType=VARCHAR}</if>
+    <if test="model.manufacture != null" >and d.manufacture= #{model.manufacture,jdbcType=VARCHAR}</if>
+    <if test="model.model != null" >and d.model= #{model.model,jdbcType=VARCHAR}</if>
+    <if test="model.phone != null" >and d.phone= #{model.phone,jdbcType=VARCHAR}</if>
+    <if test="model.phoneStatus != null" >and d.phone_status= #{model.phoneStatus,jdbcType=INTEGER}</if>
+    <if test="model.sdk != null" >and d.sdk= #{model.sdk,jdbcType=INTEGER}</if>
+    <if test="model.simSerial != null" >and d.sim_serial= #{model.simSerial,jdbcType=VARCHAR}</if>
+    <if test="model.simStatus != null" >and d.sim_status= #{model.simStatus,jdbcType=INTEGER}</if>
+    <if test="model.ssid != null" >and d.ssid= #{model.ssid,jdbcType=VARCHAR}</if>
+    <if test="model.ua != null" >and d.ua= #{model.ua,jdbcType=VARCHAR}</if>
+    <if test="model.createDate != null" >and d.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
+    <if test="model.updateDate != null" >and d.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="org.turing.pangu.model.Device" >
+    select count(0) totalCount
+    from device d
+    where 1=1 
+    <if test="token != null" >and d.token= #{token,jdbcType=VARCHAR}</if>
+    <if test="deviceType != null" >and d.device_type= #{deviceType,jdbcType=INTEGER}</if>
+    <if test="androidId != null" >and d.android_id= #{androidId,jdbcType=VARCHAR}</if>
+    <if test="androidSerial != null" >and d.android_serial= #{androidSerial,jdbcType=VARCHAR}</if>
+    <if test="androidVersion != null" >and d.android_version= #{androidVersion,jdbcType=VARCHAR}</if>
+    <if test="blueTooth != null" >and d.blue_tooth= #{blueTooth,jdbcType=VARCHAR}</if>
+    <if test="board != null" >and d.board= #{board,jdbcType=VARCHAR}</if>
+    <if test="brand != null" >and d.brand= #{brand,jdbcType=VARCHAR}</if>
+    <if test="bssid != null" >and d.bssid= #{bssid,jdbcType=VARCHAR}</if>
+    <if test="carrier != null" >and d.carrier= #{carrier,jdbcType=VARCHAR}</if>
+    <if test="carrierCode != null" >and d.carrier_code= #{carrierCode,jdbcType=VARCHAR}</if>
+    <if test="countryCode != null" >and d.country_code= #{countryCode,jdbcType=VARCHAR}</if>
+    <if test="display != null" >and d.display= #{display,jdbcType=VARCHAR}</if>
+    <if test="height != null" >and d.height= #{height,jdbcType=VARCHAR}</if>
+    <if test="imei != null" >and d.imei= #{imei,jdbcType=VARCHAR}</if>
+    <if test="ip != null" >and d.ip= #{ip,jdbcType=VARCHAR}</if>
+    <if test="mac != null" >and d.mac= #{mac,jdbcType=VARCHAR}</if>
+    <if test="manufacture != null" >and d.manufacture= #{manufacture,jdbcType=VARCHAR}</if>
+    <if test="model != null" >and d.model= #{model,jdbcType=VARCHAR}</if>
+    <if test="phone != null" >and d.phone= #{phone,jdbcType=VARCHAR}</if>
+    <if test="phoneStatus != null" >and d.phone_status= #{phoneStatus,jdbcType=INTEGER}</if>
+    <if test="sdk != null" >and d.sdk= #{sdk,jdbcType=INTEGER}</if>
+    <if test="simSerial != null" >and d.sim_serial= #{simSerial,jdbcType=VARCHAR}</if>
+    <if test="simStatus != null" >and d.sim_status= #{simStatus,jdbcType=INTEGER}</if>
+    <if test="ssid != null" >and d.ssid= #{ssid,jdbcType=VARCHAR}</if>
+    <if test="ua != null" >and d.ua= #{ua,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and d.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and d.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Long" >
+    delete from device
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.turing.pangu.model.Device" >
+    insert into device 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        token,    
+        device_type,    
+        android_id,    
+        android_serial,    
+        android_version,    
+        blue_tooth,    
+        board,    
+        brand,    
+        bssid,    
+        carrier,    
+        carrier_code,    
+        country_code,    
+        display,    
+        height,    
+        imei,    
+        ip,    
+        mac,    
+        manufacture,    
+        model,    
+        phone,    
+        phone_status,    
+        sdk,    
+        sim_serial,    
+        sim_status,    
+        ssid,    
+        ua,    
+        create_date,    
+        update_date,    
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{token,jdbcType=VARCHAR},  
+        #{deviceType,jdbcType=INTEGER},  
+        #{androidId,jdbcType=VARCHAR},  
+        #{androidSerial,jdbcType=VARCHAR},  
+        #{androidVersion,jdbcType=VARCHAR},  
+        #{blueTooth,jdbcType=VARCHAR},  
+        #{board,jdbcType=VARCHAR},  
+        #{brand,jdbcType=VARCHAR},  
+        #{bssid,jdbcType=VARCHAR},  
+        #{carrier,jdbcType=VARCHAR},  
+        #{carrierCode,jdbcType=VARCHAR},  
+        #{countryCode,jdbcType=VARCHAR},  
+        #{display,jdbcType=VARCHAR},  
+        #{height,jdbcType=VARCHAR},  
+        #{imei,jdbcType=VARCHAR},  
+        #{ip,jdbcType=VARCHAR},  
+        #{mac,jdbcType=VARCHAR},  
+        #{manufacture,jdbcType=VARCHAR},  
+        #{model,jdbcType=VARCHAR},  
+        #{phone,jdbcType=VARCHAR},  
+        #{phoneStatus,jdbcType=INTEGER},  
+        #{sdk,jdbcType=INTEGER},  
+        #{simSerial,jdbcType=VARCHAR},  
+        #{simStatus,jdbcType=INTEGER},  
+        #{ssid,jdbcType=VARCHAR},  
+        #{ua,jdbcType=VARCHAR},  
+        #{createDate,jdbcType=TIMESTAMP},  
+        #{updateDate,jdbcType=TIMESTAMP},  
+    </trim>
+  </insert>
+  <insert id="insertDeviceByTrim" parameterType="org.turing.pangu.model.Device" >
+    insert into device 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="token != null" >token,</if>
+        <if test="deviceType != null" >device_type,</if>
+        <if test="androidId != null" >android_id,</if>
+        <if test="androidSerial != null" >android_serial,</if>
+        <if test="androidVersion != null" >android_version,</if>
+        <if test="blueTooth != null" >blue_tooth,</if>
+        <if test="board != null" >board,</if>
+        <if test="brand != null" >brand,</if>
+        <if test="bssid != null" >bssid,</if>
+        <if test="carrier != null" >carrier,</if>
+        <if test="carrierCode != null" >carrier_code,</if>
+        <if test="countryCode != null" >country_code,</if>
+        <if test="display != null" >display,</if>
+        <if test="height != null" >height,</if>
+        <if test="imei != null" >imei,</if>
+        <if test="ip != null" >ip,</if>
+        <if test="mac != null" >mac,</if>
+        <if test="manufacture != null" >manufacture,</if>
+        <if test="model != null" >model,</if>
+        <if test="phone != null" >phone,</if>
+        <if test="phoneStatus != null" >phone_status,</if>
+        <if test="sdk != null" >sdk,</if>
+        <if test="simSerial != null" >sim_serial,</if>
+        <if test="simStatus != null" >sim_status,</if>
+        <if test="ssid != null" >ssid,</if>
+        <if test="ua != null" >ua,</if>
+        <if test="createDate != null" >create_date,</if>
+        <if test="updateDate != null" >update_date,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="token != null" >#{token,jdbcType=VARCHAR},</if>  
+        <if test="deviceType != null" >#{deviceType,jdbcType=INTEGER},</if>  
+        <if test="androidId != null" >#{androidId,jdbcType=VARCHAR},</if>  
+        <if test="androidSerial != null" >#{androidSerial,jdbcType=VARCHAR},</if>  
+        <if test="androidVersion != null" >#{androidVersion,jdbcType=VARCHAR},</if>  
+        <if test="blueTooth != null" >#{blueTooth,jdbcType=VARCHAR},</if>  
+        <if test="board != null" >#{board,jdbcType=VARCHAR},</if>  
+        <if test="brand != null" >#{brand,jdbcType=VARCHAR},</if>  
+        <if test="bssid != null" >#{bssid,jdbcType=VARCHAR},</if>  
+        <if test="carrier != null" >#{carrier,jdbcType=VARCHAR},</if>  
+        <if test="carrierCode != null" >#{carrierCode,jdbcType=VARCHAR},</if>  
+        <if test="countryCode != null" >#{countryCode,jdbcType=VARCHAR},</if>  
+        <if test="display != null" >#{display,jdbcType=VARCHAR},</if>  
+        <if test="height != null" >#{height,jdbcType=VARCHAR},</if>  
+        <if test="imei != null" >#{imei,jdbcType=VARCHAR},</if>  
+        <if test="ip != null" >#{ip,jdbcType=VARCHAR},</if>  
+        <if test="mac != null" >#{mac,jdbcType=VARCHAR},</if>  
+        <if test="manufacture != null" >#{manufacture,jdbcType=VARCHAR},</if>  
+        <if test="model != null" >#{model,jdbcType=VARCHAR},</if>  
+        <if test="phone != null" >#{phone,jdbcType=VARCHAR},</if>  
+        <if test="phoneStatus != null" >#{phoneStatus,jdbcType=INTEGER},</if>  
+        <if test="sdk != null" >#{sdk,jdbcType=INTEGER},</if>  
+        <if test="simSerial != null" >#{simSerial,jdbcType=VARCHAR},</if>  
+        <if test="simStatus != null" >#{simStatus,jdbcType=INTEGER},</if>  
+        <if test="ssid != null" >#{ssid,jdbcType=VARCHAR},</if>  
+        <if test="ua != null" >#{ua,jdbcType=VARCHAR},</if>  
+        <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
+        <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
+    </trim>
+  </insert>
+  <update id="updateDeviceById" parameterType="org.turing.pangu.model.Device" >
+    update device set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        token=#{token,jdbcType=VARCHAR},    
+        device_type=#{deviceType,jdbcType=INTEGER},    
+        android_id=#{androidId,jdbcType=VARCHAR},    
+        android_serial=#{androidSerial,jdbcType=VARCHAR},    
+        android_version=#{androidVersion,jdbcType=VARCHAR},    
+        blue_tooth=#{blueTooth,jdbcType=VARCHAR},    
+        board=#{board,jdbcType=VARCHAR},    
+        brand=#{brand,jdbcType=VARCHAR},    
+        bssid=#{bssid,jdbcType=VARCHAR},    
+        carrier=#{carrier,jdbcType=VARCHAR},    
+        carrier_code=#{carrierCode,jdbcType=VARCHAR},    
+        country_code=#{countryCode,jdbcType=VARCHAR},    
+        display=#{display,jdbcType=VARCHAR},    
+        height=#{height,jdbcType=VARCHAR},    
+        imei=#{imei,jdbcType=VARCHAR},    
+        ip=#{ip,jdbcType=VARCHAR},    
+        mac=#{mac,jdbcType=VARCHAR},    
+        manufacture=#{manufacture,jdbcType=VARCHAR},    
+        model=#{model,jdbcType=VARCHAR},    
+        phone=#{phone,jdbcType=VARCHAR},    
+        phone_status=#{phoneStatus,jdbcType=INTEGER},    
+        sdk=#{sdk,jdbcType=INTEGER},    
+        sim_serial=#{simSerial,jdbcType=VARCHAR},    
+        sim_status=#{simStatus,jdbcType=INTEGER},    
+        ssid=#{ssid,jdbcType=VARCHAR},    
+        ua=#{ua,jdbcType=VARCHAR},    
+        create_date=#{createDate,jdbcType=TIMESTAMP},    
+        update_date=#{updateDate,jdbcType=TIMESTAMP},    
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="org.turing.pangu.model.Device" >
+    update device set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="token != null" >token=#{token,jdbcType=VARCHAR},</if>
+        <if test="deviceType != null" >device_type=#{deviceType,jdbcType=INTEGER},</if>
+        <if test="androidId != null" >android_id=#{androidId,jdbcType=VARCHAR},</if>
+        <if test="androidSerial != null" >android_serial=#{androidSerial,jdbcType=VARCHAR},</if>
+        <if test="androidVersion != null" >android_version=#{androidVersion,jdbcType=VARCHAR},</if>
+        <if test="blueTooth != null" >blue_tooth=#{blueTooth,jdbcType=VARCHAR},</if>
+        <if test="board != null" >board=#{board,jdbcType=VARCHAR},</if>
+        <if test="brand != null" >brand=#{brand,jdbcType=VARCHAR},</if>
+        <if test="bssid != null" >bssid=#{bssid,jdbcType=VARCHAR},</if>
+        <if test="carrier != null" >carrier=#{carrier,jdbcType=VARCHAR},</if>
+        <if test="carrierCode != null" >carrier_code=#{carrierCode,jdbcType=VARCHAR},</if>
+        <if test="countryCode != null" >country_code=#{countryCode,jdbcType=VARCHAR},</if>
+        <if test="display != null" >display=#{display,jdbcType=VARCHAR},</if>
+        <if test="height != null" >height=#{height,jdbcType=VARCHAR},</if>
+        <if test="imei != null" >imei=#{imei,jdbcType=VARCHAR},</if>
+        <if test="ip != null" >ip=#{ip,jdbcType=VARCHAR},</if>
+        <if test="mac != null" >mac=#{mac,jdbcType=VARCHAR},</if>
+        <if test="manufacture != null" >manufacture=#{manufacture,jdbcType=VARCHAR},</if>
+        <if test="model != null" >model=#{model,jdbcType=VARCHAR},</if>
+        <if test="phone != null" >phone=#{phone,jdbcType=VARCHAR},</if>
+        <if test="phoneStatus != null" >phone_status=#{phoneStatus,jdbcType=INTEGER},</if>
+        <if test="sdk != null" >sdk=#{sdk,jdbcType=INTEGER},</if>
+        <if test="simSerial != null" >sim_serial=#{simSerial,jdbcType=VARCHAR},</if>
+        <if test="simStatus != null" >sim_status=#{simStatus,jdbcType=INTEGER},</if>
+        <if test="ssid != null" >ssid=#{ssid,jdbcType=VARCHAR},</if>
+        <if test="ua != null" >ua=#{ua,jdbcType=VARCHAR},</if>
+        <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
