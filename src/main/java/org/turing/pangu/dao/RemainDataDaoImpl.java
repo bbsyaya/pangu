@@ -14,21 +14,21 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import org.turing.pangu.mapper.UserMapper;
-import org.turing.pangu.model.User;
+import org.turing.pangu.mapper.RemainDataMapper;
+import org.turing.pangu.model.RemainData;
 
 @Repository
-public class UserDaoImpl extends BaseDaoImpl<User, Long> implements UserDao {
+public class RemainDataDaoImpl extends BaseDaoImpl<RemainData, Long> implements RemainDataDao {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
+	private static final Logger logger = Logger.getLogger(RemainDataDaoImpl.class);
 
 	@Autowired
-	private UserMapper mapper;
+	private RemainDataMapper mapper;
 	
 	@Autowired
-	public void setUserMapper(UserMapper mapper) {
+	public void setRemainDataMapper(RemainDataMapper mapper) {
 		super.setBaseMapper(mapper);
 	}
 

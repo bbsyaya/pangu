@@ -4,6 +4,8 @@
   <resultMap id="BaseResultMap" type="org.turing.pangu.model.Device" >
     <id column="id" property="id" jdbcType="BIGINT" />       
     <result column="token" property="token" jdbcType="VARCHAR" />          
+    <result column="is_actived" property="isActived" jdbcType="INTEGER" />          
+    <result column="is_remain_ip" property="isRemainIp" jdbcType="INTEGER" />          
     <result column="device_type" property="deviceType" jdbcType="INTEGER" />          
     <result column="android_id" property="androidId" jdbcType="VARCHAR" />          
     <result column="android_serial" property="androidSerial" jdbcType="VARCHAR" />          
@@ -35,6 +37,8 @@
   <sql id="Base_Column_List" >
     d.id,
 	d.token,
+	d.is_actived,
+	d.is_remain_ip,
 	d.device_type,
 	d.android_id,
 	d.android_serial,
@@ -65,6 +69,8 @@
   </sql>
   <sql id="Base_Column_Value_List" >
     #{token},
+	#{isActived},
+	#{isRemainIp},
 	#{deviceType},
 	#{androidId},
 	#{androidSerial},
@@ -95,6 +101,8 @@
   </sql>
   <sql id="Base_Column_Update_List" >
     token=#{token},
+	is_actived=#{isActived},
+	is_remain_ip=#{isRemainIp},
 	device_type=#{deviceType},
 	android_id=#{androidId},
 	android_serial=#{androidSerial},
@@ -140,6 +148,8 @@
     from device d
     where 1=1 
     <if test="token != null" >and d.token= #{token,jdbcType=VARCHAR}</if>
+    <if test="isActived != null" >and d.is_actived= #{isActived,jdbcType=INTEGER}</if>
+    <if test="isRemainIp != null" >and d.is_remain_ip= #{isRemainIp,jdbcType=INTEGER}</if>
     <if test="deviceType != null" >and d.device_type= #{deviceType,jdbcType=INTEGER}</if>
     <if test="androidId != null" >and d.android_id= #{androidId,jdbcType=VARCHAR}</if>
     <if test="androidSerial != null" >and d.android_serial= #{androidSerial,jdbcType=VARCHAR}</if>
@@ -175,6 +185,8 @@
     from device d
     where 1=1 
     <if test="token != null" >and d.token= #{token,jdbcType=VARCHAR}</if>
+    <if test="isActived != null" >and d.is_actived= #{isActived,jdbcType=INTEGER}</if>
+    <if test="isRemainIp != null" >and d.is_remain_ip= #{isRemainIp,jdbcType=INTEGER}</if>
     <if test="deviceType != null" >and d.device_type= #{deviceType,jdbcType=INTEGER}</if>
     <if test="androidId != null" >and d.android_id= #{androidId,jdbcType=VARCHAR}</if>
     <if test="androidSerial != null" >and d.android_serial= #{androidSerial,jdbcType=VARCHAR}</if>
@@ -209,6 +221,8 @@
     from device d
     where 1=1 
     <if test="model.token != null" >and d.token= #{model.token,jdbcType=VARCHAR}</if>
+    <if test="model.isActived != null" >and d.is_actived= #{model.isActived,jdbcType=INTEGER}</if>
+    <if test="model.isRemainIp != null" >and d.is_remain_ip= #{model.isRemainIp,jdbcType=INTEGER}</if>
     <if test="model.deviceType != null" >and d.device_type= #{model.deviceType,jdbcType=INTEGER}</if>
     <if test="model.androidId != null" >and d.android_id= #{model.androidId,jdbcType=VARCHAR}</if>
     <if test="model.androidSerial != null" >and d.android_serial= #{model.androidSerial,jdbcType=VARCHAR}</if>
@@ -243,6 +257,8 @@
     from device d
     where 1=1 
     <if test="token != null" >and d.token= #{token,jdbcType=VARCHAR}</if>
+    <if test="isActived != null" >and d.is_actived= #{isActived,jdbcType=INTEGER}</if>
+    <if test="isRemainIp != null" >and d.is_remain_ip= #{isRemainIp,jdbcType=INTEGER}</if>
     <if test="deviceType != null" >and d.device_type= #{deviceType,jdbcType=INTEGER}</if>
     <if test="androidId != null" >and d.android_id= #{androidId,jdbcType=VARCHAR}</if>
     <if test="androidSerial != null" >and d.android_serial= #{androidSerial,jdbcType=VARCHAR}</if>
@@ -279,6 +295,8 @@
     insert into device 
     <trim prefix="(" suffix=")" suffixOverrides="," >
         token,    
+        is_actived,    
+        is_remain_ip,    
         device_type,    
         android_id,    
         android_serial,    
@@ -309,6 +327,8 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
         #{token,jdbcType=VARCHAR},  
+        #{isActived,jdbcType=INTEGER},  
+        #{isRemainIp,jdbcType=INTEGER},  
         #{deviceType,jdbcType=INTEGER},  
         #{androidId,jdbcType=VARCHAR},  
         #{androidSerial,jdbcType=VARCHAR},  
@@ -342,6 +362,8 @@
     insert into device 
     <trim prefix="(" suffix=")" suffixOverrides="," >
         <if test="token != null" >token,</if>
+        <if test="isActived != null" >is_actived,</if>
+        <if test="isRemainIp != null" >is_remain_ip,</if>
         <if test="deviceType != null" >device_type,</if>
         <if test="androidId != null" >android_id,</if>
         <if test="androidSerial != null" >android_serial,</if>
@@ -372,6 +394,8 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
         <if test="token != null" >#{token,jdbcType=VARCHAR},</if>  
+        <if test="isActived != null" >#{isActived,jdbcType=INTEGER},</if>  
+        <if test="isRemainIp != null" >#{isRemainIp,jdbcType=INTEGER},</if>  
         <if test="deviceType != null" >#{deviceType,jdbcType=INTEGER},</if>  
         <if test="androidId != null" >#{androidId,jdbcType=VARCHAR},</if>  
         <if test="androidSerial != null" >#{androidSerial,jdbcType=VARCHAR},</if>  
@@ -405,6 +429,8 @@
     update device set 
     <trim prefix="" suffix="" suffixOverrides="," >
         token=#{token,jdbcType=VARCHAR},    
+        is_actived=#{isActived,jdbcType=INTEGER},    
+        is_remain_ip=#{isRemainIp,jdbcType=INTEGER},    
         device_type=#{deviceType,jdbcType=INTEGER},    
         android_id=#{androidId,jdbcType=VARCHAR},    
         android_serial=#{androidSerial,jdbcType=VARCHAR},    
@@ -439,6 +465,8 @@
     update device set 
     <trim prefix="" suffix="" suffixOverrides="," >
         <if test="token != null" >token=#{token,jdbcType=VARCHAR},</if>
+        <if test="isActived != null" >is_actived=#{isActived,jdbcType=INTEGER},</if>
+        <if test="isRemainIp != null" >is_remain_ip=#{isRemainIp,jdbcType=INTEGER},</if>
         <if test="deviceType != null" >device_type=#{deviceType,jdbcType=INTEGER},</if>
         <if test="androidId != null" >android_id=#{androidId,jdbcType=VARCHAR},</if>
         <if test="androidSerial != null" >android_serial=#{androidSerial,jdbcType=VARCHAR},</if>

@@ -22,10 +22,16 @@ import org.hibernate.validator.constraints.NotEmpty;
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 7789091484483217998L;
+  private static final long serialVersionUID = 7083071484489193136L;
 
   /***/
   private String token;
+
+  /***/
+  private Integer isActived;
+
+  /***/
+  private Integer isRemainIp;
 
   /***/
   private Integer deviceType;
@@ -123,6 +129,36 @@ import org.hibernate.validator.constraints.NotEmpty;
   public void setToken(String token)
   {
     this.token=token;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
+  public Integer getIsActived()
+  {
+   return this.isActived;
+  }
+
+  /**设置*/
+  public void setIsActived(Integer isActived)
+  {
+    this.isActived=isActived;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
+  public Integer getIsRemainIp()
+  {
+   return this.isRemainIp;
+  }
+
+  /**设置*/
+  public void setIsRemainIp(Integer isRemainIp)
+  {
+    this.isRemainIp=isRemainIp;
   }
 
   

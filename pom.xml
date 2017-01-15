@@ -2,10 +2,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.turing</groupId>
-  <artifactId>pandu</artifactId>
+  <artifactId>pangu</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>pandu Maven Webapp</name>
+  <name>pangu Maven Webapp</name>
   <url>http://maven.apache.org</url>
 	<!-- 配置-->
 	<properties>
@@ -233,6 +233,6 @@
 		<!-- other end -->
   </dependencies>
   <build>
-    <finalName>pandu</finalName>
+    <finalName>pangu</finalName>
   </build>
 </project>
