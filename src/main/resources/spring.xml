@@ -85,7 +85,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 			<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
 		</property>
 	</bean>
-
+<!--  
 	<bean id="version" class="org.turing.pangu.model.Version">
 		<property name="number" value="${version.number}" />
 		<property name="download" value="${version.download}" />
@@ -192,7 +192,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 			</list>
 		</property>
 	</bean>
-
+-->
 	<!-- 上传文件 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="defaultEncoding" value="UTF-8" />

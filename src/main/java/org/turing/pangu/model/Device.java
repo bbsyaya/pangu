@@ -4,8 +4,8 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年01月15日 
- * @since 2017年01月15日 
+ * @version 1.0, 2017年01月16日 
+ * @since 2017年01月16日 
  */
 
 package org.turing.pangu.model;
@@ -22,10 +22,10 @@ import org.hibernate.validator.constraints.NotEmpty;
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 7083071484489193136L;
+  private static final long serialVersionUID = 4576371484545161786L;
 
   /***/
-  private String token;
+  private Long appId;
 
   /***/
   private Integer isActived;
@@ -70,10 +70,16 @@ import org.hibernate.validator.constraints.NotEmpty;
   private String display;
 
   /***/
-  private String height;
+  private Integer height;
+
+  /***/
+  private Integer width;
 
   /***/
   private String imei;
+
+  /***/
+  private String imsi;
 
   /***/
   private String ip;
@@ -118,17 +124,16 @@ import org.hibernate.validator.constraints.NotEmpty;
   
   /**获取*/
   @JsonProperty
-  @Length(max =255 )
-  @NotEmpty(groups = {Default.class,Save.class})
-  public String getToken()
+  @NotNull(groups = {Default.class,Save.class})
+  public Long getAppId()
   {
-   return this.token;
+   return this.appId;
   }
 
   /**设置*/
-  public void setToken(String token)
+  public void setAppId(Long appId)
   {
-    this.token=token;
+    this.appId=appId;
   }
 
   
@@ -344,16 +349,29 @@ import org.hibernate.validator.constraints.NotEmpty;
   
   /**获取*/
   @JsonProperty
-  @Length(max =255 )
-  public String getHeight()
+  public Integer getHeight()
   {
    return this.height;
   }
 
   /**设置*/
-  public void setHeight(String height)
+  public void setHeight(Integer height)
   {
     this.height=height;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  public Integer getWidth()
+  {
+   return this.width;
+  }
+
+  /**设置*/
+  public void setWidth(Integer width)
+  {
+    this.width=width;
   }
 
   
@@ -370,6 +388,21 @@ import org.hibernate.validator.constraints.NotEmpty;
   public void setImei(String imei)
   {
     this.imei=imei;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getImsi()
+  {
+   return this.imsi;
+  }
+
+  /**设置*/
+  public void setImsi(String imsi)
+  {
+    this.imsi=imsi;
   }
 
   

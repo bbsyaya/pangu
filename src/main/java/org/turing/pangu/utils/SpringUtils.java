@@ -95,7 +95,7 @@ public final class SpringUtils implements ApplicationContextAware, DisposableBea
 
 	public static String getBasePath(HttpServletRequest request) {
 		
-		org.springframework.core.io.Resource resource = new ClassPathResource("/sdb.properties");
+		org.springframework.core.io.Resource resource = new ClassPathResource("/pangu.properties");
 
 		Properties prop = new Properties();
 		try {

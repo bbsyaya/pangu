@@ -3,7 +3,7 @@
 <mapper namespace="org.turing.pangu.mapper.DeviceMapper" >
   <resultMap id="BaseResultMap" type="org.turing.pangu.model.Device" >
     <id column="id" property="id" jdbcType="BIGINT" />       
-    <result column="token" property="token" jdbcType="VARCHAR" />          
+    <result column="app_id" property="appId" jdbcType="BIGINT" />          
     <result column="is_actived" property="isActived" jdbcType="INTEGER" />          
     <result column="is_remain_ip" property="isRemainIp" jdbcType="INTEGER" />          
     <result column="device_type" property="deviceType" jdbcType="INTEGER" />          
@@ -18,8 +18,10 @@
     <result column="carrier_code" property="carrierCode" jdbcType="VARCHAR" />          
     <result column="country_code" property="countryCode" jdbcType="VARCHAR" />          
     <result column="display" property="display" jdbcType="VARCHAR" />          
-    <result column="height" property="height" jdbcType="VARCHAR" />          
+    <result column="height" property="height" jdbcType="INTEGER" />          
+    <result column="width" property="width" jdbcType="INTEGER" />          
     <result column="imei" property="imei" jdbcType="VARCHAR" />          
+    <result column="imsi" property="imsi" jdbcType="VARCHAR" />          
     <result column="ip" property="ip" jdbcType="VARCHAR" />          
     <result column="mac" property="mac" jdbcType="VARCHAR" />          
     <result column="manufacture" property="manufacture" jdbcType="VARCHAR" />          
@@ -36,7 +38,7 @@
   </resultMap>   
   <sql id="Base_Column_List" >
     d.id,
-	d.token,
+	d.app_id,
 	d.is_actived,
 	d.is_remain_ip,
 	d.device_type,
@@ -52,7 +54,9 @@
 	d.country_code,
 	d.display,
 	d.height,
+	d.width,
 	d.imei,
+	d.imsi,
 	d.ip,
 	d.mac,
 	d.manufacture,
@@ -68,7 +72,7 @@
 	d.update_date
   </sql>
   <sql id="Base_Column_Value_List" >
-    #{token},
+    #{appId},
 	#{isActived},
 	#{isRemainIp},
 	#{deviceType},
@@ -84,7 +88,9 @@
 	#{countryCode},
 	#{display},
 	#{height},
+	#{width},
 	#{imei},
+	#{imsi},
 	#{ip},
 	#{mac},
 	#{manufacture},
@@ -100,7 +106,7 @@
 	#{updateDate}
   </sql>
   <sql id="Base_Column_Update_List" >
-    token=#{token},
+    app_id=#{appId},
 	is_actived=#{isActived},
 	is_remain_ip=#{isRemainIp},
 	device_type=#{deviceType},
@@ -116,7 +122,9 @@
 	country_code=#{countryCode},
 	display=#{display},
 	height=#{height},
+	width=#{width},
 	imei=#{imei},
+	imsi=#{imsi},
 	ip=#{ip},
 	mac=#{mac},
 	manufacture=#{manufacture},
@@ -147,7 +155,7 @@
     <include refid="Base_Column_List" />
     from device d
     where 1=1 
-    <if test="token != null" >and d.token= #{token,jdbcType=VARCHAR}</if>
+    <if test="appId != null" >and d.app_id= #{appId,jdbcType=BIGINT}</if>
     <if test="isActived != null" >and d.is_actived= #{isActived,jdbcType=INTEGER}</if>
     <if test="isRemainIp != null" >and d.is_remain_ip= #{isRemainIp,jdbcType=INTEGER}</if>
     <if test="deviceType != null" >and d.device_type= #{deviceType,jdbcType=INTEGER}</if>
@@ -162,8 +170,10 @@
     <if test="carrierCode != null" >and d.carrier_code= #{carrierCode,jdbcType=VARCHAR}</if>
     <if test="countryCode != null" >and d.country_code= #{countryCode,jdbcType=VARCHAR}</if>
     <if test="display != null" >and d.display= #{display,jdbcType=VARCHAR}</if>
-    <if test="height != null" >and d.height= #{height,jdbcType=VARCHAR}</if>
+    <if test="height != null" >and d.height= #{height,jdbcType=INTEGER}</if>
+    <if test="width != null" >and d.width= #{width,jdbcType=INTEGER}</if>
     <if test="imei != null" >and d.imei= #{imei,jdbcType=VARCHAR}</if>
+    <if test="imsi != null" >and d.imsi= #{imsi,jdbcType=VARCHAR}</if>
     <if test="ip != null" >and d.ip= #{ip,jdbcType=VARCHAR}</if>
     <if test="mac != null" >and d.mac= #{mac,jdbcType=VARCHAR}</if>
     <if test="manufacture != null" >and d.manufacture= #{manufacture,jdbcType=VARCHAR}</if>
@@ -184,7 +194,7 @@
     <include refid="Base_Column_List" />
     from device d
     where 1=1 
-    <if test="token != null" >and d.token= #{token,jdbcType=VARCHAR}</if>
+    <if test="appId != null" >and d.app_id= #{appId,jdbcType=BIGINT}</if>
     <if test="isActived != null" >and d.is_actived= #{isActived,jdbcType=INTEGER}</if>
     <if test="isRemainIp != null" >and d.is_remain_ip= #{isRemainIp,jdbcType=INTEGER}</if>
     <if test="deviceType != null" >and d.device_type= #{deviceType,jdbcType=INTEGER}</if>
@@ -199,8 +209,10 @@
     <if test="carrierCode != null" >and d.carrier_code= #{carrierCode,jdbcType=VARCHAR}</if>
     <if test="countryCode != null" >and d.country_code= #{countryCode,jdbcType=VARCHAR}</if>
     <if test="display != null" >and d.display= #{display,jdbcType=VARCHAR}</if>
-    <if test="height != null" >and d.height= #{height,jdbcType=VARCHAR}</if>
+    <if test="height != null" >and d.height= #{height,jdbcType=INTEGER}</if>
+    <if test="width != null" >and d.width= #{width,jdbcType=INTEGER}</if>
     <if test="imei != null" >and d.imei= #{imei,jdbcType=VARCHAR}</if>
+    <if test="imsi != null" >and d.imsi= #{imsi,jdbcType=VARCHAR}</if>
     <if test="ip != null" >and d.ip= #{ip,jdbcType=VARCHAR}</if>
     <if test="mac != null" >and d.mac= #{mac,jdbcType=VARCHAR}</if>
     <if test="manufacture != null" >and d.manufacture= #{manufacture,jdbcType=VARCHAR}</if>
@@ -220,7 +232,7 @@
     <include refid="Base_Column_List" />
     from device d
     where 1=1 
-    <if test="model.token != null" >and d.token= #{model.token,jdbcType=VARCHAR}</if>
+    <if test="model.appId != null" >and d.app_id= #{model.appId,jdbcType=BIGINT}</if>
     <if test="model.isActived != null" >and d.is_actived= #{model.isActived,jdbcType=INTEGER}</if>
     <if test="model.isRemainIp != null" >and d.is_remain_ip= #{model.isRemainIp,jdbcType=INTEGER}</if>
     <if test="model.deviceType != null" >and d.device_type= #{model.deviceType,jdbcType=INTEGER}</if>
@@ -235,8 +247,10 @@
     <if test="model.carrierCode != null" >and d.carrier_code= #{model.carrierCode,jdbcType=VARCHAR}</if>
     <if test="model.countryCode != null" >and d.country_code= #{model.countryCode,jdbcType=VARCHAR}</if>
     <if test="model.display != null" >and d.display= #{model.display,jdbcType=VARCHAR}</if>
-    <if test="model.height != null" >and d.height= #{model.height,jdbcType=VARCHAR}</if>
+    <if test="model.height != null" >and d.height= #{model.height,jdbcType=INTEGER}</if>
+    <if test="model.width != null" >and d.width= #{model.width,jdbcType=INTEGER}</if>
     <if test="model.imei != null" >and d.imei= #{model.imei,jdbcType=VARCHAR}</if>
+    <if test="model.imsi != null" >and d.imsi= #{model.imsi,jdbcType=VARCHAR}</if>
     <if test="model.ip != null" >and d.ip= #{model.ip,jdbcType=VARCHAR}</if>
     <if test="model.mac != null" >and d.mac= #{model.mac,jdbcType=VARCHAR}</if>
     <if test="model.manufacture != null" >and d.manufacture= #{model.manufacture,jdbcType=VARCHAR}</if>
@@ -256,7 +270,7 @@
     select count(0) totalCount
     from device d
     where 1=1 
-    <if test="token != null" >and d.token= #{token,jdbcType=VARCHAR}</if>
+    <if test="appId != null" >and d.app_id= #{appId,jdbcType=BIGINT}</if>
     <if test="isActived != null" >and d.is_actived= #{isActived,jdbcType=INTEGER}</if>
     <if test="isRemainIp != null" >and d.is_remain_ip= #{isRemainIp,jdbcType=INTEGER}</if>
     <if test="deviceType != null" >and d.device_type= #{deviceType,jdbcType=INTEGER}</if>
@@ -271,8 +285,10 @@
     <if test="carrierCode != null" >and d.carrier_code= #{carrierCode,jdbcType=VARCHAR}</if>
     <if test="countryCode != null" >and d.country_code= #{countryCode,jdbcType=VARCHAR}</if>
     <if test="display != null" >and d.display= #{display,jdbcType=VARCHAR}</if>
-    <if test="height != null" >and d.height= #{height,jdbcType=VARCHAR}</if>
+    <if test="height != null" >and d.height= #{height,jdbcType=INTEGER}</if>
+    <if test="width != null" >and d.width= #{width,jdbcType=INTEGER}</if>
     <if test="imei != null" >and d.imei= #{imei,jdbcType=VARCHAR}</if>
+    <if test="imsi != null" >and d.imsi= #{imsi,jdbcType=VARCHAR}</if>
     <if test="ip != null" >and d.ip= #{ip,jdbcType=VARCHAR}</if>
     <if test="mac != null" >and d.mac= #{mac,jdbcType=VARCHAR}</if>
     <if test="manufacture != null" >and d.manufacture= #{manufacture,jdbcType=VARCHAR}</if>
@@ -294,7 +310,7 @@
   <insert id="insert" parameterType="org.turing.pangu.model.Device" >
     insert into device 
     <trim prefix="(" suffix=")" suffixOverrides="," >
-        token,    
+        app_id,    
         is_actived,    
         is_remain_ip,    
         device_type,    
@@ -310,7 +326,9 @@
         country_code,    
         display,    
         height,    
+        width,    
         imei,    
+        imsi,    
         ip,    
         mac,    
         manufacture,    
@@ -326,7 +344,7 @@
         update_date,    
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-        #{token,jdbcType=VARCHAR},  
+        #{appId,jdbcType=BIGINT},  
         #{isActived,jdbcType=INTEGER},  
         #{isRemainIp,jdbcType=INTEGER},  
         #{deviceType,jdbcType=INTEGER},  
@@ -341,8 +359,10 @@
         #{carrierCode,jdbcType=VARCHAR},  
         #{countryCode,jdbcType=VARCHAR},  
         #{display,jdbcType=VARCHAR},  
-        #{height,jdbcType=VARCHAR},  
+        #{height,jdbcType=INTEGER},  
+        #{width,jdbcType=INTEGER},  
         #{imei,jdbcType=VARCHAR},  
+        #{imsi,jdbcType=VARCHAR},  
         #{ip,jdbcType=VARCHAR},  
         #{mac,jdbcType=VARCHAR},  
         #{manufacture,jdbcType=VARCHAR},  
@@ -361,7 +381,7 @@
   <insert id="insertDeviceByTrim" parameterType="org.turing.pangu.model.Device" >
     insert into device 
     <trim prefix="(" suffix=")" suffixOverrides="," >
-        <if test="token != null" >token,</if>
+        <if test="appId != null" >app_id,</if>
         <if test="isActived != null" >is_actived,</if>
         <if test="isRemainIp != null" >is_remain_ip,</if>
         <if test="deviceType != null" >device_type,</if>
@@ -377,7 +397,9 @@
         <if test="countryCode != null" >country_code,</if>
         <if test="display != null" >display,</if>
         <if test="height != null" >height,</if>
+        <if test="width != null" >width,</if>
         <if test="imei != null" >imei,</if>
+        <if test="imsi != null" >imsi,</if>
         <if test="ip != null" >ip,</if>
         <if test="mac != null" >mac,</if>
         <if test="manufacture != null" >manufacture,</if>
@@ -393,7 +415,7 @@
         <if test="updateDate != null" >update_date,</if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-        <if test="token != null" >#{token,jdbcType=VARCHAR},</if>  
+        <if test="appId != null" >#{appId,jdbcType=BIGINT},</if>  
         <if test="isActived != null" >#{isActived,jdbcType=INTEGER},</if>  
         <if test="isRemainIp != null" >#{isRemainIp,jdbcType=INTEGER},</if>  
         <if test="deviceType != null" >#{deviceType,jdbcType=INTEGER},</if>  
@@ -408,8 +430,10 @@
         <if test="carrierCode != null" >#{carrierCode,jdbcType=VARCHAR},</if>  
         <if test="countryCode != null" >#{countryCode,jdbcType=VARCHAR},</if>  
         <if test="display != null" >#{display,jdbcType=VARCHAR},</if>  
-        <if test="height != null" >#{height,jdbcType=VARCHAR},</if>  
+        <if test="height != null" >#{height,jdbcType=INTEGER},</if>  
+        <if test="width != null" >#{width,jdbcType=INTEGER},</if>  
         <if test="imei != null" >#{imei,jdbcType=VARCHAR},</if>  
+        <if test="imsi != null" >#{imsi,jdbcType=VARCHAR},</if>  
         <if test="ip != null" >#{ip,jdbcType=VARCHAR},</if>  
         <if test="mac != null" >#{mac,jdbcType=VARCHAR},</if>  
         <if test="manufacture != null" >#{manufacture,jdbcType=VARCHAR},</if>  
@@ -428,7 +452,7 @@
   <update id="updateDeviceById" parameterType="org.turing.pangu.model.Device" >
     update device set 
     <trim prefix="" suffix="" suffixOverrides="," >
-        token=#{token,jdbcType=VARCHAR},    
+        app_id=#{appId,jdbcType=BIGINT},    
         is_actived=#{isActived,jdbcType=INTEGER},    
         is_remain_ip=#{isRemainIp,jdbcType=INTEGER},    
         device_type=#{deviceType,jdbcType=INTEGER},    
@@ -443,8 +467,10 @@
         carrier_code=#{carrierCode,jdbcType=VARCHAR},    
         country_code=#{countryCode,jdbcType=VARCHAR},    
         display=#{display,jdbcType=VARCHAR},    
-        height=#{height,jdbcType=VARCHAR},    
+        height=#{height,jdbcType=INTEGER},    
+        width=#{width,jdbcType=INTEGER},    
         imei=#{imei,jdbcType=VARCHAR},    
+        imsi=#{imsi,jdbcType=VARCHAR},    
         ip=#{ip,jdbcType=VARCHAR},    
         mac=#{mac,jdbcType=VARCHAR},    
         manufacture=#{manufacture,jdbcType=VARCHAR},    
@@ -464,7 +490,7 @@
   <update id="update" parameterType="org.turing.pangu.model.Device" >
     update device set 
     <trim prefix="" suffix="" suffixOverrides="," >
-        <if test="token != null" >token=#{token,jdbcType=VARCHAR},</if>
+        <if test="appId != null" >app_id=#{appId,jdbcType=BIGINT},</if>
         <if test="isActived != null" >is_actived=#{isActived,jdbcType=INTEGER},</if>
         <if test="isRemainIp != null" >is_remain_ip=#{isRemainIp,jdbcType=INTEGER},</if>
         <if test="deviceType != null" >device_type=#{deviceType,jdbcType=INTEGER},</if>
@@ -479,8 +505,10 @@
         <if test="carrierCode != null" >carrier_code=#{carrierCode,jdbcType=VARCHAR},</if>
         <if test="countryCode != null" >country_code=#{countryCode,jdbcType=VARCHAR},</if>
         <if test="display != null" >display=#{display,jdbcType=VARCHAR},</if>
-        <if test="height != null" >height=#{height,jdbcType=VARCHAR},</if>
+        <if test="height != null" >height=#{height,jdbcType=INTEGER},</if>
+        <if test="width != null" >width=#{width,jdbcType=INTEGER},</if>
         <if test="imei != null" >imei=#{imei,jdbcType=VARCHAR},</if>
+        <if test="imsi != null" >imsi=#{imsi,jdbcType=VARCHAR},</if>
         <if test="ip != null" >ip=#{ip,jdbcType=VARCHAR},</if>
         <if test="mac != null" >mac=#{mac,jdbcType=VARCHAR},</if>
         <if test="manufacture != null" >manufacture=#{manufacture,jdbcType=VARCHAR},</if>

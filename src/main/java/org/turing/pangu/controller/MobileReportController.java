@@ -1,4 +1,6 @@
-package org.turing.pangu.controller.phone;
+package org.turing.pangu.controller;
+
+import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.turing.pangu.controller.BaseController;
+import org.turing.pangu.controller.phone.MobileResponse;
 import org.turing.pangu.controller.phone.request.ReportReq;
 import org.turing.pangu.dao.UserDaoImpl;
+import org.turing.pangu.model.App;
+import org.turing.pangu.service.AppService;
+import org.turing.pangu.service.DeviceService;
+import org.turing.pangu.service.RemainVpnService;
 
 /**
  * 
@@ -24,8 +30,15 @@ public class MobileReportController extends BaseController {
 	 * Logger for this class
 	 */
 	private static final Logger logger = Logger.getLogger(MobileReportController.class);
-	@Autowired
-	private UserDaoImpl userService;
+
+	@Resource(name="appServiceImpl")
+	private AppService appService;
+	
+	@Resource(name="remainVpnServiceImpl")
+	private RemainVpnService remainVpnService;
+	
+	@Resource(name="deviceServiceImpl")
+	private DeviceService deviceService;
 	/**
 	 * 获取短信接口
 	 * 
@@ -35,12 +48,20 @@ public class MobileReportController extends BaseController {
 	
 	public @ResponseBody MobileResponse<String> report(@RequestBody ReportReq req) {
 		MobileResponse<String> rsp = new MobileResponse<String>();
-		//1. 先验证是否为有效token
-		
-		
+		//1. 先验证是否为有效appid
+		App app = appService.select(req.getAppId());
+		if(app == null){
+			rsp.setAllData(1, "上报失败");
+			return rsp;
+		}
 		//2. 验证是否为 VPN ip
-		
 		//3. 写入DB
+		if(remainVpnService.isWhileListIp(req.getDevice().getIpAddress())){
+			deviceService.saveReport(req, true);
+		}else{
+			deviceService.saveReport(req, false);
+		}
+		rsp.setAllData(0, "上报成功");
 		return rsp;
 	}
 
