@@ -193,6 +193,39 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 		</property>
 	</bean>
 -->
+	<!-- 读取配置文件 -->
+	<bean id="propertyConfigurer" class="org.turing.pangu.Engine.PropertyEngine">
+        <property name="location">
+            <value>classpath:pangu.properties</value>
+        </property>
+    </bean>
+    
+	<!-- 生成留存文件定时器 start -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+       <property name="triggers">  
+           <list>  
+              <ref bean="remainTrigger"/>  
+           </list>  
+       </property>  
+       <property name="autoStartup" value="true"/>  
+	</bean>  
+	<bean id="remainTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="remainJobDetail"/>  
+       <!-- 每天23点30分执行一次 -->
+       <!--  
+       <property name="cronExpression" value="0 30 23 * * ?"/>   
+       -->
+       <property name="cronExpression" value="0 */5 * * * ?"/>  
+	</bean>  
+	<bean id="remainJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+        <property name="targetObject" ref="remainJob"/>  
+        <property name="targetMethod" value="execute"/>  
+        <property name="concurrent" value="false"/>
+        <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
+	</bean> 
+	<bean id="remainJob" class="org.turing.pangu.service.quartz.RemainJob"/> 
+	 
+	<!-- 生成留存文件定时器 end -->
 	<!-- 上传文件 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="defaultEncoding" value="UTF-8" />

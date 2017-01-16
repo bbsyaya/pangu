@@ -30,7 +30,13 @@ public interface BaseMapper<T,ID extends Serializable> {
 	 * @return
 	 */
 	public List<T> selectList(T model);
-	
+	/**
+	 * 查找所有数据
+	 * @author turing
+	 * @param model
+	 * @return
+	 */
+	public List<T> selectAll();
 	/**
 	 * 查找确定列表
 	 * @author turing

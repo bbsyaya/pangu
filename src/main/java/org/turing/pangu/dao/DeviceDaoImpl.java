@@ -10,10 +10,11 @@
 
 package org.turing.pangu.dao;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import org.turing.pangu.mapper.DeviceMapper;
 import org.turing.pangu.model.Device;
 
@@ -30,6 +31,18 @@ public class DeviceDaoImpl extends BaseDaoImpl<Device, Long> implements DeviceDa
 	@Autowired
 	public void setDeviceMapper(DeviceMapper mapper) {
 		super.setBaseMapper(mapper);
+	}
+
+	@Override
+	public List<Device> selectCanRemainData(Device device) {
+		// TODO Auto-generated method stub
+		List<Device> list = null;
+		try {
+			list = mapper.selectCanRemainData();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return list;
 	}
 
 }

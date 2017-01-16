@@ -8,20 +8,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.turing.pangu.Engine.RemainEngine;
 import org.turing.pangu.model.App;
+import org.turing.pangu.model.Device;
 import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.model.User;
 import org.turing.pangu.service.AppService;
+import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.UserService;
+import org.turing.pangu.utils.RandomUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring.xml", "classpath:spring-mvc.xml", "classpath:spring-mybatis.xml" })
 public class TestData {
-	
-//	@Resource(name="memberServiceImpl")
-//	private MemberService memberService;
 	
 	@Resource(name="appServiceImpl")
 	private AppService appService;
@@ -35,8 +36,9 @@ public class TestData {
 	@Resource(name="remainVpnServiceImpl")
 	private RemainVpnService remainVpnService;
 	
-//	@Autowired
-//	private CacheHandle  service;
+	@Resource(name="deviceServiceImpl")
+	private DeviceService deviceService;
+	
 	/*
 	@Test
 	public void testInsertPlatform(){
@@ -109,12 +111,44 @@ public class TestData {
 		vpn.setIpList("10.205.154.192|120.180.221.178|230.63.79.29|140.130.101.78|123.43.67.129|207.18.138.82|103.143.107.68");
 		remainVpnService.insert(vpn);
 	}
-	*/
-	public void main(String[] args) {
-		//testInsertUser();
-		//testInsertApp();
+	
+	@Test
+	public void testInsertDevice(){
+		Device dev = new Device();
+		dev.setCreateDate(new Date());
+		dev.setUpdateDate(new Date());
+		
+		for(int index = 0; index < 1000; index++){
+			dev.setImei(RandomUtils.getRandom(16));
+			dev.setIsRemainIp(1);
+			dev.setDeviceType(0);
+			dev.setIsActived(1);
+			String ipAddress = "";
+			{
+				Integer ip0 = (int)(Math.random() * 255);
+				Integer ip1 = (int)(Math.random() * 255);
+				Integer ip2 = (int)(Math.random() * 255);
+				Integer ip3 = (int)(Math.random() * 255);
+				ipAddress =  ip0.toString()+":" +ip1.toString()+":" +ip2.toString()+":" +ip3.toString();
+			}
+			dev.setIp(ipAddress);
+			int random = (int)(Math.random() * 10);
+			int mod = random%4 + 1;
+			dev.setAppId((long) mod);
+			if(random%4 == 0){
+				dev.setIsRemainIp(0);
+				dev.setDeviceType(1);
+				dev.setIsActived(0);
+			}
+			deviceService.insert(dev);
+			dev.setCreateDate(new Date());
+			dev.setUpdateDate(new Date());
+		}
+	}*/
+
+	@Test
+	public void remain(){
+		RemainEngine.getInstance().setService(platformService, appService, deviceService);
+		RemainEngine.getInstance().generateRemainFile();
 	}
-	
-	
-	
 }

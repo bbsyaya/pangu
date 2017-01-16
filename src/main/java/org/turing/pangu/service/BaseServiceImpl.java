@@ -38,7 +38,13 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
 	public T selectModel(T model) {
 		return baseDao.selectModel(model);
 	}
-
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<T> selectAll() {
+		return baseDao.selectAll();
+	}
+	
 	@Override
 	@Transactional(readOnly = true)
 	public List<T> selectList(T model) {

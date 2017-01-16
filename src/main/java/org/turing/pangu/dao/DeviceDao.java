@@ -10,8 +10,10 @@
 
 package org.turing.pangu.dao;
 
+import java.util.List;
+
 import org.turing.pangu.model.Device;
 
 public interface DeviceDao extends BaseDao<Device, Long> {
-
+	public List<Device> selectCanRemainData(Device device);
 }

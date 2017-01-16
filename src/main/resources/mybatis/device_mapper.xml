@@ -150,6 +150,17 @@
     <include refid="Base_Column_List" />
     from device d
   </select>
+  
+  <select id="selectCanRemainData" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Device" >
+    select 
+    <include refid="Base_Column_List" />
+    from device d
+    where 1=1 
+    <if test="appId != null" >and d.app_id= #{appId,jdbcType=BIGINT}</if>
+    <if test="isRemainIp != null" >and d.is_remain_ip= #{isRemainIp,jdbcType=INTEGER}</if>
+    <if test="createDate != null" >and d.create_date BETWEEN #{createDate,jdbcType=TIMESTAMP} AND #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  
   <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Device" >
     select 
     <include refid="Base_Column_List" />

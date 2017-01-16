@@ -25,7 +25,16 @@ public interface BaseDao<T, ID extends Serializable> {
 	 * @return
 	 */
 	public T selectModel(T model);
-
+	
+	/**
+	 * 查找所有
+	 * 
+	 * @author turing
+	 * @param model
+	 * @return
+	 */
+	public List<T> selectAll();
+	
 	/**
 	 * 查找列表
 	 * 

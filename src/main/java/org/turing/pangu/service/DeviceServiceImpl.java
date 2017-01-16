@@ -1,6 +1,7 @@
 package org.turing.pangu.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -74,5 +75,11 @@ public class DeviceServiceImpl extends BaseServiceImpl<Device,Long> implements D
 		
 		dao.insert(device);
 		return false;
-	}	
+	}
+
+	@Override
+	public List<Device> selectCanRemainData(Device device) {
+		// TODO Auto-generated method stub
+		return dao.selectCanRemainData(device);
+	}
 }

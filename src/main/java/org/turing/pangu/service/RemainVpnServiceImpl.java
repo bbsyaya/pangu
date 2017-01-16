@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.turing.pangu.Engine.VpnEngine;
 import org.turing.pangu.dao.AppDao;
 import org.turing.pangu.dao.RemainVpnDao;
 import org.turing.pangu.model.App;
@@ -30,7 +31,11 @@ public class RemainVpnServiceImpl extends BaseServiceImpl<RemainVpn,Long> implem
 	@Override
 	public boolean isWhileListIp(String ip) {
 		// TODO Auto-generated method stub
-		List<RemainVpn> list =  dao.selectCertainList(1L,2L);
+		if(null == VpnEngine.getInstance().getList()){
+			VpnEngine.getInstance().setList(dao.selectCertainList(1L,2L));
+		}
+		
+		List<RemainVpn> list = VpnEngine.getInstance().getList();
 		if(null == list || list.size() == 0 )
 			return false;
 		

@@ -66,7 +66,19 @@ public class BaseDaoImpl<T, ID extends Serializable> implements BaseDao<T, ID> {
 		}
 		return t;
 	}
-
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<T> selectAll(){
+		List<T> list = null;
+		try {
+			list = baseMapper.selectAll();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return list;
+	}
+	
 	@Override
 	@Transactional(readOnly = true)
 	public List<T> selectList(T model) {
