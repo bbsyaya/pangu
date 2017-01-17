@@ -1,8 +1,8 @@
-package org.turing.pangu.service.quartz;
+package org.turing.pangu.quartz;
 
-import org.turing.pangu.Engine.RemainEngine;
+import org.turing.pangu.engine.RemainEngine;
 
-public class RemainJob {
+public class GenerateRemainFileJob {
 	public void execute(){  
         try{  
         	RemainEngine.getInstance().generateRemainFile();

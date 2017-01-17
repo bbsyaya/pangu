@@ -6,6 +6,7 @@
     <result column="app_id" property="appId" jdbcType="BIGINT" />          
     <result column="is_actived" property="isActived" jdbcType="INTEGER" />          
     <result column="is_remain" property="isRemain" jdbcType="INTEGER" />          
+    <result column="is_white_ip" property="isWhiteIp" jdbcType="INTEGER" />          
     <result column="device_type" property="deviceType" jdbcType="INTEGER" />          
     <result column="android_id" property="androidId" jdbcType="VARCHAR" />          
     <result column="android_serial" property="androidSerial" jdbcType="VARCHAR" />          
@@ -41,6 +42,7 @@
 	d.app_id,
 	d.is_actived,
 	d.is_remain,
+	d.is_white_ip,
 	d.device_type,
 	d.android_id,
 	d.android_serial,
@@ -75,6 +77,7 @@
     #{appId},
 	#{isActived},
 	#{isRemain},
+	#{isWhiteIp},
 	#{deviceType},
 	#{androidId},
 	#{androidSerial},
@@ -109,6 +112,7 @@
     app_id=#{appId},
 	is_actived=#{isActived},
 	is_remain=#{isRemain},
+	is_white_ip=#{isWhiteIp},
 	device_type=#{deviceType},
 	android_id=#{androidId},
 	android_serial=#{androidSerial},
@@ -145,19 +149,20 @@
     from device d
     where d.id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from device d
-  </select>
   <select id="selectCanRemainData" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Device" >
     select 
     <include refid="Base_Column_List" />
     from device d
     where 1=1 
     <if test="appId != null" >and d.app_id= #{appId,jdbcType=BIGINT}</if>
-    <if test="isRemain != null" >and d.is_remain= #{isRemain,jdbcType=INTEGER}</if>
+    <if test="isWhiteIp != null" >and d.is_white_ip= #{isWhiteIp,jdbcType=INTEGER}</if>
     <if test="createDate != null and createDate!=''" >and d.create_date BETWEEN #{createDate,jdbcType=TIMESTAMP} AND #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from device d
   </select>
   <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Device" >
     select 
@@ -167,6 +172,7 @@
     <if test="appId != null" >and d.app_id= #{appId,jdbcType=BIGINT}</if>
     <if test="isActived != null" >and d.is_actived= #{isActived,jdbcType=INTEGER}</if>
     <if test="isRemain != null" >and d.is_remain= #{isRemain,jdbcType=INTEGER}</if>
+    <if test="isWhiteIp != null" >and d.is_white_ip= #{isWhiteIp,jdbcType=INTEGER}</if>
     <if test="deviceType != null" >and d.device_type= #{deviceType,jdbcType=INTEGER}</if>
     <if test="androidId != null" >and d.android_id= #{androidId,jdbcType=VARCHAR}</if>
     <if test="androidSerial != null" >and d.android_serial= #{androidSerial,jdbcType=VARCHAR}</if>
@@ -206,6 +212,7 @@
     <if test="appId != null" >and d.app_id= #{appId,jdbcType=BIGINT}</if>
     <if test="isActived != null" >and d.is_actived= #{isActived,jdbcType=INTEGER}</if>
     <if test="isRemain != null" >and d.is_remain= #{isRemain,jdbcType=INTEGER}</if>
+    <if test="isWhiteIp != null" >and d.is_white_ip= #{isWhiteIp,jdbcType=INTEGER}</if>
     <if test="deviceType != null" >and d.device_type= #{deviceType,jdbcType=INTEGER}</if>
     <if test="androidId != null" >and d.android_id= #{androidId,jdbcType=VARCHAR}</if>
     <if test="androidSerial != null" >and d.android_serial= #{androidSerial,jdbcType=VARCHAR}</if>
@@ -244,6 +251,7 @@
     <if test="model.appId != null" >and d.app_id= #{model.appId,jdbcType=BIGINT}</if>
     <if test="model.isActived != null" >and d.is_actived= #{model.isActived,jdbcType=INTEGER}</if>
     <if test="model.isRemain != null" >and d.is_remain= #{model.isRemain,jdbcType=INTEGER}</if>
+    <if test="model.isWhiteIp != null" >and d.is_white_ip= #{model.isWhiteIp,jdbcType=INTEGER}</if>
     <if test="model.deviceType != null" >and d.device_type= #{model.deviceType,jdbcType=INTEGER}</if>
     <if test="model.androidId != null" >and d.android_id= #{model.androidId,jdbcType=VARCHAR}</if>
     <if test="model.androidSerial != null" >and d.android_serial= #{model.androidSerial,jdbcType=VARCHAR}</if>
@@ -282,6 +290,7 @@
     <if test="appId != null" >and d.app_id= #{appId,jdbcType=BIGINT}</if>
     <if test="isActived != null" >and d.is_actived= #{isActived,jdbcType=INTEGER}</if>
     <if test="isRemain != null" >and d.is_remain= #{isRemain,jdbcType=INTEGER}</if>
+    <if test="isWhiteIp != null" >and d.is_white_ip= #{isWhiteIp,jdbcType=INTEGER}</if>
     <if test="deviceType != null" >and d.device_type= #{deviceType,jdbcType=INTEGER}</if>
     <if test="androidId != null" >and d.android_id= #{androidId,jdbcType=VARCHAR}</if>
     <if test="androidSerial != null" >and d.android_serial= #{androidSerial,jdbcType=VARCHAR}</if>
@@ -322,6 +331,7 @@
         app_id,    
         is_actived,    
         is_remain,    
+        is_white_ip,    
         device_type,    
         android_id,    
         android_serial,    
@@ -356,6 +366,7 @@
         #{appId,jdbcType=BIGINT},  
         #{isActived,jdbcType=INTEGER},  
         #{isRemain,jdbcType=INTEGER},  
+        #{isWhiteIp,jdbcType=INTEGER},  
         #{deviceType,jdbcType=INTEGER},  
         #{androidId,jdbcType=VARCHAR},  
         #{androidSerial,jdbcType=VARCHAR},  
@@ -393,6 +404,7 @@
         <if test="appId != null" >app_id,</if>
         <if test="isActived != null" >is_actived,</if>
         <if test="isRemain != null" >is_remain,</if>
+        <if test="isWhiteIp != null" >is_white_ip,</if>
         <if test="deviceType != null" >device_type,</if>
         <if test="androidId != null" >android_id,</if>
         <if test="androidSerial != null" >android_serial,</if>
@@ -427,6 +439,7 @@
         <if test="appId != null" >#{appId,jdbcType=BIGINT},</if>  
         <if test="isActived != null" >#{isActived,jdbcType=INTEGER},</if>  
         <if test="isRemain != null" >#{isRemain,jdbcType=INTEGER},</if>  
+        <if test="isWhiteIp != null" >#{isWhiteIp,jdbcType=INTEGER},</if>  
         <if test="deviceType != null" >#{deviceType,jdbcType=INTEGER},</if>  
         <if test="androidId != null" >#{androidId,jdbcType=VARCHAR},</if>  
         <if test="androidSerial != null" >#{androidSerial,jdbcType=VARCHAR},</if>  
@@ -464,6 +477,7 @@
         app_id=#{appId,jdbcType=BIGINT},    
         is_actived=#{isActived,jdbcType=INTEGER},    
         is_remain=#{isRemain,jdbcType=INTEGER},    
+        is_white_ip=#{isWhiteIp,jdbcType=INTEGER},    
         device_type=#{deviceType,jdbcType=INTEGER},    
         android_id=#{androidId,jdbcType=VARCHAR},    
         android_serial=#{androidSerial,jdbcType=VARCHAR},    
@@ -502,6 +516,7 @@
         <if test="appId != null" >app_id=#{appId,jdbcType=BIGINT},</if>
         <if test="isActived != null" >is_actived=#{isActived,jdbcType=INTEGER},</if>
         <if test="isRemain != null" >is_remain=#{isRemain,jdbcType=INTEGER},</if>
+        <if test="isWhiteIp != null" >is_white_ip=#{isWhiteIp,jdbcType=INTEGER},</if>
         <if test="deviceType != null" >device_type=#{deviceType,jdbcType=INTEGER},</if>
         <if test="androidId != null" >android_id=#{androidId,jdbcType=VARCHAR},</if>
         <if test="androidSerial != null" >android_serial=#{androidSerial,jdbcType=VARCHAR},</if>

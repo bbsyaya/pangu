@@ -6,9 +6,8 @@ import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import org.turing.pangu.controller.phone.MobileResponse;
-import org.turing.pangu.controller.phone.Token;
+import org.turing.pangu.controller.common.PGResponse;
+import org.turing.pangu.controller.common.Token;
 import org.turing.pangu.utils.CipherUtil;
 import org.turing.pangu.utils.Const;
 import org.turing.pangu.utils.ConstantUtil;
@@ -31,8 +30,8 @@ public class TokenHandleImpl implements TokenService {
 	}
 
 	@Override
-	public MobileResponse<String> ValidateSignature(Token token, ArrayList<String> paramList,int type) {
-		MobileResponse<String> respone = new MobileResponse<String>();
+	public PGResponse<String> ValidateSignature(Token token, ArrayList<String> paramList,int type) {
+		PGResponse<String> respone = new PGResponse<String>();
 		if(token==null)
 		{
 			/** 请求参数错误 */

@@ -1,4 +1,4 @@
-package org.turing.pangu.Engine;
+package org.turing.pangu.engine;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.quartz.simpl.RAMJobStore;
-import org.turing.pangu.controller.MobileReportController;
+import org.turing.pangu.controller.phone.MobileReportController;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.model.Platform;
@@ -104,7 +104,7 @@ public class RemainEngine {
 			device.setCreateDate(todayMorning);
 			device.setUpdateDate(todayNight);
 			device.setAppId(app.getId());
-			device.setIsRemain(1); // 查询经过留存IP验证的数据
+			device.setIsWhiteIp(1);
 			List<Device> deviceList = deviceService.selectCanRemainData(device);
 			
 			if( null == deviceList || deviceList.size() == 0 )
@@ -157,6 +157,22 @@ public class RemainEngine {
 		}
 		return false;
 	}
+	public void updateRemainData()
+	{
+		List<App> appList = AppEngine.getInstance().getList();
+		if(null == appList){			
+			appList = appService.selectAll();
+			AppEngine.getInstance().setList(appList);
+		}
+		if(null == appList || appList.size() == 0 )
+			return;
+		
+		// 为每个app生成留存文件
+		for(App app : appList){
+			saveRemainData(app,null);
+		}
+		
+	}
 	// 保存运营数据
 	private boolean saveRemainData(App app,String remainPath)
 	{
@@ -185,7 +201,9 @@ public class RemainEngine {
 		
 		data.setAppId(app.getId());
 		data.setCreateDate(new Date());
-		data.setRemainPath(remainPath);
+		if(null != remainPath){
+			data.setRemainPath(remainPath);
+		}
 		data.setActive(actived);
 		data.setInactive(noneActived);
 		data.setRemain(remain);
@@ -206,6 +224,9 @@ public class RemainEngine {
 			return false;
 		}
 		data.setId(list.get(0).getId());
+		if(null == remainPath){
+			data.setRemainPath(list.get(0).getRemainPath());
+		}
 		remainDataService.update(data);
 		return true;
 		

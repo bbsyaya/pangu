@@ -205,25 +205,38 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
        <property name="triggers">  
            <list>  
               <ref bean="remainTrigger"/>  
+              <ref bean="updateRemainTrigger"/> 
            </list>  
        </property>  
        <property name="autoStartup" value="true"/>  
 	</bean>  
+	
 	<bean id="remainTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="remainJobDetail"/>  
        <!-- 每天23点30分执行一次 -->
-       <!--  
        <property name="cronExpression" value="0 30 23 * * ?"/>   
-       -->
+	</bean> 
+	<bean id="updateRemainTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="updateRemainJobDetail"/>  
+       <!-- 每5分钟执行一次 -->
        <property name="cronExpression" value="0 */5 * * * ?"/>  
-	</bean>  
+	</bean> 
+	 
 	<bean id="remainJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
         <property name="targetObject" ref="remainJob"/>  
         <property name="targetMethod" value="execute"/>  
         <property name="concurrent" value="false"/>
         <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
-	</bean> 
-	<bean id="remainJob" class="org.turing.pangu.service.quartz.RemainJob"/> 
+	</bean>
+	<bean id="updateRemainJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+        <property name="targetObject" ref="updateRemainJob"/>  
+        <property name="targetMethod" value="execute"/>  
+        <property name="concurrent" value="false"/>
+        <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
+	</bean>  
+	
+	<bean id="remainJob" class="org.turing.pangu.quartz.GenerateRemainFileJob"/> 
+	<bean id="updateRemainJob" class="org.turing.pangu.quartz.UpdateRemainJob"/> 
 	 
 	<!-- 生成留存文件定时器 end -->
 	<!-- 上传文件 -->

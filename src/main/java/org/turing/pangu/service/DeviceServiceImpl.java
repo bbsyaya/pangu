@@ -31,7 +31,7 @@ public class DeviceServiceImpl extends BaseServiceImpl<Device,Long> implements D
 	}
 
 	@Override
-	public boolean saveReport(ReportReq req,boolean isRemain) {
+	public boolean saveReport(ReportReq req,boolean isWhiteIp) {
 		// TODO Auto-generated method stub
 		Device device = new Device();
 		//----------------------------------------------------------------------
@@ -70,8 +70,9 @@ public class DeviceServiceImpl extends BaseServiceImpl<Device,Long> implements D
 		device.setAppId(req.getAppId());
 		device.setDeviceType(req.getDevice_type());
 		device.setIsActived(req.getIs_active());
-		Integer remainIp = (isRemain == true) ? 1: 0;
-		device.setIsRemain(remainIp);
+		Integer whiteIp = (isWhiteIp == true) ? 1: 0;
+		device.setIsWhiteIp(whiteIp);
+		device.setIsRemain(req.getIs_remain());
 		
 		dao.insert(device);
 		return false;

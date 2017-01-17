@@ -22,7 +22,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 3859971484627621317L;
+  private static final long serialVersionUID = 4975301484634277871L;
 
   /***/
   private Long appId;
@@ -32,6 +32,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 
   /***/
   private Integer isRemain;
+
+  /***/
+  private Integer isWhiteIp;
 
   /***/
   private Integer deviceType;
@@ -164,6 +167,21 @@ import org.hibernate.validator.constraints.NotEmpty;
   public void setIsRemain(Integer isRemain)
   {
     this.isRemain=isRemain;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
+  public Integer getIsWhiteIp()
+  {
+   return this.isWhiteIp;
+  }
+
+  /**设置*/
+  public void setIsWhiteIp(Integer isWhiteIp)
+  {
+    this.isWhiteIp=isWhiteIp;
   }
 
   

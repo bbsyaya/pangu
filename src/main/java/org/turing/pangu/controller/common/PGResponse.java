@@ -1,9 +1,9 @@
-package org.turing.pangu.controller.phone;
+package org.turing.pangu.controller.common;
 
 import org.turing.pangu.utils.Const;
 import org.turing.pangu.utils.SpringUtils;
 
-public class MobileResponse<T> {
+public class PGResponse<T> {
 	public int getStatus() {
 		return status;
 	}

@@ -2,8 +2,8 @@ package org.turing.pangu.service;
 
 import java.util.ArrayList;
 
-import org.turing.pangu.controller.phone.MobileResponse;
-import org.turing.pangu.controller.phone.Token;
+import org.turing.pangu.controller.common.PGResponse;
+import org.turing.pangu.controller.common.Token;
 
 public interface TokenService {
 
@@ -15,7 +15,7 @@ public interface TokenService {
 	 * @param type
 	 * @return
 	 */
-	MobileResponse<String> ValidateSignature(Token token, ArrayList<String> paramList, int type);
+	PGResponse<String> ValidateSignature(Token token, ArrayList<String> paramList, int type);
 
     String getOauthToken();
 }

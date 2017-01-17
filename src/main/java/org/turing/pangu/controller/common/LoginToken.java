@@ -8,7 +8,7 @@
  * @since 2015年10月30日 
  */
 
-package org.turing.pangu.controller.phone.response;
+package org.turing.pangu.controller.common;
 
 import java.util.Date;
 

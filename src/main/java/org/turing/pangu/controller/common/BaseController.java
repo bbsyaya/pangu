@@ -1,4 +1,4 @@
-package org.turing.pangu.controller;
+package org.turing.pangu.controller.common;
 
 import java.util.HashSet;
 import java.util.Set;

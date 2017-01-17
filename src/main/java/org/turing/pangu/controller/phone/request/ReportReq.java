@@ -1,5 +1,7 @@
 package org.turing.pangu.controller.phone.request;
 
+import org.turing.pangu.controller.common.BaseReq;
+
 
 public class ReportReq extends BaseReq{
 	public String getAccessToken() {

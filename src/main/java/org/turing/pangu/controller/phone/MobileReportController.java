@@ -1,4 +1,6 @@
-package org.turing.pangu.controller;
+package org.turing.pangu.controller.phone;
+
+import java.util.Date;
 
 import javax.annotation.Resource;
 
@@ -9,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.turing.pangu.controller.phone.MobileResponse;
+import org.turing.pangu.controller.common.BaseController;
+import org.turing.pangu.controller.common.PGResponse;
 import org.turing.pangu.controller.phone.request.ReportReq;
 import org.turing.pangu.dao.UserDaoImpl;
 import org.turing.pangu.model.App;
@@ -45,9 +48,9 @@ public class MobileReportController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/report", method = RequestMethod.POST, consumes = "application/json")
-	
-	public @ResponseBody MobileResponse<String> report(@RequestBody ReportReq req) {
-		MobileResponse<String> rsp = new MobileResponse<String>();
+	public @ResponseBody PGResponse<String> report(@RequestBody ReportReq req) {
+		logger.trace("report---" + req.getAppId() + "--" + new Date());
+		PGResponse<String> rsp = new PGResponse<String>();
 		//1. 先验证是否为有效appid
 		App app = appService.select(req.getAppId());
 		if(app == null){

@@ -1,4 +1,4 @@
-package org.turing.pangu.controller.phone;
+package org.turing.pangu.controller.common;
 
 import java.io.Serializable;
 

@@ -1,6 +1,4 @@
-package org.turing.pangu.controller.phone.request;
-
-import org.turing.pangu.controller.common.Token;
+package org.turing.pangu.controller.common;
 
 
 /*

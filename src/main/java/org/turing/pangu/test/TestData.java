@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.turing.pangu.Engine.RemainEngine;
+import org.turing.pangu.engine.RemainEngine;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.model.RemainVpn;
