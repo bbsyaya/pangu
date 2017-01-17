@@ -16,6 +16,7 @@ import org.turing.pangu.model.User;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.PlatformService;
+import org.turing.pangu.service.RemainDataService;
 import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.UserService;
 import org.turing.pangu.utils.RandomUtils;
@@ -35,6 +36,9 @@ public class TestData {
 	
 	@Resource(name="remainVpnServiceImpl")
 	private RemainVpnService remainVpnService;
+	
+	@Resource(name="remainDataServiceImpl")
+	private RemainDataService remainDataService;
 	
 	@Resource(name="deviceServiceImpl")
 	private DeviceService deviceService;
@@ -110,8 +114,8 @@ public class TestData {
 		vpn.setName("广东VPN");
 		vpn.setIpList("10.205.154.192|120.180.221.178|230.63.79.29|140.130.101.78|123.43.67.129|207.18.138.82|103.143.107.68");
 		remainVpnService.insert(vpn);
-	}
-	
+	}*/
+	/*
 	@Test
 	public void testInsertDevice(){
 		Device dev = new Device();
@@ -132,23 +136,20 @@ public class TestData {
 				ipAddress =  ip0.toString()+":" +ip1.toString()+":" +ip2.toString()+":" +ip3.toString();
 			}
 			dev.setIp(ipAddress);
-			int random = (int)(Math.random() * 10);
+			int random = (int)(Math.random() * 100);
 			int mod = random%4 + 1;
 			dev.setAppId((long) mod);
-			if(random%4 == 0){
-				dev.setIsRemainIp(0);
-				dev.setDeviceType(1);
-				dev.setIsActived(0);
-			}
 			deviceService.insert(dev);
 			dev.setCreateDate(new Date());
 			dev.setUpdateDate(new Date());
 		}
 	}*/
-
+	
 	@Test
 	public void remain(){
-		RemainEngine.getInstance().setService(platformService, appService, deviceService);
+		RemainEngine.getInstance().setService(platformService, appService, deviceService,remainDataService);
 		RemainEngine.getInstance().generateRemainFile();
 	}
+	
+
 }

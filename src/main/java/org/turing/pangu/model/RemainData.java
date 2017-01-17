@@ -4,8 +4,8 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年01月15日 
- * @since 2017年01月15日 
+ * @version 1.0, 2017年01月17日 
+ * @since 2017年01月17日 
  */
 
 package org.turing.pangu.model;
@@ -22,22 +22,25 @@ import org.hibernate.validator.constraints.NotEmpty;
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 5725141484483833454L;
+  private static final long serialVersionUID = 4086231484631377987L;
 
   /***/
-  private String token;
+  private Long appId;
 
   /***/
-  private Long addActiveDevice;
+  private Long active;
 
   /***/
-  private Long addInactiveDevice;
+  private Long inactive;
 
   /***/
-  private Long remainActiveDevice;
+  private Long remain;
 
   /***/
-  private Long remainInactiveDevice;
+  private Long remainActive;
+
+  /***/
+  private Long unremain;
 
   /***/
   private String remainPath;
@@ -45,76 +48,93 @@ import org.hibernate.validator.constraints.NotEmpty;
   /***/
   private Date createDate;
 
+  /***/
+  private Date updateDate;
+
 
   
   /**获取*/
   @JsonProperty
-  @Length(max =255 )
-  public String getToken()
+  @NotNull(groups = {Default.class,Save.class})
+  public Long getAppId()
   {
-   return this.token;
+   return this.appId;
   }
 
   /**设置*/
-  public void setToken(String token)
+  public void setAppId(Long appId)
   {
-    this.token=token;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  public Long getAddActiveDevice()
-  {
-   return this.addActiveDevice;
-  }
-
-  /**设置*/
-  public void setAddActiveDevice(Long addActiveDevice)
-  {
-    this.addActiveDevice=addActiveDevice;
+    this.appId=appId;
   }
 
   
   /**获取*/
   @JsonProperty
-  public Long getAddInactiveDevice()
+  public Long getActive()
   {
-   return this.addInactiveDevice;
+   return this.active;
   }
 
   /**设置*/
-  public void setAddInactiveDevice(Long addInactiveDevice)
+  public void setActive(Long active)
   {
-    this.addInactiveDevice=addInactiveDevice;
+    this.active=active;
   }
 
   
   /**获取*/
   @JsonProperty
-  public Long getRemainActiveDevice()
+  public Long getInactive()
   {
-   return this.remainActiveDevice;
+   return this.inactive;
   }
 
   /**设置*/
-  public void setRemainActiveDevice(Long remainActiveDevice)
+  public void setInactive(Long inactive)
   {
-    this.remainActiveDevice=remainActiveDevice;
+    this.inactive=inactive;
   }
 
   
   /**获取*/
   @JsonProperty
-  public Long getRemainInactiveDevice()
+  public Long getRemain()
   {
-   return this.remainInactiveDevice;
+   return this.remain;
   }
 
   /**设置*/
-  public void setRemainInactiveDevice(Long remainInactiveDevice)
+  public void setRemain(Long remain)
   {
-    this.remainInactiveDevice=remainInactiveDevice;
+    this.remain=remain;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  public Long getRemainActive()
+  {
+   return this.remainActive;
+  }
+
+  /**设置*/
+  public void setRemainActive(Long remainActive)
+  {
+    this.remainActive=remainActive;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  public Long getUnremain()
+  {
+   return this.unremain;
+  }
+
+  /**设置*/
+  public void setUnremain(Long unremain)
+  {
+    this.unremain=unremain;
   }
 
   
@@ -144,6 +164,20 @@ import org.hibernate.validator.constraints.NotEmpty;
   public void setCreateDate(Date createDate)
   {
     this.createDate=createDate;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  public Date getUpdateDate()
+  {
+   return this.updateDate;
+  }
+
+  /**设置*/
+  public void setUpdateDate(Date updateDate)
+  {
+    this.updateDate=updateDate;
   }
 
   //自动生成区域结束

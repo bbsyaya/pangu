@@ -3,41 +3,49 @@
 <mapper namespace="org.turing.pangu.mapper.RemainDataMapper" >
   <resultMap id="BaseResultMap" type="org.turing.pangu.model.RemainData" >
     <id column="id" property="id" jdbcType="BIGINT" />       
-    <result column="token" property="token" jdbcType="VARCHAR" />          
-    <result column="add_active_device" property="addActiveDevice" jdbcType="BIGINT" />          
-    <result column="add_inactive_device" property="addInactiveDevice" jdbcType="BIGINT" />          
-    <result column="remain_active_device" property="remainActiveDevice" jdbcType="BIGINT" />          
-    <result column="remain_inactive_device" property="remainInactiveDevice" jdbcType="BIGINT" />          
+    <result column="app_id" property="appId" jdbcType="BIGINT" />          
+    <result column="active" property="active" jdbcType="BIGINT" />          
+    <result column="inactive" property="inactive" jdbcType="BIGINT" />          
+    <result column="remain" property="remain" jdbcType="BIGINT" />          
+    <result column="remain_active" property="remainActive" jdbcType="BIGINT" />          
+    <result column="unremain" property="unremain" jdbcType="BIGINT" />          
     <result column="remain_path" property="remainPath" jdbcType="VARCHAR" />          
     <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
   </resultMap>   
   <sql id="Base_Column_List" >
     r.id,
-	r.token,
-	r.add_active_device,
-	r.add_inactive_device,
-	r.remain_active_device,
-	r.remain_inactive_device,
+	r.app_id,
+	r.active,
+	r.inactive,
+	r.remain,
+	r.remain_active,
+	r.unremain,
 	r.remain_path,
-	r.create_date
+	r.create_date,
+	r.update_date
   </sql>
   <sql id="Base_Column_Value_List" >
-    #{token},
-	#{addActiveDevice},
-	#{addInactiveDevice},
-	#{remainActiveDevice},
-	#{remainInactiveDevice},
+    #{appId},
+	#{active},
+	#{inactive},
+	#{remain},
+	#{remainActive},
+	#{unremain},
 	#{remainPath},
-	#{createDate}
+	#{createDate},
+	#{updateDate}
   </sql>
   <sql id="Base_Column_Update_List" >
-    token=#{token},
-	add_active_device=#{addActiveDevice},
-	add_inactive_device=#{addInactiveDevice},
-	remain_active_device=#{remainActiveDevice},
-	remain_inactive_device=#{remainInactiveDevice},
+    app_id=#{appId},
+	active=#{active},
+	inactive=#{inactive},
+	remain=#{remain},
+	remain_active=#{remainActive},
+	unremain=#{unremain},
 	remain_path=#{remainPath},
-	create_date=#{createDate}
+	create_date=#{createDate},
+	update_date=#{updateDate}
   </sql> 
   <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -50,18 +58,28 @@
     <include refid="Base_Column_List" />
     from remain_data r
   </select>
+  <select id="selectTodayData" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Device" >
+    select 
+    <include refid="Base_Column_List" />
+    from remain_data r
+    where 1=1 
+    <if test="appId != null" >and r.app_id= #{appId,jdbcType=BIGINT}</if>
+    <if test="createDate != null and createDate!=''" >and r.create_date BETWEEN #{createDate,jdbcType=TIMESTAMP} AND #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
   <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.RemainData" >
     select 
     <include refid="Base_Column_List" />
     from remain_data r
     where 1=1 
-    <if test="token != null" >and r.token= #{token,jdbcType=VARCHAR}</if>
-    <if test="addActiveDevice != null" >and r.add_active_device= #{addActiveDevice,jdbcType=BIGINT}</if>
-    <if test="addInactiveDevice != null" >and r.add_inactive_device= #{addInactiveDevice,jdbcType=BIGINT}</if>
-    <if test="remainActiveDevice != null" >and r.remain_active_device= #{remainActiveDevice,jdbcType=BIGINT}</if>
-    <if test="remainInactiveDevice != null" >and r.remain_inactive_device= #{remainInactiveDevice,jdbcType=BIGINT}</if>
+    <if test="appId != null" >and r.app_id= #{appId,jdbcType=BIGINT}</if>
+    <if test="active != null" >and r.active= #{active,jdbcType=BIGINT}</if>
+    <if test="inactive != null" >and r.inactive= #{inactive,jdbcType=BIGINT}</if>
+    <if test="remain != null" >and r.remain= #{remain,jdbcType=BIGINT}</if>
+    <if test="remainActive != null" >and r.remain_active= #{remainActive,jdbcType=BIGINT}</if>
+    <if test="unremain != null" >and r.unremain= #{unremain,jdbcType=BIGINT}</if>
     <if test="remainPath != null" >and r.remain_path= #{remainPath,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and r.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and r.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
     <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
   </select>
   <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.RemainData" >
@@ -69,39 +87,45 @@
     <include refid="Base_Column_List" />
     from remain_data r
     where 1=1 
-    <if test="token != null" >and r.token= #{token,jdbcType=VARCHAR}</if>
-    <if test="addActiveDevice != null" >and r.add_active_device= #{addActiveDevice,jdbcType=BIGINT}</if>
-    <if test="addInactiveDevice != null" >and r.add_inactive_device= #{addInactiveDevice,jdbcType=BIGINT}</if>
-    <if test="remainActiveDevice != null" >and r.remain_active_device= #{remainActiveDevice,jdbcType=BIGINT}</if>
-    <if test="remainInactiveDevice != null" >and r.remain_inactive_device= #{remainInactiveDevice,jdbcType=BIGINT}</if>
+    <if test="appId != null" >and r.app_id= #{appId,jdbcType=BIGINT}</if>
+    <if test="active != null" >and r.active= #{active,jdbcType=BIGINT}</if>
+    <if test="inactive != null" >and r.inactive= #{inactive,jdbcType=BIGINT}</if>
+    <if test="remain != null" >and r.remain= #{remain,jdbcType=BIGINT}</if>
+    <if test="remainActive != null" >and r.remain_active= #{remainActive,jdbcType=BIGINT}</if>
+    <if test="unremain != null" >and r.unremain= #{unremain,jdbcType=BIGINT}</if>
     <if test="remainPath != null" >and r.remain_path= #{remainPath,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and r.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and r.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
   <select id="selectPage" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.ParamModel" >
     select 
     <include refid="Base_Column_List" />
     from remain_data r
     where 1=1 
-    <if test="model.token != null" >and r.token= #{model.token,jdbcType=VARCHAR}</if>
-    <if test="model.addActiveDevice != null" >and r.add_active_device= #{model.addActiveDevice,jdbcType=BIGINT}</if>
-    <if test="model.addInactiveDevice != null" >and r.add_inactive_device= #{model.addInactiveDevice,jdbcType=BIGINT}</if>
-    <if test="model.remainActiveDevice != null" >and r.remain_active_device= #{model.remainActiveDevice,jdbcType=BIGINT}</if>
-    <if test="model.remainInactiveDevice != null" >and r.remain_inactive_device= #{model.remainInactiveDevice,jdbcType=BIGINT}</if>
+    <if test="model.appId != null" >and r.app_id= #{model.appId,jdbcType=BIGINT}</if>
+    <if test="model.active != null" >and r.active= #{model.active,jdbcType=BIGINT}</if>
+    <if test="model.inactive != null" >and r.inactive= #{model.inactive,jdbcType=BIGINT}</if>
+    <if test="model.remain != null" >and r.remain= #{model.remain,jdbcType=BIGINT}</if>
+    <if test="model.remainActive != null" >and r.remain_active= #{model.remainActive,jdbcType=BIGINT}</if>
+    <if test="model.unremain != null" >and r.unremain= #{model.unremain,jdbcType=BIGINT}</if>
     <if test="model.remainPath != null" >and r.remain_path= #{model.remainPath,jdbcType=VARCHAR}</if>
     <if test="model.createDate != null" >and r.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
+    <if test="model.updateDate != null" >and r.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
     <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
   </select>
   <select id="selectCount" resultType="java.lang.Long" parameterType="org.turing.pangu.model.RemainData" >
     select count(0) totalCount
     from remain_data r
     where 1=1 
-    <if test="token != null" >and r.token= #{token,jdbcType=VARCHAR}</if>
-    <if test="addActiveDevice != null" >and r.add_active_device= #{addActiveDevice,jdbcType=BIGINT}</if>
-    <if test="addInactiveDevice != null" >and r.add_inactive_device= #{addInactiveDevice,jdbcType=BIGINT}</if>
-    <if test="remainActiveDevice != null" >and r.remain_active_device= #{remainActiveDevice,jdbcType=BIGINT}</if>
-    <if test="remainInactiveDevice != null" >and r.remain_inactive_device= #{remainInactiveDevice,jdbcType=BIGINT}</if>
+    <if test="appId != null" >and r.app_id= #{appId,jdbcType=BIGINT}</if>
+    <if test="active != null" >and r.active= #{active,jdbcType=BIGINT}</if>
+    <if test="inactive != null" >and r.inactive= #{inactive,jdbcType=BIGINT}</if>
+    <if test="remain != null" >and r.remain= #{remain,jdbcType=BIGINT}</if>
+    <if test="remainActive != null" >and r.remain_active= #{remainActive,jdbcType=BIGINT}</if>
+    <if test="unremain != null" >and r.unremain= #{unremain,jdbcType=BIGINT}</if>
     <if test="remainPath != null" >and r.remain_path= #{remainPath,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and r.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and r.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
   <delete id="delete" parameterType="java.lang.Long" >
     delete from remain_data
@@ -110,68 +134,80 @@
   <insert id="insert" parameterType="org.turing.pangu.model.RemainData" >
     insert into remain_data 
     <trim prefix="(" suffix=")" suffixOverrides="," >
-        token,    
-        add_active_device,    
-        add_inactive_device,    
-        remain_active_device,    
-        remain_inactive_device,    
+        app_id,    
+        active,    
+        inactive,    
+        remain,    
+        remain_active,    
+        unremain,    
         remain_path,    
         create_date,    
+        update_date,    
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-        #{token,jdbcType=VARCHAR},  
-        #{addActiveDevice,jdbcType=BIGINT},  
-        #{addInactiveDevice,jdbcType=BIGINT},  
-        #{remainActiveDevice,jdbcType=BIGINT},  
-        #{remainInactiveDevice,jdbcType=BIGINT},  
+        #{appId,jdbcType=BIGINT},  
+        #{active,jdbcType=BIGINT},  
+        #{inactive,jdbcType=BIGINT},  
+        #{remain,jdbcType=BIGINT},  
+        #{remainActive,jdbcType=BIGINT},  
+        #{unremain,jdbcType=BIGINT},  
         #{remainPath,jdbcType=VARCHAR},  
         #{createDate,jdbcType=TIMESTAMP},  
+        #{updateDate,jdbcType=TIMESTAMP},  
     </trim>
   </insert>
   <insert id="insertRemainDataByTrim" parameterType="org.turing.pangu.model.RemainData" >
     insert into remain_data 
     <trim prefix="(" suffix=")" suffixOverrides="," >
-        <if test="token != null" >token,</if>
-        <if test="addActiveDevice != null" >add_active_device,</if>
-        <if test="addInactiveDevice != null" >add_inactive_device,</if>
-        <if test="remainActiveDevice != null" >remain_active_device,</if>
-        <if test="remainInactiveDevice != null" >remain_inactive_device,</if>
+        <if test="appId != null" >app_id,</if>
+        <if test="active != null" >active,</if>
+        <if test="inactive != null" >inactive,</if>
+        <if test="remain != null" >remain,</if>
+        <if test="remainActive != null" >remain_active,</if>
+        <if test="unremain != null" >unremain,</if>
         <if test="remainPath != null" >remain_path,</if>
         <if test="createDate != null" >create_date,</if>
+        <if test="updateDate != null" >update_date,</if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-        <if test="token != null" >#{token,jdbcType=VARCHAR},</if>  
-        <if test="addActiveDevice != null" >#{addActiveDevice,jdbcType=BIGINT},</if>  
-        <if test="addInactiveDevice != null" >#{addInactiveDevice,jdbcType=BIGINT},</if>  
-        <if test="remainActiveDevice != null" >#{remainActiveDevice,jdbcType=BIGINT},</if>  
-        <if test="remainInactiveDevice != null" >#{remainInactiveDevice,jdbcType=BIGINT},</if>  
+        <if test="appId != null" >#{appId,jdbcType=BIGINT},</if>  
+        <if test="active != null" >#{active,jdbcType=BIGINT},</if>  
+        <if test="inactive != null" >#{inactive,jdbcType=BIGINT},</if>  
+        <if test="remain != null" >#{remain,jdbcType=BIGINT},</if>  
+        <if test="remainActive != null" >#{remainActive,jdbcType=BIGINT},</if>  
+        <if test="unremain != null" >#{unremain,jdbcType=BIGINT},</if>  
         <if test="remainPath != null" >#{remainPath,jdbcType=VARCHAR},</if>  
         <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
+        <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
     </trim>
   </insert>
   <update id="updateRemainDataById" parameterType="org.turing.pangu.model.RemainData" >
     update remain_data set 
     <trim prefix="" suffix="" suffixOverrides="," >
-        token=#{token,jdbcType=VARCHAR},    
-        add_active_device=#{addActiveDevice,jdbcType=BIGINT},    
-        add_inactive_device=#{addInactiveDevice,jdbcType=BIGINT},    
-        remain_active_device=#{remainActiveDevice,jdbcType=BIGINT},    
-        remain_inactive_device=#{remainInactiveDevice,jdbcType=BIGINT},    
+        app_id=#{appId,jdbcType=BIGINT},    
+        active=#{active,jdbcType=BIGINT},    
+        inactive=#{inactive,jdbcType=BIGINT},    
+        remain=#{remain,jdbcType=BIGINT},    
+        remain_active=#{remainActive,jdbcType=BIGINT},    
+        unremain=#{unremain,jdbcType=BIGINT},    
         remain_path=#{remainPath,jdbcType=VARCHAR},    
         create_date=#{createDate,jdbcType=TIMESTAMP},    
+        update_date=#{updateDate,jdbcType=TIMESTAMP},    
     </trim>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="update" parameterType="org.turing.pangu.model.RemainData" >
     update remain_data set 
     <trim prefix="" suffix="" suffixOverrides="," >
-        <if test="token != null" >token=#{token,jdbcType=VARCHAR},</if>
-        <if test="addActiveDevice != null" >add_active_device=#{addActiveDevice,jdbcType=BIGINT},</if>
-        <if test="addInactiveDevice != null" >add_inactive_device=#{addInactiveDevice,jdbcType=BIGINT},</if>
-        <if test="remainActiveDevice != null" >remain_active_device=#{remainActiveDevice,jdbcType=BIGINT},</if>
-        <if test="remainInactiveDevice != null" >remain_inactive_device=#{remainInactiveDevice,jdbcType=BIGINT},</if>
+        <if test="appId != null" >app_id=#{appId,jdbcType=BIGINT},</if>
+        <if test="active != null" >active=#{active,jdbcType=BIGINT},</if>
+        <if test="inactive != null" >inactive=#{inactive,jdbcType=BIGINT},</if>
+        <if test="remain != null" >remain=#{remain,jdbcType=BIGINT},</if>
+        <if test="remainActive != null" >remain_active=#{remainActive,jdbcType=BIGINT},</if>
+        <if test="unremain != null" >unremain=#{unremain,jdbcType=BIGINT},</if>
         <if test="remainPath != null" >remain_path=#{remainPath,jdbcType=VARCHAR},</if>
         <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
     </trim>
     where id = #{id,jdbcType=INTEGER}
   </update>

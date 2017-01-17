@@ -10,10 +10,11 @@
 
 package org.turing.pangu.dao;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import org.turing.pangu.mapper.RemainDataMapper;
 import org.turing.pangu.model.RemainData;
 
@@ -30,6 +31,18 @@ public class RemainDataDaoImpl extends BaseDaoImpl<RemainData, Long> implements 
 	@Autowired
 	public void setRemainDataMapper(RemainDataMapper mapper) {
 		super.setBaseMapper(mapper);
+	}
+
+	@Override
+	public List<RemainData> selectTodayData(RemainData model) {
+		// TODO Auto-generated method stub
+		List<RemainData> list = null;
+		try {
+			list = mapper.selectTodayData(model);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return list;
 	}
 
 }

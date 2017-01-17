@@ -134,6 +134,11 @@
 			<version>${jackjson.version}</version>
 		</dependency>
 		<!-- jackson end -->
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>fastjson</artifactId>
+		    <version>1.2.23</version>
+		</dependency>
 		<!-- datasource begin -->
 		<dependency>
 			<groupId>mysql</groupId>

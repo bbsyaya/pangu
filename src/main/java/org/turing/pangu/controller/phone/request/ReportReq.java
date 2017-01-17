@@ -32,16 +32,16 @@ public class ReportReq extends BaseReq{
 	public void setIs_active(int is_active) {
 		this.is_active = is_active;
 	}
-	public int getIs_remain_ip() {
-		return is_remain_ip;
+	public int getIs_remain() {
+		return is_remain;
 	}
-	public void setIs_remain_ip(int is_remain_ip) {
-		this.is_remain_ip = is_remain_ip;
+	public void setIs_remain(int is_remain) {
+		this.is_remain = is_remain;
 	}
 	private String accessToken; // 访问token,前期为空
 	private Long appId;
 	private NeedChangedInfo device;
 	private int device_type; // 0: 模拟器 ，1:真机 	
 	private int is_active;	// 1:active 0:inactive
-	private int is_remain_ip;	// 1:留存IP 0:未知,需验证
+	private int is_remain;	// 1:为留存数据 0:不为留存数据
 }

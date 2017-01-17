@@ -10,8 +10,10 @@
 
 package org.turing.pangu.dao;
 
+import java.util.List;
+
 import org.turing.pangu.model.RemainData;
 
 public interface RemainDataDao extends BaseDao<RemainData, Long> {
-
+	public List<RemainData> selectTodayData(RemainData model);
 }

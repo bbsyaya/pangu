@@ -11,21 +11,30 @@ import java.util.Random;
 import javax.annotation.Resource;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.quartz.simpl.RAMJobStore;
+import org.turing.pangu.controller.MobileReportController;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.model.Platform;
+import org.turing.pangu.model.RemainData;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.service.PlatformServiceImpl;
+import org.turing.pangu.service.RemainDataService;
 import org.turing.pangu.utils.DateUtils;
 import org.turing.pangu.utils.FileUtil;
 import org.turing.pangu.utils.JsonUtils;
 import org.turing.pangu.utils.RandomUtils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
+
 
 public class RemainEngine {
+	private static final Logger logger = Logger.getLogger(RemainEngine.class);
 	private static RemainEngine mInstance = new RemainEngine();
 	private String remainRootPath = PropertyEngine.getProperty("download.root").toString(); // 留存文件根目录
 	private String remainDownload = PropertyEngine.getProperty("download.remain").toString(); // 下载留存文件
@@ -35,11 +44,13 @@ public class RemainEngine {
 	private PlatformService platformService;
 	private AppService appService;
 	private DeviceService deviceService;
+	private RemainDataService remainDataService;
 	
-	public void setService(PlatformService platformService,AppService appService,DeviceService deviceService){
+	public void setService(PlatformService platformService,AppService appService,DeviceService deviceService,RemainDataService remainDataService){
 		this.platformService = platformService;
 		this.appService = appService;
 		this.deviceService = deviceService;
+		this.remainDataService = remainDataService;
 	}
 	public static RemainEngine getInstance()
 	{
@@ -93,7 +104,7 @@ public class RemainEngine {
 			device.setCreateDate(todayMorning);
 			device.setUpdateDate(todayNight);
 			device.setAppId(app.getId());
-			device.setIsRemainIp(1); // 查询经过留存IP验证的数据
+			device.setIsRemain(1); // 查询经过留存IP验证的数据
 			List<Device> deviceList = deviceService.selectCanRemainData(device);
 			
 			if( null == deviceList || deviceList.size() == 0 )
@@ -103,16 +114,19 @@ public class RemainEngine {
 			
 			String yestodayRemain = DateFormat(todayMorning) + "_" + app.getId() + "_" + app.getPackageName() + ".json";
 			String todayRemain = DateFormat(tomorrowMorning) + "_" + app.getId() + "_" + app.getPackageName() + ".json";
+			yestodayRemain = remainDownload + app.getUserId() + "/" + app.getPlatformId() + "/" + yestodayRemain;
+			todayRemain = remainDownload + app.getUserId() + "/" + app.getPlatformId() + "/" + todayRemain;
 			
-			String yesPath = remainRootPath + remainDownload + app.getUserId() + "/" + app.getPlatformId() + "/" + yestodayRemain;
-			String tomPath = remainRootPath + remainDownload + app.getUserId() + "/" + app.getPlatformId() + "/" + todayRemain;
+			String yesPath = remainRootPath + yestodayRemain;
+			String tomPath = remainRootPath + todayRemain;
 			
 			if(FileUtil.isFileExist(yesPath))
 			{
 				File file = new File(yesPath);
 				try {
 					String json = FileUtils.readFileToString(file);
-					deviceRemainList = JsonUtils.toObject(json, new ArrayList<Device>().getClass());
+					// -- ali关键转换
+					deviceRemainList = JSON.parseObject(json, new TypeReference<ArrayList<Device>>(){});					
 					if(deviceRemainList.size() > remainCount ){
 						removeList(deviceRemainList,remainCount);
 					}
@@ -127,23 +141,75 @@ public class RemainEngine {
 				removeList(deviceList,remainCount); // 从中选200个
 			}
 			List<Device> newlist = mergeList(deviceRemainList,deviceList);
-			
 			String newjson = JsonUtils.toJson(newlist);
 			
 			if(!FileUtil.isFileExist(tomPath)){
 				FileUtil.makeDirectory(tomPath);
+				File file = new File(tomPath);
+				try {
+					FileUtils.write(file, newjson, "UTF-8");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-
-			
-			//FileUtil.
-			
-			//String pfPath = remainRoot + pf.getName();
-			// 创建目录
-			//FileUtils.c
+			saveRemainData(app,todayRemain);
 		}
 		return false;
 	}
-	
+	// 保存运营数据
+	private boolean saveRemainData(App app,String remainPath)
+	{
+		RemainData data = new RemainData();
+		Date todayMorning = DateUtils.getTimesMorning();
+		Date todayNight = DateUtils.getTimesNight();
+		
+		Device dev = new Device();
+		dev.setAppId(app.getId());
+		dev.setIsActived(0);
+		Long noneActived = deviceService.selectCount(dev);
+		
+		dev.setIsActived(1);
+		Long actived = deviceService.selectCount(dev);
+		
+		dev.setIsActived(null);
+		
+		dev.setIsRemain(0);
+		Long noneRemain = deviceService.selectCount(dev);
+		
+		dev.setIsRemain(1);
+		Long remain = deviceService.selectCount(dev);
+		
+		dev.setIsActived(1);
+		Long remain_active = deviceService.selectCount(dev);
+		
+		data.setAppId(app.getId());
+		data.setCreateDate(new Date());
+		data.setRemainPath(remainPath);
+		data.setActive(actived);
+		data.setInactive(noneActived);
+		data.setRemain(remain);
+		data.setUnremain(noneRemain);
+		data.setRemainActive(remain_active);
+		
+		data.setCreateDate(todayMorning);
+		data.setUpdateDate(todayNight);
+		List<RemainData> list = remainDataService.selectTodayData(data);
+		data.setCreateDate(new Date());
+		data.setUpdateDate(new Date());
+		if(null == list || list.size() == 0 ){
+			remainDataService.insert(data);
+			return true;
+		}
+		if(list.size() > 1){
+			logger.error("saveRemainData" + "今日留存数据大于1条");
+			return false;
+		}
+		data.setId(list.get(0).getId());
+		remainDataService.update(data);
+		return true;
+		
+	}
 	private void removeList(List<Device> list,int needCount){
 		int tmp = list.size() - needCount;
 		for(int index = 0; index < tmp;index++)

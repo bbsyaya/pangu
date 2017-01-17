@@ -31,7 +31,7 @@ public class DeviceServiceImpl extends BaseServiceImpl<Device,Long> implements D
 	}
 
 	@Override
-	public boolean saveReport(ReportReq req,boolean isRemainIp) {
+	public boolean saveReport(ReportReq req,boolean isRemain) {
 		// TODO Auto-generated method stub
 		Device device = new Device();
 		//----------------------------------------------------------------------
@@ -70,8 +70,8 @@ public class DeviceServiceImpl extends BaseServiceImpl<Device,Long> implements D
 		device.setAppId(req.getAppId());
 		device.setDeviceType(req.getDevice_type());
 		device.setIsActived(req.getIs_active());
-		Integer remainIp = (isRemainIp == true) ? 1: 0;
-		device.setIsRemainIp(remainIp);
+		Integer remainIp = (isRemain == true) ? 1: 0;
+		device.setIsRemain(remainIp);
 		
 		dao.insert(device);
 		return false;

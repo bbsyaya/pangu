@@ -38,7 +38,7 @@ public class DeviceDaoImpl extends BaseDaoImpl<Device, Long> implements DeviceDa
 		// TODO Auto-generated method stub
 		List<Device> list = null;
 		try {
-			list = mapper.selectCanRemainData();
+			list = mapper.selectCanRemainData(device);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}

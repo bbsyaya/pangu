@@ -4,8 +4,8 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年01月16日 
- * @since 2017年01月16日 
+ * @version 1.0, 2017年01月17日 
+ * @since 2017年01月17日 
  */
 
 package org.turing.pangu.model;
@@ -22,7 +22,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 4576371484545161786L;
+  private static final long serialVersionUID = 3859971484627621317L;
 
   /***/
   private Long appId;
@@ -31,7 +31,7 @@ import org.hibernate.validator.constraints.NotEmpty;
   private Integer isActived;
 
   /***/
-  private Integer isRemainIp;
+  private Integer isRemain;
 
   /***/
   private Integer deviceType;
@@ -155,15 +155,15 @@ import org.hibernate.validator.constraints.NotEmpty;
   /**获取*/
   @JsonProperty
   @NotNull(groups = {Default.class,Save.class})
-  public Integer getIsRemainIp()
+  public Integer getIsRemain()
   {
-   return this.isRemainIp;
+   return this.isRemain;
   }
 
   /**设置*/
-  public void setIsRemainIp(Integer isRemainIp)
+  public void setIsRemain(Integer isRemain)
   {
-    this.isRemainIp=isRemainIp;
+    this.isRemain=isRemain;
   }
 
   
@@ -409,7 +409,6 @@ import org.hibernate.validator.constraints.NotEmpty;
   /**获取*/
   @JsonProperty
   @Length(max =255 )
-  @NotEmpty(groups = {Default.class,Save.class})
   public String getIp()
   {
    return this.ip;
