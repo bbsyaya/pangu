@@ -213,7 +213,6 @@ public class RemainEngine {
 		data.setCreateDate(todayMorning);
 		data.setUpdateDate(todayNight);
 		List<RemainData> list = remainDataService.selectTodayData(data);
-		data.setCreateDate(new Date());
 		data.setUpdateDate(new Date());
 		if(null == list || list.size() == 0 ){
 			remainDataService.insert(data);

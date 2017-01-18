@@ -19,6 +19,7 @@ import org.turing.pangu.model.App;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.RemainVpnService;
+import org.turing.pangu.utils.Const;
 
 /**
  * 
@@ -26,7 +27,7 @@ import org.turing.pangu.service.RemainVpnService;
  * @des 处理手机端过来的所有关于用户信息相关请求（如：注册，登录，修改密码）
  *
  */
-@Controller("mobileUserController")
+@Controller("mobileReportController")
 @RequestMapping("/mobile")
 public class MobileReportController extends BaseController {
 	/**
@@ -54,7 +55,7 @@ public class MobileReportController extends BaseController {
 		//1. 先验证是否为有效appid
 		App app = appService.select(req.getAppId());
 		if(app == null){
-			rsp.setAllData(1, "上报失败");
+			rsp.setAllData(Const.common_error, "common_error",null);
 			return rsp;
 		}
 		//2. 验证是否为 VPN ip
@@ -64,9 +65,7 @@ public class MobileReportController extends BaseController {
 		}else{
 			deviceService.saveReport(req, false);
 		}
-		rsp.setAllData(0, "上报成功");
+		rsp.setAllData(Const.common_ok, "common_ok",null);
 		return rsp;
 	}
-
-
 }

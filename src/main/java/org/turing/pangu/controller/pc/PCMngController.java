@@ -18,12 +18,14 @@ import org.turing.pangu.controller.pc.request.GetAppListReq;
 import org.turing.pangu.controller.pc.request.GetRemainListReq;
 import org.turing.pangu.controller.pc.request.GetVpnListReq;
 import org.turing.pangu.controller.pc.request.LoginReq;
+import org.turing.pangu.engine.RemainEngine;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.RemainData;
 import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.model.User;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
+import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.service.RemainDataService;
 import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.UserService;
@@ -36,7 +38,7 @@ import org.turing.pangu.utils.DateUtils;
  * @des 处理手机端过来的所有关于用户信息相关请求（如：注册，登录，修改密码）
  *
  */
-@Controller("pcUserController")
+@Controller("pcMngController")
 @RequestMapping("/pc")
 public class PCMngController extends BaseController {
 	/**
@@ -44,6 +46,9 @@ public class PCMngController extends BaseController {
 	 */
 	private static final Logger logger = Logger.getLogger(PCMngController.class);
 
+	@Resource(name="platformServiceImpl")
+	private PlatformService platformService;
+	
 	@Resource(name="appServiceImpl")
 	private AppService appService;
 	
@@ -59,7 +64,13 @@ public class PCMngController extends BaseController {
 	@Resource(name="userServiceImpl")
 	private UserService userService;
 	
-	
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	public @ResponseBody PGResponse<String> index() {
+		PGResponse<String> rsp = new PGResponse<String>();
+		RemainEngine.getInstance().setService(platformService, appService, deviceService, remainDataService);
+		rsp.setAllData(Const.common_ok, "common_ok", null);
+		return rsp;
+	}
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<String> login(@RequestBody LoginReq req) {
 		logger.trace("login---" + req.getName() + "--" + new Date());
@@ -70,10 +81,10 @@ public class PCMngController extends BaseController {
 		List<User> list = userService.selectList(user);
 		if(null == list || list.size() == 0 )
 		{
-			rsp.setAllData(Const.common_error, "", "");
+			rsp.setAllData(Const.common_error, "common_error", "");
 		}else
 		{
-			rsp.setAllData(Const.common_ok, "", "");
+			rsp.setAllData(Const.common_ok, "common_ok", "");
 		}
 		return rsp;
 	}
@@ -87,7 +98,7 @@ public class PCMngController extends BaseController {
 		logger.trace("getVpnList---" + new Date());
 		PGResponse<List<RemainVpn>> rsp = new PGResponse<List<RemainVpn>>();
 		List<RemainVpn> list = remainVpnService.selectAll();
-		rsp.setAllData(Const.common_ok, "", list);
+		rsp.setAllData(Const.common_ok, "common_ok", list);
 		return rsp;
 	}
 	/**
@@ -100,7 +111,7 @@ public class PCMngController extends BaseController {
 		logger.trace("getAppList---" + req.getUserId() + "--" + new Date());
 		PGResponse<List<App>> rsp = new PGResponse<List<App>>();
 		List<App> list = appService.selectAll();
-		rsp.setAllData(Const.common_ok, "", list);
+		rsp.setAllData(Const.common_ok, "common_ok", list);
 		return rsp;
 	}
 	
@@ -116,7 +127,7 @@ public class PCMngController extends BaseController {
 		RemainData data = new RemainData();
 		data.setAppId(req.getAppId());
 		List<RemainData> list = remainDataService.selectList(data);
-		rsp.setAllData(Const.common_ok, "", list);
+		rsp.setAllData(Const.common_ok, "common_ok", list);
 		return rsp;
 	}
 	
@@ -136,7 +147,7 @@ public class PCMngController extends BaseController {
 		data.setCreateDate(todayMorning);
 		data.setUpdateDate(todayNight);
 		List<RemainData> list = remainDataService.selectTodayData(data);
-		rsp.setAllData(Const.common_ok, "", list);
+		rsp.setAllData(Const.common_ok, "common_ok", list);
 		return rsp;
 	}
 	/**
@@ -144,7 +155,7 @@ public class PCMngController extends BaseController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/curdVpnVpn", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/curdVpn", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<String> saveVpn(@RequestBody CurdVpnReq req) {
 		logger.trace("saveVpn---" + req.getName() + "--" + new Date());
 		PGResponse<String> rsp = new PGResponse<String>();
@@ -164,9 +175,10 @@ public class PCMngController extends BaseController {
 			model.setUpdateDate(new Date());
 			remainVpnService.update(model);
 		}else{
-			rsp.setAllData(Const.common_error, "", "");
+			rsp.setAllData(Const.common_error, "common_error", "");
 			return rsp;
 		}
+		rsp.setAllData(Const.common_ok, "common_ok", "");
 		return rsp;
 	}
 }

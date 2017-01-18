@@ -1,6 +1,7 @@
-package org.turing.pangu.test;
+package org.turing.pangu.zzztest;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -11,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.turing.pangu.engine.RemainEngine;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
+import org.turing.pangu.model.RemainData;
 import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.model.User;
 import org.turing.pangu.service.AppService;
@@ -148,7 +150,14 @@ public class TestData {
 	@Test
 	public void remain(){
 		RemainEngine.getInstance().setService(platformService, appService, deviceService,remainDataService);
-		RemainEngine.getInstance().generateRemainFile();
+		//RemainEngine.getInstance().generateRemainFile();
+		RemainData data = new RemainData();
+		data.setAppId(1L);
+		List<RemainData> list = remainDataService.selectList(data);
+		if(null == list || list.size() == 0)
+		{
+			System.out.print("--------------------");
+		}
 	}
 	
 

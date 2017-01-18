@@ -23,6 +23,7 @@ http://www.springframework.org/schema/context/spring-context.xsd">
 		</property>
 	</bean>
 	<!-- 开启注解 -->
+
 	<mvc:annotation-driven validator="validator" conversion-service="conversionService">
 		<mvc:message-converters register-defaults="true">
 			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">

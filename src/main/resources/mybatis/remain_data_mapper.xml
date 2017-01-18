@@ -51,14 +51,14 @@
     select 
     <include refid="Base_Column_List" />
     from remain_data r
-    where r.id = #{id,jdbcType=INTEGER}
+    where r.id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from remain_data r
   </select>
-  <select id="selectTodayData" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Device" >
+  <select id="selectTodayData" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.RemainData" >
     select 
     <include refid="Base_Column_List" />
     from remain_data r
@@ -70,7 +70,7 @@
     select 
     <include refid="Base_Column_List" />
     from remain_data r
-    where 1=1 
+    where 1=1
     <if test="appId != null" >and r.app_id= #{appId,jdbcType=BIGINT}</if>
     <if test="active != null" >and r.active= #{active,jdbcType=BIGINT}</if>
     <if test="inactive != null" >and r.inactive= #{inactive,jdbcType=BIGINT}</if>
@@ -80,7 +80,7 @@
     <if test="remainPath != null" >and r.remain_path= #{remainPath,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and r.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and r.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
-    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
+    order by r.create_date desc
   </select>
   <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.RemainData" >
     select 

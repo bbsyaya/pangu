@@ -37,7 +37,6 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 			</list>
 		</property>
 	</bean>
-
 	<!-- 验证数据 -->
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
 		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
@@ -194,7 +193,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 	</bean>
 -->
 	<!-- 读取配置文件 -->
-	<bean id="propertyConfigurer" class="org.turing.pangu.Engine.PropertyEngine">
+	<bean id="propertyConfigurer" class="org.turing.pangu.engine.PropertyEngine">
         <property name="location">
             <value>classpath:pangu.properties</value>
         </property>
