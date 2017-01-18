@@ -1,6 +1,6 @@
 /**
  * 
- * Title：RemainVpn
+ * Title：DynamicVpn
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
@@ -17,24 +17,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
- /**RemainVpn*/
- public class RemainVpn extends BaseModel<RemainVpn>
+ /**DynamicVpn*/
+ public class DynamicVpn extends BaseModel<DynamicVpn>
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 4809601484736288485L;
-
-  /***/
-  private String ipList;
+  private static final long serialVersionUID = 8046511484738694423L;
 
   /***/
   private String name;
 
   /***/
-  private String password;
+  private String domain;
 
   /***/
   private String user;
+
+  /***/
+  private String password;
+
+  /***/
+  private String ipList;
 
   /***/
   private Date createDate;
@@ -42,21 +45,6 @@ import org.hibernate.validator.constraints.NotEmpty;
   /***/
   private Date updateDate;
 
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =5592405 )
-  public String getIpList()
-  {
-   return this.ipList;
-  }
-
-  /**设置*/
-  public void setIpList(String ipList)
-  {
-    this.ipList=ipList;
-  }
 
   
   /**获取*/
@@ -77,15 +65,15 @@ import org.hibernate.validator.constraints.NotEmpty;
   /**获取*/
   @JsonProperty
   @Length(max =255 )
-  public String getPassword()
+  public String getDomain()
   {
-   return this.password;
+   return this.domain;
   }
 
   /**设置*/
-  public void setPassword(String password)
+  public void setDomain(String domain)
   {
-    this.password=password;
+    this.domain=domain;
   }
 
   
@@ -101,6 +89,36 @@ import org.hibernate.validator.constraints.NotEmpty;
   public void setUser(String user)
   {
     this.user=user;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getPassword()
+  {
+   return this.password;
+  }
+
+  /**设置*/
+  public void setPassword(String password)
+  {
+    this.password=password;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =715827882 )
+  public String getIpList()
+  {
+   return this.ipList;
+  }
+
+  /**设置*/
+  public void setIpList(String ipList)
+  {
+    this.ipList=ipList;
   }
 
   

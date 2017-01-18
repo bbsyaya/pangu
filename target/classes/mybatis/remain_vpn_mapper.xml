@@ -5,6 +5,8 @@
     <id column="id" property="id" jdbcType="BIGINT" />       
     <result column="ip_list" property="ipList" jdbcType="VARCHAR" />          
     <result column="name" property="name" jdbcType="VARCHAR" />          
+    <result column="password" property="password" jdbcType="VARCHAR" />          
+    <result column="user" property="user" jdbcType="VARCHAR" />          
     <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
   </resultMap>   
@@ -12,18 +14,24 @@
     r.id,
 	r.ip_list,
 	r.name,
+	r.password,
+	r.user,
 	r.create_date,
 	r.update_date
   </sql>
   <sql id="Base_Column_Value_List" >
     #{ipList},
 	#{name},
+	#{password},
+	#{user},
 	#{createDate},
 	#{updateDate}
   </sql>
   <sql id="Base_Column_Update_List" >
     ip_list=#{ipList},
 	name=#{name},
+	password=#{password},
+	user=#{user},
 	create_date=#{createDate},
 	update_date=#{updateDate}
   </sql> 
@@ -45,6 +53,8 @@
     where 1=1 
     <if test="ipList != null" >and r.ip_list= #{ipList,jdbcType=VARCHAR}</if>
     <if test="name != null" >and r.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="password != null" >and r.password= #{password,jdbcType=VARCHAR}</if>
+    <if test="user != null" >and r.user= #{user,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and r.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and r.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
     <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
@@ -56,6 +66,8 @@
     where 1=1 
     <if test="ipList != null" >and r.ip_list= #{ipList,jdbcType=VARCHAR}</if>
     <if test="name != null" >and r.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="password != null" >and r.password= #{password,jdbcType=VARCHAR}</if>
+    <if test="user != null" >and r.user= #{user,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and r.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and r.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
@@ -66,6 +78,8 @@
     where 1=1 
     <if test="model.ipList != null" >and r.ip_list= #{model.ipList,jdbcType=VARCHAR}</if>
     <if test="model.name != null" >and r.name= #{model.name,jdbcType=VARCHAR}</if>
+    <if test="model.password != null" >and r.password= #{model.password,jdbcType=VARCHAR}</if>
+    <if test="model.user != null" >and r.user= #{model.user,jdbcType=VARCHAR}</if>
     <if test="model.createDate != null" >and r.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
     <if test="model.updateDate != null" >and r.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
     <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
@@ -76,6 +90,8 @@
     where 1=1 
     <if test="ipList != null" >and r.ip_list= #{ipList,jdbcType=VARCHAR}</if>
     <if test="name != null" >and r.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="password != null" >and r.password= #{password,jdbcType=VARCHAR}</if>
+    <if test="user != null" >and r.user= #{user,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and r.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and r.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
@@ -88,12 +104,16 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
         ip_list,    
         name,    
+        password,    
+        user,    
         create_date,    
         update_date,    
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
         #{ipList,jdbcType=VARCHAR},  
         #{name,jdbcType=VARCHAR},  
+        #{password,jdbcType=VARCHAR},  
+        #{user,jdbcType=VARCHAR},  
         #{createDate,jdbcType=TIMESTAMP},  
         #{updateDate,jdbcType=TIMESTAMP},  
     </trim>
@@ -103,12 +123,16 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
         <if test="ipList != null" >ip_list,</if>
         <if test="name != null" >name,</if>
+        <if test="password != null" >password,</if>
+        <if test="user != null" >user,</if>
         <if test="createDate != null" >create_date,</if>
         <if test="updateDate != null" >update_date,</if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
         <if test="ipList != null" >#{ipList,jdbcType=VARCHAR},</if>  
         <if test="name != null" >#{name,jdbcType=VARCHAR},</if>  
+        <if test="password != null" >#{password,jdbcType=VARCHAR},</if>  
+        <if test="user != null" >#{user,jdbcType=VARCHAR},</if>  
         <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
         <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
     </trim>
@@ -118,6 +142,8 @@
     <trim prefix="" suffix="" suffixOverrides="," >
         ip_list=#{ipList,jdbcType=VARCHAR},    
         name=#{name,jdbcType=VARCHAR},    
+        password=#{password,jdbcType=VARCHAR},    
+        user=#{user,jdbcType=VARCHAR},    
         create_date=#{createDate,jdbcType=TIMESTAMP},    
         update_date=#{updateDate,jdbcType=TIMESTAMP},    
     </trim>
@@ -128,6 +154,8 @@
     <trim prefix="" suffix="" suffixOverrides="," >
         <if test="ipList != null" >ip_list=#{ipList,jdbcType=VARCHAR},</if>
         <if test="name != null" >name=#{name,jdbcType=VARCHAR},</if>
+        <if test="password != null" >password=#{password,jdbcType=VARCHAR},</if>
+        <if test="user != null" >user=#{user,jdbcType=VARCHAR},</if>
         <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
         <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
     </trim>
