@@ -2,7 +2,7 @@ package org.turing.pangu.controller.pc.request;
 
 import org.turing.pangu.controller.common.BaseReq;
 
-public class GetRemainListReq extends BaseReq{
+public class GetRemainDataListReq extends BaseReq{
 	private Long appId;
 
 	public Long getAppId() {

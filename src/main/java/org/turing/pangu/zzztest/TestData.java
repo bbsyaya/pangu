@@ -21,6 +21,7 @@ import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.service.RemainDataService;
 import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.UserService;
+import org.turing.pangu.utils.DateUtils;
 import org.turing.pangu.utils.RandomUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -145,20 +146,35 @@ public class TestData {
 			dev.setCreateDate(new Date());
 			dev.setUpdateDate(new Date());
 		}
-	}*/
+	}
+	*/
+
+	public void testUpdateDevice(){
+		List<Device> list = deviceService.selectAll();
+		for(Device dev :list){
+			if((int)(Math.random()*100) % 5 == 0){
+				dev.setIsWhiteIp(1);
+				dev.setIsRemain(1);
+				Date yesterdayMorning = DateUtils.getYesterdayMorning();
+				Date yesterdayNight = DateUtils.getYesterdayNight();
+				dev.setCreateDate(yesterdayMorning);
+				dev.setUpdateDate(yesterdayNight);
+				deviceService.update(dev);
+			}
+		}
+	}
 	
 	@Test
 	public void remain(){
 		RemainEngine.getInstance().setService(platformService, appService, deviceService,remainDataService);
 		//RemainEngine.getInstance().generateRemainFile();
-		RemainData data = new RemainData();
-		data.setAppId(1L);
-		List<RemainData> list = remainDataService.selectList(data);
-		if(null == list || list.size() == 0)
+		testUpdateDevice();
+		Device data = new Device();
+		String list = deviceService.getRemainIpList();
+		if(null == list)
 		{
 			System.out.print("--------------------");
 		}
 	}
-	
 
 }

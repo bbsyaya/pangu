@@ -58,7 +58,7 @@
     <include refid="Base_Column_List" />
     from remain_data r
   </select>
-  <select id="selectTodayData" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.RemainData" >
+  <select id="selectRemainData" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.RemainData" >
     select 
     <include refid="Base_Column_List" />
     from remain_data r

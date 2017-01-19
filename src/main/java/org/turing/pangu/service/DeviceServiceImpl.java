@@ -11,7 +11,9 @@ import org.turing.pangu.controller.phone.request.ReportReq;
 import org.turing.pangu.dao.DeviceDao;
 import org.turing.pangu.dao.UserDao;
 import org.turing.pangu.model.Device;
+import org.turing.pangu.model.RemainData;
 import org.turing.pangu.model.User;
+import org.turing.pangu.utils.DateUtils;
 
 
 
@@ -82,5 +84,24 @@ public class DeviceServiceImpl extends BaseServiceImpl<Device,Long> implements D
 	public List<Device> selectCanRemainData(Device device) {
 		// TODO Auto-generated method stub
 		return dao.selectCanRemainData(device);
+	}
+	@Override
+	public String getRemainIpList() {
+		// TODO Auto-generated method stub
+		StringBuffer ipStr = new StringBuffer();
+		Device device = new Device();
+		Date yesterdayMorning = DateUtils.getYesterdayMorning();
+		Date yesterdayNight = DateUtils.getYesterdayNight();
+		device.setIsWhiteIp(1);
+		device.setCreateDate(yesterdayMorning);
+		device.setUpdateDate(yesterdayNight);
+		List<Device> list = dao.selectCanRemainData(device);
+		if(null == list || list.size() == 0 )
+			return null;
+		for(Device dev : list){
+			ipStr.append(dev.getIp());
+			ipStr.append("|");
+		}
+		return ipStr.toString();
 	}
 }

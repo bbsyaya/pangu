@@ -16,7 +16,8 @@ import org.turing.pangu.controller.common.PGResponse;
 import org.turing.pangu.controller.pc.request.CurdVpnReq;
 import org.turing.pangu.controller.pc.request.GetAppListReq;
 import org.turing.pangu.controller.pc.request.GetDynamicVpnListReq;
-import org.turing.pangu.controller.pc.request.GetRemainListReq;
+import org.turing.pangu.controller.pc.request.GetRemainIpListReq;
+import org.turing.pangu.controller.pc.request.GetRemainDataListReq;
 import org.turing.pangu.controller.pc.request.GetRemainVpnListReq;
 import org.turing.pangu.controller.pc.request.GetVpnListReq;
 import org.turing.pangu.controller.pc.request.LoginReq;
@@ -111,12 +112,26 @@ public class PCMngController extends BaseController {
 	}
 	
 	/**
-	 * 获取VPN列表接口
+	 * 获取固定IPVPN列表接口
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/getRemainVpnList", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<List<RemainVpn>> getRemainVpnList(@RequestBody GetRemainVpnListReq req) {
+	@RequestMapping(value = "/getTodayRemainIpList", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody PGResponse<String> getTodayRemainIpList(@RequestBody GetRemainIpListReq req) {
+		logger.debug("getTodayRemainIpList---" + new Date());
+		PGResponse<String> rsp = new PGResponse<String>();
+		String iplist = deviceService.getRemainIpList();
+		rsp.setAllData(Const.common_ok, "common_ok", iplist);
+		return rsp;
+	}
+	
+	/**
+	 * 获取固定IPVPN列表接口
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/getFixedVpnList", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody PGResponse<List<RemainVpn>> getFixedVpnList(@RequestBody GetRemainVpnListReq req) {
 		logger.debug("getRemainVpnList---" + new Date());
 		PGResponse<List<RemainVpn>> rsp = new PGResponse<List<RemainVpn>>();
 		List<RemainVpn> list = remainVpnService.selectAll();
@@ -142,8 +157,8 @@ public class PCMngController extends BaseController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/getRemainList", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<List<RemainData>> getRemainList(@RequestBody GetRemainListReq req) {
+	@RequestMapping(value = "/getRemainDataList", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody PGResponse<List<RemainData>> getRemainList(@RequestBody GetRemainDataListReq req) {
 		logger.debug("getRemainList---" + req.getAppId() + "--" + new Date());
 		PGResponse<List<RemainData>> rsp = new PGResponse<List<RemainData>>();
 		RemainData data = new RemainData();
@@ -159,7 +174,7 @@ public class PCMngController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getTodayRemain", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<List<RemainData>> getTodayRemain(@RequestBody GetRemainListReq req) {
+	public @ResponseBody PGResponse<List<RemainData>> getTodayRemain(@RequestBody GetRemainDataListReq req) {
 		logger.debug("getTodayRemain---" + req.getAppId() + "--" + new Date());
 		PGResponse<List<RemainData>> rsp = new PGResponse<List<RemainData>>();
 		RemainData data = new RemainData();

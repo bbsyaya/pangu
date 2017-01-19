@@ -34,11 +34,11 @@ public class RemainDataDaoImpl extends BaseDaoImpl<RemainData, Long> implements 
 	}
 
 	@Override
-	public List<RemainData> selectTodayData(RemainData model) {
+	public List<RemainData> selectRemainData(RemainData model) {
 		// TODO Auto-generated method stub
 		List<RemainData> list = null;
 		try {
-			list = mapper.selectTodayData(model);
+			list = mapper.selectRemainData(model);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}

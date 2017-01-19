@@ -7,7 +7,7 @@ import org.turing.pangu.model.RemainData;
  /**AppMapper*/
  public interface RemainDataMapper extends BaseMapper<RemainData,Long>
  {
-	 public List<RemainData> selectTodayData(RemainData model);
+	 public List<RemainData> selectRemainData(RemainData model);
  }
  
 

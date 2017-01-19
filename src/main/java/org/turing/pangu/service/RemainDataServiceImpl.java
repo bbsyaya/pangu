@@ -1,5 +1,6 @@
 package org.turing.pangu.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -9,6 +10,7 @@ import org.turing.pangu.dao.AppDao;
 import org.turing.pangu.dao.RemainDataDao;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.RemainData;
+import org.turing.pangu.utils.DateUtils;
 
 
 
@@ -30,6 +32,6 @@ public class RemainDataServiceImpl extends BaseServiceImpl<RemainData,Long> impl
 	@Override
 	public List<RemainData> selectTodayData(RemainData model) {
 		// TODO Auto-generated method stub
-		return dao.selectTodayData(model);
+		return dao.selectRemainData(model);
 	}	
 }
