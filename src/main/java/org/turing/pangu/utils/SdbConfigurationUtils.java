@@ -7,7 +7,7 @@ public class SdbConfigurationUtils {
 	private static Object lock = new Object();
 	private static SdbConfigurationUtils config = null;
 	private static ResourceBundle rb = null;
-	private static final String CONFIG_FILE = "sdb";
+	private static final String CONFIG_FILE = "pangu";
 
 	private SdbConfigurationUtils() {
 		rb = ResourceBundle.getBundle(CONFIG_FILE);

@@ -169,11 +169,31 @@ public class PCMngController extends BaseController {
 	}
 	
 	/**
+	 * 获取留存文件地址
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/getRemainFilePath", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody PGResponse<List<RemainData>> getRemainFilePath(@RequestBody GetRemainDataListReq req) {
+		logger.debug("getRemainFilePath---" + req.getAppId() + "--" + new Date());
+		PGResponse<List<RemainData>> rsp = new PGResponse<List<RemainData>>();
+		RemainData data = new RemainData();
+		//Date todayMorning = DateUtils.getTimesMorning();
+		//Date todayNight = DateUtils.getTimesNight();
+		data.setAppId(req.getAppId());
+		data.setCreateDate(req.getStartDate());
+		data.setUpdateDate(req.getEndDate());
+		List<RemainData> list = remainDataService.getRemainData(data);
+		rsp.setAllData(Const.common_ok, "common_ok", list);
+		return rsp;
+	}
+	
+	/**
 	 * 获取今日实时数据情况
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/getTodayRemain", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/getRemain", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<List<RemainData>> getTodayRemain(@RequestBody GetRemainDataListReq req) {
 		logger.debug("getTodayRemain---" + req.getAppId() + "--" + new Date());
 		PGResponse<List<RemainData>> rsp = new PGResponse<List<RemainData>>();
@@ -183,10 +203,11 @@ public class PCMngController extends BaseController {
 		data.setAppId(req.getAppId());
 		data.setCreateDate(todayMorning);
 		data.setUpdateDate(todayNight);
-		List<RemainData> list = remainDataService.selectTodayData(data);
+		List<RemainData> list = remainDataService.getRemainData(data);
 		rsp.setAllData(Const.common_ok, "common_ok", list);
 		return rsp;
 	}
+	
 	/**
 	 * 获取VPN列表接口
 	 * 

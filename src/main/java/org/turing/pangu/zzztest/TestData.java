@@ -151,10 +151,34 @@ public class TestData {
 
 	public void testUpdateDevice(){
 		List<Device> list = deviceService.selectAll();
+		List<RemainVpn> vpnList =  remainVpnService.selectAll();
+		String ip = "";
 		for(Device dev :list){
-			if((int)(Math.random()*100) % 5 == 0){
+			dev.setIsWhiteIp(0);
+			dev.setIsRemain(0);
+			dev.setIsActived(0);
+			int random = (int)(Math.random()*100);
+			if(random % 8 == 0){
+				dev.setIsActived(1);
+			}
+			if( random % 5 == 0){
+				int tmp = (int)(Math.random()*100);
+				for(RemainVpn vpn : vpnList){
+					if(tmp % 2 == 0){
+						String[] ipList = vpn.getIpList().split("\\|");
+						int index = (int)(Math.random()*ipList.length);
+						ip = ipList[index];
+						dev.setIp(ip);
+						break;
+					}else{
+						tmp++;
+					}
+				}
 				dev.setIsWhiteIp(1);
-				dev.setIsRemain(1);
+				if(random%3 == 0){
+					dev.setIsActived(1);
+					dev.setIsRemain(1);
+				}
 				Date yesterdayMorning = DateUtils.getYesterdayMorning();
 				Date yesterdayNight = DateUtils.getYesterdayNight();
 				dev.setCreateDate(yesterdayMorning);
@@ -169,12 +193,6 @@ public class TestData {
 		RemainEngine.getInstance().setService(platformService, appService, deviceService,remainDataService);
 		//RemainEngine.getInstance().generateRemainFile();
 		testUpdateDevice();
-		Device data = new Device();
-		String list = deviceService.getRemainIpList();
-		if(null == list)
-		{
-			System.out.print("--------------------");
-		}
 	}
 
 }

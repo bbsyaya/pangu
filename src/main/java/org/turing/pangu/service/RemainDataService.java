@@ -12,5 +12,5 @@ import org.turing.pangu.model.User;
 
 /** InvestService */
 public interface RemainDataService extends BaseService<RemainData, Long> {
-	public List<RemainData> selectTodayData(RemainData model);
+	public List<RemainData> getRemainData(RemainData model);
 }

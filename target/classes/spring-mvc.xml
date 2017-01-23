@@ -34,12 +34,15 @@ http://www.springframework.org/schema/context/spring-context.xsd">
 						</property>
 					</bean>
 				</property>
+				<!--
 				<property name="supportedMediaTypes">
 					<list>
-						<!-- *****自定义JSON返回类型***** -->
+						
 						<value>application/json;charset=UTF-8</value>
+						
 					</list>
 				</property>
+				-->
 			</bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>

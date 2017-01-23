@@ -30,7 +30,7 @@ public class RemainDataServiceImpl extends BaseServiceImpl<RemainData,Long> impl
 	}
 
 	@Override
-	public List<RemainData> selectTodayData(RemainData model) {
+	public List<RemainData> getRemainData(RemainData model) {
 		// TODO Auto-generated method stub
 		return dao.selectRemainData(model);
 	}	
