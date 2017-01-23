@@ -38,11 +38,23 @@ public class DeviceDaoImpl extends BaseDaoImpl<Device, Long> implements DeviceDa
 		// TODO Auto-generated method stub
 		List<Device> list = null;
 		try {
-			list = mapper.selectCanRemainData(device);
+			list = mapper.selectTimeSpan(device);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
 		return list;
+	}
+
+	@Override
+	public int selectCountByTimeSpan(Device device) {
+		// TODO Auto-generated method stub
+		int count = 0;
+		try {
+			count = mapper.selectCountByTimeSpan(device);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return count;
 	}
 
 }

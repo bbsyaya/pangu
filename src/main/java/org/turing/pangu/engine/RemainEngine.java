@@ -25,8 +25,10 @@ import org.turing.pangu.service.PlatformServiceImpl;
 import org.turing.pangu.service.RemainDataService;
 import org.turing.pangu.utils.DateUtils;
 import org.turing.pangu.utils.FileUtil;
+import org.turing.pangu.utils.HttpUtil;
 import org.turing.pangu.utils.JsonUtils;
 import org.turing.pangu.utils.RandomUtils;
+import org.turing.pangu.utils.SpringContextHolder;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -47,6 +49,9 @@ public class RemainEngine {
 	private RemainDataService remainDataService;
 	
 	public void setService(PlatformService platformService,AppService appService,DeviceService deviceService,RemainDataService remainDataService){
+		
+		//platformService = SpringContextHolder.getBean(PlatformServiceImpl.class);
+		
 		this.platformService = platformService;
 		this.appService = appService;
 		this.deviceService = deviceService;
@@ -160,7 +165,10 @@ public class RemainEngine {
 	public void updateRemainData()
 	{
 		List<App> appList = AppEngine.getInstance().getList();
-		if(null == appList){			
+		if(null == appList){	
+			if(null == platformService){
+				HttpUtil.get("http://pangu.u-app.cn/pc/index.pangu"); // 以这种方式赋值
+			}
 			appList = appService.selectAll();
 			AppEngine.getInstance().setList(appList);
 		}
@@ -183,35 +191,36 @@ public class RemainEngine {
 		Device dev = new Device();
 		dev.setAppId(app.getId());
 		dev.setIsActived(0);
-		Long noneActived = deviceService.selectCount(dev);
+		Integer noneActived = deviceService.selectCountByTimeSpan(dev);
 		
 		dev.setIsActived(1);
-		Long actived = deviceService.selectCount(dev);
+		Integer actived = deviceService.selectCountByTimeSpan(dev);
 		
-		dev.setIsActived(null);
 		
 		dev.setIsRemain(0);
-		Long noneRemain = deviceService.selectCount(dev);
-		
+		Integer noneRemain = deviceService.selectCountByTimeSpan(dev);
+		//-----------------------------
 		dev.setIsRemain(1);
-		Long remain = deviceService.selectCount(dev);
-		
+		Integer remain = deviceService.selectCountByTimeSpan(dev);
+		//------------------------------
+		dev.setIsRemain(1);
 		dev.setIsActived(1);
-		Long remain_active = deviceService.selectCount(dev);
+		Integer remain_active = deviceService.selectCountByTimeSpan(dev);
 		
 		data.setAppId(app.getId());
 		data.setCreateDate(new Date());
 		if(null != remainPath){
 			data.setRemainPath(remainPath);
 		}
-		data.setActive(actived);
-		data.setInactive(noneActived);
-		data.setRemain(remain);
-		data.setUnremain(noneRemain);
-		data.setRemainActive(remain_active);
+		data.setActive(actived.longValue());
+		data.setInactive(noneActived.longValue());
+		data.setRemain(remain.longValue());
+		data.setUnremain(noneRemain.longValue());
+		data.setRemainActive(remain_active.longValue());
 		
 		data.setCreateDate(todayMorning);
 		data.setUpdateDate(todayNight);
+		
 		List<RemainData> list = remainDataService.getRemainData(data);
 		data.setUpdateDate(new Date());
 		if(null == list || list.size() == 0 ){
@@ -219,7 +228,7 @@ public class RemainEngine {
 			return true;
 		}
 		if(list.size() > 1){
-			logger.error("saveRemainData" + "今日留存数据大于1条");
+			logger.error("saveRemainData" + "今日留存数据大于1条是不可能的");
 			return false;
 		}
 		data.setId(list.get(0).getId());

@@ -14,6 +14,7 @@ public class AppEngine {
 			mInstance = new AppEngine();
 		return mInstance;
 	}
+
 	
 	public synchronized List<App> getList() {
 		return list;

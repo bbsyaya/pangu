@@ -34,6 +34,10 @@
     <result column="sim_status" property="simStatus" jdbcType="INTEGER" />          
     <result column="ssid" property="ssid" jdbcType="VARCHAR" />          
     <result column="ua" property="ua" jdbcType="VARCHAR" />          
+    <result column="product" property="product" jdbcType="VARCHAR" />          
+    <result column="cpu_abi" property="cpuAbi" jdbcType="VARCHAR" />          
+    <result column="device" property="device" jdbcType="VARCHAR" />          
+    <result column="bootloader" property="bootloader" jdbcType="VARCHAR" />          
     <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
   </resultMap>   
@@ -70,6 +74,10 @@
 	d.sim_status,
 	d.ssid,
 	d.ua,
+	d.product,
+	d.cpu_abi,
+	d.device,
+	d.bootloader,
 	d.create_date,
 	d.update_date
   </sql>
@@ -105,6 +113,10 @@
 	#{simStatus},
 	#{ssid},
 	#{ua},
+	#{product},
+	#{cpuAbi},
+	#{device},
+	#{bootloader},
 	#{createDate},
 	#{updateDate}
   </sql>
@@ -140,6 +152,10 @@
 	sim_status=#{simStatus},
 	ssid=#{ssid},
 	ua=#{ua},
+	product=#{product},
+	cpu_abi=#{cpuAbi},
+	device=#{device},
+	bootloader=#{bootloader},
 	create_date=#{createDate},
 	update_date=#{updateDate}
   </sql> 
@@ -149,7 +165,7 @@
     from device d
     where d.id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectCanRemainData" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Device" >
+  <select id="selectTimeSpan" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Device" >
     select 
     <include refid="Base_Column_List" />
     from device d
@@ -158,7 +174,6 @@
     <if test="isWhiteIp != null" >and d.is_white_ip= #{isWhiteIp,jdbcType=INTEGER}</if>
     <if test="createDate != null and createDate!=''" >and d.create_date BETWEEN #{createDate,jdbcType=TIMESTAMP} AND #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
-
   <select id="selectAll" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -200,6 +215,10 @@
     <if test="simStatus != null" >and d.sim_status= #{simStatus,jdbcType=INTEGER}</if>
     <if test="ssid != null" >and d.ssid= #{ssid,jdbcType=VARCHAR}</if>
     <if test="ua != null" >and d.ua= #{ua,jdbcType=VARCHAR}</if>
+    <if test="product != null" >and d.product= #{product,jdbcType=VARCHAR}</if>
+    <if test="cpuAbi != null" >and d.cpu_abi= #{cpuAbi,jdbcType=VARCHAR}</if>
+    <if test="device != null" >and d.device= #{device,jdbcType=VARCHAR}</if>
+    <if test="bootloader != null" >and d.bootloader= #{bootloader,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and d.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and d.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
     <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
@@ -240,6 +259,10 @@
     <if test="simStatus != null" >and d.sim_status= #{simStatus,jdbcType=INTEGER}</if>
     <if test="ssid != null" >and d.ssid= #{ssid,jdbcType=VARCHAR}</if>
     <if test="ua != null" >and d.ua= #{ua,jdbcType=VARCHAR}</if>
+    <if test="product != null" >and d.product= #{product,jdbcType=VARCHAR}</if>
+    <if test="cpuAbi != null" >and d.cpu_abi= #{cpuAbi,jdbcType=VARCHAR}</if>
+    <if test="device != null" >and d.device= #{device,jdbcType=VARCHAR}</if>
+    <if test="bootloader != null" >and d.bootloader= #{bootloader,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and d.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and d.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
@@ -279,9 +302,54 @@
     <if test="model.simStatus != null" >and d.sim_status= #{model.simStatus,jdbcType=INTEGER}</if>
     <if test="model.ssid != null" >and d.ssid= #{model.ssid,jdbcType=VARCHAR}</if>
     <if test="model.ua != null" >and d.ua= #{model.ua,jdbcType=VARCHAR}</if>
+    <if test="model.product != null" >and d.product= #{model.product,jdbcType=VARCHAR}</if>
+    <if test="model.cpuAbi != null" >and d.cpu_abi= #{model.cpuAbi,jdbcType=VARCHAR}</if>
+    <if test="model.device != null" >and d.device= #{model.device,jdbcType=VARCHAR}</if>
+    <if test="model.bootloader != null" >and d.bootloader= #{model.bootloader,jdbcType=VARCHAR}</if>
     <if test="model.createDate != null" >and d.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
     <if test="model.updateDate != null" >and d.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
     <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectCountByTimeSpan" resultType="java.lang.Long" parameterType="org.turing.pangu.model.Device" >
+    select count(0) totalCount
+    from device d
+    where 1=1 
+    <if test="appId != null" >and d.app_id= #{appId,jdbcType=BIGINT}</if>
+    <if test="isActived != null" >and d.is_actived= #{isActived,jdbcType=INTEGER}</if>
+    <if test="isRemain != null" >and d.is_remain= #{isRemain,jdbcType=INTEGER}</if>
+    <if test="isWhiteIp != null" >and d.is_white_ip= #{isWhiteIp,jdbcType=INTEGER}</if>
+    <if test="deviceType != null" >and d.device_type= #{deviceType,jdbcType=INTEGER}</if>
+    <if test="androidId != null" >and d.android_id= #{androidId,jdbcType=VARCHAR}</if>
+    <if test="androidSerial != null" >and d.android_serial= #{androidSerial,jdbcType=VARCHAR}</if>
+    <if test="androidVersion != null" >and d.android_version= #{androidVersion,jdbcType=VARCHAR}</if>
+    <if test="blueTooth != null" >and d.blue_tooth= #{blueTooth,jdbcType=VARCHAR}</if>
+    <if test="board != null" >and d.board= #{board,jdbcType=VARCHAR}</if>
+    <if test="brand != null" >and d.brand= #{brand,jdbcType=VARCHAR}</if>
+    <if test="bssid != null" >and d.bssid= #{bssid,jdbcType=VARCHAR}</if>
+    <if test="carrier != null" >and d.carrier= #{carrier,jdbcType=VARCHAR}</if>
+    <if test="carrierCode != null" >and d.carrier_code= #{carrierCode,jdbcType=VARCHAR}</if>
+    <if test="countryCode != null" >and d.country_code= #{countryCode,jdbcType=VARCHAR}</if>
+    <if test="display != null" >and d.display= #{display,jdbcType=VARCHAR}</if>
+    <if test="height != null" >and d.height= #{height,jdbcType=INTEGER}</if>
+    <if test="width != null" >and d.width= #{width,jdbcType=INTEGER}</if>
+    <if test="imei != null" >and d.imei= #{imei,jdbcType=VARCHAR}</if>
+    <if test="imsi != null" >and d.imsi= #{imsi,jdbcType=VARCHAR}</if>
+    <if test="ip != null" >and d.ip= #{ip,jdbcType=VARCHAR}</if>
+    <if test="mac != null" >and d.mac= #{mac,jdbcType=VARCHAR}</if>
+    <if test="manufacture != null" >and d.manufacture= #{manufacture,jdbcType=VARCHAR}</if>
+    <if test="model != null" >and d.model= #{model,jdbcType=VARCHAR}</if>
+    <if test="phone != null" >and d.phone= #{phone,jdbcType=VARCHAR}</if>
+    <if test="phoneStatus != null" >and d.phone_status= #{phoneStatus,jdbcType=INTEGER}</if>
+    <if test="sdk != null" >and d.sdk= #{sdk,jdbcType=INTEGER}</if>
+    <if test="simSerial != null" >and d.sim_serial= #{simSerial,jdbcType=VARCHAR}</if>
+    <if test="simStatus != null" >and d.sim_status= #{simStatus,jdbcType=INTEGER}</if>
+    <if test="ssid != null" >and d.ssid= #{ssid,jdbcType=VARCHAR}</if>
+    <if test="ua != null" >and d.ua= #{ua,jdbcType=VARCHAR}</if>
+    <if test="product != null" >and d.product= #{product,jdbcType=VARCHAR}</if>
+    <if test="cpuAbi != null" >and d.cpu_abi= #{cpuAbi,jdbcType=VARCHAR}</if>
+    <if test="device != null" >and d.device= #{device,jdbcType=VARCHAR}</if>
+    <if test="bootloader != null" >and d.bootloader= #{bootloader,jdbcType=VARCHAR}</if>
+    <if test="createDate != null and createDate!=''" >and d.create_date BETWEEN #{createDate,jdbcType=TIMESTAMP} AND #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
   <select id="selectCount" resultType="java.lang.Long" parameterType="org.turing.pangu.model.Device" >
     select count(0) totalCount
@@ -318,6 +386,10 @@
     <if test="simStatus != null" >and d.sim_status= #{simStatus,jdbcType=INTEGER}</if>
     <if test="ssid != null" >and d.ssid= #{ssid,jdbcType=VARCHAR}</if>
     <if test="ua != null" >and d.ua= #{ua,jdbcType=VARCHAR}</if>
+    <if test="product != null" >and d.product= #{product,jdbcType=VARCHAR}</if>
+    <if test="cpuAbi != null" >and d.cpu_abi= #{cpuAbi,jdbcType=VARCHAR}</if>
+    <if test="device != null" >and d.device= #{device,jdbcType=VARCHAR}</if>
+    <if test="bootloader != null" >and d.bootloader= #{bootloader,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and d.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and d.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
@@ -359,6 +431,10 @@
         sim_status,    
         ssid,    
         ua,    
+        product,    
+        cpu_abi,    
+        device,    
+        bootloader,    
         create_date,    
         update_date,    
     </trim>
@@ -394,6 +470,10 @@
         #{simStatus,jdbcType=INTEGER},  
         #{ssid,jdbcType=VARCHAR},  
         #{ua,jdbcType=VARCHAR},  
+        #{product,jdbcType=VARCHAR},  
+        #{cpuAbi,jdbcType=VARCHAR},  
+        #{device,jdbcType=VARCHAR},  
+        #{bootloader,jdbcType=VARCHAR},  
         #{createDate,jdbcType=TIMESTAMP},  
         #{updateDate,jdbcType=TIMESTAMP},  
     </trim>
@@ -432,6 +512,10 @@
         <if test="simStatus != null" >sim_status,</if>
         <if test="ssid != null" >ssid,</if>
         <if test="ua != null" >ua,</if>
+        <if test="product != null" >product,</if>
+        <if test="cpuAbi != null" >cpu_abi,</if>
+        <if test="device != null" >device,</if>
+        <if test="bootloader != null" >bootloader,</if>
         <if test="createDate != null" >create_date,</if>
         <if test="updateDate != null" >update_date,</if>
     </trim>
@@ -467,6 +551,10 @@
         <if test="simStatus != null" >#{simStatus,jdbcType=INTEGER},</if>  
         <if test="ssid != null" >#{ssid,jdbcType=VARCHAR},</if>  
         <if test="ua != null" >#{ua,jdbcType=VARCHAR},</if>  
+        <if test="product != null" >#{product,jdbcType=VARCHAR},</if>  
+        <if test="cpuAbi != null" >#{cpuAbi,jdbcType=VARCHAR},</if>  
+        <if test="device != null" >#{device,jdbcType=VARCHAR},</if>  
+        <if test="bootloader != null" >#{bootloader,jdbcType=VARCHAR},</if>  
         <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
         <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
     </trim>
@@ -505,6 +593,10 @@
         sim_status=#{simStatus,jdbcType=INTEGER},    
         ssid=#{ssid,jdbcType=VARCHAR},    
         ua=#{ua,jdbcType=VARCHAR},    
+        product=#{product,jdbcType=VARCHAR},    
+        cpu_abi=#{cpuAbi,jdbcType=VARCHAR},    
+        device=#{device,jdbcType=VARCHAR},    
+        bootloader=#{bootloader,jdbcType=VARCHAR},    
         create_date=#{createDate,jdbcType=TIMESTAMP},    
         update_date=#{updateDate,jdbcType=TIMESTAMP},    
     </trim>
@@ -544,6 +636,10 @@
         <if test="simStatus != null" >sim_status=#{simStatus,jdbcType=INTEGER},</if>
         <if test="ssid != null" >ssid=#{ssid,jdbcType=VARCHAR},</if>
         <if test="ua != null" >ua=#{ua,jdbcType=VARCHAR},</if>
+        <if test="product != null" >product=#{product,jdbcType=VARCHAR},</if>
+        <if test="cpuAbi != null" >cpu_abi=#{cpuAbi,jdbcType=VARCHAR},</if>
+        <if test="device != null" >device=#{device,jdbcType=VARCHAR},</if>
+        <if test="bootloader != null" >bootloader=#{bootloader,jdbcType=VARCHAR},</if>
         <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
         <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
     </trim>

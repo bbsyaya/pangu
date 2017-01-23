@@ -8,192 +8,120 @@ public class NeedChangedInfo {
         return sdk;
     }
 
-    public String getImei() {
-        return imei;
-    }
-
-    public String getImsi() {
-        return imsi;
-    }
-
-    public String getMacAddress() {
-        return mac;
-    }
-
-    public String getBssid() {
-        return bssid;
-    }
-
-    public String getPhoneNumber() {
-        return phone;
-    }
-
-    public String getWidth() {
-        return width;
-    }
-
-    public String getHeight() {
-        return height;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public String getManufacture() {
-        return manufacture;
-    }
-
-    public String getCarrier() {
-        return carrier;
-    }
-
-    public String getCarrierCode() {
-        return carrierCode;
-    }
-
-    public String getCountryCode() {
-        return countryCode;
-    }
-
-    public String getBoard() {
-        return board;
-    }
-
-    public String getOsName() {
-        return osName;
-    }
-
-    public String getOsArch() {
-        return osArch;
-    }
-
-    public String getOsVersion() {
-        return osVersion;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public String getSimSerial() {
-        return simSerial;
-    }
-
-    public String getAndroidSerial() {
-        return androidSerial;
-    }
-
-    public String getAndroidVersion() {
-        return androidVersion;
-    }
-
-    public String getUa() {
-        return ua;
-    }
-
-    public String getIpAddress() {
-        return ip;
-    }
-
     public void setSdk(String sdk) {
         this.sdk = sdk;
+    }
+
+    public String getImei() {
+        return imei;
     }
 
     public void setImei(String imei) {
         this.imei = imei;
     }
 
+    public String getImsi() {
+        return imsi;
+    }
+
     public void setImsi(String imsi) {
         this.imsi = imsi;
     }
 
-    public void setMacAddress(String macAddress) {
-        this.mac = macAddress;
+    public String getMac() {
+        return mac;
+    }
+
+    public void setMac(String mac) {
+        this.mac = mac;
+    }
+
+    public String getBssid() {
+        return bssid;
     }
 
     public void setBssid(String bssid) {
         this.bssid = bssid;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phone = phoneNumber;
+    public String getSsid() {
+        return ssid;
+    }
+
+    public void setSsid(String ssid) {
+        this.ssid = ssid;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getWidth() {
+        return width;
     }
 
     public void setWidth(String width) {
         this.width = width;
     }
 
+    public String getHeight() {
+        return height;
+    }
+
     public void setHeight(String height) {
         this.height = height;
+    }
+
+    public String getBrand() {
+        return brand;
     }
 
     public void setBrand(String brand) {
         this.brand = brand;
     }
 
+    public String getManufacture() {
+        return manufacture;
+    }
+
     public void setManufacture(String manufacture) {
         this.manufacture = manufacture;
+    }
+
+    public String getCarrier() {
+        return carrier;
     }
 
     public void setCarrier(String carrier) {
         this.carrier = carrier;
     }
 
+    public String getCarrierCode() {
+        return carrierCode;
+    }
+
     public void setCarrierCode(String carrierCode) {
         this.carrierCode = carrierCode;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
     }
 
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
 
+    public String getBoard() {
+        return board;
+    }
+
     public void setBoard(String board) {
         this.board = board;
-    }
-
-    public void setOsName(String osName) {
-        this.osName = osName;
-    }
-
-    public void setOsArch(String osArch) {
-        this.osArch = osArch;
-    }
-
-    public void setOsVersion(String osVersion) {
-        this.osVersion = osVersion;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public void setSimSerial(String simSerial) {
-        this.simSerial = simSerial;
-    }
-
-    public void setAndroidSerial(String androidSerial) {
-        this.androidSerial = androidSerial;
-    }
-
-    public void setAndroidVersion(String androidVersion) {
-        this.androidVersion = androidVersion;
-    }
-
-    public void setUa(String ua) {
-        this.ua = ua;
-    }
-
-    public void setIpAddress(String ipAddress) {
-        this.ip = ipAddress;
     }
 
     public String getModel() {
@@ -203,6 +131,55 @@ public class NeedChangedInfo {
     public void setModel(String model) {
         this.model = model;
     }
+
+    public String getOsName() {
+        return osName;
+    }
+
+    public void setOsName(String osName) {
+        this.osName = osName;
+    }
+
+    public String getOsArch() {
+        return osArch;
+    }
+
+    public void setOsArch(String osArch) {
+        this.osArch = osArch;
+    }
+
+    public String getOsVersion() {
+        return osVersion;
+    }
+
+    public void setOsVersion(String osVersion) {
+        this.osVersion = osVersion;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getSimSerial() {
+        return simSerial;
+    }
+
+    public void setSimSerial(String simSerial) {
+        this.simSerial = simSerial;
+    }
+
     public String getAndroidId() {
         return androidId;
     }
@@ -210,6 +187,39 @@ public class NeedChangedInfo {
     public void setAndroidId(String androidId) {
         this.androidId = androidId;
     }
+
+    public String getAndroidSerial() {
+        return androidSerial;
+    }
+
+    public void setAndroidSerial(String androidSerial) {
+        this.androidSerial = androidSerial;
+    }
+
+    public String getAndroidVersion() {
+        return androidVersion;
+    }
+
+    public void setAndroidVersion(String androidVersion) {
+        this.androidVersion = androidVersion;
+    }
+
+    public String getUa() {
+        return ua;
+    }
+
+    public void setUa(String ua) {
+        this.ua = ua;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
     public String getDisplay() {
         return display;
     }
@@ -217,13 +227,7 @@ public class NeedChangedInfo {
     public void setDisplay(String display) {
         this.display = display;
     }
-    public String getSsid() {
-        return ssid;
-    }
 
-    public void setSsid(String ssid) {
-        this.ssid = ssid;
-    }
     public String getSimStatus() {
         return simStatus;
     }
@@ -239,6 +243,7 @@ public class NeedChangedInfo {
     public void setPhoneStatus(String phoneStatus) {
         this.phoneStatus = phoneStatus;
     }
+
     public String getBlueTooth() {
         return blueTooth;
     }
@@ -247,6 +252,37 @@ public class NeedChangedInfo {
         this.blueTooth = blueTooth;
     }
 
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    public String getCpuABI() {
+        return cpuABI;
+    }
+
+    public void setCpuABI(String cpuABI) {
+        this.cpuABI = cpuABI;
+    }
+
+    public String getDevice() {
+        return device;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
+    }
+
+    public String getBootloader() {
+        return bootloader;
+    }
+
+    public void setBootloader(String bootloader) {
+        this.bootloader = bootloader;
+    }
     private String sdk = ""; //19
     private String imei = "";//TAC + FAC + SNR + SP = 15
     private String imsi = "";// MCC+MNC+MSIN
@@ -278,4 +314,8 @@ public class NeedChangedInfo {
     private String simStatus = ""; // 手机卡状态
     private String phoneStatus = ""; // 手机状态
     private String blueTooth = ""; //蓝牙地址
+    private String product="";
+    private String cpuABI = "";
+    private String device = "";
+    private String bootloader = "";
 }

@@ -243,5 +243,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
 
+	<bean id="springContextHolder" class="org.turing.pangu.utils.SpringContextHolder" />
+
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 </beans>

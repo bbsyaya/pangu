@@ -78,14 +78,14 @@ public class DeviceServiceImpl extends BaseServiceImpl<Device,Long> implements D
 		if( null != req.getDevice().getImsi())
 			device.setImsi(req.getDevice().getImsi());
 		
-		if( null != req.getDevice().getIpAddress())
-			device.setIp(req.getDevice().getIpAddress());
+		if( null != req.getDevice().getIp())
+			device.setIp(req.getDevice().getIp());
 		
 
 			//device.set(req.getDevice().getLatitude());
 			//device.setAndroidSerial(req.getDevice().getLongitude());
-		if( null != req.getDevice().getMacAddress())
-			device.setMac(req.getDevice().getMacAddress());
+		if( null != req.getDevice().getMac())
+			device.setMac(req.getDevice().getMac());
 		
 		if( null != req.getDevice().getManufacture())
 			device.setManufacture(req.getDevice().getManufacture());
@@ -96,8 +96,8 @@ public class DeviceServiceImpl extends BaseServiceImpl<Device,Long> implements D
 			//device.set(req.getDevice().getOsArch());
 			//device.setAndroidSerial(req.getDevice().getOsName());
 			//device.setAndroidSerial(req.getDevice().getOsVersion());
-		if( null != req.getDevice().getPhoneNumber())
-			device.setPhone(req.getDevice().getPhoneNumber());
+		if( null != req.getDevice().getPhone())
+			device.setPhone(req.getDevice().getPhone());
 		
 		if( null != req.getDevice().getSimSerial())
 			device.setSimSerial(req.getDevice().getSimSerial());
@@ -112,7 +112,7 @@ public class DeviceServiceImpl extends BaseServiceImpl<Device,Long> implements D
 		if( null != req.getDevice().getPhoneStatus() && !req.getDevice().getPhoneStatus().equals(""))
 			device.setPhoneStatus(Integer.valueOf(req.getDevice().getPhoneStatus()));
 		
-		device.setSdk(21);
+		device.setSdk(19);
 		if( null != req.getDevice().getSdk() && !req.getDevice().getSdk().equals(""))
 			device.setSdk(Integer.valueOf(req.getDevice().getSdk()));
 		
@@ -127,6 +127,18 @@ public class DeviceServiceImpl extends BaseServiceImpl<Device,Long> implements D
 		device.setWidth(720);
 		if( null != req.getDevice().getWidth() && !req.getDevice().getWidth().equals(""))
 			device.setWidth(Integer.valueOf(req.getDevice().getWidth()));
+		
+		if( null != req.getDevice().getDevice() && !req.getDevice().getDevice().equals(""))
+			device.setDevice(req.getDevice().getDevice());
+		
+		if( null != req.getDevice().getCpuABI() && !req.getDevice().getCpuABI().equals(""))
+			device.setCpuAbi(req.getDevice().getCpuABI());
+		
+		if( null != req.getDevice().getBootloader() && !req.getDevice().getBootloader().equals(""))
+			device.setBootloader(req.getDevice().getBootloader());
+		
+		if( null != req.getDevice().getProduct() && !req.getDevice().getProduct().equals(""))
+			device.setProduct(req.getDevice().getProduct());
 		//----------------------------------------------------------------------
 
 		device.setAppId(req.getAppId());
@@ -164,5 +176,11 @@ public class DeviceServiceImpl extends BaseServiceImpl<Device,Long> implements D
 			ipStr.append("|");
 		}
 		return ipStr.toString();
+	}
+
+	@Override
+	public int selectCountByTimeSpan(Device device) {
+		// TODO Auto-generated method stub
+		return dao.selectCountByTimeSpan(device);
 	}
 }

@@ -72,7 +72,7 @@ public class MobileReportController extends BaseController {
 		}
 		// 2. 验证是否为 VPN ip
 		// 3. 写入DB
-		if (remainVpnService.isWhileListIp(report.getDevice().getIpAddress())) {
+		if (remainVpnService.isWhileListIp(report.getDevice().getIp())) {
 			deviceService.saveReport(report, true);
 		} else {
 			deviceService.saveReport(report, false);
@@ -119,7 +119,7 @@ public class MobileReportController extends BaseController {
 			}
 			// 2. 验证是否为 VPN ip
 			// 3. 写入DB
-			if (remainVpnService.isWhileListIp(req.getDevice().getIpAddress())) {
+			if (remainVpnService.isWhileListIp(req.getDevice().getIp())) {
 				deviceService.saveReport(req, true);
 			} else {
 				deviceService.saveReport(req, false);

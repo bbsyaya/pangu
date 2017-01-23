@@ -4,8 +4,8 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年01月17日 
- * @since 2017年01月17日 
+ * @version 1.0, 2017年01月23日 
+ * @since 2017年01月23日 
  */
 
 package org.turing.pangu.model;
@@ -22,7 +22,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 4975301484634277871L;
+  private static final long serialVersionUID = 4926311485184500978L;
 
   /***/
   private Long appId;
@@ -116,6 +116,18 @@ import org.hibernate.validator.constraints.NotEmpty;
 
   /***/
   private String ua;
+
+  /***/
+  private String product;
+
+  /***/
+  private String cpuAbi;
+
+  /***/
+  private String device;
+
+  /***/
+  private String bootloader;
 
   /***/
   private Date createDate;
@@ -583,6 +595,66 @@ import org.hibernate.validator.constraints.NotEmpty;
   public void setUa(String ua)
   {
     this.ua=ua;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getProduct()
+  {
+   return this.product;
+  }
+
+  /**设置*/
+  public void setProduct(String product)
+  {
+    this.product=product;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getCpuAbi()
+  {
+   return this.cpuAbi;
+  }
+
+  /**设置*/
+  public void setCpuAbi(String cpuAbi)
+  {
+    this.cpuAbi=cpuAbi;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getDevice()
+  {
+   return this.device;
+  }
+
+  /**设置*/
+  public void setDevice(String device)
+  {
+    this.device=device;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getBootloader()
+  {
+   return this.bootloader;
+  }
+
+  /**设置*/
+  public void setBootloader(String bootloader)
+  {
+    this.bootloader=bootloader;
   }
 
   
