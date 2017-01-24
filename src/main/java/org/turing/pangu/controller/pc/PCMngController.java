@@ -147,7 +147,9 @@ public class PCMngController extends BaseController {
 	public @ResponseBody PGResponse<List<App>> getAppList(@RequestBody GetAppListReq req) {
 		logger.debug("getAppList---" + req.getUserId() + "--" + new Date());
 		PGResponse<List<App>> rsp = new PGResponse<List<App>>();
-		List<App> list = appService.selectAll();
+		App model = new App();
+		model.setIsCanRun(1);
+		List<App> list = appService.selectCanRunApps(model);
 		rsp.setAllData(Const.common_ok, "common_ok", list);
 		return rsp;
 	}

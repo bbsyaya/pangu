@@ -1,5 +1,7 @@
 package org.turing.pangu.service;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,12 @@ public class AppServiceImpl extends BaseServiceImpl<App,Long> implements AppServ
 	public void setAppDao(AppDao dao) {
 		super.setBaseDao(dao);
 		this.dao = dao;
+	}
+
+	@Override
+	public List<App> selectCanRunApps(App model) {
+		// TODO Auto-generated method stub
+		return this.dao.selectModelList(model);
 	}
 
 }

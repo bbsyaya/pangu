@@ -4,8 +4,8 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年01月15日 
- * @since 2017年01月15日 
+ * @version 1.0, 2017年01月24日 
+ * @since 2017年01月24日 
  */
 
 package org.turing.pangu.model;
@@ -22,7 +22,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 2099241484482629751L;
+  private static final long serialVersionUID = 3584481485234878995L;
 
   /***/
   private Long userId;
@@ -41,6 +41,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 
   /***/
   private String token;
+
+  /***/
+  private Integer isCanRun;
+
+  /***/
+  private Integer isClose;
 
   /***/
   private Date createDate;
@@ -139,6 +145,34 @@ import org.hibernate.validator.constraints.NotEmpty;
   public void setToken(String token)
   {
     this.token=token;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  public Integer getIsCanRun()
+  {
+   return this.isCanRun;
+  }
+
+  /**设置*/
+  public void setIsCanRun(Integer isCanRun)
+  {
+    this.isCanRun=isCanRun;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  public Integer getIsClose()
+  {
+   return this.isClose;
+  }
+
+  /**设置*/
+  public void setIsClose(Integer isClose)
+  {
+    this.isClose=isClose;
   }
 
   

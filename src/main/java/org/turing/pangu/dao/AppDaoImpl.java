@@ -10,10 +10,11 @@
 
 package org.turing.pangu.dao;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import org.turing.pangu.mapper.AppMapper;
 import org.turing.pangu.model.App;
 
@@ -30,6 +31,18 @@ public class AppDaoImpl extends BaseDaoImpl<App, Long> implements AppDao {
 	@Autowired
 	public void setAppMapper(AppMapper mapper) {
 		super.setBaseMapper(mapper);
+	}
+
+	@Override
+	public List<App> selectModelList(App model) {
+		// TODO Auto-generated method stub
+		List<App> list = null;
+		try {
+			list = mapper.selectModelList(model);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return list;
 	}
 
 }

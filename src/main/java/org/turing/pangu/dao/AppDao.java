@@ -10,8 +10,10 @@
 
 package org.turing.pangu.dao;
 
+import java.util.List;
+
 import org.turing.pangu.model.App;
 
 public interface AppDao extends BaseDao<App, Long> {
-
+	public List<App> selectModelList(App model);
 }

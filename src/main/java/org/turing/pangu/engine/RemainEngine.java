@@ -193,9 +193,11 @@ public class RemainEngine {
 		dev.setIsActived(0);
 		Integer noneActived = deviceService.selectCountByTimeSpan(dev);
 		
+		
 		dev.setIsActived(1);
 		Integer actived = deviceService.selectCountByTimeSpan(dev);
 		
+		dev.setIsActived(null);
 		
 		dev.setIsRemain(0);
 		Integer noneRemain = deviceService.selectCountByTimeSpan(dev);
