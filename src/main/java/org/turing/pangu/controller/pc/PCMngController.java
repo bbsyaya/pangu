@@ -77,6 +77,7 @@ public class PCMngController extends BaseController {
 		logger.debug("index---" + new Date());
 		PGResponse<String> rsp = new PGResponse<String>();
 		RemainEngine.getInstance().setService(platformService, appService, deviceService, remainDataService);
+		RemainEngine.getInstance().updateRemainData();
 		rsp.setAllData(Const.common_ok, "common_ok", null);
 		return rsp;
 	}

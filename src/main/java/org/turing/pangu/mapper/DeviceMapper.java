@@ -7,7 +7,7 @@ import org.turing.pangu.model.Device;
  /**AppMapper*/
  public interface DeviceMapper extends BaseMapper<Device,Long>{
 	 public List<Device> selectTimeSpan(Device device);
-	 public int selectCountByTimeSpan(Device device);
+	 public long selectCountByTimeSpan(Device device);
 	 
  }
  

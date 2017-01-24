@@ -50,7 +50,7 @@ public class DeviceDaoImpl extends BaseDaoImpl<Device, Long> implements DeviceDa
 		// TODO Auto-generated method stub
 		int count = 0;
 		try {
-			count = mapper.selectCountByTimeSpan(device);
+			count = (int)mapper.selectCountByTimeSpan(device);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}

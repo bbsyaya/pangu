@@ -168,6 +168,7 @@ public class RemainEngine {
 		if(null == appList){	
 			if(null == platformService){
 				HttpUtil.get("http://pangu.u-app.cn/pc/index.pangu"); // 以这种方式赋值
+				return;
 			}
 			appList = appService.selectAll();
 			AppEngine.getInstance().setList(appList);
@@ -191,6 +192,9 @@ public class RemainEngine {
 		Device dev = new Device();
 		dev.setAppId(app.getId());
 		dev.setIsActived(0);
+		dev.setCreateDate(todayMorning);
+		dev.setUpdateDate(todayNight);
+		
 		Integer noneActived = deviceService.selectCountByTimeSpan(dev);
 		
 		
