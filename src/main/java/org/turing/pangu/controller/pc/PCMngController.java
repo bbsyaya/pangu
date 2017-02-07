@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -24,7 +25,10 @@ import org.turing.pangu.controller.pc.request.VpnOperUpdateReq;
 import org.turing.pangu.controller.pc.request.LoginReq;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.pc.request.VpnSwitchFinishReq;
+import org.turing.pangu.controller.pc.response.VpnLoginRsp;
+import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.engine.RemainEngine;
+import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.DynamicVpn;
 import org.turing.pangu.model.RemainData;
@@ -87,20 +91,46 @@ public class PCMngController extends BaseController {
 	
 	// vpn登录请求
 	@RequestMapping(value = "/vpnLogin", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<String> vpnLogin(@RequestBody VpnLoginReq req) {
-		PGResponse<String> rsp = new PGResponse<String>();
+	public @ResponseBody PGResponse<VpnLoginRsp> vpnLogin(@RequestBody VpnLoginReq req,HttpServletRequest request) {
+		PGResponse<VpnLoginRsp> rsp = new PGResponse<VpnLoginRsp>();
+		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
+		String realIp = TaskEngine.getInstance().getRealIp(request);
+		String token = TaskEngine.getInstance().addVpnTask(req,remoteIp,realIp);
+		VpnLoginRsp dataRsp = new VpnLoginRsp();
+		dataRsp.setToken(token);
+		dataRsp.setRemoteIp(remoteIp);
+		dataRsp.setRealIp(realIp);
+		dataRsp.setLoopTime(10); // 暂定10S
+		rsp.setAllData(Const.common_ok, "common_ok", dataRsp);
 		return rsp;
 	}
 	// vpn操作请求
 	@RequestMapping(value = "/vpnOperUpdate", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<String> vpnLogin(@RequestBody VpnOperUpdateReq req) {
-		PGResponse<String> rsp = new PGResponse<String>();
+	public @ResponseBody PGResponse<VpnOperUpdateRsp> vpnLogin(@RequestBody VpnOperUpdateReq req,HttpServletRequest request) {
+		PGResponse<VpnOperUpdateRsp> rsp = new PGResponse<VpnOperUpdateRsp>();
+		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
+		String realIp = TaskEngine.getInstance().getRealIp(request);
+		boolean ret = TaskEngine.getInstance().vpnIsNeedSwitch(req.getToken());
+		VpnOperUpdateRsp dataRsp = new VpnOperUpdateRsp();
+		dataRsp.setRemoteIp(remoteIp);
+		dataRsp.setRealIp(realIp);
+		if(true == ret){
+			dataRsp.setIsSwitchVpn(1);
+		}else{
+			dataRsp.setIsSwitchVpn(0);
+		}
+		dataRsp.setLoopTime(10); // 暂定10S
+		rsp.setAllData(Const.common_ok, "common_ok", dataRsp);
 		return rsp;
 	}
 	// vpn切换完成
 	@RequestMapping(value = "/vpnSwitchFinish", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<String> vpnSwitchFinish(@RequestBody VpnSwitchFinishReq req) {
+	public @ResponseBody PGResponse<String> vpnSwitchFinish(@RequestBody VpnSwitchFinishReq req,HttpServletRequest request) {
 		PGResponse<String> rsp = new PGResponse<String>();
+		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
+		String realIp = TaskEngine.getInstance().getRealIp(request);
+		TaskEngine.getInstance().switchVpnFinish(req.getToken(), remoteIp, realIp);
+		rsp.setAllData(Const.common_ok, "common_ok", "");
 		return rsp;
 	}
 	
