@@ -25,7 +25,7 @@ public class DynamicVpnServiceImpl extends BaseServiceImpl<DynamicVpn,Long> impl
     private DynamicVpnDao dao;
 
 	@Autowired
-	public void setRemainVpnDao(DynamicVpnDao dao) {
+	public void setDynamicVpnDao(DynamicVpnDao dao) {
 		super.setBaseDao(dao);
 		this.dao = dao;
 	}

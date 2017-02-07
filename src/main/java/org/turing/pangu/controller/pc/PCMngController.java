@@ -20,7 +20,10 @@ import org.turing.pangu.controller.pc.request.GetRemainIpListReq;
 import org.turing.pangu.controller.pc.request.GetRemainDataListReq;
 import org.turing.pangu.controller.pc.request.GetRemainVpnListReq;
 import org.turing.pangu.controller.pc.request.GetVpnListReq;
+import org.turing.pangu.controller.pc.request.VpnOperUpdateReq;
 import org.turing.pangu.controller.pc.request.LoginReq;
+import org.turing.pangu.controller.pc.request.VpnLoginReq;
+import org.turing.pangu.controller.pc.request.VpnSwitchFinishReq;
 import org.turing.pangu.engine.RemainEngine;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.DynamicVpn;
@@ -81,6 +84,27 @@ public class PCMngController extends BaseController {
 		rsp.setAllData(Const.common_ok, "common_ok", null);
 		return rsp;
 	}
+	
+	// vpn登录请求
+	@RequestMapping(value = "/vpnLogin", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody PGResponse<String> vpnLogin(@RequestBody VpnLoginReq req) {
+		PGResponse<String> rsp = new PGResponse<String>();
+		return rsp;
+	}
+	// vpn操作请求
+	@RequestMapping(value = "/vpnOperUpdate", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody PGResponse<String> vpnLogin(@RequestBody VpnOperUpdateReq req) {
+		PGResponse<String> rsp = new PGResponse<String>();
+		return rsp;
+	}
+	// vpn切换完成
+	@RequestMapping(value = "/vpnSwitchFinish", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody PGResponse<String> vpnSwitchFinish(@RequestBody VpnSwitchFinishReq req) {
+		PGResponse<String> rsp = new PGResponse<String>();
+		return rsp;
+	}
+	
+	
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<String> login(@RequestBody LoginReq req) {
 		logger.debug("login---" + req.getName() + "--" + new Date());

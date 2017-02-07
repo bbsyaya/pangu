@@ -6,22 +6,24 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.turing.pangu.dao.TaskDao;
 import org.turing.pangu.dao.UserDao;
+import org.turing.pangu.model.Task;
 import org.turing.pangu.model.User;
 
 
 
-@Service("userServiceImpl")
-public class UserServiceImpl extends BaseServiceImpl<User,Long> implements UserService{
+@Service("taskServiceImpl")
+public class TaskServiceImpl extends BaseServiceImpl<Task,Long> implements TaskService{
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(TaskServiceImpl.class);
 
-    private UserDao dao;
+    private TaskDao dao;
 
 	@Autowired
-	public void setUserDao(UserDao dao) {
+	public void setTaskDao(TaskDao dao) {
 		super.setBaseDao(dao);
 		this.dao = dao;
 	}	

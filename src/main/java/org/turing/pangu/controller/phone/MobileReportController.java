@@ -53,85 +53,89 @@ public class MobileReportController extends BaseController {
 
 	@Resource(name = "deviceServiceImpl")
 	private DeviceService deviceService;
-
-	@RequestMapping(value = "/reportGet", method = RequestMethod.GET)
-	public @ResponseBody PGResponse<String> reportGet(HttpServletRequest req,
-			HttpServletResponse resp) {
-		logger.debug("report---" + new Date());
-		PGResponse<String> rsp = new PGResponse<String>();
-		String str = req.getParameter("report");
-		ReportReq report = JSON.parseObject(str,
-				new TypeReference<ReportReq>() {
-				});
-
-		// 1. 先验证是否为有效appid
-		App app = appService.select(report.getAppId());
-		if (app == null) {
-			rsp.setAllData(Const.common_error, "common_error", null);
-			return rsp;
-		}
-		// 2. 验证是否为 VPN ip
-		// 3. 写入DB
-		if (remainVpnService.isWhileListIp(report.getDevice().getIp())) {
-			deviceService.saveReport(report, true);
-		} else {
-			deviceService.saveReport(report, false);
-		}
-		rsp.setAllData(Const.common_ok, "common_ok", null);
-		return rsp;
+	
+	/*
+	 * 设备登录
+	 * */
+	@RequestMapping(value = "/deviceLogin", method = RequestMethod.POST)
+	public @ResponseBody String deviceLogin(HttpServletRequest request,
+			HttpServletResponse rsp) {
+		
+		return "";
 	}
-
+	
+	/*
+	 * 手机端请求任务
+	 * */
+	@RequestMapping(value = "/getTask", method = RequestMethod.POST)
+	public @ResponseBody String getTask(HttpServletRequest request,
+			HttpServletResponse rsp) {
+		
+		return "";
+	}
+	/*
+	 * 任务完成情况
+	 * */
+	@RequestMapping(value = "/taskFinish", method = RequestMethod.POST)
+	public @ResponseBody String taskFinish(HttpServletRequest request,
+			HttpServletResponse rsp) {
+		
+		return "";
+	}
 	/**
 	 * 获取短信接口
 	 * 
 	 * @return
 	 */
 	@RequestMapping(value = "/report", method = RequestMethod.POST)
-	public @ResponseBody String reportPost(HttpServletRequest request,
+	public @ResponseBody String report(HttpServletRequest request,
 			HttpServletResponse rspod) {
 		logger.debug("report---" + "--" + new Date());
 		String result = "";
 		PGResponse<String> rsp = new PGResponse<String>();
 		// ----------------------------------------------
+		String contentStr = getRequestBody(request);
+		ReportReq req = JSON.parseObject(contentStr,
+				new TypeReference<ReportReq>() {
+				});
+		if (null == req || req.equals("")) {
+			rsp.setAllData(Const.common_error, "common_error", null);
+			result = JSON.toJSONString(rsp);
+			return result;
+		}
+
+		// ----------------------------------------------
+
+		// 1. 先验证是否为有效appid
+		App app = appService.select(req.getAppId());
+		if (app == null) {
+			rsp.setAllData(Const.common_error, "common_error", null);
+			result = JSON.toJSONString(rsp);
+			return result;
+		}
+		// 2. 验证是否为 VPN ip
+		// 3. 写入DB
+		if (remainVpnService.isWhileListIp(req.getDevice().getIp())) {
+			deviceService.saveReport(req, true);
+		} else {
+			deviceService.saveReport(req, false);
+		}
+		rsp.setAllData(Const.common_ok, "common_ok", null);
+
+		result = JSON.toJSONString(rsp);
+		return result;
+	}
+	
+	private String getRequestBody(HttpServletRequest request){
 		InputStream is = null;
 		String contentStr = "";
 		try {
 			is = request.getInputStream();
 			contentStr = IOUtils.toString(is, "utf-8");
-
-			ReportReq req = JSON.parseObject(contentStr,
-					new TypeReference<ReportReq>() {
-					});
-			if (null == req || req.equals("")) {
-				rsp.setAllData(Const.common_error, "common_error", null);
-				result = JSON.toJSONString(rsp);
-				return result;
+			}catch (IOException e) {
+				e.printStackTrace();
 			}
-
-			// ----------------------------------------------
-
-			// 1. 先验证是否为有效appid
-			App app = appService.select(req.getAppId());
-			if (app == null) {
-				rsp.setAllData(Const.common_error, "common_error", null);
-				result = JSON.toJSONString(rsp);
-				return result;
-			}
-			// 2. 验证是否为 VPN ip
-			// 3. 写入DB
-			if (remainVpnService.isWhileListIp(req.getDevice().getIp())) {
-				deviceService.saveReport(req, true);
-			} else {
-				deviceService.saveReport(req, false);
-			}
-			rsp.setAllData(Const.common_ok, "common_ok", null);
-
-		} catch (IOException e) {
-			rsp.setAllData(Const.common_error, "common_error", null);
-			e.printStackTrace();
-		}
-		result = JSON.toJSONString(rsp);
-		return result;
+		return contentStr;
 	}
 
 }

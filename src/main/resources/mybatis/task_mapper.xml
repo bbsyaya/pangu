@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.turing.pangu.mapper.TaskMapper" >
+  <resultMap id="BaseResultMap" type="org.turing.pangu.model.Task" >
+    <id column="id" property="id" jdbcType="BIGINT" />       
+    <result column="app_id" property="appId" jdbcType="BIGINT" />          
+    <result column="increment_money" property="incrementMoney" jdbcType="INTEGER" />          
+    <result column="increment_water_amy" property="incrementWaterAmy" jdbcType="INTEGER" />          
+    <result column="stock_money" property="stockMoney" jdbcType="INTEGER" />          
+    <result column="stock_water_amy" property="stockWaterAmy" jdbcType="INTEGER" />          
+    <result column="allot_increment_money" property="allotIncrementMoney" jdbcType="INTEGER" />          
+    <result column="allot_increment_water_amy" property="allotIncrementWaterAmy" jdbcType="INTEGER" />          
+    <result column="allot_stock_money" property="allotStockMoney" jdbcType="INTEGER" />          
+    <result column="allot_stock_water_amy" property="allotStockWaterAmy" jdbcType="INTEGER" />          
+    <result column="execute_increment_money" property="executeIncrementMoney" jdbcType="INTEGER" />          
+    <result column="execute_increment_water_amy" property="executeIncrementWaterAmy" jdbcType="INTEGER" />          
+    <result column="execute_stock_money" property="executeStockMoney" jdbcType="INTEGER" />          
+    <result column="execute_stock_water_amy" property="executeStockWaterAmy" jdbcType="INTEGER" />          
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
+  </resultMap>   
+  <sql id="Base_Column_List" >
+    t.id,
+	t.app_id,
+	t.increment_money,
+	t.increment_water_amy,
+	t.stock_money,
+	t.stock_water_amy,
+	t.allot_increment_money,
+	t.allot_increment_water_amy,
+	t.allot_stock_money,
+	t.allot_stock_water_amy,
+	t.execute_increment_money,
+	t.execute_increment_water_amy,
+	t.execute_stock_money,
+	t.execute_stock_water_amy,
+	t.create_date,
+	t.update_date
+  </sql>
+  <sql id="Base_Column_Value_List" >
+    #{appId},
+	#{incrementMoney},
+	#{incrementWaterAmy},
+	#{stockMoney},
+	#{stockWaterAmy},
+	#{allotIncrementMoney},
+	#{allotIncrementWaterAmy},
+	#{allotStockMoney},
+	#{allotStockWaterAmy},
+	#{executeIncrementMoney},
+	#{executeIncrementWaterAmy},
+	#{executeStockMoney},
+	#{executeStockWaterAmy},
+	#{createDate},
+	#{updateDate}
+  </sql>
+  <sql id="Base_Column_Update_List" >
+    app_id=#{appId},
+	increment_money=#{incrementMoney},
+	increment_water_amy=#{incrementWaterAmy},
+	stock_money=#{stockMoney},
+	stock_water_amy=#{stockWaterAmy},
+	allot_increment_money=#{allotIncrementMoney},
+	allot_increment_water_amy=#{allotIncrementWaterAmy},
+	allot_stock_money=#{allotStockMoney},
+	allot_stock_water_amy=#{allotStockWaterAmy},
+	execute_increment_money=#{executeIncrementMoney},
+	execute_increment_water_amy=#{executeIncrementWaterAmy},
+	execute_stock_money=#{executeStockMoney},
+	execute_stock_water_amy=#{executeStockWaterAmy},
+	create_date=#{createDate},
+	update_date=#{updateDate}
+  </sql> 
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from task t
+    where t.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from task t
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Task" >
+    select 
+    <include refid="Base_Column_List" />
+    from task t
+    where 1=1 
+    <if test="appId != null" >and t.app_id= #{appId,jdbcType=BIGINT}</if>
+    <if test="incrementMoney != null" >and t.increment_money= #{incrementMoney,jdbcType=INTEGER}</if>
+    <if test="incrementWaterAmy != null" >and t.increment_water_amy= #{incrementWaterAmy,jdbcType=INTEGER}</if>
+    <if test="stockMoney != null" >and t.stock_money= #{stockMoney,jdbcType=INTEGER}</if>
+    <if test="stockWaterAmy != null" >and t.stock_water_amy= #{stockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="allotIncrementMoney != null" >and t.allot_increment_money= #{allotIncrementMoney,jdbcType=INTEGER}</if>
+    <if test="allotIncrementWaterAmy != null" >and t.allot_increment_water_amy= #{allotIncrementWaterAmy,jdbcType=INTEGER}</if>
+    <if test="allotStockMoney != null" >and t.allot_stock_money= #{allotStockMoney,jdbcType=INTEGER}</if>
+    <if test="allotStockWaterAmy != null" >and t.allot_stock_water_amy= #{allotStockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="executeIncrementMoney != null" >and t.execute_increment_money= #{executeIncrementMoney,jdbcType=INTEGER}</if>
+    <if test="executeIncrementWaterAmy != null" >and t.execute_increment_water_amy= #{executeIncrementWaterAmy,jdbcType=INTEGER}</if>
+    <if test="executeStockMoney != null" >and t.execute_stock_money= #{executeStockMoney,jdbcType=INTEGER}</if>
+    <if test="executeStockWaterAmy != null" >and t.execute_stock_water_amy= #{executeStockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="createDate != null" >and t.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and t.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Task" >
+    select 
+    <include refid="Base_Column_List" />
+    from task t
+    where 1=1 
+    <if test="appId != null" >and t.app_id= #{appId,jdbcType=BIGINT}</if>
+    <if test="incrementMoney != null" >and t.increment_money= #{incrementMoney,jdbcType=INTEGER}</if>
+    <if test="incrementWaterAmy != null" >and t.increment_water_amy= #{incrementWaterAmy,jdbcType=INTEGER}</if>
+    <if test="stockMoney != null" >and t.stock_money= #{stockMoney,jdbcType=INTEGER}</if>
+    <if test="stockWaterAmy != null" >and t.stock_water_amy= #{stockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="allotIncrementMoney != null" >and t.allot_increment_money= #{allotIncrementMoney,jdbcType=INTEGER}</if>
+    <if test="allotIncrementWaterAmy != null" >and t.allot_increment_water_amy= #{allotIncrementWaterAmy,jdbcType=INTEGER}</if>
+    <if test="allotStockMoney != null" >and t.allot_stock_money= #{allotStockMoney,jdbcType=INTEGER}</if>
+    <if test="allotStockWaterAmy != null" >and t.allot_stock_water_amy= #{allotStockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="executeIncrementMoney != null" >and t.execute_increment_money= #{executeIncrementMoney,jdbcType=INTEGER}</if>
+    <if test="executeIncrementWaterAmy != null" >and t.execute_increment_water_amy= #{executeIncrementWaterAmy,jdbcType=INTEGER}</if>
+    <if test="executeStockMoney != null" >and t.execute_stock_money= #{executeStockMoney,jdbcType=INTEGER}</if>
+    <if test="executeStockWaterAmy != null" >and t.execute_stock_water_amy= #{executeStockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="createDate != null" >and t.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and t.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.ParamModel" >
+    select 
+    <include refid="Base_Column_List" />
+    from task t
+    where 1=1 
+    <if test="model.appId != null" >and t.app_id= #{model.appId,jdbcType=BIGINT}</if>
+    <if test="model.incrementMoney != null" >and t.increment_money= #{model.incrementMoney,jdbcType=INTEGER}</if>
+    <if test="model.incrementWaterAmy != null" >and t.increment_water_amy= #{model.incrementWaterAmy,jdbcType=INTEGER}</if>
+    <if test="model.stockMoney != null" >and t.stock_money= #{model.stockMoney,jdbcType=INTEGER}</if>
+    <if test="model.stockWaterAmy != null" >and t.stock_water_amy= #{model.stockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="model.allotIncrementMoney != null" >and t.allot_increment_money= #{model.allotIncrementMoney,jdbcType=INTEGER}</if>
+    <if test="model.allotIncrementWaterAmy != null" >and t.allot_increment_water_amy= #{model.allotIncrementWaterAmy,jdbcType=INTEGER}</if>
+    <if test="model.allotStockMoney != null" >and t.allot_stock_money= #{model.allotStockMoney,jdbcType=INTEGER}</if>
+    <if test="model.allotStockWaterAmy != null" >and t.allot_stock_water_amy= #{model.allotStockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="model.executeIncrementMoney != null" >and t.execute_increment_money= #{model.executeIncrementMoney,jdbcType=INTEGER}</if>
+    <if test="model.executeIncrementWaterAmy != null" >and t.execute_increment_water_amy= #{model.executeIncrementWaterAmy,jdbcType=INTEGER}</if>
+    <if test="model.executeStockMoney != null" >and t.execute_stock_money= #{model.executeStockMoney,jdbcType=INTEGER}</if>
+    <if test="model.executeStockWaterAmy != null" >and t.execute_stock_water_amy= #{model.executeStockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="model.createDate != null" >and t.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
+    <if test="model.updateDate != null" >and t.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="org.turing.pangu.model.Task" >
+    select count(0) totalCount
+    from task t
+    where 1=1 
+    <if test="appId != null" >and t.app_id= #{appId,jdbcType=BIGINT}</if>
+    <if test="incrementMoney != null" >and t.increment_money= #{incrementMoney,jdbcType=INTEGER}</if>
+    <if test="incrementWaterAmy != null" >and t.increment_water_amy= #{incrementWaterAmy,jdbcType=INTEGER}</if>
+    <if test="stockMoney != null" >and t.stock_money= #{stockMoney,jdbcType=INTEGER}</if>
+    <if test="stockWaterAmy != null" >and t.stock_water_amy= #{stockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="allotIncrementMoney != null" >and t.allot_increment_money= #{allotIncrementMoney,jdbcType=INTEGER}</if>
+    <if test="allotIncrementWaterAmy != null" >and t.allot_increment_water_amy= #{allotIncrementWaterAmy,jdbcType=INTEGER}</if>
+    <if test="allotStockMoney != null" >and t.allot_stock_money= #{allotStockMoney,jdbcType=INTEGER}</if>
+    <if test="allotStockWaterAmy != null" >and t.allot_stock_water_amy= #{allotStockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="executeIncrementMoney != null" >and t.execute_increment_money= #{executeIncrementMoney,jdbcType=INTEGER}</if>
+    <if test="executeIncrementWaterAmy != null" >and t.execute_increment_water_amy= #{executeIncrementWaterAmy,jdbcType=INTEGER}</if>
+    <if test="executeStockMoney != null" >and t.execute_stock_money= #{executeStockMoney,jdbcType=INTEGER}</if>
+    <if test="executeStockWaterAmy != null" >and t.execute_stock_water_amy= #{executeStockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="createDate != null" >and t.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and t.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Long" >
+    delete from task
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.turing.pangu.model.Task" >
+    insert into task 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        app_id,    
+        increment_money,    
+        increment_water_amy,    
+        stock_money,    
+        stock_water_amy,    
+        allot_increment_money,    
+        allot_increment_water_amy,    
+        allot_stock_money,    
+        allot_stock_water_amy,    
+        execute_increment_money,    
+        execute_increment_water_amy,    
+        execute_stock_money,    
+        execute_stock_water_amy,    
+        create_date,    
+        update_date,    
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{appId,jdbcType=BIGINT},  
+        #{incrementMoney,jdbcType=INTEGER},  
+        #{incrementWaterAmy,jdbcType=INTEGER},  
+        #{stockMoney,jdbcType=INTEGER},  
+        #{stockWaterAmy,jdbcType=INTEGER},  
+        #{allotIncrementMoney,jdbcType=INTEGER},  
+        #{allotIncrementWaterAmy,jdbcType=INTEGER},  
+        #{allotStockMoney,jdbcType=INTEGER},  
+        #{allotStockWaterAmy,jdbcType=INTEGER},  
+        #{executeIncrementMoney,jdbcType=INTEGER},  
+        #{executeIncrementWaterAmy,jdbcType=INTEGER},  
+        #{executeStockMoney,jdbcType=INTEGER},  
+        #{executeStockWaterAmy,jdbcType=INTEGER},  
+        #{createDate,jdbcType=TIMESTAMP},  
+        #{updateDate,jdbcType=TIMESTAMP},  
+    </trim>
+  </insert>
+  <insert id="insertTaskByTrim" parameterType="org.turing.pangu.model.Task" >
+    insert into task 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="appId != null" >app_id,</if>
+        <if test="incrementMoney != null" >increment_money,</if>
+        <if test="incrementWaterAmy != null" >increment_water_amy,</if>
+        <if test="stockMoney != null" >stock_money,</if>
+        <if test="stockWaterAmy != null" >stock_water_amy,</if>
+        <if test="allotIncrementMoney != null" >allot_increment_money,</if>
+        <if test="allotIncrementWaterAmy != null" >allot_increment_water_amy,</if>
+        <if test="allotStockMoney != null" >allot_stock_money,</if>
+        <if test="allotStockWaterAmy != null" >allot_stock_water_amy,</if>
+        <if test="executeIncrementMoney != null" >execute_increment_money,</if>
+        <if test="executeIncrementWaterAmy != null" >execute_increment_water_amy,</if>
+        <if test="executeStockMoney != null" >execute_stock_money,</if>
+        <if test="executeStockWaterAmy != null" >execute_stock_water_amy,</if>
+        <if test="createDate != null" >create_date,</if>
+        <if test="updateDate != null" >update_date,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="appId != null" >#{appId,jdbcType=BIGINT},</if>  
+        <if test="incrementMoney != null" >#{incrementMoney,jdbcType=INTEGER},</if>  
+        <if test="incrementWaterAmy != null" >#{incrementWaterAmy,jdbcType=INTEGER},</if>  
+        <if test="stockMoney != null" >#{stockMoney,jdbcType=INTEGER},</if>  
+        <if test="stockWaterAmy != null" >#{stockWaterAmy,jdbcType=INTEGER},</if>  
+        <if test="allotIncrementMoney != null" >#{allotIncrementMoney,jdbcType=INTEGER},</if>  
+        <if test="allotIncrementWaterAmy != null" >#{allotIncrementWaterAmy,jdbcType=INTEGER},</if>  
+        <if test="allotStockMoney != null" >#{allotStockMoney,jdbcType=INTEGER},</if>  
+        <if test="allotStockWaterAmy != null" >#{allotStockWaterAmy,jdbcType=INTEGER},</if>  
+        <if test="executeIncrementMoney != null" >#{executeIncrementMoney,jdbcType=INTEGER},</if>  
+        <if test="executeIncrementWaterAmy != null" >#{executeIncrementWaterAmy,jdbcType=INTEGER},</if>  
+        <if test="executeStockMoney != null" >#{executeStockMoney,jdbcType=INTEGER},</if>  
+        <if test="executeStockWaterAmy != null" >#{executeStockWaterAmy,jdbcType=INTEGER},</if>  
+        <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
+        <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
+    </trim>
+  </insert>
+  <update id="updateTaskById" parameterType="org.turing.pangu.model.Task" >
+    update task set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        app_id=#{appId,jdbcType=BIGINT},    
+        increment_money=#{incrementMoney,jdbcType=INTEGER},    
+        increment_water_amy=#{incrementWaterAmy,jdbcType=INTEGER},    
+        stock_money=#{stockMoney,jdbcType=INTEGER},    
+        stock_water_amy=#{stockWaterAmy,jdbcType=INTEGER},    
+        allot_increment_money=#{allotIncrementMoney,jdbcType=INTEGER},    
+        allot_increment_water_amy=#{allotIncrementWaterAmy,jdbcType=INTEGER},    
+        allot_stock_money=#{allotStockMoney,jdbcType=INTEGER},    
+        allot_stock_water_amy=#{allotStockWaterAmy,jdbcType=INTEGER},    
+        execute_increment_money=#{executeIncrementMoney,jdbcType=INTEGER},    
+        execute_increment_water_amy=#{executeIncrementWaterAmy,jdbcType=INTEGER},    
+        execute_stock_money=#{executeStockMoney,jdbcType=INTEGER},    
+        execute_stock_water_amy=#{executeStockWaterAmy,jdbcType=INTEGER},    
+        create_date=#{createDate,jdbcType=TIMESTAMP},    
+        update_date=#{updateDate,jdbcType=TIMESTAMP},    
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="org.turing.pangu.model.Task" >
+    update task set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="appId != null" >app_id=#{appId,jdbcType=BIGINT},</if>
+        <if test="incrementMoney != null" >increment_money=#{incrementMoney,jdbcType=INTEGER},</if>
+        <if test="incrementWaterAmy != null" >increment_water_amy=#{incrementWaterAmy,jdbcType=INTEGER},</if>
+        <if test="stockMoney != null" >stock_money=#{stockMoney,jdbcType=INTEGER},</if>
+        <if test="stockWaterAmy != null" >stock_water_amy=#{stockWaterAmy,jdbcType=INTEGER},</if>
+        <if test="allotIncrementMoney != null" >allot_increment_money=#{allotIncrementMoney,jdbcType=INTEGER},</if>
+        <if test="allotIncrementWaterAmy != null" >allot_increment_water_amy=#{allotIncrementWaterAmy,jdbcType=INTEGER},</if>
+        <if test="allotStockMoney != null" >allot_stock_money=#{allotStockMoney,jdbcType=INTEGER},</if>
+        <if test="allotStockWaterAmy != null" >allot_stock_water_amy=#{allotStockWaterAmy,jdbcType=INTEGER},</if>
+        <if test="executeIncrementMoney != null" >execute_increment_money=#{executeIncrementMoney,jdbcType=INTEGER},</if>
+        <if test="executeIncrementWaterAmy != null" >execute_increment_water_amy=#{executeIncrementWaterAmy,jdbcType=INTEGER},</if>
+        <if test="executeStockMoney != null" >execute_stock_money=#{executeStockMoney,jdbcType=INTEGER},</if>
+        <if test="executeStockWaterAmy != null" >execute_stock_water_amy=#{executeStockWaterAmy,jdbcType=INTEGER},</if>
+        <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
