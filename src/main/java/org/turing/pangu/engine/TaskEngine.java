@@ -1,6 +1,8 @@
 package org.turing.pangu.engine;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import org.turing.pangu.controller.pc.request.VpnSwitchFinishReq;
 import org.turing.pangu.controller.pc.response.VpnLoginRsp;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.RemainVpn;
+import org.turing.pangu.model.Task;
 import org.turing.pangu.utils.RandomUtils;
 /*
  * 任务引擎，负责每日任务生成,配置任务,跟踪任务进展,
@@ -19,8 +22,16 @@ import org.turing.pangu.utils.RandomUtils;
 public class TaskEngine {
 	private static TaskEngine mInstance = new TaskEngine();
 	private List<VpnTask> vpnTaskList = new ArrayList<VpnTask>();
+	private List<Task> todayTaskList = new ArrayList<Task>();
+	
+	public static final int INCREMENT_MONEY_TYPE = 0;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
+	public static final int INCREMENT_WATERAMY_TYPE = 1;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
+	public static final int STOCK_MONEY_TYPE = 3;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
+	public static final int STOCK_WATERAMY_TYPE = 4;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
+	
 	private int vpnTokenLengh = 16;
 	private int phoneTaskIdLengh = 32;
+
 	public static TaskEngine getInstance()
 	{
 		if(null == mInstance)
@@ -89,20 +100,112 @@ public class TaskEngine {
 							return null;// 任务完成,这种情况下不给任务
 					}
 				}
-				pTask = getTask(task.getToken(),deviceId,task.getOperType());
+				pTask = getTask(task,deviceId,task.getOperType());
 				task.getPhoneTaskList().add(pTask);
 			}
 		}
 		return pTask;
 	}
-	private synchronized PhoneTask getTask(String vpnToken,String deviceId,int operType){
-		PhoneTask task = new PhoneTask();
-		task.setDeviceId(deviceId);
-		task.setOperType(operType);
-		task.setTaskId(vpnToken + RandomUtils.getRandom(phoneTaskIdLengh/2));//32位
+	class SortByIncrementMoney implements Comparator{
+
+		@Override
+		public int compare(Object arg0, Object arg1) {
+			// TODO Auto-generated method stub
+			Task s1 = (Task) arg0;
+			Task s2 = (Task) arg1;
+			if((s1.getIncrementMoney()-s1.getAllotIncrementMoney())>(s2.getIncrementMoney()-s2.getAllotIncrementMoney()))
+				return 1;
+			return 0;
+		}
+		
+	}
+	class sortByIncrementWaterAmy implements Comparator{
+
+		@Override
+		public int compare(Object arg0, Object arg1) {
+			// TODO Auto-generated method stub
+			Task s1 = (Task) arg0;
+			Task s2 = (Task) arg1;
+			if((s1.getIncrementWaterAmy()-s1.getAllotIncrementWaterAmy())>(s2.getIncrementWaterAmy()-s2.getAllotIncrementWaterAmy()))
+				return 1;
+			return 0;
+		}
+		
+	}
+	class sortByStockMoney implements Comparator{
+
+		@Override
+		public int compare(Object arg0, Object arg1) {
+			// TODO Auto-generated method stub
+			Task s1 = (Task) arg0;
+			Task s2 = (Task) arg1;
+			if((s1.getStockMoney()-s1.getAllotStockMoney())>(s2.getStockMoney()-s2.getAllotStockMoney()))
+				return 1;
+			return 0;
+		}
+		
+	}
+	class sortByStockWaterAmy implements Comparator{
+
+		@Override
+		public int compare(Object arg0, Object arg1) {
+			// TODO Auto-generated method stub
+			Task s1 = (Task) arg0;
+			Task s2 = (Task) arg1;
+			if((s1.getStockWaterAmy()-s1.getAllotStockWaterAmy())>(s2.getStockWaterAmy()-s2.getAllotStockWaterAmy()))
+				return 1;
+			return 0;
+		}
+	}
+	// 获得最优 appID
+	private synchronized long getOptimalAppId(VpnTask task){
+		// -- 排序
+		switch(task.getOperType()){
+			case INCREMENT_MONEY_TYPE:
+				Collections.sort(todayTaskList, new SortByIncrementMoney());
+				break;
+			case INCREMENT_WATERAMY_TYPE:
+				Collections.sort(todayTaskList, new sortByIncrementWaterAmy());
+				break;	
+			case STOCK_MONEY_TYPE:
+				Collections.sort(todayTaskList, new sortByStockMoney());
+				break;		
+			case STOCK_WATERAMY_TYPE:
+				Collections.sort(todayTaskList, new sortByStockWaterAmy());
+				break;
+		}
+		
+		// --
+		int flag = 0;
+		for(Task dbTask:todayTaskList){
+			for(PhoneTask tmpTask:task.getPhoneTaskList()){
+				if(tmpTask.getAppId() == dbTask.getAppId()){
+					flag = 1;
+					break;
+				}
+			}
+			if(flag == 0){
+				return dbTask.getAppId();
+			}
+		}
+		return 0L;
+	}
+	private synchronized PhoneTask getTask(VpnTask task,String deviceId,int operType){
+		PhoneTask pTask = new PhoneTask();
+		pTask.setDeviceId(deviceId);
+		pTask.setOperType(operType);
+		pTask.setTaskId(task.getToken() + RandomUtils.getRandom(phoneTaskIdLengh/2));//32位
+		pTask.setAppId(getOptimalAppId(task));
+		pTask.setOperType(task.getOperType());
+		pTask.setTimes(1);// 暂定一次
+		pTask.setSpanTime(5);//暂定5S 
+		//pTask.setStockInfo(stockInfo);
 		// ---- todo
 		return null;
 	}
+	
+	
+	
 	
 	public synchronized String getRemoteIp(HttpServletRequest request){
 		return request.getRemoteAddr();
