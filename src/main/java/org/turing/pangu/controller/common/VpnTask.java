@@ -1,6 +1,7 @@
 package org.turing.pangu.controller.common;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /*
@@ -43,11 +44,18 @@ public class VpnTask {
 	public void setToken(String token) {
 		this.token = token;
 	}
+	public Date getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 	
 	private String deviceId; //pc 设备ID
 	private String remoteIp;
 	private String realIp;
 	private String token; // 16位
 	private int operType; // 操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
+	private Date createTime;// Vpn 任务创建时间
 	private List<PhoneTask> phoneTaskList = new ArrayList<PhoneTask>();//PhoneTask 的 operType 必须和 VpnTask 的 operType 一致
 }

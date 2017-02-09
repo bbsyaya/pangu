@@ -23,5 +23,5 @@ public class GetTaskRsp extends BaseRsp{
 	}
 	private PhoneTask task; // 一个任务
 	private int loopTime; // 循环请求任务时间间隔，单位秒
-	private int isHaveTask; // 是否有任务
+	private int isHaveTask; // 是否有任务, 1:有 0: 没有
 }

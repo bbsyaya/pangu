@@ -18,9 +18,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.turing.pangu.controller.common.BaseController;
 import org.turing.pangu.controller.common.PGResponse;
+import org.turing.pangu.controller.common.PhoneTask;
+import org.turing.pangu.controller.phone.request.GetTaskReq;
 import org.turing.pangu.controller.phone.request.ReportReq;
+import org.turing.pangu.controller.phone.request.TaskFinishReq;
+import org.turing.pangu.controller.phone.response.GetTaskRsp;
 import org.turing.pangu.dao.UserDaoImpl;
 import org.turing.pangu.engine.RemainEngine;
+import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.model.App;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
@@ -68,9 +73,24 @@ public class MobileReportController extends BaseController {
 	 * 手机端请求任务
 	 * */
 	@RequestMapping(value = "/getTask", method = RequestMethod.POST)
-	public @ResponseBody String getTask(HttpServletRequest request,
-			HttpServletResponse rsp) {
+	public @ResponseBody String getTask(HttpServletRequest request) {
+		PGResponse<GetTaskRsp> getTaskRsp = new PGResponse<GetTaskRsp>();
 		
+		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
+		String realIp = TaskEngine.getInstance().getRealIp(request);
+		String contentStr = getRequestBody(request);
+		GetTaskReq req = JSON.parseObject(contentStr,
+				new TypeReference<GetTaskReq>() {
+				});
+		GetTaskRsp rsp = new GetTaskRsp();
+		PhoneTask task = TaskEngine.getInstance().getTask(req.getDeviceId(), remoteIp, realIp);
+		rsp.setTask(task);
+		if(task.getAppId() != 0L){
+			rsp.setIsHaveTask(1);
+		}else{
+			rsp.setIsHaveTask(0);
+		}
+		rsp.setLoopTime(TaskEngine.SPAN_TIME);
 		return "";
 	}
 	/*
@@ -79,7 +99,14 @@ public class MobileReportController extends BaseController {
 	@RequestMapping(value = "/taskFinish", method = RequestMethod.POST)
 	public @ResponseBody String taskFinish(HttpServletRequest request,
 			HttpServletResponse rsp) {
+		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
+		String realIp = TaskEngine.getInstance().getRealIp(request);
+		String contentStr = getRequestBody(request);
+		TaskFinishReq req = JSON.parseObject(contentStr,
+				new TypeReference<TaskFinishReq>() {
+				});
 		
+		TaskEngine.getInstance().taskFinish(req,remoteIp,realIp);
 		return "";
 	}
 	/**

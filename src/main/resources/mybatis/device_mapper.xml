@@ -221,7 +221,6 @@
     <if test="bootloader != null" >and d.bootloader= #{bootloader,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and d.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and d.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
-    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
   </select>
   <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Device" >
     select 

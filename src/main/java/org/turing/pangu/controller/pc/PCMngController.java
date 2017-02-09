@@ -83,8 +83,9 @@ public class PCMngController extends BaseController {
 	public @ResponseBody PGResponse<String> index() {
 		logger.debug("index---" + new Date());
 		PGResponse<String> rsp = new PGResponse<String>();
-		RemainEngine.getInstance().setService(platformService, appService, deviceService, remainDataService);
-		RemainEngine.getInstance().updateRemainData();
+		TaskEngine.getInstance().setService(platformService, appService, deviceService, remainDataService);
+		//RemainEngine.getInstance().setService(platformService, appService, deviceService, remainDataService);
+		//RemainEngine.getInstance().updateRemainData();
 		rsp.setAllData(Const.common_ok, "common_ok", null);
 		return rsp;
 	}
@@ -106,7 +107,7 @@ public class PCMngController extends BaseController {
 	}
 	// vpn操作请求
 	@RequestMapping(value = "/vpnOperUpdate", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<VpnOperUpdateRsp> vpnLogin(@RequestBody VpnOperUpdateReq req,HttpServletRequest request) {
+	public @ResponseBody PGResponse<VpnOperUpdateRsp> vpnOperUpdate(@RequestBody VpnOperUpdateReq req,HttpServletRequest request) {
 		PGResponse<VpnOperUpdateRsp> rsp = new PGResponse<VpnOperUpdateRsp>();
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);

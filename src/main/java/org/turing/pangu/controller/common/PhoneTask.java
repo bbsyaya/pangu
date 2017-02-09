@@ -63,8 +63,16 @@ public class PhoneTask {
 	public void setIsFinished(int isFinished) {
 		this.isFinished = isFinished;
 	}
+	public String getVpnToken() {
+		return vpnToken;
+	}
+	public void setVpnToken(String vpnToken) {
+		this.vpnToken = vpnToken;
+	}
+	
 	private Device stockInfo; // 存量的设备信息
 	private String deviceId;
+	private String vpnToken; // 带上VPN的token
 	private String taskId; //任务id, 32位
 	private String shellPath;
 	private int operType; // 操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
