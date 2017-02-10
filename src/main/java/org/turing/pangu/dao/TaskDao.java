@@ -16,4 +16,5 @@ import org.turing.pangu.model.App;
 import org.turing.pangu.model.Task;
 
 public interface TaskDao extends BaseDao<Task, Long> {
+	public List<Task> selectTimeSpan(Task task);
 }

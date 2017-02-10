@@ -28,6 +28,7 @@ import org.turing.pangu.controller.pc.request.VpnSwitchFinishReq;
 import org.turing.pangu.controller.pc.response.VpnLoginRsp;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.engine.RemainEngine;
+import org.turing.pangu.engine.TaskConfigureEngine;
 import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.DynamicVpn;
@@ -40,6 +41,7 @@ import org.turing.pangu.service.DynamicVpnService;
 import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.service.RemainDataService;
 import org.turing.pangu.service.RemainVpnService;
+import org.turing.pangu.service.TaskService;
 import org.turing.pangu.service.UserService;
 import org.turing.pangu.utils.Const;
 import org.turing.pangu.utils.DateUtils;
@@ -79,13 +81,15 @@ public class PCMngController extends BaseController {
 	@Resource(name="userServiceImpl")
 	private UserService userService;
 	
+	@Resource(name="taskServiceImpl")
+	private TaskService taskService;
+	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public @ResponseBody PGResponse<String> index() {
 		logger.debug("index---" + new Date());
 		PGResponse<String> rsp = new PGResponse<String>();
-		TaskEngine.getInstance().setService(platformService, appService, deviceService, remainDataService);
-		//RemainEngine.getInstance().setService(platformService, appService, deviceService, remainDataService);
-		//RemainEngine.getInstance().updateRemainData();
+		TaskEngine.getInstance().setService(platformService, appService, deviceService, taskService);
+		TaskConfigureEngine.getInstance().init();
 		rsp.setAllData(Const.common_ok, "common_ok", null);
 		return rsp;
 	}

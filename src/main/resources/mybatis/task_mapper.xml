@@ -82,6 +82,27 @@
     <include refid="Base_Column_List" />
     from task t
   </select>
+  <select id="selectTimeSpan" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Task" >
+    select 
+    <include refid="Base_Column_List" />
+    from task t
+    where 1=1 
+    <if test="appId != null" >and t.app_id= #{appId,jdbcType=BIGINT}</if>
+    <if test="incrementMoney != null" >and t.increment_money= #{incrementMoney,jdbcType=INTEGER}</if>
+    <if test="incrementWaterAmy != null" >and t.increment_water_amy= #{incrementWaterAmy,jdbcType=INTEGER}</if>
+    <if test="stockMoney != null" >and t.stock_money= #{stockMoney,jdbcType=INTEGER}</if>
+    <if test="stockWaterAmy != null" >and t.stock_water_amy= #{stockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="allotIncrementMoney != null" >and t.allot_increment_money= #{allotIncrementMoney,jdbcType=INTEGER}</if>
+    <if test="allotIncrementWaterAmy != null" >and t.allot_increment_water_amy= #{allotIncrementWaterAmy,jdbcType=INTEGER}</if>
+    <if test="allotStockMoney != null" >and t.allot_stock_money= #{allotStockMoney,jdbcType=INTEGER}</if>
+    <if test="allotStockWaterAmy != null" >and t.allot_stock_water_amy= #{allotStockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="executeIncrementMoney != null" >and t.execute_increment_money= #{executeIncrementMoney,jdbcType=INTEGER}</if>
+    <if test="executeIncrementWaterAmy != null" >and t.execute_increment_water_amy= #{executeIncrementWaterAmy,jdbcType=INTEGER}</if>
+    <if test="executeStockMoney != null" >and t.execute_stock_money= #{executeStockMoney,jdbcType=INTEGER}</if>
+    <if test="executeStockWaterAmy != null" >and t.execute_stock_water_amy= #{executeStockWaterAmy,jdbcType=INTEGER}</if>
+ 	<if test="createDate != null and createDate!=''" >and d.create_date BETWEEN #{createDate,jdbcType=TIMESTAMP} AND #{updateDate,jdbcType=TIMESTAMP}</if> 
+  </select>
+
   <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Task" >
     select 
     <include refid="Base_Column_List" />

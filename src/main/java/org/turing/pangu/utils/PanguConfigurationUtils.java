@@ -2,21 +2,21 @@ package org.turing.pangu.utils;
 
 import java.util.ResourceBundle;
 
-public class SdbConfigurationUtils {
+public class PanguConfigurationUtils {
 
 	private static Object lock = new Object();
-	private static SdbConfigurationUtils config = null;
+	private static PanguConfigurationUtils config = null;
 	private static ResourceBundle rb = null;
 	private static final String CONFIG_FILE = "pangu";
 
-	private SdbConfigurationUtils() {
+	private PanguConfigurationUtils() {
 		rb = ResourceBundle.getBundle(CONFIG_FILE);
 	}
 
-	public static SdbConfigurationUtils getInstance() {
+	public static PanguConfigurationUtils getInstance() {
 		synchronized (lock) {
 			if (null == config) {
-				config = new SdbConfigurationUtils();
+				config = new PanguConfigurationUtils();
 			}
 		}
 		return (config);

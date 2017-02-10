@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.turing.pangu.bean.TaskConfigureBean;
 import org.turing.pangu.controller.common.PhoneTask;
 import org.turing.pangu.controller.common.VpnTask;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
@@ -22,6 +23,8 @@ import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.service.RemainDataService;
+import org.turing.pangu.service.TaskService;
+import org.turing.pangu.utils.DateUtils;
 import org.turing.pangu.utils.RandomUtils;
 /*
  * 任务引擎，负责每日任务生成,配置任务,跟踪任务进展,
@@ -30,6 +33,7 @@ public class TaskEngine {
 	private static TaskEngine mInstance = new TaskEngine();
 	private List<VpnTask> vpnTaskList = new ArrayList<VpnTask>();
 	private List<Task> todayTaskList = new ArrayList<Task>();
+	private List<App> appList = new ArrayList<App>();
 	public static final int SPAN_TIME = 10;// 10S 
 	public static final int INCREMENT_MONEY_TYPE = 0;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	public static final int INCREMENT_WATERAMY_TYPE = 1;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
@@ -47,7 +51,7 @@ public class TaskEngine {
 	private PlatformService platformService;
 	private AppService appService;
 	private DeviceService deviceService;
-	private RemainDataService remainDataService;
+	private TaskService taskService;
 	
 	public static TaskEngine getInstance(){
 		if(null == mInstance)
@@ -55,16 +59,70 @@ public class TaskEngine {
 		return mInstance;
 	}
 
-	public void setService(PlatformService platformService,AppService appService,DeviceService deviceService,RemainDataService remainDataService){
+	public void setService(PlatformService platformService,AppService appService,DeviceService deviceService,TaskService taskService){
 		this.platformService = platformService;
 		this.appService = appService;
 		this.deviceService = deviceService;
-		this.remainDataService = remainDataService;
+		this.taskService = taskService;
+		init();
 	}
-	
+	public List<App> getAppList(){
+		return appList;
+	}
+	public void init(){
+		if(null != appService)
+			appList = appService.selectAll();
+		Date fromTime = DateUtils.getTimesMorning();
+		Date toTime = new Date();
+		todayTaskList.clear();
+		todayTaskList = getTodayTaskList(fromTime, toTime);
+	}
+	public synchronized String getRemoteIp(HttpServletRequest request){
+		return request.getRemoteAddr();
+	}
+	/** 
+	   * 获取用户真实IP地址，不使用request.getRemoteAddr();的原因是有可能用户使用了代理软件方式避免真实IP地址, 
+	   * 
+	   * 可是，如果通过了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP值，究竟哪个才是真正的用户端的真实IP呢？ 
+	   * 答案是取X-Forwarded-For中第一个非unknown的有效IP字符串。 
+	   * 
+	   * 如：X-Forwarded-For：192.168.1.110, 192.168.1.120, 192.168.1.130, 
+	   * 192.168.1.100 
+	   * 
+	   * 用户真实IP为： 192.168.1.110 
+	   * 
+	   * @param request 
+	   * @return 
+	   */ 
+	public synchronized String getRealIp(HttpServletRequest request){
+		String ip = request.getHeader("x-forwarded-for"); 
+	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+	      ip = request.getHeader("Proxy-Client-IP"); 
+	    } 
+	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+	      ip = request.getHeader("WL-Proxy-Client-IP"); 
+	    } 
+	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+	      ip = request.getHeader("HTTP_CLIENT_IP"); 
+	    } 
+	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+	      ip = request.getHeader("HTTP_X_FORWARDED_FOR"); 
+	    } 
+	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
+	      ip = request.getRemoteAddr(); 
+	    } 
+	    return ip; 
+	}
 	// 更新任务配置
 	public boolean updateTaskConfigure(){
 		return true;
+	}
+	// 更新缓存任务信息至数据库
+	public void UpdateTaskToDBJob(){
+		for(Task task:todayTaskList){
+			task.setUpdateDate(new Date());
+			taskService.update(task);
+		}
 	}
 	public synchronized String addVpnTask(VpnLoginReq req,String remoteIp,String realIp){
 		VpnTask task = new VpnTask();
@@ -82,20 +140,7 @@ public class TaskEngine {
 		vpnTaskList.add(task);
 		return task.getToken();
 	}
-	private synchronized boolean isTimeOut(VpnTask task){
-		Date nowTime = new Date();
-		switch(task.getOperType()){
-		case INCREMENT_MONEY_TYPE:
-			return (nowTime.getTime() - task.getCreateTime().getTime() > INCREMENT_MONEY_TIMEOUT)?true:false;
-		case INCREMENT_WATERAMY_TYPE:
-			return (nowTime.getTime() - task.getCreateTime().getTime() > INCREMENT_WATERAMY_TIMEOUT)?true:false;	
-		case STOCK_MONEY_TYPE:	
-			return (nowTime.getTime() - task.getCreateTime().getTime() > STOCK_MONEY_TIMEOUT)?true:false;
-		case STOCK_WATERAMY_TYPE:
-			return (nowTime.getTime() - task.getCreateTime().getTime() > STOCK_WATERAMY_TIMEOUT)?true:false;
-		}
-		return true;
-	}
+
 	public synchronized boolean vpnIsNeedSwitch(String token){
 		for(VpnTask task :vpnTaskList){
 			if(task.getToken().equals(token)){
@@ -125,7 +170,32 @@ public class TaskEngine {
 	}
 	// 创建今日任务
 	public void createTodayTask(){
-		
+		List<TaskConfigureBean> list = TaskConfigureEngine.getInstance().getAllAppConfigure();
+		UpdateTaskToDBJob(); // 先保存
+		Date fromTime = new Date(); //开始时间
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for(TaskConfigureBean bean :list){
+			Task model = new Task();
+			model.setAppId(bean.getAppId());
+			model.setIncrementMoney(bean.getIncrementMoney());
+			model.setIncrementWaterAmy(bean.getIncrementWaterAmy());
+			model.setStockMoney(bean.getStockMoney());
+			model.setStockWaterAmy(bean.getStockWaterAmy());
+			taskService.insert(model);
+		}
+		Date toTime = new Date(); // 结束时间 ,取这段时间插入的数据
+		todayTaskList.clear();//清空
+		todayTaskList = getTodayTaskList(fromTime,toTime);
+	}
+	private List<Task> getTodayTaskList(Date fromTime,Date toTime){
+		Task selectModel = new Task();
+		List<Task> list = taskService.selectTodayTaskList(selectModel);
+		return list;
 	}
 	// 手机端一个任务完成
 	public synchronized void taskFinish(TaskFinishReq req,String remoteIp,String realIp){
@@ -134,6 +204,7 @@ public class TaskEngine {
 				for(PhoneTask tmpTask:task.getPhoneTaskList()){
 					if(tmpTask.getTaskId().equals(req.getTaskId())){
 						tmpTask.setIsFinished(1);//找到任务并设为完成状态
+						updateExecute(tmpTask); // 更新执行任务
 					}
 				}
 			}
@@ -159,6 +230,41 @@ public class TaskEngine {
 		}
 		return pTask;
 	}
+	
+	private synchronized boolean isTimeOut(VpnTask task){
+		Date nowTime = new Date();
+		switch(task.getOperType()){
+		case INCREMENT_MONEY_TYPE:
+			return (nowTime.getTime() - task.getCreateTime().getTime() > INCREMENT_MONEY_TIMEOUT)?true:false;
+		case INCREMENT_WATERAMY_TYPE:
+			return (nowTime.getTime() - task.getCreateTime().getTime() > INCREMENT_WATERAMY_TIMEOUT)?true:false;	
+		case STOCK_MONEY_TYPE:	
+			return (nowTime.getTime() - task.getCreateTime().getTime() > STOCK_MONEY_TIMEOUT)?true:false;
+		case STOCK_WATERAMY_TYPE:
+			return (nowTime.getTime() - task.getCreateTime().getTime() > STOCK_WATERAMY_TIMEOUT)?true:false;
+		}
+		return true;
+	}
+	private void updateExecute(PhoneTask pTask){
+		for(Task task : todayTaskList){
+			if(pTask.getAppId() == task.getAppId()){
+				switch(pTask.getOperType()){
+				case INCREMENT_MONEY_TYPE:
+					task.setExecuteIncrementMoney(task.getExecuteIncrementMoney() + 1);
+					break;
+				case INCREMENT_WATERAMY_TYPE:
+					task.setExecuteIncrementWaterAmy(task.getExecuteIncrementWaterAmy() + 1);
+					break;
+				case STOCK_MONEY_TYPE:	
+					task.setExecuteStockMoney(task.getExecuteStockMoney() + 1);
+					break;
+				case STOCK_WATERAMY_TYPE:
+					task.setExecuteStockWaterAmy(task.getExecuteStockWaterAmy() + 1);
+					break;
+				}
+			}
+		}
+	}
 	private synchronized PhoneTask getTask(VpnTask task,String deviceId,int operType,String remoteIp,String realIp){
 		PhoneTask pTask = new PhoneTask();
 		pTask.setDeviceId(deviceId);
@@ -173,7 +279,6 @@ public class TaskEngine {
 		
 		return pTask;
 	}
-	
 	class SortByIncrementMoney implements Comparator{
 
 		@Override
@@ -310,41 +415,6 @@ public class TaskEngine {
 	
 	
 	
-	public synchronized String getRemoteIp(HttpServletRequest request){
-		return request.getRemoteAddr();
-	}
-	/** 
-	   * 获取用户真实IP地址，不使用request.getRemoteAddr();的原因是有可能用户使用了代理软件方式避免真实IP地址, 
-	   * 
-	   * 可是，如果通过了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP值，究竟哪个才是真正的用户端的真实IP呢？ 
-	   * 答案是取X-Forwarded-For中第一个非unknown的有效IP字符串。 
-	   * 
-	   * 如：X-Forwarded-For：192.168.1.110, 192.168.1.120, 192.168.1.130, 
-	   * 192.168.1.100 
-	   * 
-	   * 用户真实IP为： 192.168.1.110 
-	   * 
-	   * @param request 
-	   * @return 
-	   */ 
-	public synchronized String getRealIp(HttpServletRequest request){
-		String ip = request.getHeader("x-forwarded-for"); 
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
-	      ip = request.getHeader("Proxy-Client-IP"); 
-	    } 
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
-	      ip = request.getHeader("WL-Proxy-Client-IP"); 
-	    } 
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
-	      ip = request.getHeader("HTTP_CLIENT_IP"); 
-	    } 
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
-	      ip = request.getHeader("HTTP_X_FORWARDED_FOR"); 
-	    } 
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
-	      ip = request.getRemoteAddr(); 
-	    } 
-	    return ip; 
-	}
+
 	
 }

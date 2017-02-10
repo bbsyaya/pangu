@@ -26,5 +26,11 @@ public class TaskServiceImpl extends BaseServiceImpl<Task,Long> implements TaskS
 	public void setTaskDao(TaskDao dao) {
 		super.setBaseDao(dao);
 		this.dao = dao;
+	}
+
+	@Override
+	public List<Task> selectTodayTaskList(Task task) {
+		// TODO Auto-generated method stub
+		return dao.selectTimeSpan(task);
 	}	
 }

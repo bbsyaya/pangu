@@ -234,8 +234,8 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
         <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
 	</bean>  
 	
-	<bean id="remainJob" class="org.turing.pangu.quartz.GenerateRemainFileJob"/> 
-	<bean id="updateRemainJob" class="org.turing.pangu.quartz.UpdateRemainJob"/> 
+	<bean id="remainJob" class="org.turing.pangu.quartz.CreateTaskJob"/> 
+	<bean id="updateRemainJob" class="org.turing.pangu.quartz.UpdateTaskToDBJob"/> 
 	 
 	<!-- 生成留存文件定时器 end -->
 	<!-- 上传文件 -->

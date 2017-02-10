@@ -34,4 +34,10 @@ public class TaskDaoImpl extends BaseDaoImpl<Task, Long> implements TaskDao {
 	public void setAppMapper(TaskMapper mapper) {
 		super.setBaseMapper(mapper);
 	}
+
+	@Override
+	public List<Task> selectTimeSpan(Task task) {
+		// TODO Auto-generated method stub
+		return mapper.selectTimeSpan(task);
+	}
 }
