@@ -132,7 +132,8 @@ public class TaskEngine {
 		task.setRealIp(realIp);
 		task.setToken(RandomUtils.getRandom(vpnTokenLengh));
 		task.setCreateTime(new Date());
-		for(VpnTask tmp :vpnTaskList){
+		for (int i = vpnTaskList.size()-1; i >=0; i--){
+			VpnTask tmp = vpnTaskList.get(i);
 			if(tmp.getDeviceId().equals(task.getDeviceId())){
 				vpnTaskList.remove(tmp); // 删除原来的VPN task
 			}
