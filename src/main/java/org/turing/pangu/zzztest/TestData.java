@@ -1,5 +1,6 @@
 package org.turing.pangu.zzztest;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.turing.pangu.bean.TaskConfigureBean;
 import org.turing.pangu.engine.RemainEngine;
+import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.model.RemainData;
@@ -20,9 +23,12 @@ import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.service.RemainDataService;
 import org.turing.pangu.service.RemainVpnService;
+import org.turing.pangu.service.TaskService;
 import org.turing.pangu.service.UserService;
 import org.turing.pangu.utils.DateUtils;
 import org.turing.pangu.utils.RandomUtils;
+
+import com.alibaba.fastjson.JSON;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring.xml", "classpath:spring-mvc.xml", "classpath:spring-mybatis.xml" })
@@ -45,6 +51,9 @@ public class TestData {
 	
 	@Resource(name="deviceServiceImpl")
 	private DeviceService deviceService;
+	
+	@Resource(name="taskServiceImpl")
+	private TaskService taskService;
 	
 	/*
 	@Test
@@ -190,9 +199,22 @@ public class TestData {
 	
 	@Test
 	public void remain(){
-		RemainEngine.getInstance().setService(platformService, appService, deviceService,remainDataService);
+		TaskEngine.getInstance().setService(platformService, appService, deviceService,taskService);
 		//RemainEngine.getInstance().generateRemainFile();
-		testUpdateDevice();
+		//testUpdateDevice();
+		List<TaskConfigureBean> list = new ArrayList<TaskConfigureBean>();
+		for(int i =0 ; i < 5; i++){
+			TaskConfigureBean bean = new TaskConfigureBean();
+			bean.setAppId((long)i);
+			bean.setIncrementMoney(100);
+			bean.setIncrementWaterAmy(100);
+			bean.setStockMoney(100);
+			bean.setStockWaterAmy(100);
+			list.add(bean);
+		}
+		String json = JSON.toJSONString(list);
+		System.out.print(json);
+
 	}
 
 }

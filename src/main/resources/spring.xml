@@ -213,7 +213,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 	<bean id="remainTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="remainJobDetail"/>  
        <!-- 每天23点30分执行一次 -->
-       <property name="cronExpression" value="0 30 23 * * ?"/>   
+       <property name="cronExpression" value="0 0 0 * * ?"/>   
 	</bean> 
 	<bean id="updateRemainTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="updateRemainJobDetail"/>  

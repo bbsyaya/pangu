@@ -61,6 +61,21 @@ public class TaskConfigureEngine {
 				configureList.add(bean);
 			}
 		}
+		//----------------------------------------------------------
+		List<TaskConfigureBean> tmpList = new ArrayList<TaskConfigureBean>(); 
+		for(TaskConfigureBean bean:configureList){
+			if(bean == null)break;
+			
+			flag = 0;
+			for(App app : appList){
+				if(app.getId() == bean.getAppId()){
+					flag = 1;
+					tmpList.add(bean);
+					break;
+				}
+			}
+		}
+		configureList = tmpList;
 		saveConfigure();
 	}
 	public void updateOneAppConfigure(List<TaskConfigureBean> beanList){
@@ -79,8 +94,13 @@ public class TaskConfigureEngine {
 	}
 	// 写文件
 	private void saveConfigure(){
-		String jsonContent = JSON.toJSONString(configureList);
-		FileUtil.writeAsString(mFile, jsonContent);
+		try{
+			String jsonContent = JSON.toJSONString(configureList);
+			FileUtil.writeAsString(mFile, jsonContent);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 	}
 	
 }
