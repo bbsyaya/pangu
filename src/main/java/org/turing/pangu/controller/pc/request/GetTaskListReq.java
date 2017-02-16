@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.turing.pangu.controller.common.BaseReq;
 
-public class GetRemainDataListReq extends BaseReq{
+public class GetTaskListReq extends BaseReq{
 	private Long appId;
 	private Date startDate;
 	private Date endDate;

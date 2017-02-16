@@ -11,13 +11,9 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.turing.pangu.bean.TaskConfigureBean;
-import org.turing.pangu.engine.RemainEngine;
 import org.turing.pangu.engine.TaskEngine;
-import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
-import org.turing.pangu.model.RemainData;
 import org.turing.pangu.model.RemainVpn;
-import org.turing.pangu.model.User;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.PlatformService;
@@ -26,7 +22,6 @@ import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.TaskService;
 import org.turing.pangu.service.UserService;
 import org.turing.pangu.utils.DateUtils;
-import org.turing.pangu.utils.RandomUtils;
 
 import com.alibaba.fastjson.JSON;
 

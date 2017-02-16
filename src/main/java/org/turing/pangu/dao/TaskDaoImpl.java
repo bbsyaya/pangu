@@ -15,9 +15,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.turing.pangu.mapper.AppMapper;
 import org.turing.pangu.mapper.TaskMapper;
-import org.turing.pangu.model.App;
 import org.turing.pangu.model.Task;
 
 @Repository

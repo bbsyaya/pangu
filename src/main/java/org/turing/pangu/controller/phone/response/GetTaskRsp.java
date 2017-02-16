@@ -21,7 +21,14 @@ public class GetTaskRsp extends BaseRsp{
 	public void setTask(PhoneTask task) {
 		this.task = task;
 	}
+	public String getTaskIp() {
+		return taskIp;
+	}
+	public void setTaskIp(String taskIp) {
+		this.taskIp = taskIp;
+	}
 	private PhoneTask task; // 一个任务
 	private int loopTime; // 循环请求任务时间间隔，单位秒
-	private int isHaveTask; // 是否有任务, 1:有 0: 没有
+	private int isHaveTask = 0; // 是否有任务, 1:有 0: 没有
+	private String taskIp; // 执行任务的IP
 }

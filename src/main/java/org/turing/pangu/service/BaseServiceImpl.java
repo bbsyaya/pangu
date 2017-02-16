@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.turing.pangu.dao.BaseDao;
 import org.turing.pangu.model.PageModel;
 import org.turing.pangu.model.ParamModel;

@@ -10,9 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,8 +21,6 @@ import org.turing.pangu.controller.phone.request.GetTaskReq;
 import org.turing.pangu.controller.phone.request.ReportReq;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.controller.phone.response.GetTaskRsp;
-import org.turing.pangu.dao.UserDaoImpl;
-import org.turing.pangu.engine.RemainEngine;
 import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.model.App;
 import org.turing.pangu.service.AppService;
@@ -73,9 +69,7 @@ public class MobileReportController extends BaseController {
 	 * 手机端请求任务
 	 * */
 	@RequestMapping(value = "/getTask", method = RequestMethod.POST)
-	public @ResponseBody String getTask(HttpServletRequest request) {
-		PGResponse<GetTaskRsp> getTaskRsp = new PGResponse<GetTaskRsp>();
-		
+	public @ResponseBody GetTaskRsp getTask(HttpServletRequest request) {
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);
 		String contentStr = getRequestBody(request);
@@ -91,7 +85,8 @@ public class MobileReportController extends BaseController {
 			rsp.setIsHaveTask(0);
 		}
 		rsp.setLoopTime(TaskEngine.SPAN_TIME);
-		return "";
+		rsp.setTaskIp(remoteIp);
+		return rsp;
 	}
 	/*
 	 * 任务完成情况
@@ -99,6 +94,7 @@ public class MobileReportController extends BaseController {
 	@RequestMapping(value = "/taskFinish", method = RequestMethod.POST)
 	public @ResponseBody String taskFinish(HttpServletRequest request,
 			HttpServletResponse rsp) {
+		String result = "";
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);
 		String contentStr = getRequestBody(request);

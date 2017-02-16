@@ -100,7 +100,7 @@
     <if test="executeIncrementWaterAmy != null" >and t.execute_increment_water_amy= #{executeIncrementWaterAmy,jdbcType=INTEGER}</if>
     <if test="executeStockMoney != null" >and t.execute_stock_money= #{executeStockMoney,jdbcType=INTEGER}</if>
     <if test="executeStockWaterAmy != null" >and t.execute_stock_water_amy= #{executeStockWaterAmy,jdbcType=INTEGER}</if>
- 	<if test="createDate != null and createDate!=''" >and d.create_date BETWEEN #{createDate,jdbcType=TIMESTAMP} AND #{updateDate,jdbcType=TIMESTAMP}</if> 
+ 	<if test="createDate != null and createDate!=''" >and t.create_date BETWEEN #{createDate,jdbcType=TIMESTAMP} AND #{updateDate,jdbcType=TIMESTAMP}</if> 
   </select>
 
   <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Task" >

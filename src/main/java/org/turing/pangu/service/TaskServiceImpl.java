@@ -1,15 +1,12 @@
 package org.turing.pangu.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.turing.pangu.dao.TaskDao;
-import org.turing.pangu.dao.UserDao;
 import org.turing.pangu.model.Task;
-import org.turing.pangu.model.User;
 
 
 

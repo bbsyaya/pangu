@@ -13,7 +13,6 @@ package org.turing.pangu.dao;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import org.turing.pangu.mapper.UserMapper;
 import org.turing.pangu.model.User;
 

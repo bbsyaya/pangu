@@ -17,23 +17,22 @@ import org.turing.pangu.controller.common.PGResponse;
 import org.turing.pangu.controller.pc.request.CurdVpnReq;
 import org.turing.pangu.controller.pc.request.GetAppListReq;
 import org.turing.pangu.controller.pc.request.GetDynamicVpnListReq;
+import org.turing.pangu.controller.pc.request.GetTaskListReq;
 import org.turing.pangu.controller.pc.request.GetRemainIpListReq;
-import org.turing.pangu.controller.pc.request.GetRemainDataListReq;
 import org.turing.pangu.controller.pc.request.GetRemainVpnListReq;
-import org.turing.pangu.controller.pc.request.GetVpnListReq;
-import org.turing.pangu.controller.pc.request.VpnOperUpdateReq;
 import org.turing.pangu.controller.pc.request.LoginReq;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
+import org.turing.pangu.controller.pc.request.VpnOperUpdateReq;
 import org.turing.pangu.controller.pc.request.VpnSwitchFinishReq;
 import org.turing.pangu.controller.pc.response.VpnLoginRsp;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
-import org.turing.pangu.engine.RemainEngine;
 import org.turing.pangu.engine.TaskConfigureEngine;
 import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.DynamicVpn;
 import org.turing.pangu.model.RemainData;
 import org.turing.pangu.model.RemainVpn;
+import org.turing.pangu.model.Task;
 import org.turing.pangu.model.User;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
@@ -86,11 +85,37 @@ public class PCMngController extends BaseController {
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public @ResponseBody PGResponse<String> index() {
-		logger.debug("index---" + new Date());
+		logger.info("index---" + new Date());
 		PGResponse<String> rsp = new PGResponse<String>();
 		TaskEngine.getInstance().setService(platformService, appService, deviceService, taskService);
+		TaskEngine.getInstance().init();
 		TaskConfigureEngine.getInstance().init();
 		rsp.setAllData(Const.common_ok, "common_ok", null);
+		return rsp;
+	}
+	
+	@RequestMapping(value = "/createTodayTask", method = RequestMethod.GET)
+	public @ResponseBody PGResponse<String> createTodayTask() {
+		logger.info("createTodayTask---" + new Date());
+		PGResponse<String> rsp = new PGResponse<String>();
+		TaskEngine.getInstance().createTodayTask();
+		rsp.setAllData(Const.common_ok, "common_ok", null);
+		return rsp;
+	}
+	@RequestMapping(value = "/remoteIp", method = RequestMethod.GET)
+	public @ResponseBody PGResponse<String> remoteIp(HttpServletRequest request) {
+		logger.info("remoteIp---" + new Date());
+		PGResponse<String> rsp = new PGResponse<String>();
+		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
+		rsp.setAllData(Const.common_ok, "common_ok", remoteIp);
+		return rsp;
+	}
+	@RequestMapping(value = "/proxyIp", method = RequestMethod.GET)
+	public @ResponseBody PGResponse<String> proxyIp(HttpServletRequest request) {
+		logger.info("proxyIp---" + new Date());
+		PGResponse<String> rsp = new PGResponse<String>();
+		String realIp = TaskEngine.getInstance().getRealIp(request);
+		rsp.setAllData(Const.common_ok, "common_ok", realIp);
 		return rsp;
 	}
 	
@@ -219,13 +244,13 @@ public class PCMngController extends BaseController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/getRemainDataList", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<List<RemainData>> getRemainList(@RequestBody GetRemainDataListReq req) {
+	@RequestMapping(value = "/getTaskDataList", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody PGResponse<List<Task>> getTaskDataList(@RequestBody GetTaskListReq req) {
 		logger.debug("getRemainList---" + req.getAppId() + "--" + new Date());
-		PGResponse<List<RemainData>> rsp = new PGResponse<List<RemainData>>();
-		RemainData data = new RemainData();
+		PGResponse<List<Task>> rsp = new PGResponse<List<Task>>();
+		Task data = new Task();
 		data.setAppId(req.getAppId());
-		List<RemainData> list = remainDataService.selectList(data);
+		List<Task> list = taskService.selectList(data);
 		rsp.setAllData(Const.common_ok, "common_ok", list);
 		return rsp;
 	}
@@ -236,7 +261,7 @@ public class PCMngController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getRemainFilePath", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<List<RemainData>> getRemainFilePath(@RequestBody GetRemainDataListReq req) {
+	public @ResponseBody PGResponse<List<RemainData>> getRemainFilePath(@RequestBody GetTaskListReq req) {
 		logger.debug("getRemainFilePath---" + req.getAppId() + "--" + new Date());
 		PGResponse<List<RemainData>> rsp = new PGResponse<List<RemainData>>();
 		RemainData data = new RemainData();
@@ -256,7 +281,7 @@ public class PCMngController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getRemain", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<List<RemainData>> getTodayRemain(@RequestBody GetRemainDataListReq req) {
+	public @ResponseBody PGResponse<List<RemainData>> getTodayRemain(@RequestBody GetTaskListReq req) {
 		logger.debug("getTodayRemain---" + req.getAppId() + "--" + new Date());
 		PGResponse<List<RemainData>> rsp = new PGResponse<List<RemainData>>();
 		RemainData data = new RemainData();

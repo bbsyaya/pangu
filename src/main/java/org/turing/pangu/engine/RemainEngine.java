@@ -6,14 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Resource;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.quartz.simpl.RAMJobStore;
-import org.turing.pangu.controller.phone.MobileReportController;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.model.Platform;
@@ -21,17 +16,13 @@ import org.turing.pangu.model.RemainData;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.PlatformService;
-import org.turing.pangu.service.PlatformServiceImpl;
 import org.turing.pangu.service.RemainDataService;
 import org.turing.pangu.utils.DateUtils;
 import org.turing.pangu.utils.FileUtil;
 import org.turing.pangu.utils.HttpUtil;
 import org.turing.pangu.utils.JsonUtils;
-import org.turing.pangu.utils.RandomUtils;
-import org.turing.pangu.utils.SpringContextHolder;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 
 
@@ -167,7 +158,7 @@ public class RemainEngine {
 		List<App> appList = AppEngine.getInstance().getList();
 		if(null == appList){	
 			if(null == platformService){
-				HttpUtil.get("http://pangu.u-app.cn/pc/index.pangu"); // 以这种方式赋值
+				//HttpUtil.get("http://pangu.u-app.cn/pc/index.pangu"); // 以这种方式赋值
 				return;
 			}
 			appList = appService.selectAll();

@@ -3,7 +3,6 @@ package org.turing.pangu.quartz;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
-import org.turing.pangu.engine.RemainEngine;
 import org.turing.pangu.engine.TaskEngine;
 
 public class CreateTaskJob {

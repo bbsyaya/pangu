@@ -3,7 +3,6 @@ package org.turing.pangu.engine;
 import java.util.List;
 
 import org.turing.pangu.model.App;
-import org.turing.pangu.model.RemainVpn;
 
 public class AppEngine {
 	private static AppEngine mInstance = new AppEngine();

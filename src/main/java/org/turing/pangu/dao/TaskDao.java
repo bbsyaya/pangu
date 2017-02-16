@@ -12,7 +12,6 @@ package org.turing.pangu.dao;
 
 import java.util.List;
 
-import org.turing.pangu.model.App;
 import org.turing.pangu.model.Task;
 
 public interface TaskDao extends BaseDao<Task, Long> {
