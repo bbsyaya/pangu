@@ -35,8 +35,8 @@ public class TaskEngine {
 	public static final int SPAN_TIME = 10;// 10S 
 	public static final int INCREMENT_MONEY_TYPE = 0;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	public static final int INCREMENT_WATERAMY_TYPE = 1;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
-	public static final int STOCK_MONEY_TYPE = 3;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
-	public static final int STOCK_WATERAMY_TYPE = 4;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
+	public static final int STOCK_MONEY_TYPE = 2;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
+	public static final int STOCK_WATERAMY_TYPE = 3;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	
 	public static final int INCREMENT_MONEY_TIMEOUT = 5*60*1000;
 	public static final int INCREMENT_WATERAMY_TIMEOUT = 3*60*1000;
@@ -444,12 +444,16 @@ public class TaskEngine {
 		switch(type){
 		case INCREMENT_MONEY_TYPE:
 			dbTask.setAllotIncrementMoney(dbTask.getAllotIncrementMoney() + 1);
+			break;
 		case INCREMENT_WATERAMY_TYPE:
 			dbTask.setAllotIncrementWaterAmy(dbTask.getAllotIncrementWaterAmy() + 1);
+			break;
 		case STOCK_MONEY_TYPE:	
 			dbTask.setAllotStockMoney(dbTask.getAllotStockMoney() + 1);
+			break;
 		case STOCK_WATERAMY_TYPE:
 			dbTask.setAllotStockWaterAmy(dbTask.getAllotStockWaterAmy() + 1);
+			break;
 		}
 	}
 	// 是否还有该类型的任务

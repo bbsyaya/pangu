@@ -79,10 +79,10 @@ public class MobileReportController extends BaseController {
 		GetTaskRsp rsp = new GetTaskRsp();
 		PhoneTask task = TaskEngine.getInstance().getTask(req.getDeviceId(), remoteIp, realIp);
 		rsp.setTask(task);
-		if(task.getAppId() != 0L){
-			rsp.setIsHaveTask(1);
-		}else{
+		if(null == task || task.getAppId() == 0L){
 			rsp.setIsHaveTask(0);
+		}else{
+			rsp.setIsHaveTask(1);
 		}
 		rsp.setLoopTime(TaskEngine.SPAN_TIME);
 		rsp.setTaskIp(remoteIp);

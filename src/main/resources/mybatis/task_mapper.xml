@@ -123,7 +123,7 @@
     <if test="executeStockWaterAmy != null" >and t.execute_stock_water_amy= #{executeStockWaterAmy,jdbcType=INTEGER}</if>
     <if test="createDate != null" >and t.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and t.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
-    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
+    order by t.create_date desc
   </select>
   <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Task" >
     select 
