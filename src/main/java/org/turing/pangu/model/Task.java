@@ -69,7 +69,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   /***/
   private Date updateDate;
 
-
+  public void init(){
+	  setIncrementMoney(0);
+	  setIncrementWaterAmy(0);
+	  setStockMoney(0);
+	  setStockWaterAmy(0);
+	  setAllotIncrementMoney(0);
+	  setAllotIncrementWaterAmy(0);
+	  setAllotStockMoney(0);
+	  setAllotStockWaterAmy(0);
+	  setExecuteIncrementMoney(0);
+	  setExecuteIncrementWaterAmy(0);
+	  setExecuteStockMoney(0);
+	  setExecuteStockWaterAmy(0);
+  }
   
   /**获取*/
   @JsonProperty

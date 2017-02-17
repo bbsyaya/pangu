@@ -5,6 +5,11 @@
     <id column="id" property="id" jdbcType="BIGINT" />       
     <result column="name" property="name" jdbcType="VARCHAR" />          
     <result column="introduce" property="introduce" jdbcType="VARCHAR" />          
+    <result column="shell_config" property="shellConfig" jdbcType="VARCHAR" />          
+    <result column="fix_data" property="fixData" jdbcType="VARCHAR" />          
+    <result column="resolution" property="resolution" jdbcType="VARCHAR" />          
+    <result column="black_ip" property="blackIp" jdbcType="VARCHAR" />          
+    <result column="task_config" property="taskConfig" jdbcType="VARCHAR" />          
     <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
   </resultMap>   
@@ -12,18 +17,33 @@
     p.id,
 	p.name,
 	p.introduce,
+	p.shell_config,
+	p.fix_data,
+	p.resolution,
+	p.black_ip,
+	p.task_config,
 	p.create_date,
 	p.update_date
   </sql>
   <sql id="Base_Column_Value_List" >
     #{name},
 	#{introduce},
+	#{shellConfig},
+	#{fixData},
+	#{resolution},
+	#{blackIp},
+	#{taskConfig},
 	#{createDate},
 	#{updateDate}
   </sql>
   <sql id="Base_Column_Update_List" >
     name=#{name},
 	introduce=#{introduce},
+	shell_config=#{shellConfig},
+	fix_data=#{fixData},
+	resolution=#{resolution},
+	black_ip=#{blackIp},
+	task_config=#{taskConfig},
 	create_date=#{createDate},
 	update_date=#{updateDate}
   </sql> 
@@ -45,6 +65,11 @@
     where 1=1 
     <if test="name != null" >and p.name= #{name,jdbcType=VARCHAR}</if>
     <if test="introduce != null" >and p.introduce= #{introduce,jdbcType=VARCHAR}</if>
+    <if test="shellConfig != null" >and p.shell_config= #{shellConfig,jdbcType=VARCHAR}</if>
+    <if test="fixData != null" >and p.fix_data= #{fixData,jdbcType=VARCHAR}</if>
+    <if test="resolution != null" >and p.resolution= #{resolution,jdbcType=VARCHAR}</if>
+    <if test="blackIp != null" >and p.black_ip= #{blackIp,jdbcType=VARCHAR}</if>
+    <if test="taskConfig != null" >and p.task_config= #{taskConfig,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and p.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and p.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
     <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
@@ -56,6 +81,11 @@
     where 1=1 
     <if test="name != null" >and p.name= #{name,jdbcType=VARCHAR}</if>
     <if test="introduce != null" >and p.introduce= #{introduce,jdbcType=VARCHAR}</if>
+    <if test="shellConfig != null" >and p.shell_config= #{shellConfig,jdbcType=VARCHAR}</if>
+    <if test="fixData != null" >and p.fix_data= #{fixData,jdbcType=VARCHAR}</if>
+    <if test="resolution != null" >and p.resolution= #{resolution,jdbcType=VARCHAR}</if>
+    <if test="blackIp != null" >and p.black_ip= #{blackIp,jdbcType=VARCHAR}</if>
+    <if test="taskConfig != null" >and p.task_config= #{taskConfig,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and p.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and p.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
@@ -66,6 +96,11 @@
     where 1=1 
     <if test="model.name != null" >and p.name= #{model.name,jdbcType=VARCHAR}</if>
     <if test="model.introduce != null" >and p.introduce= #{model.introduce,jdbcType=VARCHAR}</if>
+    <if test="model.shellConfig != null" >and p.shell_config= #{model.shellConfig,jdbcType=VARCHAR}</if>
+    <if test="model.fixData != null" >and p.fix_data= #{model.fixData,jdbcType=VARCHAR}</if>
+    <if test="model.resolution != null" >and p.resolution= #{model.resolution,jdbcType=VARCHAR}</if>
+    <if test="model.blackIp != null" >and p.black_ip= #{model.blackIp,jdbcType=VARCHAR}</if>
+    <if test="model.taskConfig != null" >and p.task_config= #{model.taskConfig,jdbcType=VARCHAR}</if>
     <if test="model.createDate != null" >and p.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
     <if test="model.updateDate != null" >and p.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
     <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
@@ -76,6 +111,11 @@
     where 1=1 
     <if test="name != null" >and p.name= #{name,jdbcType=VARCHAR}</if>
     <if test="introduce != null" >and p.introduce= #{introduce,jdbcType=VARCHAR}</if>
+    <if test="shellConfig != null" >and p.shell_config= #{shellConfig,jdbcType=VARCHAR}</if>
+    <if test="fixData != null" >and p.fix_data= #{fixData,jdbcType=VARCHAR}</if>
+    <if test="resolution != null" >and p.resolution= #{resolution,jdbcType=VARCHAR}</if>
+    <if test="blackIp != null" >and p.black_ip= #{blackIp,jdbcType=VARCHAR}</if>
+    <if test="taskConfig != null" >and p.task_config= #{taskConfig,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and p.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and p.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
@@ -88,12 +128,22 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
         name,    
         introduce,    
+        shell_config,    
+        fix_data,    
+        resolution,    
+        black_ip,    
+        task_config,    
         create_date,    
         update_date,    
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
         #{name,jdbcType=VARCHAR},  
         #{introduce,jdbcType=VARCHAR},  
+        #{shellConfig,jdbcType=VARCHAR},  
+        #{fixData,jdbcType=VARCHAR},  
+        #{resolution,jdbcType=VARCHAR},  
+        #{blackIp,jdbcType=VARCHAR},  
+        #{taskConfig,jdbcType=VARCHAR},  
         #{createDate,jdbcType=TIMESTAMP},  
         #{updateDate,jdbcType=TIMESTAMP},  
     </trim>
@@ -103,12 +153,22 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
         <if test="name != null" >name,</if>
         <if test="introduce != null" >introduce,</if>
+        <if test="shellConfig != null" >shell_config,</if>
+        <if test="fixData != null" >fix_data,</if>
+        <if test="resolution != null" >resolution,</if>
+        <if test="blackIp != null" >black_ip,</if>
+        <if test="taskConfig != null" >task_config,</if>
         <if test="createDate != null" >create_date,</if>
         <if test="updateDate != null" >update_date,</if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
         <if test="name != null" >#{name,jdbcType=VARCHAR},</if>  
         <if test="introduce != null" >#{introduce,jdbcType=VARCHAR},</if>  
+        <if test="shellConfig != null" >#{shellConfig,jdbcType=VARCHAR},</if>  
+        <if test="fixData != null" >#{fixData,jdbcType=VARCHAR},</if>  
+        <if test="resolution != null" >#{resolution,jdbcType=VARCHAR},</if>  
+        <if test="blackIp != null" >#{blackIp,jdbcType=VARCHAR},</if>  
+        <if test="taskConfig != null" >#{taskConfig,jdbcType=VARCHAR},</if>  
         <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
         <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
     </trim>
@@ -118,6 +178,11 @@
     <trim prefix="" suffix="" suffixOverrides="," >
         name=#{name,jdbcType=VARCHAR},    
         introduce=#{introduce,jdbcType=VARCHAR},    
+        shell_config=#{shellConfig,jdbcType=VARCHAR},    
+        fix_data=#{fixData,jdbcType=VARCHAR},    
+        resolution=#{resolution,jdbcType=VARCHAR},    
+        black_ip=#{blackIp,jdbcType=VARCHAR},    
+        task_config=#{taskConfig,jdbcType=VARCHAR},    
         create_date=#{createDate,jdbcType=TIMESTAMP},    
         update_date=#{updateDate,jdbcType=TIMESTAMP},    
     </trim>
@@ -128,6 +193,11 @@
     <trim prefix="" suffix="" suffixOverrides="," >
         <if test="name != null" >name=#{name,jdbcType=VARCHAR},</if>
         <if test="introduce != null" >introduce=#{introduce,jdbcType=VARCHAR},</if>
+        <if test="shellConfig != null" >shell_config=#{shellConfig,jdbcType=VARCHAR},</if>
+        <if test="fixData != null" >fix_data=#{fixData,jdbcType=VARCHAR},</if>
+        <if test="resolution != null" >resolution=#{resolution,jdbcType=VARCHAR},</if>
+        <if test="blackIp != null" >black_ip=#{blackIp,jdbcType=VARCHAR},</if>
+        <if test="taskConfig != null" >task_config=#{taskConfig,jdbcType=VARCHAR},</if>
         <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
         <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
     </trim>

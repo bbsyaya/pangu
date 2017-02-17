@@ -16,6 +16,7 @@ import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
+import org.turing.pangu.model.Platform;
 import org.turing.pangu.model.Task;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
@@ -32,6 +33,7 @@ public class TaskEngine {
 	private List<VpnTask> vpnTaskList = new ArrayList<VpnTask>();
 	private List<Task> todayTaskList = new ArrayList<Task>();
 	private List<App> appList = new ArrayList<App>();
+	private List<Platform> platformList = new ArrayList<Platform>();
 	public static final int SPAN_TIME = 10;// 10S 
 	public static final int INCREMENT_MONEY_TYPE = 0;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	public static final int INCREMENT_WATERAMY_TYPE = 1;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
@@ -67,12 +69,33 @@ public class TaskEngine {
 		return appList;
 	}
 	public void init(){
-		if(null != appService)
+		if(null != appService){
 			appList = appService.selectAll();
+		}
+		if(null != platformService){
+			platformList = platformService.selectAll();
+		}
+			
 		Date fromTime = DateUtils.getTimesMorning();
 		Date toTime = new Date();
 		todayTaskList.clear();
 		todayTaskList = getTodayTaskList(fromTime, toTime);
+	}
+	public Platform getPlatformInfo(long pfId){
+		for(Platform pf:platformList){
+			if(pf.getId() == pfId){
+				return pf;
+			}
+		}
+		return null;
+	}
+	public App getAppInfo(long appId){
+		for(App app:appList){
+			if(app.getId() == appId){
+				return app;
+			}
+		}
+		return null;
 	}
 	public synchronized String getRemoteIp(HttpServletRequest request){
 		String ip = request.getHeader("X-Real-IP"); 
@@ -202,6 +225,7 @@ public class TaskEngine {
 		logger.info("createTodayTask---001");
 		for(TaskConfigureBean bean :list){
 			Task model = new Task();
+			model.init();//把变量设为0
 			model.setAppId(bean.getAppId());
 			model.setIncrementMoney(bean.getIncrementMoney());
 			model.setIncrementWaterAmy(bean.getIncrementWaterAmy());

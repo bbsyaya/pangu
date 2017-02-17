@@ -3,6 +3,7 @@ package org.turing.pangu.controller.phone;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -11,18 +12,25 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.turing.pangu.controller.common.BaseController;
 import org.turing.pangu.controller.common.PGResponse;
 import org.turing.pangu.controller.common.PhoneTask;
+import org.turing.pangu.controller.pc.request.GetAppListReq;
+import org.turing.pangu.controller.phone.request.GetAppInfoReq;
+import org.turing.pangu.controller.phone.request.GetBlackIpListReq;
+import org.turing.pangu.controller.phone.request.GetPlatformInfoReq;
 import org.turing.pangu.controller.phone.request.GetTaskReq;
 import org.turing.pangu.controller.phone.request.ReportReq;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
+import org.turing.pangu.controller.phone.response.GetBlackIpListRsp;
 import org.turing.pangu.controller.phone.response.GetTaskRsp;
 import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.model.App;
+import org.turing.pangu.model.Platform;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.RemainVpnService;
@@ -63,6 +71,59 @@ public class MobileReportController extends BaseController {
 			HttpServletResponse rsp) {
 		
 		return "";
+	}
+	@RequestMapping(value = "/getBlackIpList", method = RequestMethod.POST)
+	public @ResponseBody GetBlackIpListRsp getBlackIpList(HttpServletRequest request) {
+		logger.info("getAppInfo---" + new Date());
+		String contentStr = getRequestBody(request);
+		GetBlackIpListReq req = JSON.parseObject(contentStr,
+				new TypeReference<GetBlackIpListReq>() {
+				});
+		GetBlackIpListRsp rsp = new GetBlackIpListRsp();
+		Platform model = null;
+		model = TaskEngine.getInstance().getPlatformInfo(req.getPlatformId());
+		String[] ipList = model.getBlackIp().split("\\|");
+		int count = 1;
+		for(String ip :ipList){
+			rsp.getIpList().add(ip);
+			count++;
+		}
+		rsp.setCount(count);
+		return rsp;
+	}
+	/**
+	 * 获取平台信息
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/getPlatformInfo", method = RequestMethod.POST)
+	public @ResponseBody Platform getPlatformInfo(HttpServletRequest request) {
+		logger.info("getPlatformInfo---" + new Date());
+		String contentStr = getRequestBody(request);
+		GetPlatformInfoReq req = JSON.parseObject(contentStr,
+				new TypeReference<GetPlatformInfoReq>() {
+				});
+		Platform model = null;
+		model = TaskEngine.getInstance().getPlatformInfo(req.getPlatformId());
+		return model;
+	}
+	
+	/**
+	 * 获取app信息
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/getAppInfo", method = RequestMethod.POST)
+	public @ResponseBody App getAppInfo(HttpServletRequest request) {
+		logger.info("getAppInfo---" + new Date());
+		String contentStr = getRequestBody(request);
+		GetAppInfoReq req = JSON.parseObject(contentStr,
+				new TypeReference<GetAppInfoReq>() {
+				});
+		
+		App model = null;
+		model = TaskEngine.getInstance().getAppInfo(req.getAppId());
+		return model;
 	}
 	
 	/*
@@ -138,6 +199,8 @@ public class MobileReportController extends BaseController {
 		}
 		// 2. 验证是否为 VPN ip
 		// 3. 写入DB
+		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
+		req.getDevice().setIp(remoteIp);
 		if (remainVpnService.isWhileListIp(req.getDevice().getIp())) {
 			deviceService.saveReport(req, true);
 		} else {

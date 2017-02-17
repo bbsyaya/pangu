@@ -100,7 +100,6 @@ public class TaskConfigureEngine {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
 	}
 	
 }
