@@ -221,6 +221,7 @@
     <if test="bootloader != null" >and d.bootloader= #{bootloader,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and d.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and d.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+    order by d.create_date desc
   </select>
   <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Device" >
     select 

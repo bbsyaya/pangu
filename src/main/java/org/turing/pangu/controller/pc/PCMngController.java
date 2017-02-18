@@ -48,6 +48,8 @@ import org.turing.pangu.service.UserService;
 import org.turing.pangu.utils.Const;
 import org.turing.pangu.utils.DateUtils;
 
+import com.alibaba.fastjson.JSON;
+
 /**
  * 
  * @author turing
@@ -94,6 +96,7 @@ public class PCMngController extends BaseController {
 		TaskEngine.getInstance().init();
 		TaskConfigureEngine.getInstance().init();
 		rsp.setAllData(Const.common_ok, "common_ok", null);
+		logger.info("index---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	
@@ -103,6 +106,7 @@ public class PCMngController extends BaseController {
 		PGResponse<String> rsp = new PGResponse<String>();
 		TaskEngine.getInstance().createTodayTask();
 		rsp.setAllData(Const.common_ok, "common_ok", null);
+		logger.info("createTodayTask---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	@RequestMapping(value = "/remoteIp", method = RequestMethod.GET)
@@ -136,6 +140,7 @@ public class PCMngController extends BaseController {
 		dataRsp.setRealIp(realIp);
 		dataRsp.setLoopTime(10); // 暂定10S
 		rsp.setAllData(Const.common_ok, "common_ok", dataRsp);
+		logger.info("vpnLogin---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	// vpn操作请求
@@ -156,6 +161,7 @@ public class PCMngController extends BaseController {
 		}
 		dataRsp.setLoopTime(10); // 暂定10S
 		rsp.setAllData(Const.common_ok, "common_ok", dataRsp);
+		logger.info("vpnOperUpdate---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	// vpn切换完成
@@ -167,6 +173,7 @@ public class PCMngController extends BaseController {
 		String realIp = TaskEngine.getInstance().getRealIp(request);
 		TaskEngine.getInstance().switchVpnFinish(req.getToken(), remoteIp, realIp);
 		rsp.setAllData(Const.common_ok, "common_ok", "");
+		logger.info("vpnSwitchFinish---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	
@@ -186,6 +193,7 @@ public class PCMngController extends BaseController {
 		{
 			rsp.setAllData(Const.common_ok, "common_ok", "");
 		}
+		logger.info("login---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	/**
@@ -199,6 +207,7 @@ public class PCMngController extends BaseController {
 		PGResponse<List<DynamicVpn>> rsp = new PGResponse<List<DynamicVpn>>();
 		List<DynamicVpn> list = dynamicVpnService.selectAll();
 		rsp.setAllData(Const.common_ok, "common_ok", list);
+		logger.info("getDynamicVpnList---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	
@@ -213,6 +222,7 @@ public class PCMngController extends BaseController {
 		PGResponse<String> rsp = new PGResponse<String>();
 		String iplist = deviceService.getRemainIpList();
 		rsp.setAllData(Const.common_ok, "common_ok", iplist);
+		logger.info("getTodayRemainIpList---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	/**
@@ -226,6 +236,7 @@ public class PCMngController extends BaseController {
 		PGResponse<String> rsp = new PGResponse<String>();
 		Platform platform = platformService.select(req.getPlatformId());
 		rsp.setAllData(Const.common_ok, "common_ok", platform.getBlackIp());
+		logger.info("getBlackIpList---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	/**
@@ -244,6 +255,7 @@ public class PCMngController extends BaseController {
 			platformService.update(platform);
 		}
 		rsp.setAllData(Const.common_ok, "common_ok", "");
+		logger.info("saveBlackIpList---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	
@@ -258,6 +270,7 @@ public class PCMngController extends BaseController {
 		PGResponse<List<RemainVpn>> rsp = new PGResponse<List<RemainVpn>>();
 		List<RemainVpn> list = remainVpnService.selectAll();
 		rsp.setAllData(Const.common_ok, "common_ok", list);
+		logger.info("getRemainVpnList---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	/**
@@ -273,6 +286,7 @@ public class PCMngController extends BaseController {
 		model.setIsCanRun(1);
 		List<App> list = appService.selectCanRunApps(model);
 		rsp.setAllData(Const.common_ok, "common_ok", list);
+		logger.info("getAppList---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	
@@ -289,6 +303,7 @@ public class PCMngController extends BaseController {
 		data.setAppId(req.getAppId());
 		List<Task> list = taskService.selectList(data);
 		rsp.setAllData(Const.common_ok, "common_ok", list);
+		logger.info("getTaskDataList---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	
@@ -310,6 +325,7 @@ public class PCMngController extends BaseController {
 		data.setUpdateDate(req.getEndDate());
 		List<RemainData> list = remainDataService.getRemainData(data);
 		rsp.setAllData(Const.common_ok, "common_ok", list);
+		logger.info("getRemainFilePath---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	
@@ -330,6 +346,7 @@ public class PCMngController extends BaseController {
 		data.setUpdateDate(todayNight);
 		List<RemainData> list = remainDataService.getRemainData(data);
 		rsp.setAllData(Const.common_ok, "common_ok", list);
+		logger.info("getRemain---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	

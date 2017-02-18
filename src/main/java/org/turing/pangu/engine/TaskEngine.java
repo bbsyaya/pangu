@@ -70,7 +70,9 @@ public class TaskEngine {
 	}
 	public void init(){
 		if(null != appService){
-			appList = appService.selectAll();
+			App model = new App();
+			model.setIsCanRun(1);
+			appList = appService.selectCanRunApps(model);
 		}
 		if(null != platformService){
 			platformList = platformService.selectAll();
@@ -430,14 +432,30 @@ public class TaskEngine {
 				logger.info("getOptimalAppId---003--not STOCK");
 				return 0L;
 			}
+			int flag = 0;
+			/*算法核心:
+			 * 一个IP只能运行一个APP,即便找到了很多符合条件的device,但只运行一次
+			 * */
 			for(Device dev:deviceList){
 				for(Task dbTask:todayTaskList){
-					if(dev.getAppId() == dbTask.getAppId() && isHavaTaskByOperType(task.getOperType(),dbTask)){
-						updateAllocTask(task.getOperType(),dbTask); // 对应派发 ++ 
-						mDevice = dev; // 保存好不容易找到的存量信息，函数外赋值。
-						logger.info("getOptimalAppId---end--find STOCK mDevice:"+mDevice.toString());
-						return dbTask.getAppId();
+					flag = 0;
+					for(PhoneTask tmpTask:task.getPhoneTaskList()){
+						if(tmpTask.getAppId() == dbTask.getAppId()){
+							flag = 1;
+							logger.info("getOptimalAppId---005-- stock existed in run");
+							break;
+						}
+						if(flag == 0 && dev.getAppId() == dbTask.getAppId() && isHavaTaskByOperType(task.getOperType(),dbTask)){
+							int random = (int)(1+Math.random()*(10-1+1));
+							if(random%2 == 0){ // 当有很多条数据时 50% 方式衰减
+								updateAllocTask(task.getOperType(),dbTask); // 对应派发 ++ 
+								mDevice = dev; // 保存好不容易找到的存量信息，函数外赋值。
+								logger.info("getOptimalAppId---end--find STOCK mDevice:"+mDevice.toString());
+								return dbTask.getAppId();
+							}
+						}
 					}
+					
 				}
 			}
 			logger.info("getOptimalAppId---end--not match STOCK");

@@ -74,7 +74,7 @@ public class MobileReportController extends BaseController {
 	}
 	@RequestMapping(value = "/getBlackIpList", method = RequestMethod.POST)
 	public @ResponseBody GetBlackIpListRsp getBlackIpList(HttpServletRequest request) {
-		logger.info("getAppInfo---" + new Date());
+		logger.info("getBlackIpList---" + new Date());
 		String contentStr = getRequestBody(request);
 		GetBlackIpListReq req = JSON.parseObject(contentStr,
 				new TypeReference<GetBlackIpListReq>() {
@@ -83,12 +83,13 @@ public class MobileReportController extends BaseController {
 		Platform model = null;
 		model = TaskEngine.getInstance().getPlatformInfo(req.getPlatformId());
 		String[] ipList = model.getBlackIp().split("\\|");
-		int count = 1;
+		int count = 0;
 		for(String ip :ipList){
 			rsp.getIpList().add(ip);
 			count++;
 		}
 		rsp.setCount(count);
+		logger.info("getBlackIpList---end" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	/**
@@ -105,6 +106,7 @@ public class MobileReportController extends BaseController {
 				});
 		Platform model = null;
 		model = TaskEngine.getInstance().getPlatformInfo(req.getPlatformId());
+		logger.info("getPlatformInfo---end" + model.toString());
 		return model;
 	}
 	
@@ -123,6 +125,7 @@ public class MobileReportController extends BaseController {
 		
 		App model = null;
 		model = TaskEngine.getInstance().getAppInfo(req.getAppId());
+		logger.info("getAppInfo---end" + model.toString());
 		return model;
 	}
 	
@@ -131,6 +134,7 @@ public class MobileReportController extends BaseController {
 	 * */
 	@RequestMapping(value = "/getTask", method = RequestMethod.POST)
 	public @ResponseBody GetTaskRsp getTask(HttpServletRequest request) {
+		logger.info("getTask---" + new Date());
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);
 		String contentStr = getRequestBody(request);
@@ -147,6 +151,7 @@ public class MobileReportController extends BaseController {
 		}
 		rsp.setLoopTime(TaskEngine.SPAN_TIME);
 		rsp.setTaskIp(remoteIp);
+		logger.info("getTask---end" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	/*
@@ -155,6 +160,7 @@ public class MobileReportController extends BaseController {
 	@RequestMapping(value = "/taskFinish", method = RequestMethod.POST)
 	public @ResponseBody String taskFinish(HttpServletRequest request,
 			HttpServletResponse rsp) {
+		logger.info("taskFinish---" + new Date());
 		String result = "";
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);
@@ -164,6 +170,7 @@ public class MobileReportController extends BaseController {
 				});
 		
 		TaskEngine.getInstance().taskFinish(req,remoteIp,realIp);
+		logger.info("taskFinish---end" + new Date());
 		return "";
 	}
 	/**
@@ -174,11 +181,12 @@ public class MobileReportController extends BaseController {
 	@RequestMapping(value = "/report", method = RequestMethod.POST)
 	public @ResponseBody String report(HttpServletRequest request,
 			HttpServletResponse rspod) {
-		logger.debug("report---" + "--" + new Date());
+		logger.info("report---" + new Date());
 		String result = "";
 		PGResponse<String> rsp = new PGResponse<String>();
 		// ----------------------------------------------
 		String contentStr = getRequestBody(request);
+		logger.info("report---001--" + contentStr);
 		ReportReq req = JSON.parseObject(contentStr,
 				new TypeReference<ReportReq>() {
 				});
@@ -209,6 +217,7 @@ public class MobileReportController extends BaseController {
 		rsp.setAllData(Const.common_ok, "common_ok", null);
 
 		result = JSON.toJSONString(rsp);
+		logger.info("report---end--" + result.toString());
 		return result;
 	}
 	
