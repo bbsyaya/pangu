@@ -1,13 +1,13 @@
 package org.turing.pangu.zzztest;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.http.client.utils.HttpClientUtils;
+import java.util.Date;
+
 import org.junit.Test;
 import org.turing.pangu.controller.phone.request.GetTaskReq;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.controller.phone.response.GetTaskRsp;
 import org.turing.pangu.model.Device;
-import org.turing.pangu.utils.HttpUtil;
+import org.turing.pangu.utils.DateUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
@@ -71,19 +71,37 @@ import com.alibaba.fastjson.TypeReference;
 public class testTask {
 	@Test
 	public void test(){
-		getTask();
-		taskFinish();
-		getTask();
+		try {
+			GetTaskRsp aTask = getTask();
+			Thread.sleep(1000);
+
+			GetTaskRsp bTask = getTask();
+			Thread.sleep(3*1000);
+			//1487425049683
+			taskFinish(aTask,1);
+			taskFinish(bTask,1);
+			Thread.sleep(2*1000);
+			
+			aTask = getTask();
+			Thread.sleep(1000);
+			bTask = getTask();
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public void getTask(){
+	public GetTaskRsp getTask(){
 		String getTaskUrl = "http://localhost:8080/mobile/getTask.pangu";
 		//String getTaskUrl="http://pangu.u-app.cn/mobile/getTask.pangu";
 		//String taskFinishUrl = "http://localhost:8080/mobile/taskFinish.pangu";
 		
 		GetTaskReq req = new GetTaskReq();
-		req.setDeviceId("eeeeewww");
-		req.setAccessToken("00kkfdajl");
+		Date data = new Date();
+		Long time = 1487425049683L;//data.getTime();
+		req.setDeviceId(time.toString());
+		req.setAccessToken("");
 		String json = JSON.toJSONString(req);
 		String contentStr = HttpUtils.doPost(getTaskUrl, json, HttpUtils.UTF8);
 		GetTaskRsp rsp = JSON.parseObject(contentStr,
@@ -93,15 +111,15 @@ public class testTask {
 		contentStr = JSON.toJSONString(rsp);
 		System.out.print("\n");
 		System.out.print(contentStr);
+		return rsp;
 	}
 	
-	public void taskFinish(){
+	public void taskFinish(GetTaskRsp rsp,int isFinished){
 		String taskFinishUrl = "http://localhost:8080/mobile/taskFinish.pangu";
-		
 		TaskFinishReq req = new TaskFinishReq();
-		req.setTaskId("IFMro5Ga9629g556wt6yFdC1dlt2CNHP");
-		req.setVpnToken("IFMro5Ga9629g556");
-		req.setIsFinished(1);
+		req.setTaskId(rsp.getTask().getTaskId());
+		req.setVpnToken(rsp.getTask().getVpnToken());
+		req.setIsFinished(isFinished);
 		String json = JSON.toJSONString(req);
 		String contentStr = HttpUtils.doPost(taskFinishUrl, json, HttpUtils.UTF8);
 		System.out.print("\n");

@@ -19,7 +19,6 @@ import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.service.RemainDataService;
 import org.turing.pangu.utils.DateUtils;
 import org.turing.pangu.utils.FileUtil;
-import org.turing.pangu.utils.HttpUtil;
 import org.turing.pangu.utils.JsonUtils;
 
 import com.alibaba.fastjson.JSON;

@@ -3,7 +3,6 @@ package org.turing.pangu.controller.phone;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -12,20 +11,20 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.turing.pangu.controller.common.BaseController;
 import org.turing.pangu.controller.common.PGResponse;
 import org.turing.pangu.controller.common.PhoneTask;
-import org.turing.pangu.controller.pc.request.GetAppListReq;
+import org.turing.pangu.controller.phone.request.DeviceLoginReq;
 import org.turing.pangu.controller.phone.request.GetAppInfoReq;
 import org.turing.pangu.controller.phone.request.GetBlackIpListReq;
 import org.turing.pangu.controller.phone.request.GetPlatformInfoReq;
 import org.turing.pangu.controller.phone.request.GetTaskReq;
 import org.turing.pangu.controller.phone.request.ReportReq;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
+import org.turing.pangu.controller.phone.response.DeviceLoginRsp;
 import org.turing.pangu.controller.phone.response.GetBlackIpListRsp;
 import org.turing.pangu.controller.phone.response.GetTaskRsp;
 import org.turing.pangu.engine.TaskEngine;
@@ -35,6 +34,7 @@ import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.utils.Const;
+import org.turing.pangu.utils.RandomUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
@@ -67,10 +67,19 @@ public class MobileReportController extends BaseController {
 	 * 设备登录
 	 * */
 	@RequestMapping(value = "/deviceLogin", method = RequestMethod.POST)
-	public @ResponseBody String deviceLogin(HttpServletRequest request,
-			HttpServletResponse rsp) {
-		
-		return "";
+	public @ResponseBody DeviceLoginRsp deviceLogin(HttpServletRequest request,
+			HttpServletResponse rsponsed) {
+		String contentStr = getRequestBody(request);
+		DeviceLoginReq req = JSON.parseObject(contentStr,
+				new TypeReference<DeviceLoginReq>() {
+				});
+		DeviceLoginRsp rsp = new DeviceLoginRsp();
+		rsp.setDeviceId(req.getDeviceId());
+		if(req.getDeviceId().equals("turing")){
+			rsp.setDeviceId(RandomUtils.getRandom(16));
+		}
+		rsp.setDeviceToken(RandomUtils.getRandom(32));
+		return rsp;
 	}
 	@RequestMapping(value = "/getBlackIpList", method = RequestMethod.POST)
 	public @ResponseBody GetBlackIpListRsp getBlackIpList(HttpServletRequest request) {
@@ -143,10 +152,10 @@ public class MobileReportController extends BaseController {
 				});
 		GetTaskRsp rsp = new GetTaskRsp();
 		PhoneTask task = TaskEngine.getInstance().getTask(req.getDeviceId(), remoteIp, realIp);
-		rsp.setTask(task);
-		if(null == task || task.getAppId() == 0L){
+		if(null == task){
 			rsp.setIsHaveTask(0);
 		}else{
+			rsp.setTask(task);
 			rsp.setIsHaveTask(1);
 		}
 		rsp.setLoopTime(TaskEngine.SPAN_TIME);

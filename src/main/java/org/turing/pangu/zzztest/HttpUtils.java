@@ -1,30 +1,30 @@
 package org.turing.pangu.zzztest;
 
 
-import java.io.BufferedInputStream; 
-import java.io.ByteArrayOutputStream; 
-import java.io.Closeable; 
-import java.io.IOException; 
-import java.io.InputStream; 
-import java.io.OutputStream; 
-import java.io.UnsupportedEncodingException; 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL; 
-import java.security.KeyManagementException; 
-import java.security.NoSuchAlgorithmException; 
-import java.security.SecureRandom; 
-import java.security.cert.X509Certificate; 
-import java.util.Iterator; 
-import java.util.Map; 
-import java.util.logging.Level; 
+import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.net.ssl.HostnameVerifier; 
-import javax.net.ssl.HttpsURLConnection; 
-import javax.net.ssl.SSLContext; 
-import javax.net.ssl.SSLSession; 
-import javax.net.ssl.TrustManager; 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 public class HttpUtils {

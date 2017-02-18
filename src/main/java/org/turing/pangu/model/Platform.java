@@ -11,11 +11,10 @@
 package org.turing.pangu.model;
 
 import java.util.Date;
-import javax.validation.constraints.NotNull;
-import javax.validation.groups.Default;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
  /**Platform*/
  public class Platform extends BaseModel<Platform>

@@ -40,10 +40,10 @@ public class TaskEngine {
 	public static final int STOCK_MONEY_TYPE = 2;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	public static final int STOCK_WATERAMY_TYPE = 3;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	
-	public static final int INCREMENT_MONEY_TIMEOUT = 5*60*1000;
-	public static final int INCREMENT_WATERAMY_TIMEOUT = 3*60*1000;
-	public static final int STOCK_MONEY_TIMEOUT = 5*60*1000;
-	public static final int STOCK_WATERAMY_TIMEOUT = 3*60*1000;
+	public static final int INCREMENT_MONEY_TIMEOUT = 10*60*1000;
+	public static final int INCREMENT_WATERAMY_TIMEOUT = 5*60*1000;
+	public static final int STOCK_MONEY_TIMEOUT = 10*60*1000;
+	public static final int STOCK_WATERAMY_TIMEOUT = 5*60*1000;
 	
 	private Device mDevice = null; // 记录找到的存量信息
 	private int vpnTokenLengh = 16;
@@ -82,6 +82,7 @@ public class TaskEngine {
 		Date toTime = new Date();
 		todayTaskList.clear();
 		todayTaskList = getTodayTaskList(fromTime, toTime);
+		vpnTaskList.clear();
 	}
 	public Platform getPlatformInfo(long pfId){
 		for(Platform pf:platformList){
@@ -204,6 +205,7 @@ public class TaskEngine {
 				}
 				logger.info("switchVpnFinish|remoteIp:"+remoteIp+"|realIp:"+realIp);
 				task.setRemoteIp(remoteIp);
+				task.getPhoneTaskList().clear();//清空所有任务
 				task.setRealIp(realIp);
 				task.setCreateTime(new Date());//重新设置超时起点时间
 				break;
@@ -292,11 +294,16 @@ public class TaskEngine {
 					}
 				}
 				pTask = getTask(task,deviceId,task.getOperType(),remoteIp,realIp);
-				task.getPhoneTaskList().add(pTask);
+				if(pTask != null){
+					logger.info("getTask---002--"+pTask.toString());
+					task.getPhoneTaskList().add(pTask);
+				}else{
+					logger.info("getTask---not task");
+				}
 			}
 		}
-		logger.info("getTask---002--"+pTask.toString());
-		logger.info("getTask---end - ,return new task");
+		
+		logger.info("getTask---end");
 		return pTask;
 	}
 	
@@ -340,11 +347,15 @@ public class TaskEngine {
 	}
 	private synchronized PhoneTask getTask(VpnTask task,String deviceId,int operType,String remoteIp,String realIp){
 		PhoneTask pTask = new PhoneTask();
+		long appId = getOptimalAppId(task,remoteIp,realIp);
+		if(appId == 0L){
+			return null;
+		}
 		pTask.setDeviceId(deviceId);
 		pTask.setVpnToken(task.getToken());
 		pTask.setOperType(operType);
 		pTask.setTaskId(task.getToken() + RandomUtils.getRandom(phoneTaskIdLengh/2));//32位
-		pTask.setAppId(getOptimalAppId(task,remoteIp,realIp));
+		pTask.setAppId(appId);
 		pTask.setOperType(task.getOperType());
 		pTask.setTimes(1);// 暂定一次
 		pTask.setSpanTime(5);//暂定5S 
@@ -447,7 +458,8 @@ public class TaskEngine {
 						}
 						if(flag == 0 && dev.getAppId() == dbTask.getAppId() && isHavaTaskByOperType(task.getOperType(),dbTask)){
 							int random = (int)(1+Math.random()*(10-1+1));
-							if(random%2 == 0){ // 当有很多条数据时 50% 方式衰减
+							//if(random%2 == 0)// 当有很多条数据时 50% 方式衰减
+							{ 
 								updateAllocTask(task.getOperType(),dbTask); // 对应派发 ++ 
 								mDevice = dev; // 保存好不容易找到的存量信息，函数外赋值。
 								logger.info("getOptimalAppId---end--find STOCK mDevice:"+mDevice.toString());
