@@ -139,7 +139,11 @@ public class PCMngController extends BaseController {
 		dataRsp.setRemoteIp(remoteIp);
 		dataRsp.setRealIp(realIp);
 		dataRsp.setLoopTime(10); // 暂定10S
-		rsp.setAllData(Const.common_ok, "common_ok", dataRsp);
+		if(null == token ){
+			rsp.setAllData(Const.common_error, "common_error", dataRsp);
+		}else{
+			rsp.setAllData(Const.common_ok, "common_ok", dataRsp);
+		}
 		logger.info("vpnLogin---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
@@ -171,8 +175,12 @@ public class PCMngController extends BaseController {
 		PGResponse<String> rsp = new PGResponse<String>();
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);
-		TaskEngine.getInstance().switchVpnFinish(req.getToken(), remoteIp, realIp);
-		rsp.setAllData(Const.common_ok, "common_ok", "");
+		if(false == TaskEngine.getInstance().switchVpnFinish(req.getToken(), remoteIp, realIp)){
+			rsp.setAllData(Const.common_error, "common_error", "");
+		}else{
+			rsp.setAllData(Const.common_ok, "common_ok", "");
+		}
+		
 		logger.info("vpnSwitchFinish---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}

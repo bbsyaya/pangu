@@ -83,6 +83,7 @@ public class TaskEngine {
 		todayTaskList.clear();
 		todayTaskList = getTodayTaskList(fromTime, toTime);
 		vpnTaskList.clear();
+		IpMngEngine.getInstance().clearIpList();
 	}
 	public Platform getPlatformInfo(long pfId){
 		for(Platform pf:platformList){
@@ -153,6 +154,10 @@ public class TaskEngine {
 	}
 	public synchronized String addVpnTask(VpnLoginReq req,String remoteIp,String realIp){
 		logger.info("addVpnTask---000");
+		// 此IP不能运行任务了
+		if(false == IpMngEngine.getInstance().isCanGetTask(remoteIp)){
+			return null;
+		}
 		VpnTask task = new VpnTask();
 		task.setDeviceId(req.getDeviceId());
 		task.setOperType(req.getOperType());
@@ -194,6 +199,10 @@ public class TaskEngine {
 		return true;
 	}
 	public synchronized boolean switchVpnFinish(String token,String remoteIp,String realIp){
+		// 此IP不能运行任务了
+		if(false == IpMngEngine.getInstance().isCanGetTask(remoteIp)){
+			return false;
+		}
 		logger.info("switchVpnFinish---000");
 		for(VpnTask task :vpnTaskList){
 			if(task.getToken().equals(token)){
@@ -243,6 +252,8 @@ public class TaskEngine {
 		Date toTime = new Date(); // 结束时间 ,取这段时间插入的数据
 		todayTaskList.clear();//清空
 		todayTaskList = getTodayTaskList(fromTime,toTime);
+		IpMngEngine.getInstance().clearIpList();
+		
 		logger.info("createTodayTask---end");
 	}
 	private List<Task> getTodayTaskList(Date fromTime,Date toTime){
