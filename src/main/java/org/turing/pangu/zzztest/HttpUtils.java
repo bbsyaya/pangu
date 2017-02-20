@@ -60,7 +60,8 @@ public static String doPost(String connectURL, String param, String charset) {
         httpPost.setUseCaches(false);
         httpPost.setConnectTimeout(CONNECT_TIMEOUT);
         httpPost.setReadTimeout(READ_TIMEOUT);
-        httpPost.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        //httpPost.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        httpPost.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
         httpPost.connect();
         out = httpPost.getOutputStream();
         out.write(param.getBytes(charset));
@@ -126,7 +127,8 @@ public static String doPost(String connectURL, Map<String, String> params, Strin
         httpPost.setUseCaches(false);
         httpPost.setConnectTimeout(CONNECT_TIMEOUT);
         httpPost.setReadTimeout(READ_TIMEOUT);
-        httpPost.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        //httpPost.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        httpPost.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
         httpPost.connect();
         out = httpPost.getOutputStream();
         out.write(param.getBytes(charset));

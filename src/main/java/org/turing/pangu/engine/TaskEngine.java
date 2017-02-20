@@ -362,77 +362,14 @@ public class TaskEngine {
 		pTask.setStockInfo(mDevice);
 		return pTask;
 	}
-	class SortByIncrementMoney implements Comparator{
 
-		@Override
-		public int compare(Object arg0, Object arg1) {
-			// TODO Auto-generated method stub
-			Task s1 = (Task) arg0;
-			Task s2 = (Task) arg1;
-			if((s1.getIncrementMoney()-s1.getAllotIncrementMoney())>(s2.getIncrementMoney()-s2.getAllotIncrementMoney()))
-				return 1;
-			return 0;
-		}
-		
-	}
-	class SortByIncrementWaterAmy implements Comparator{
-
-		@Override
-		public int compare(Object arg0, Object arg1) {
-			// TODO Auto-generated method stub
-			Task s1 = (Task) arg0;
-			Task s2 = (Task) arg1;
-			if((s1.getIncrementWaterAmy()-s1.getAllotIncrementWaterAmy())>(s2.getIncrementWaterAmy()-s2.getAllotIncrementWaterAmy()))
-				return 1;
-			return 0;
-		}
-		
-	}
-	class SortByStockMoney implements Comparator{
-
-		@Override
-		public int compare(Object arg0, Object arg1) {
-			// TODO Auto-generated method stub
-			Task s1 = (Task) arg0;
-			Task s2 = (Task) arg1;
-			if((s1.getStockMoney()-s1.getAllotStockMoney())>(s2.getStockMoney()-s2.getAllotStockMoney()))
-				return 1;
-			return 0;
-		}
-		
-	}
-	class SortByStockWaterAmy implements Comparator{
-
-		@Override
-		public int compare(Object arg0, Object arg1) {
-			// TODO Auto-generated method stub
-			Task s1 = (Task) arg0;
-			Task s2 = (Task) arg1;
-			if((s1.getStockWaterAmy()-s1.getAllotStockWaterAmy())>(s2.getStockWaterAmy()-s2.getAllotStockWaterAmy()))
-				return 1;
-			return 0;
-		}
-	}
 	// 获得最优 appID
 	private synchronized long getOptimalAppId(VpnTask task,String remoteIp,String realIp){
 		// -- 排序
 		mDevice = null;
 		logger.info("getOptimalAppId---000");
 		logger.info("getOptimalAppId---001--operType:"+task.getOperType()+"remoteIp:"+remoteIp+"realIp:"+realIp);
-		switch(task.getOperType()){
-			case INCREMENT_MONEY_TYPE:
-				Collections.sort(todayTaskList, new SortByIncrementMoney());
-				break;
-			case INCREMENT_WATERAMY_TYPE:
-				Collections.sort(todayTaskList, new SortByIncrementWaterAmy());
-				break;	
-			case STOCK_MONEY_TYPE:	
-				Collections.sort(todayTaskList, new SortByStockMoney());
-				break;
-			case STOCK_WATERAMY_TYPE:
-				Collections.sort(todayTaskList, new SortByStockWaterAmy());
-				break;
-		}
+		TaskListSort.taskSort(todayTaskList, task.getOperType());//对任务列表排序
 		// 处理存量
 		if(task.getOperType() == STOCK_MONEY_TYPE || task.getOperType() == STOCK_WATERAMY_TYPE ){
 			logger.info("getOptimalAppId---002--STOCK");

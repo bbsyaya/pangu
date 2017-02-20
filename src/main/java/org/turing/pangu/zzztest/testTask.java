@@ -3,6 +3,7 @@ package org.turing.pangu.zzztest;
 import java.util.Date;
 
 import org.junit.Test;
+import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.phone.request.GetTaskReq;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.controller.phone.response.GetTaskRsp;
@@ -72,10 +73,13 @@ public class testTask {
 	@Test
 	public void test(){
 		try {
+			//loginPangu();
 			GetTaskRsp aTask = getTask();
 			Thread.sleep(1000);
-
 			GetTaskRsp bTask = getTask();
+			Thread.sleep(1000);
+			GetTaskRsp cTask = getTask();
+			/*
 			Thread.sleep(3*1000);
 			//1487425049683
 			taskFinish(aTask,1);
@@ -85,13 +89,22 @@ public class testTask {
 			aTask = getTask();
 			Thread.sleep(1000);
 			bTask = getTask();
+			*/
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+	public void loginPangu(){
+		String loginUrl = "http://localhost:8080/pc/vpnLogin.pangu";
+		VpnLoginReq req = new VpnLoginReq();
+		req.setOperType(1);
+		req.setDeviceId("232dsssddd");// 取电脑mac地址
+		String json = JSON.toJSONString(req);
+		String contentStr = HttpUtils.doPost(loginUrl, json, HttpUtils.UTF8);
+		System.out.print("\n"+contentStr);
+	}
 	public GetTaskRsp getTask(){
 		String getTaskUrl = "http://localhost:8080/mobile/getTask.pangu";
 		//String getTaskUrl="http://pangu.u-app.cn/mobile/getTask.pangu";
@@ -99,8 +112,8 @@ public class testTask {
 		
 		GetTaskReq req = new GetTaskReq();
 		Date data = new Date();
-		Long time = 1487425049683L;//data.getTime();
-		req.setDeviceId(time.toString());
+		Long time = data.getTime();
+		req.setDeviceId("18899882888");
 		req.setAccessToken("");
 		String json = JSON.toJSONString(req);
 		String contentStr = HttpUtils.doPost(getTaskUrl, json, HttpUtils.UTF8);

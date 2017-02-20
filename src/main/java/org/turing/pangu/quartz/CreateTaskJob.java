@@ -9,7 +9,7 @@ public class CreateTaskJob {
 	private static final Logger logger = Logger.getLogger(CreateTaskJob.class);
 	public void execute(){  
         try{ 
-        	logger.debug("execute - GenerateRemainFileJob -- " + new Date());
+        	logger.info("execute - GenerateRemainFileJob -- " + new Date());
         	TaskEngine.getInstance().createTodayTask();
          }catch(Exception ex){  
              ex.printStackTrace();  

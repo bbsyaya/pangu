@@ -9,7 +9,7 @@ public class UpdateTaskToDBJob {
 	private static final Logger logger = Logger.getLogger(UpdateTaskToDBJob.class);
 	public void execute(){  
         try{ 
-        	logger.debug("execute - UpdateRemainJob -- " + new Date());
+        	logger.info("execute - UpdateRemainJob -- " + new Date());
         	TaskEngine.getInstance().UpdateTaskToDBJob();
          }catch(Exception ex){  
              ex.printStackTrace();  
