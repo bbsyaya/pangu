@@ -218,7 +218,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 	<bean id="updateRemainTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="updateRemainJobDetail"/>  
        <!-- 每1分钟执行一次 -->
-       <property name="cronExpression" value="0 */2 * * * ?"/>  
+       <property name="cronExpression" value="0 */15 * * * ?"/>  
 	</bean> 
 	 
 	<bean id="remainJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   

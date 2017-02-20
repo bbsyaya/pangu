@@ -194,7 +194,7 @@ public class TestData {
 	
 	@Test
 	public void remain(){
-		TaskEngine.getInstance().setService(platformService, appService, deviceService,taskService);
+		TaskEngine.getInstance().setService(remainVpnService,platformService, appService, deviceService,taskService);
 		//RemainEngine.getInstance().generateRemainFile();
 		//testUpdateDevice();
 		List<TaskConfigureBean> list = new ArrayList<TaskConfigureBean>();

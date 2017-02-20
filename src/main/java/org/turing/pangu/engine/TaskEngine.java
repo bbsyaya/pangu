@@ -13,14 +13,17 @@ import org.turing.pangu.bean.TaskConfigureBean;
 import org.turing.pangu.controller.common.PhoneTask;
 import org.turing.pangu.controller.common.VpnTask;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
+import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.model.Platform;
+import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.model.Task;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.PlatformService;
+import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.TaskService;
 import org.turing.pangu.utils.DateUtils;
 import org.turing.pangu.utils.RandomUtils;
@@ -31,20 +34,15 @@ public class TaskEngine {
 	private static final Logger logger = Logger.getLogger(TaskEngine.class);
 	private static TaskEngine mInstance = new TaskEngine();
 	private List<VpnTask> vpnTaskList = new ArrayList<VpnTask>();
+	private List<Task> allTaskList = new ArrayList<Task>();
 	private List<Task> todayTaskList = new ArrayList<Task>();
 	private List<App> appList = new ArrayList<App>();
+	private List<RemainVpn> whiteIpList = new ArrayList<RemainVpn>();
 	private List<Platform> platformList = new ArrayList<Platform>();
-	public static final int SPAN_TIME = 10;// 10S 
 	public static final int INCREMENT_MONEY_TYPE = 0;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	public static final int INCREMENT_WATERAMY_TYPE = 1;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	public static final int STOCK_MONEY_TYPE = 2;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
-	public static final int STOCK_WATERAMY_TYPE = 3;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
-	
-	public static final int INCREMENT_MONEY_TIMEOUT = 10*60*1000;
-	public static final int INCREMENT_WATERAMY_TIMEOUT = 5*60*1000;
-	public static final int STOCK_MONEY_TIMEOUT = 10*60*1000;
-	public static final int STOCK_WATERAMY_TIMEOUT = 5*60*1000;
-	
+	public static final int STOCK_WATERAMY_TYPE = 3;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军	
 	private Device mDevice = null; // 记录找到的存量信息
 	private int vpnTokenLengh = 16;
 	private int phoneTaskIdLengh = 32;
@@ -52,18 +50,19 @@ public class TaskEngine {
 	private AppService appService;
 	private DeviceService deviceService;
 	private TaskService taskService;
-	
+	private RemainVpnService remainVpnService;
 	public static TaskEngine getInstance(){
 		if(null == mInstance)
 			mInstance = new TaskEngine();
 		return mInstance;
 	}
 
-	public void setService(PlatformService platformService,AppService appService,DeviceService deviceService,TaskService taskService){
+	public void setService(RemainVpnService remainVpnService,PlatformService platformService,AppService appService,DeviceService deviceService,TaskService taskService){
 		this.platformService = platformService;
 		this.appService = appService;
 		this.deviceService = deviceService;
 		this.taskService = taskService;
+		this.remainVpnService = remainVpnService;
 	}
 	public List<App> getAppList(){
 		return appList;
@@ -77,13 +76,27 @@ public class TaskEngine {
 		if(null != platformService){
 			platformList = platformService.selectAll();
 		}
-			
+		if(null != remainVpnService){
+			whiteIpList = remainVpnService.selectAll();
+		}
 		Date fromTime = DateUtils.getTimesMorning();
 		Date toTime = new Date();
+		
 		todayTaskList.clear();
 		todayTaskList = getTodayTaskList(fromTime, toTime);
+		allTaskList.clear();
+		allTaskList = taskService.selectAll();
+		
 		vpnTaskList.clear();
 		IpMngEngine.getInstance().clearIpList();
+	}
+	public boolean isWhiteIp(String ip){
+		for(RemainVpn remain :whiteIpList){
+			if(remain.getIpList().contains(ip)){
+				return true;
+			}
+		}
+		return false;
 	}
 	public Platform getPlatformInfo(long pfId){
 		for(Platform pf:platformList){
@@ -92,6 +105,15 @@ public class TaskEngine {
 			}
 		}
 		return null;
+	}
+	public List<Task> getAllDBTaskByAppId(long appId){
+		List<Task> list = new ArrayList<Task>();
+		for(Task task:allTaskList){
+			if(task.getAppId() == appId){
+				list.add(task);
+			}
+		}
+		return list;
 	}
 	public App getAppInfo(long appId){
 		for(App app:appList){
@@ -178,25 +200,31 @@ public class TaskEngine {
 		return task.getToken();
 	}
 
-	public synchronized boolean vpnIsNeedSwitch(String token){
+	public synchronized VpnOperUpdateRsp vpnIsNeedSwitch(String token){
 		logger.info("vpnIsNeedSwitch---000--"+token);
+		VpnOperUpdateRsp dataRsp = new VpnOperUpdateRsp();
+		dataRsp.setIsSwitchVpn(1);
 		for(VpnTask task :vpnTaskList){
 			if(task.getToken().equals(token)){
 				if(task.getPhoneTaskList() == null || task.getPhoneTaskList().size() == 0){
 					logger.info("vpnIsNeedSwitch---false---001---end");
-					return false;
+					dataRsp.setIsSwitchVpn(0);
+					dataRsp.setFinishedTaskCount(0);
+					dataRsp.setTaskTotal(0);
 				}
+				dataRsp.setTaskTotal(task.getPhoneTaskList().size());
 				for(PhoneTask pTask:task.getPhoneTaskList()){
-					Date nowTime = new Date();
+					dataRsp.setFinishedTaskCount(dataRsp.getFinishedTaskCount()+1);
 					if(pTask.getIsFinished() == 0 && false == isTimeOut(task)){ // 发现模拟器还有未完成的任务
 						logger.info("vpnIsNeedSwitch---false---002---end");
-						return false;
+						dataRsp.setIsSwitchVpn(0);
+						dataRsp.setFinishedTaskCount(dataRsp.getFinishedTaskCount()-1);
 					}
 				}
 			}
 		}
 		logger.info("vpnIsNeedSwitch---true---end");
-		return true;
+		return dataRsp;
 	}
 	public synchronized boolean switchVpnFinish(String token,String remoteIp,String realIp){
 		// 此IP不能运行任务了
@@ -292,6 +320,9 @@ public class TaskEngine {
 		logger.info("getTask---001--deviceId:"+deviceId+"--remoteIp:"+remoteIp+"--realIp:"+realIp);
 		for(VpnTask task:vpnTaskList){
 			if(task.getRemoteIp().equals(remoteIp)){
+				if(task.getPhoneTaskList().size() > appList.size() * TimeZoneMng.getInstance().getTimeZoneWeight() ){
+					return pTask;
+				}
 				for(PhoneTask tmpTask:task.getPhoneTaskList()){
 					if(tmpTask.getDeviceId().equals(deviceId)){ // 发现取过任务了
 						if(tmpTask.getIsFinished() == 0){ // 任务没完成,返回原来的任务
@@ -323,13 +354,13 @@ public class TaskEngine {
 		logger.info("isTimeOut---000--OperType:"+task.getOperType());
 		switch(task.getOperType()){
 		case INCREMENT_MONEY_TYPE:
-			return (nowTime.getTime() - task.getCreateTime().getTime() > INCREMENT_MONEY_TIMEOUT)?true:false;
+			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeZoneMng.INCREMENT_MONEY_TIMEOUT)?true:false;
 		case INCREMENT_WATERAMY_TYPE:
-			return (nowTime.getTime() - task.getCreateTime().getTime() > INCREMENT_WATERAMY_TIMEOUT)?true:false;	
+			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeZoneMng.INCREMENT_WATERAMY_TIMEOUT)?true:false;	
 		case STOCK_MONEY_TYPE:	
-			return (nowTime.getTime() - task.getCreateTime().getTime() > STOCK_MONEY_TIMEOUT)?true:false;
+			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeZoneMng.STOCK_MONEY_TIMEOUT)?true:false;
 		case STOCK_WATERAMY_TYPE:
-			return (nowTime.getTime() - task.getCreateTime().getTime() > STOCK_WATERAMY_TIMEOUT)?true:false;
+			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeZoneMng.STOCK_WATERAMY_TIMEOUT)?true:false;
 		}
 		return true;
 	}
@@ -404,18 +435,17 @@ public class TaskEngine {
 							logger.info("getOptimalAppId---005-- stock existed in run");
 							break;
 						}
-						if(flag == 0 && dev.getAppId() == dbTask.getAppId() && isHavaTaskByOperType(task.getOperType(),dbTask)){
-							int random = (int)(1+Math.random()*(10-1+1));
-							//if(random%2 == 0)// 当有很多条数据时 50% 方式衰减
-							{ 
-								updateAllocTask(task.getOperType(),dbTask); // 对应派发 ++ 
-								mDevice = dev; // 保存好不容易找到的存量信息，函数外赋值。
-								logger.info("getOptimalAppId---end--find STOCK mDevice:"+mDevice.toString());
-								return dbTask.getAppId();
-							}
+					}
+					if(flag == 0 && dev.getAppId() == dbTask.getAppId() && isHavaTaskByOperType(task.getOperType(),dbTask)){
+						int random = (int)(1+Math.random()*(10-1+1));
+						if(random%2 == 0)// 当有很多条数据时 50% 方式衰减
+						{ 
+							updateAllocTask(task.getOperType(),dbTask); // 对应派发 ++ 
+							mDevice = dev; // 保存好不容易找到的存量信息，函数外赋值。
+							logger.info("getOptimalAppId---end--find STOCK mDevice:"+mDevice.toString());
+							return dbTask.getAppId();
 						}
 					}
-					
 				}
 			}
 			logger.info("getOptimalAppId---end--not match STOCK");
@@ -456,6 +486,15 @@ public class TaskEngine {
 		case STOCK_WATERAMY_TYPE:
 			dbTask.setAllotStockWaterAmy(dbTask.getAllotStockWaterAmy() + 1);
 			break;
+		}
+		synchronizedAppTaskData(dbTask);
+	}
+	private synchronized void synchronizedAppTaskData(Task dbTask){
+		int count = 0;
+		for(Task tmp :allTaskList){
+			if(tmp.getId() == dbTask.getId()){
+				allTaskList.set(count, dbTask);
+			}
 		}
 	}
 	// 是否还有该类型的任务

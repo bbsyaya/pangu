@@ -30,6 +30,7 @@ import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.controller.phone.request.GetBlackIpListReq;
 import org.turing.pangu.engine.TaskConfigureEngine;
 import org.turing.pangu.engine.TaskEngine;
+import org.turing.pangu.engine.TimeZoneMng;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.DynamicVpn;
 import org.turing.pangu.model.Platform;
@@ -87,12 +88,12 @@ public class PCMngController extends BaseController {
 	
 	@Resource(name="taskServiceImpl")
 	private TaskService taskService;
-	
+
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public @ResponseBody PGResponse<String> index() {
 		logger.info("index---" + new Date());
 		PGResponse<String> rsp = new PGResponse<String>();
-		TaskEngine.getInstance().setService(platformService, appService, deviceService, taskService);
+		TaskEngine.getInstance().setService(remainVpnService,platformService, appService, deviceService, taskService);
 		TaskEngine.getInstance().init();
 		TaskConfigureEngine.getInstance().init();
 		rsp.setAllData(Const.common_ok, "common_ok", null);
@@ -138,7 +139,7 @@ public class PCMngController extends BaseController {
 		dataRsp.setToken(token);
 		dataRsp.setRemoteIp(remoteIp);
 		dataRsp.setRealIp(realIp);
-		dataRsp.setLoopTime(10); // 暂定10S
+		dataRsp.setLoopTime(TimeZoneMng.SPAN_TIME);
 		if(null == token ){
 			rsp.setAllData(Const.common_error, "common_error", dataRsp);
 		}else{
@@ -154,16 +155,10 @@ public class PCMngController extends BaseController {
 		PGResponse<VpnOperUpdateRsp> rsp = new PGResponse<VpnOperUpdateRsp>();
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);
-		boolean ret = TaskEngine.getInstance().vpnIsNeedSwitch(req.getToken());
-		VpnOperUpdateRsp dataRsp = new VpnOperUpdateRsp();
+		VpnOperUpdateRsp dataRsp =  TaskEngine.getInstance().vpnIsNeedSwitch(req.getToken());
 		dataRsp.setRemoteIp(remoteIp);
 		dataRsp.setRealIp(realIp);
-		if(true == ret){
-			dataRsp.setIsSwitchVpn(1);
-		}else{
-			dataRsp.setIsSwitchVpn(0);
-		}
-		dataRsp.setLoopTime(10); // 暂定10S
+		dataRsp.setLoopTime(TimeZoneMng.SPAN_TIME);
 		rsp.setAllData(Const.common_ok, "common_ok", dataRsp);
 		logger.info("vpnOperUpdate---" + JSON.toJSONString(rsp).toString());
 		return rsp;
@@ -242,7 +237,7 @@ public class PCMngController extends BaseController {
 	public @ResponseBody PGResponse<String> getBlackIpList(@RequestBody GetBlackIpListReq req) {
 		logger.info("getBlackIpList---" + new Date());
 		PGResponse<String> rsp = new PGResponse<String>();
-		Platform platform = platformService.select(req.getPlatformId());
+		Platform platform = TaskEngine.getInstance().getPlatformInfo(req.getPlatformId());
 		rsp.setAllData(Const.common_ok, "common_ok", platform.getBlackIp());
 		logger.info("getBlackIpList---" + JSON.toJSONString(rsp).toString());
 		return rsp;
@@ -290,9 +285,7 @@ public class PCMngController extends BaseController {
 	public @ResponseBody PGResponse<List<App>> getAppList(@RequestBody GetAppListReq req) {
 		logger.info("getAppList---" + req.getUserId() + "--" + new Date());
 		PGResponse<List<App>> rsp = new PGResponse<List<App>>();
-		App model = new App();
-		model.setIsCanRun(1);
-		List<App> list = appService.selectCanRunApps(model);
+		List<App> list = TaskEngine.getInstance().getAppList();
 		rsp.setAllData(Const.common_ok, "common_ok", list);
 		logger.info("getAppList---" + JSON.toJSONString(rsp).toString());
 		return rsp;
@@ -307,57 +300,12 @@ public class PCMngController extends BaseController {
 	public @ResponseBody PGResponse<List<Task>> getTaskDataList(@RequestBody GetTaskListReq req) {
 		logger.info("getTaskDataList---" + req.getAppId() + "--" + new Date());
 		PGResponse<List<Task>> rsp = new PGResponse<List<Task>>();
-		Task data = new Task();
-		data.setAppId(req.getAppId());
-		List<Task> list = taskService.selectList(data);
+		List<Task> list = TaskEngine.getInstance().getAllDBTaskByAppId(req.getAppId());
 		rsp.setAllData(Const.common_ok, "common_ok", list);
 		logger.info("getTaskDataList---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
-	
-	/**
-	 * 获取留存文件地址
-	 * 
-	 * @return
-	 */
-	@Deprecated
-	@RequestMapping(value = "/getRemainFilePath", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<List<RemainData>> getRemainFilePath(@RequestBody GetTaskListReq req) {
-		logger.info("getRemainFilePath---" + req.getAppId() + "--" + new Date());
-		PGResponse<List<RemainData>> rsp = new PGResponse<List<RemainData>>();
-		RemainData data = new RemainData();
-		//Date todayMorning = DateUtils.getTimesMorning();
-		//Date todayNight = DateUtils.getTimesNight();
-		data.setAppId(req.getAppId());
-		data.setCreateDate(req.getStartDate());
-		data.setUpdateDate(req.getEndDate());
-		List<RemainData> list = remainDataService.getRemainData(data);
-		rsp.setAllData(Const.common_ok, "common_ok", list);
-		logger.info("getRemainFilePath---" + JSON.toJSONString(rsp).toString());
-		return rsp;
-	}
-	
-	/**
-	 * 获取今日实时数据情况
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "/getRemain", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<List<RemainData>> getRemain(@RequestBody GetTaskListReq req) {
-		logger.info("getRemain---" + req.getAppId() + "--" + new Date());
-		PGResponse<List<RemainData>> rsp = new PGResponse<List<RemainData>>();
-		RemainData data = new RemainData();
-		Date todayMorning = DateUtils.getTimesMorning();
-		Date todayNight = DateUtils.getTimesNight();
-		data.setAppId(req.getAppId());
-		data.setCreateDate(todayMorning);
-		data.setUpdateDate(todayNight);
-		List<RemainData> list = remainDataService.getRemainData(data);
-		rsp.setAllData(Const.common_ok, "common_ok", list);
-		logger.info("getRemain---" + JSON.toJSONString(rsp).toString());
-		return rsp;
-	}
-	
+			
 	/**
 	 * 获取VPN列表接口
 	 * 

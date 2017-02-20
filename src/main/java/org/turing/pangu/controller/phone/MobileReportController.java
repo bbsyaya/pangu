@@ -28,6 +28,7 @@ import org.turing.pangu.controller.phone.response.DeviceLoginRsp;
 import org.turing.pangu.controller.phone.response.GetBlackIpListRsp;
 import org.turing.pangu.controller.phone.response.GetTaskRsp;
 import org.turing.pangu.engine.TaskEngine;
+import org.turing.pangu.engine.TimeZoneMng;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Platform;
 import org.turing.pangu.service.AppService;
@@ -53,12 +54,6 @@ public class MobileReportController extends BaseController {
 	 */
 	private static final Logger logger = Logger
 			.getLogger(MobileReportController.class);
-
-	@Resource(name = "appServiceImpl")
-	private AppService appService;
-
-	@Resource(name = "remainVpnServiceImpl")
-	private RemainVpnService remainVpnService;
 
 	@Resource(name = "deviceServiceImpl")
 	private DeviceService deviceService;
@@ -158,7 +153,7 @@ public class MobileReportController extends BaseController {
 			rsp.setTask(task);
 			rsp.setIsHaveTask(1);
 		}
-		rsp.setLoopTime(TaskEngine.SPAN_TIME);
+		rsp.setLoopTime(TimeZoneMng.SPAN_TIME);
 		rsp.setTaskIp(remoteIp);
 		logger.info("getTask---end" + JSON.toJSONString(rsp).toString());
 		return rsp;
@@ -208,7 +203,7 @@ public class MobileReportController extends BaseController {
 		// ----------------------------------------------
 
 		// 1. 先验证是否为有效appid
-		App app = appService.select(req.getAppId());
+		App app = TaskEngine.getInstance().getAppInfo(req.getAppId());
 		if (app == null) {
 			rsp.setAllData(Const.common_error, "common_error", null);
 			result = JSON.toJSONString(rsp);
@@ -218,7 +213,7 @@ public class MobileReportController extends BaseController {
 		// 3. 写入DB
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		req.getDevice().setIp(remoteIp);
-		if (remainVpnService.isWhileListIp(req.getDevice().getIp())) {
+		if (TaskEngine.getInstance().isWhiteIp(remoteIp)) {
 			deviceService.saveReport(req, true);
 		} else {
 			deviceService.saveReport(req, false);

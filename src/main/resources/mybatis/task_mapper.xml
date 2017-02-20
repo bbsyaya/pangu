@@ -80,7 +80,7 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from task t
+    from task t order by t.create_date desc
   </select>
   <select id="selectTimeSpan" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Task" >
     select 

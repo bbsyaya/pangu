@@ -27,8 +27,23 @@ public class VpnOperUpdateRsp extends BaseRsp{
 	public void setLoopTime(int loopTime) {
 		this.loopTime = loopTime;
 	}
+	public int getTaskTotal() {
+		return taskTotal;
+	}
+	public void setTaskTotal(int taskTotal) {
+		this.taskTotal = taskTotal;
+	}
+	public int getFinishedTaskCount() {
+		return finishedTaskCount;
+	}
+	public void setFinishedTaskCount(int finishedTaskCount) {
+		this.finishedTaskCount = finishedTaskCount;
+	}
+	
 	private String remoteIp;	//getRemoteAddr
 	private String realIp; 		//x-forwarded-for
 	private int isSwitchVpn;    //1: 是 0:否
 	private int loopTime;		// 下次询问时长 单位秒
+	private int taskTotal = 0;		// 任务总数
+	private int finishedTaskCount = 0;//已完成的任务数
 }
