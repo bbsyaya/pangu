@@ -25,27 +25,31 @@ import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.TaskService;
+import org.turing.pangu.task.DateUpdateListen;
+import org.turing.pangu.task.DynamicIpTaskMng;
+import org.turing.pangu.task.FixIpTaskMng;
+import org.turing.pangu.task.TaskIF;
 import org.turing.pangu.utils.DateUtils;
 import org.turing.pangu.utils.RandomUtils;
 /*
  * 任务引擎，负责每日任务生成,配置任务,跟踪任务进展,
  * */
-public class TaskEngine {
+public class TaskEngine implements TaskIF,DateUpdateListen{
 	private static final Logger logger = Logger.getLogger(TaskEngine.class);
 	private static TaskEngine mInstance = new TaskEngine();
 	private List<VpnTask> vpnTaskList = new ArrayList<VpnTask>();
 	private List<Task> allTaskList = new ArrayList<Task>();
-	private List<Task> todayTaskList = new ArrayList<Task>();
-	private List<App> appList = new ArrayList<App>();
+	public List<Task> todayTaskList = new ArrayList<Task>();
+	public List<App> appList = new ArrayList<App>();
 	private List<RemainVpn> whiteIpList = new ArrayList<RemainVpn>();
 	private List<Platform> platformList = new ArrayList<Platform>();
 	public static final int INCREMENT_MONEY_TYPE = 0;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	public static final int INCREMENT_WATERAMY_TYPE = 1;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	public static final int STOCK_MONEY_TYPE = 2;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	public static final int STOCK_WATERAMY_TYPE = 3;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军	
+	public static final int VPN_TOKEN_LENGH = 16;
+	public static final int PHONE_TASKID_LENGH = 32;
 	private Device mDevice = null; // 记录找到的存量信息
-	private int vpnTokenLengh = 16;
-	private int phoneTaskIdLengh = 32;
 	private PlatformService platformService;
 	private AppService appService;
 	private DeviceService deviceService;
@@ -68,6 +72,8 @@ public class TaskEngine {
 		return appList;
 	}
 	public void init(){
+		FixIpTaskMng.getInstance().setDataUpdateListen(this);
+		DynamicIpTaskMng.getInstance().setDataUpdateListen(this);
 		if(null != appService){
 			App model = new App();
 			model.setIsCanRun(1);
@@ -97,6 +103,9 @@ public class TaskEngine {
 			}
 		}
 		return false;
+	}
+	public List<RemainVpn> getFixedIpList(){
+		return whiteIpList;
 	}
 	public Platform getPlatformInfo(long pfId){
 		for(Platform pf:platformList){
@@ -176,28 +185,8 @@ public class TaskEngine {
 	}
 	public synchronized String addVpnTask(VpnLoginReq req,String remoteIp,String realIp){
 		logger.info("addVpnTask---000");
-		// 此IP不能运行任务了
-		if(false == IpMngEngine.getInstance().isCanGetTask(remoteIp)){
-			return null;
-		}
-		VpnTask task = new VpnTask();
-		task.setDeviceId(req.getDeviceId());
-		task.setOperType(req.getOperType());
-		task.setRemoteIp(remoteIp);
-		task.setRealIp(realIp);
-		task.setToken(RandomUtils.getRandom(vpnTokenLengh));
-		task.setCreateTime(new Date());
-		logger.info("addVpnTask---001--"+task.toString());
-		for (int i = vpnTaskList.size()-1; i >=0; i--){
-			VpnTask tmp = vpnTaskList.get(i);
-			if(tmp.getDeviceId().equals(task.getDeviceId())){
-				vpnTaskList.remove(tmp); // 删除原来的VPN task
-				logger.info("addVpnTask---002--del old task");
-			}
-		}
-		vpnTaskList.add(task);
 		logger.info("addVpnTask---end");
-		return task.getToken();
+		return "";
 	}
 
 	public synchronized VpnOperUpdateRsp vpnIsNeedSwitch(String token){
@@ -281,6 +270,7 @@ public class TaskEngine {
 		todayTaskList.clear();//清空
 		todayTaskList = getTodayTaskList(fromTime,toTime);
 		IpMngEngine.getInstance().clearIpList();
+		FixIpTaskMng.getInstance().createFixedIpTask(incrementMoney, incrementWater, stockMoney, stockWater);
 		
 		logger.info("createTodayTask---end");
 	}
@@ -304,7 +294,7 @@ public class TaskEngine {
 						logger.info("taskFinish---001--findandsettastkFinished");
 						if(req.getIsFinished() == 1 ){
 							tmpTask.setIsFinished(1);//找到任务并设为完成状态
-							updateExecute(tmpTask); // 更新执行任务
+							updateExecuteTask(tmpTask); // 更新执行任务
 						}
 					}
 				}
@@ -364,11 +354,11 @@ public class TaskEngine {
 		}
 		return true;
 	}
-	private void updateExecute(PhoneTask pTask){
+	public void updateExecuteTask(PhoneTask pTask){
 		logger.info("updateExecute---000");
 		for(Task task : todayTaskList){
-			if(pTask.getAppId() == task.getAppId()){
-				logger.info("updateExecute---001--appId:"+pTask.getAppId());
+			if(pTask.getApp().getId() == task.getAppId()){
+				logger.info("updateExecute---001--appId:"+pTask.getApp().getId());
 				switch(pTask.getOperType()){
 				case INCREMENT_MONEY_TYPE:
 					task.setExecuteIncrementMoney(task.getExecuteIncrementMoney() + 1);
@@ -389,90 +379,11 @@ public class TaskEngine {
 	}
 	private synchronized PhoneTask getTask(VpnTask task,String deviceId,int operType,String remoteIp,String realIp){
 		PhoneTask pTask = new PhoneTask();
-		long appId = getOptimalAppId(task,remoteIp,realIp);
-		if(appId == 0L){
-			return null;
-		}
-		pTask.setDeviceId(deviceId);
-		pTask.setVpnToken(task.getToken());
-		pTask.setOperType(operType);
-		pTask.setTaskId(task.getToken() + RandomUtils.getRandom(phoneTaskIdLengh/2));//32位
-		pTask.setAppId(appId);
-		pTask.setOperType(task.getOperType());
-		pTask.setTimes(1);// 暂定一次
-		pTask.setSpanTime(5);//暂定5S 
-		pTask.setStockInfo(mDevice);
+
 		return pTask;
 	}
 
-	// 获得最优 appID
-	private synchronized long getOptimalAppId(VpnTask task,String remoteIp,String realIp){
-		// -- 排序
-		mDevice = null;
-		logger.info("getOptimalAppId---000");
-		logger.info("getOptimalAppId---001--operType:"+task.getOperType()+"remoteIp:"+remoteIp+"realIp:"+realIp);
-		TaskListSort.taskSort(todayTaskList, task.getOperType());//对任务列表排序
-		// 处理存量
-		if(task.getOperType() == STOCK_MONEY_TYPE || task.getOperType() == STOCK_WATERAMY_TYPE ){
-			logger.info("getOptimalAppId---002--STOCK");
-			Device device = new Device();
-			device.setIp(remoteIp);
-			List<Device> deviceList = deviceService.selectStockByIp(device);
-			if(null == deviceList || deviceList.size() == 0){
-				logger.info("getOptimalAppId---003--not STOCK");
-				return 0L;
-			}
-			int flag = 0;
-			/*算法核心:
-			 * 一个IP只能运行一个APP,即便找到了很多符合条件的device,但只运行一次
-			 * */
-			for(Device dev:deviceList){
-				for(Task dbTask:todayTaskList){
-					flag = 0;
-					for(PhoneTask tmpTask:task.getPhoneTaskList()){
-						if(tmpTask.getAppId() == dbTask.getAppId()){
-							flag = 1;
-							logger.info("getOptimalAppId---005-- stock existed in run");
-							break;
-						}
-					}
-					if(flag == 0 && dev.getAppId() == dbTask.getAppId() && isHavaTaskByOperType(task.getOperType(),dbTask)){
-						int random = (int)(1+Math.random()*(10-1+1));
-						if(random%2 == 0)// 当有很多条数据时 50% 方式衰减
-						{ 
-							updateAllocTask(task.getOperType(),dbTask); // 对应派发 ++ 
-							mDevice = dev; // 保存好不容易找到的存量信息，函数外赋值。
-							logger.info("getOptimalAppId---end--find STOCK mDevice:"+mDevice.toString());
-							return dbTask.getAppId();
-						}
-					}
-				}
-			}
-			logger.info("getOptimalAppId---end--not match STOCK");
-			return 0L;
-		}else{// 处理增量
-			logger.info("getOptimalAppId---004--INCREMENT");
-			int flag = 0;
-			for(Task dbTask:todayTaskList){
-				flag = 0;
-				for(PhoneTask tmpTask:task.getPhoneTaskList()){
-					if(tmpTask.getAppId() == dbTask.getAppId()){
-						flag = 1;
-						logger.info("getOptimalAppId---005-- INCREMENT existed");
-						break;
-					}
-				}
-				if(flag == 0 && isHavaTaskByOperType(task.getOperType(),dbTask)){
-					updateAllocTask(task.getOperType(),dbTask); // 对应派发 ++ 
-					logger.info("getOptimalAppId---end--return INCREMENT ");
-					return dbTask.getAppId();
-				}
-			}
-		}
-		logger.info("getOptimalAppId---end--not task send ");
-		return 0L;
-	}
-	private void updateAllocTask(int type,Task dbTask){
+	public void updateAllocTask(int type,Task dbTask){
 		switch(type){
 		case INCREMENT_MONEY_TYPE:
 			dbTask.setAllotIncrementMoney(dbTask.getAllotIncrementMoney() + 1);
@@ -495,6 +406,7 @@ public class TaskEngine {
 			if(tmp.getId() == dbTask.getId()){
 				allTaskList.set(count, dbTask);
 			}
+			count++;
 		}
 	}
 	// 是否还有该类型的任务

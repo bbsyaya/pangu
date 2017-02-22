@@ -28,10 +28,10 @@ import com.alibaba.fastjson.TypeReference;
 public class RemainEngine {
 	private static final Logger logger = Logger.getLogger(RemainEngine.class);
 	private static RemainEngine mInstance = new RemainEngine();
-	private String remainRootPath = PropertyEngine.getProperty("download.root").toString(); // 留存文件根目录
-	private String remainDownload = PropertyEngine.getProperty("download.remain").toString(); // 下载留存文件
-	private int remainCount = 200;
-	private int remainAllCount = 400;
+	public  static String remainRootPath = PropertyEngine.getProperty("download.root").toString(); // 留存文件根目录
+	public  static String remainDownload = PropertyEngine.getProperty("download.remain").toString(); // 下载留存文件
+	private int remainCount = 100;
+	private int remainAllCount = 200;
 	
 	private PlatformService platformService;
 	private AppService appService;
@@ -39,9 +39,6 @@ public class RemainEngine {
 	private RemainDataService remainDataService;
 	
 	public void setService(PlatformService platformService,AppService appService,DeviceService deviceService,RemainDataService remainDataService){
-		
-		//platformService = SpringContextHolder.getBean(PlatformServiceImpl.class);
-		
 		this.platformService = platformService;
 		this.appService = appService;
 		this.deviceService = deviceService;
@@ -66,10 +63,9 @@ public class RemainEngine {
 		time+=day; // 减去得到新的毫秒数
 		return new Date(time); // 将毫秒数转换成日期
 	}
-	private String DateFormat(Date date){
+	public static String DateFormat(Date date){
 		// 给定模式
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        // public final String format(Date date)
         String s = sdf.format(date);
         System.out.println(s);
         return s;
@@ -121,7 +117,7 @@ public class RemainEngine {
 				try {
 					String json = FileUtils.readFileToString(file);
 					// -- ali关键转换
-					deviceRemainList = JSON.parseObject(json, new TypeReference<ArrayList<Device>>(){});					
+					deviceRemainList = JSON.parseObject(json, new TypeReference<ArrayList<Device>>(){});				
 					if(deviceRemainList.size() > remainCount ){
 						removeList(deviceRemainList,remainCount);
 					}

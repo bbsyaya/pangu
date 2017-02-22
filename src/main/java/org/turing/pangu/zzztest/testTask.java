@@ -97,14 +97,15 @@ public class testTask {
 			
 			
 			Task c = new Task();
-			c.setId(1L);
+			c.setId(6L);
 			c.setAllotIncrementMoney(500);
 			int count = 0;
 			for(Task tmp :allTaskList){
-				
-				if(tmp.getId() == c.getId()){
-					allTaskList.set(count, c);
-				}
+				tmp.setAllotIncrementMoney(c.getAllotIncrementMoney());
+				//tmp.setAppId(5L);
+				//if(tmp.getId() == c.getId()){
+					//allTaskList.set(count, c);
+				//}
 				count ++;
 			}
 			Thread.sleep(1000);
