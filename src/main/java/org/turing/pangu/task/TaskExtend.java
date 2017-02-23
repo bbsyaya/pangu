@@ -5,34 +5,119 @@ import org.turing.pangu.model.Task;
  * 动态IP和固定IP都要刷增量，对总增量的分食
  * */
 public class TaskExtend extends Task{
-	public int getFixedIpIncrementMoney() {
-		return fixedIpIncrementMoney;
+	private int staticIpIncrementMoney = 0 ;
+	private int staticIpIncrementWaterAmy = 0 ;
+	private int staticIpAllocIncrementMoney = 0 ;
+	private int staticIpAllocIncrementWaterAmy = 0 ;
+	private int staticIpExecuteIncrementMoney = 0 ;
+	private int staticIpExecuteIncrementWaterAmy = 0 ;
+	
+	private int dynamicIpAllocIncrementMoney = 0 ;
+	private int dynamicIpAllocIncrementWaterAmy = 0 ;
+	private int dynamicIpIncrementMoney = 0 ;
+	private int dynamicIpIncrementWaterAmy = 0 ;
+	private int dynamicIpExecuteIncrementMoney = 0 ;
+	private int dynamicIpExecuteIncrementWaterAmy = 0 ;
+
+
+	public int getStaticIpIncrementMoney() {
+		return staticIpIncrementMoney;
 	}
-	public void setFixedIpIncrementMoney(int fixedIpIncrementMoney) {
-		this.fixedIpIncrementMoney = fixedIpIncrementMoney;
+
+	public void setStaticIpIncrementMoney(int staticIpIncrementMoney) {
+		this.staticIpIncrementMoney = staticIpIncrementMoney;
 	}
-	public int getFixedIpIncrementWaterAmy() {
-		return fixedIpIncrementWaterAmy;
+
+	public int getStaticIpIncrementWaterAmy() {
+		return staticIpIncrementWaterAmy;
 	}
-	public void setFixedIpIncrementWaterAmy(int fixedIpIncrementWaterAmy) {
-		this.fixedIpIncrementWaterAmy = fixedIpIncrementWaterAmy;
+
+	public void setStaticIpIncrementWaterAmy(int staticIpIncrementWaterAmy) {
+		this.staticIpIncrementWaterAmy = staticIpIncrementWaterAmy;
 	}
+
+	public int getStaticIpAllocIncrementMoney() {
+		return staticIpAllocIncrementMoney;
+	}
+
+	public void setStaticIpAllocIncrementMoney(int staticIpAllocIncrementMoney) {
+		this.staticIpAllocIncrementMoney = staticIpAllocIncrementMoney;
+	}
+
+	public int getStaticIpAllocIncrementWaterAmy() {
+		return staticIpAllocIncrementWaterAmy;
+	}
+
+	public void setStaticIpAllocIncrementWaterAmy(int staticIpAllocIncrementWaterAmy) {
+		this.staticIpAllocIncrementWaterAmy = staticIpAllocIncrementWaterAmy;
+	}
+
+	public int getStaticIpExecuteIncrementMoney() {
+		return staticIpExecuteIncrementMoney;
+	}
+
+	public void setStaticIpExecuteIncrementMoney(int staticIpExecuteIncrementMoney) {
+		this.staticIpExecuteIncrementMoney = staticIpExecuteIncrementMoney;
+	}
+
+	public int getStaticIpExecuteIncrementWaterAmy() {
+		return staticIpExecuteIncrementWaterAmy;
+	}
+
+	public void setStaticIpExecuteIncrementWaterAmy(
+			int staticIpExecuteIncrementWaterAmy) {
+		this.staticIpExecuteIncrementWaterAmy = staticIpExecuteIncrementWaterAmy;
+	}
+
+	public int getDynamicIpAllocIncrementMoney() {
+		return dynamicIpAllocIncrementMoney;
+	}
+
+	public void setDynamicIpAllocIncrementMoney(int dynamicIpAllocIncrementMoney) {
+		this.dynamicIpAllocIncrementMoney = dynamicIpAllocIncrementMoney;
+	}
+
+	public int getDynamicIpAllocIncrementWaterAmy() {
+		return dynamicIpAllocIncrementWaterAmy;
+	}
+
+	public void setDynamicIpAllocIncrementWaterAmy(
+			int dynamicIpAllocIncrementWaterAmy) {
+		this.dynamicIpAllocIncrementWaterAmy = dynamicIpAllocIncrementWaterAmy;
+	}
+
 	public int getDynamicIpIncrementMoney() {
-		return DynamicIpIncrementMoney;
+		return dynamicIpIncrementMoney;
 	}
+
 	public void setDynamicIpIncrementMoney(int dynamicIpIncrementMoney) {
-		DynamicIpIncrementMoney = dynamicIpIncrementMoney;
+		this.dynamicIpIncrementMoney = dynamicIpIncrementMoney;
 	}
+
 	public int getDynamicIpIncrementWaterAmy() {
-		return DynamicIpIncrementWaterAmy;
+		return dynamicIpIncrementWaterAmy;
 	}
+
 	public void setDynamicIpIncrementWaterAmy(int dynamicIpIncrementWaterAmy) {
-		DynamicIpIncrementWaterAmy = dynamicIpIncrementWaterAmy;
+		this.dynamicIpIncrementWaterAmy = dynamicIpIncrementWaterAmy;
 	}
-	private int fixedIpIncrementMoney = 0 ;
-	private int fixedIpIncrementWaterAmy = 0 ;
-	private int DynamicIpIncrementMoney = 0 ;
-	private int DynamicIpIncrementWaterAmy = 0 ;
+
+	public int getDynamicIpExecuteIncrementMoney() {
+		return dynamicIpExecuteIncrementMoney;
+	}
+
+	public void setDynamicIpExecuteIncrementMoney(int dynamicIpExecuteIncrementMoney) {
+		this.dynamicIpExecuteIncrementMoney = dynamicIpExecuteIncrementMoney;
+	}
+
+	public int getDynamicIpExecuteIncrementWaterAmy() {
+		return dynamicIpExecuteIncrementWaterAmy;
+	}
+
+	public void setDynamicIpExecuteIncrementWaterAmy(
+			int dynamicIpExecuteIncrementWaterAmy) {
+		this.dynamicIpExecuteIncrementWaterAmy = dynamicIpExecuteIncrementWaterAmy;
+	}
 	public void setDBTask(Task task){
 		this.setAllotIncrementMoney(task.getAllotIncrementMoney());
 		this.setAllotIncrementWaterAmy(task.getAllotIncrementWaterAmy());

@@ -1,35 +1,20 @@
 package org.turing.pangu.engine;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
-import org.turing.pangu.bean.TaskConfigureBean;
 import org.turing.pangu.controller.common.PhoneTask;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
-import org.turing.pangu.model.App;
-import org.turing.pangu.model.Device;
-import org.turing.pangu.model.Platform;
-import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.model.Task;
-import org.turing.pangu.service.AppService;
-import org.turing.pangu.service.DeviceService;
-import org.turing.pangu.service.PlatformService;
-import org.turing.pangu.service.RemainVpnService;
-import org.turing.pangu.service.TaskService;
 import org.turing.pangu.task.DateUpdateListen;
+import org.turing.pangu.task.TaskExtend;
 import org.turing.pangu.task.TaskIF;
 import org.turing.pangu.task.TaskListSort;
-import org.turing.pangu.task.TaskUtils;
 import org.turing.pangu.task.VpnTask;
-import org.turing.pangu.utils.DateUtils;
 import org.turing.pangu.utils.RandomUtils;
 /*
  * 任务引擎，负责每日任务生成,配置任务,跟踪任务进展,
@@ -48,6 +33,33 @@ public class TaskDynamicIpEngine implements TaskIF{
 	public void setDataUpdateListen(DateUpdateListen listen){
 		mListen = listen;
 	}
+	public boolean isRunVpn(String remoteIp){
+		for(VpnTask task :vpnTaskList){
+			if(task.getRemoteIp().equals(remoteIp)){
+				return true;
+			}
+		}
+		return false;
+	}
+	@Override
+	public void init(DateUpdateListen listen) {
+		// TODO Auto-generated method stub
+		setDataUpdateListen(listen);
+		clear();
+	}
+	@Override
+	public boolean isHavaTaskByOperType(int type, Task dbTask) {
+		// TODO Auto-generated method stub
+		TaskExtend ext = (TaskExtend)dbTask;
+		switch(type){
+		case TaskEngine.INCREMENT_MONEY_TYPE:
+			return (ext.getDynamicIpIncrementMoney() - ext.getDynamicIpAllocIncrementMoney()) > 0 ? true:false;
+		case TaskEngine.INCREMENT_WATERAMY_TYPE:
+			return (ext.getDynamicIpIncrementWaterAmy() - ext.getDynamicIpAllocIncrementWaterAmy()) > 0 ? true:false;
+		}
+		return false;
+	}
+	@Override
 	public synchronized String addVpnTask(VpnLoginReq req,String remoteIp,String realIp){
 		logger.info("addVpnTask---000");
 		// 此IP不能运行任务了
@@ -73,8 +85,8 @@ public class TaskDynamicIpEngine implements TaskIF{
 		logger.info("addVpnTask---end");
 		return task.getToken();
 	}
-
-	public synchronized VpnOperUpdateRsp vpnIsNeedSwitch(String token){
+	@Override
+	public synchronized VpnOperUpdateRsp vpnIsNeedSwitch(String token,String remoteIp,String realIp){
 		logger.info("vpnIsNeedSwitch---000--"+token);
 		VpnOperUpdateRsp dataRsp = new VpnOperUpdateRsp();
 		dataRsp.setIsSwitchVpn(1);
@@ -89,7 +101,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 				dataRsp.setTaskTotal(task.getPhoneTaskList().size());
 				for(PhoneTask pTask:task.getPhoneTaskList()){
 					dataRsp.setFinishedTaskCount(dataRsp.getFinishedTaskCount()+1);
-					if(pTask.getIsFinished() == 0 && false == TaskUtils.isTimeOut(task)){ // 发现模拟器还有未完成的任务
+					if(pTask.getIsFinished() == 0 && false == TaskEngine.isTimeOut(task)){ // 发现模拟器还有未完成的任务
 						logger.info("vpnIsNeedSwitch---false---002---end");
 						dataRsp.setIsSwitchVpn(0);
 						dataRsp.setFinishedTaskCount(dataRsp.getFinishedTaskCount()-1);
@@ -100,6 +112,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 		logger.info("vpnIsNeedSwitch---true---end");
 		return dataRsp;
 	}
+	@Override
 	public synchronized boolean switchVpnFinish(String token,String remoteIp,String realIp){
 		// 此IP不能运行任务了
 		if(false == IpMngEngine.getInstance().isCanGetTask(remoteIp)){
@@ -127,6 +140,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 	}
 
 	// 手机端一个任务完成
+	@Override
 	public synchronized void taskFinish(TaskFinishReq req,String remoteIp,String realIp){
 		logger.info("taskFinish---000");
 		logger.info("taskFinish---taskId:"+req.getTaskId()+"--remoteIp:"+remoteIp+"--realIp:"+realIp);
@@ -137,7 +151,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 						logger.info("taskFinish---001--findandsettastkFinished");
 						if(req.getIsFinished() == 1 ){
 							tmpTask.setIsFinished(1);//找到任务并设为完成状态
-							mListen.updateExecuteTask(tmpTask); // 更新执行任务
+							mListen.updateExecuteTask(TaskEngine.USED_DYNAMIC_VPN,tmpTask); // 更新执行任务
 						}
 					}
 				}
@@ -146,6 +160,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 		logger.info("taskFinish---end");
 	}
 	//取一个任务
+	@Override
 	public synchronized PhoneTask getTask(String deviceId,String remoteIp,String realIp){
 		// 1. 先查VPN用途
 		PhoneTask pTask = null;
@@ -217,8 +232,8 @@ public class TaskDynamicIpEngine implements TaskIF{
 						break;
 					}
 				}
-				if(flag == 0 && TaskUtils.isHavaTaskByOperType(task.getOperType(),dbTask)){
-					mListen.updateAllocTask(task.getOperType(),dbTask); // 对应派发 ++ 
+				if(flag == 0 && isHavaTaskByOperType(task.getOperType(),dbTask)){
+					mListen.updateAllocTask(TaskEngine.USED_DYNAMIC_VPN,task.getOperType(),dbTask); // 对应派发 ++ 
 					logger.info("getOptimalAppId---end--return INCREMENT ");
 					return dbTask.getAppId();
 				}
@@ -226,13 +241,6 @@ public class TaskDynamicIpEngine implements TaskIF{
 		}
 		logger.info("getOptimalAppId---end--not task send ");
 		return 0L;
-	}
-	@Override
-	public void init(DateUpdateListen listen) {
-		// TODO Auto-generated method stub
-		setDataUpdateListen(listen);
-		clear();
-		
 	}
 	private void clear(){
 		vpnTaskList.clear();

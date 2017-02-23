@@ -25,10 +25,19 @@ public class ConnectVpnInfo {
 	public void setVpnId(Long vpnId) {
 		this.vpnId = vpnId;
 	}
+
 	
+	public boolean isUsed() {
+		return isUsed;
+	}
+	public void setUsed(boolean isUsed) {
+		this.isUsed = isUsed;
+	}
+
+
 	private String ip;
 	private String userName;
 	private String password;
 	private Long vpnId;
-
+	private boolean isUsed = false;
 }
