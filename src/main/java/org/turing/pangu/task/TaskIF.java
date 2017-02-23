@@ -12,4 +12,5 @@ public interface TaskIF{
 	
 	public PhoneTask getTask(String deviceId,String remoteIp,String realIp);
 	public void taskFinish(TaskFinishReq req,String remoteIp,String realIp);
+	public void init(DateUpdateListen listen);
 }

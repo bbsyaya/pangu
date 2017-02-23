@@ -1,14 +1,15 @@
-package org.turing.pangu.engine;
+package org.turing.pangu.task;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.model.Task;
 
 public class TaskListSort {
-	public static void taskSort(List<Task> todayTaskList,int operType){
+	public static void taskSort(List<TaskExtend> todayTaskList,int operType){
 		switch(operType){
 		case TaskEngine.INCREMENT_MONEY_TYPE:
 			Collections.sort(todayTaskList, new SortByIncrementMoney(true));

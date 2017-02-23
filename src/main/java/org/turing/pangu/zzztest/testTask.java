@@ -13,6 +13,7 @@ import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.controller.phone.response.GetTaskRsp;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.model.Task;
+import org.turing.pangu.task.TaskExtend;
 import org.turing.pangu.utils.DateUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -77,6 +78,14 @@ import com.alibaba.fastjson.TypeReference;
 public class testTask {
 	@Test
 	public void test(){
+		TaskExtend task = new TaskExtend();
+		task.setAllotIncrementMoney(100);
+		task.setAllotIncrementWaterAmy(19989);
+		task.setAppId(3L);
+		Task ts = new Task();
+		ts = task;
+		ts.setAllotIncrementMoney(1222);
+		/*
 		try {
 			Calendar cal=Calendar.getInstance(TimeZone.getTimeZone( "GMT+8")); 
 			int hour =cal.get(Calendar.HOUR_OF_DAY);
@@ -109,7 +118,7 @@ public class testTask {
 				count ++;
 			}
 			Thread.sleep(1000);
-			/*
+			
 			loginPangu();
 			GetTaskRsp aTask = getTask();
 			Thread.sleep(1000);
@@ -126,12 +135,12 @@ public class testTask {
 			aTask = getTask();
 			Thread.sleep(1000);
 			bTask = getTask();
-			*/
+			
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 	public void loginPangu(){
 		String loginUrl = "http://localhost:8080/pc/vpnLogin.pangu";

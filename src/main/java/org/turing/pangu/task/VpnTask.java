@@ -1,8 +1,10 @@
-package org.turing.pangu.controller.common;
+package org.turing.pangu.task;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.turing.pangu.controller.common.PhoneTask;
 
 /*
  * PC 端的 VPN 任务管理，与 PhoneTask 是 1对多的关系

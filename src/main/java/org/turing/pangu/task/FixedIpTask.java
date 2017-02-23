@@ -1,9 +1,8 @@
 package org.turing.pangu.task;
 
-import org.turing.pangu.controller.common.VpnTask;
 
 /*固定IP的生命周期*/
-public class FixedIpProcess extends VpnTask{
+public class FixedIpTask extends VpnTask{
 	public String getIp() {
 		return ip;
 	}
