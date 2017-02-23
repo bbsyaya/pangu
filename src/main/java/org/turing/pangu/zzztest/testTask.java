@@ -1,10 +1,6 @@
 package org.turing.pangu.zzztest;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
 
 import org.junit.Test;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
@@ -14,7 +10,6 @@ import org.turing.pangu.controller.phone.response.GetTaskRsp;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.model.Task;
 import org.turing.pangu.task.TaskExtend;
-import org.turing.pangu.utils.DateUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;

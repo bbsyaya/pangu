@@ -1,6 +1,8 @@
-package org.turing.pangu.bean;
+package org.turing.pangu.controller.pc.response;
 
-public class ConnectVpnInfo {
+import org.turing.pangu.controller.common.BaseRsp;
+
+public class VpnConnectInfoRsp extends BaseRsp{
 	public String getIp() {
 		return ip;
 	}

@@ -22,19 +22,21 @@ import org.turing.pangu.controller.pc.request.GetRemainVpnListReq;
 import org.turing.pangu.controller.pc.request.GetTaskListReq;
 import org.turing.pangu.controller.pc.request.LoginReq;
 import org.turing.pangu.controller.pc.request.SaveBlackIpListReq;
+import org.turing.pangu.controller.pc.request.VpnConnectInfoReq;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.pc.request.VpnOperUpdateReq;
 import org.turing.pangu.controller.pc.request.VpnSwitchFinishReq;
+import org.turing.pangu.controller.pc.response.VpnConnectInfoRsp;
 import org.turing.pangu.controller.pc.response.VpnLoginRsp;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.controller.phone.request.GetBlackIpListReq;
 import org.turing.pangu.engine.TaskConfigureEngine;
 import org.turing.pangu.engine.TaskEngine;
+import org.turing.pangu.engine.TaskStaticIpEngine;
 import org.turing.pangu.engine.TimeZoneMng;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.DynamicVpn;
 import org.turing.pangu.model.Platform;
-import org.turing.pangu.model.RemainData;
 import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.model.Task;
 import org.turing.pangu.model.User;
@@ -47,7 +49,6 @@ import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.TaskService;
 import org.turing.pangu.service.UserService;
 import org.turing.pangu.utils.Const;
-import org.turing.pangu.utils.DateUtils;
 
 import com.alibaba.fastjson.JSON;
 
@@ -126,7 +127,18 @@ public class PCMngController extends BaseController {
 		rsp.setAllData(Const.common_ok, "common_ok", realIp);
 		return rsp;
 	}
-	
+	// vpn登录请求
+	@RequestMapping(value = "/getConnectInfo", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody PGResponse<VpnConnectInfoRsp> getConnectInfo(@RequestBody VpnConnectInfoReq req,HttpServletRequest request) {
+		PGResponse<VpnConnectInfoRsp> rsp = new PGResponse<VpnConnectInfoRsp>();
+		VpnConnectInfoRsp con = TaskStaticIpEngine.getInstance().getConnectVpnInfo();
+		if(null == con){
+			rsp.setAllData(Const.common_error, "common_error", null);
+		}else{
+			rsp.setAllData(Const.common_ok, "common_ok", con);
+		}
+		return rsp;
+	}
 	// vpn登录请求
 	@RequestMapping(value = "/vpnLogin", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<VpnLoginRsp> vpnLogin(@RequestBody VpnLoginReq req,HttpServletRequest request) {
@@ -155,7 +167,7 @@ public class PCMngController extends BaseController {
 		PGResponse<VpnOperUpdateRsp> rsp = new PGResponse<VpnOperUpdateRsp>();
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);
-		VpnOperUpdateRsp dataRsp =  TaskEngine.getInstance().vpnIsNeedSwitch(req.getToken());
+		VpnOperUpdateRsp dataRsp =  TaskEngine.getInstance().vpnIsNeedSwitch(req.getToken(),remoteIp,realIp);
 		dataRsp.setRemoteIp(remoteIp);
 		dataRsp.setRealIp(realIp);
 		dataRsp.setLoopTime(TimeZoneMng.SPAN_TIME);

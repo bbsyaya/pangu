@@ -60,7 +60,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 		return false;
 	}
 	@Override
-	public synchronized String addVpnTask(VpnLoginReq req,String remoteIp,String realIp){
+	public synchronized String vpnLogin(VpnLoginReq req,String remoteIp,String realIp){
 		logger.info("addVpnTask---000");
 		// 此IP不能运行任务了
 		if(false == IpMngEngine.getInstance().isCanGetTask(remoteIp)){
@@ -243,6 +243,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 		return 0L;
 	}
 	private void clear(){
-		vpnTaskList.clear();
+		if(null != vpnTaskList)
+			vpnTaskList.clear();
 	}
 }

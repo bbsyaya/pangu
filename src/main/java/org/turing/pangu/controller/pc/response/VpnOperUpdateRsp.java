@@ -1,6 +1,5 @@
 package org.turing.pangu.controller.pc.response;
 
-import org.turing.pangu.bean.ConnectVpnInfo;
 import org.turing.pangu.controller.common.BaseRsp;
 
 public class VpnOperUpdateRsp extends BaseRsp{
@@ -41,10 +40,10 @@ public class VpnOperUpdateRsp extends BaseRsp{
 		this.finishedTaskCount = finishedTaskCount;
 	}
 	
-	public ConnectVpnInfo getConnectInfo() {
+	public VpnConnectInfoRsp getConnectInfo() {
 		return connectInfo;
 	}
-	public void setConnectInfo(ConnectVpnInfo connectInfo) {
+	public void setConnectInfo(VpnConnectInfoRsp connectInfo) {
 		this.connectInfo = connectInfo;
 	}
 
@@ -54,5 +53,5 @@ public class VpnOperUpdateRsp extends BaseRsp{
 	private int loopTime;		// 下次询问时长 单位秒
 	private int taskTotal = 0;		// 任务总数
 	private int finishedTaskCount = 0;//已完成的任务数
-	private ConnectVpnInfo connectInfo;
+	private VpnConnectInfoRsp connectInfo;
 }

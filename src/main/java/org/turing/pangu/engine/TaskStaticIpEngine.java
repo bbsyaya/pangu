@@ -8,9 +8,9 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.turing.pangu.bean.ConnectVpnInfo;
 import org.turing.pangu.controller.common.PhoneTask;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
+import org.turing.pangu.controller.pc.response.VpnConnectInfoRsp;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.model.App;
@@ -18,13 +18,12 @@ import org.turing.pangu.model.Device;
 import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.model.Task;
 import org.turing.pangu.task.DateUpdateListen;
-import org.turing.pangu.task.StaticVpnTask;
 import org.turing.pangu.task.StaticVpn;
+import org.turing.pangu.task.StaticVpnTask;
 import org.turing.pangu.task.TaskExtend;
 import org.turing.pangu.task.TaskIF;
 import org.turing.pangu.task.TaskListSort;
 import org.turing.pangu.task.VpnTask;
-import org.turing.pangu.utils.DateUtils;
 import org.turing.pangu.utils.FileUtil;
 import org.turing.pangu.utils.RandomUtils;
 
@@ -35,9 +34,9 @@ import com.alibaba.fastjson.TypeReference;
 public class TaskStaticIpEngine implements TaskIF {
 	private static final Logger logger = Logger.getLogger(TaskEngine.class);
 	private static TaskStaticIpEngine mInstance = new TaskStaticIpEngine();
-	private List<StaticVpnTask> mIncrementIpList = null; // 固定IP中用来增量的IP,来源由存量文件中没有的固定IP
-	private List<StaticVpnTask> mStockIpList = null; // 固定IP中用来做增量的IP,来源由存量库
-	private List<StaticVpn> mCurrentRunVpnList = null; // 当前在跑的VPN
+	private List<StaticVpnTask> mIncrementIpList = new ArrayList<StaticVpnTask>(); // 固定IP中用来增量的IP,来源由存量文件中没有的固定IP
+	private List<StaticVpnTask> mStockIpList = new ArrayList<StaticVpnTask>(); // 固定IP中用来做增量的IP,来源由存量库
+	private List<StaticVpn> mCurrentRunVpnList = new ArrayList<StaticVpn>(); // 当前在跑的VPN
 	public static final int IP_INIT = 0;// 0:初始 1:已下发 2:已连接 3:已完成
 	public static final int IP_SEND = 1;// 0:初始 1:已下发 2:已连接 3:已完成
 	public static final int IP_CONNECTED = 2;// 0:初始 1:已下发 2:已连接 3:已完成
@@ -58,11 +57,12 @@ public class TaskStaticIpEngine implements TaskIF {
 		mCurrentRunVpnList.clear();
 		for (RemainVpn vpn : TaskEngine.getInstance().getStaticIpList()) {
 			StaticVpn runVpn = new StaticVpn();
-			ConnectVpnInfo info = new ConnectVpnInfo();
+			VpnConnectInfoRsp info = new VpnConnectInfoRsp();
 			info.setIp("");
 			info.setVpnId(vpn.getId());
 			info.setUserName(vpn.getUser());
 			info.setPassword(vpn.getPassword());
+			runVpn.setConnectInfo(info);
 			mCurrentRunVpnList.add(runVpn);
 		}
 	}
@@ -72,7 +72,7 @@ public class TaskStaticIpEngine implements TaskIF {
 		// TODO Auto-generated method stub
 		setDataUpdateListen(listen);
 		clear();
-		createFixedIpTask();
+		createStaticIpTask();
 		initRunVpn();
 	}
 
@@ -199,7 +199,7 @@ public class TaskStaticIpEngine implements TaskIF {
 		return 0L;
 	}
 	@Override
-	public String addVpnTask(VpnLoginReq req, String remoteIp, String realIp) {
+	public String vpnLogin(VpnLoginReq req, String remoteIp, String realIp) {
 		// TODO Auto-generated method stub
 		for (StaticVpn vpn : mCurrentRunVpnList) {
 			if (vpn.getConnectInfo().getIp().equals(remoteIp)) {
@@ -286,13 +286,13 @@ public class TaskStaticIpEngine implements TaskIF {
 		logger.info("taskFinish---end");
 	}
 
-	private void createFixedIpTask() {
+	private void createStaticIpTask() {
 		createStockIpList();
 		createIncrementIpList();
 	}
 
 	/* 获得一个连接VPN信息 */
-	public ConnectVpnInfo getConnectVpnInfo() {
+	public VpnConnectInfoRsp getConnectVpnInfo() {
 		StaticVpnTask task = null;
 		int random = (int) (Math.random() * 10) + 1;
 		int flag = 0;
@@ -304,11 +304,12 @@ public class TaskStaticIpEngine implements TaskIF {
 		 * 1.看有没有可用的vpn资源
 		 */
 		for (StaticVpn staticVpn : mCurrentRunVpnList) {
-			ConnectVpnInfo conInfo = staticVpn.getConnectInfo();
+			VpnConnectInfoRsp conInfo = staticVpn.getConnectInfo();
 			if (conInfo.isUsed() == true) {
 				flag = 1;
 			} else {
 				flag = 0;
+				break;
 			}
 			vpnIndex++;
 		}
@@ -344,48 +345,59 @@ public class TaskStaticIpEngine implements TaskIF {
 		}
 		return null;
 	}
-
-	private boolean addOneAllocTask(int operType) {
-		return true;
-	}
-
 	private void createIncrementIpList() {
 		int moneyCount = 0;
 		int waterCount = 0;
+		if(null == TaskEngine.getInstance().getTodayTaskList() || TaskEngine.getInstance().getTodayTaskList().size() == 0)
+			return ;
+			
 		for (TaskExtend task : TaskEngine.getInstance().getTodayTaskList()) {
 			moneyCount = moneyCount + task.getStaticIpIncrementMoney();
 			waterCount = waterCount + task.getStaticIpIncrementWaterAmy();
 		}
 
-		int incrementTotalCount = moneyCount + waterCount;
+		int incrementTotalCount =(moneyCount + waterCount)/TaskEngine.getInstance().getTodayTaskList().size();
 		List<RemainVpn> whiteIpList = TaskEngine.getInstance()
 				.getStaticIpList();
 		int flag = 0;
-		for (int index = 0; index < incrementTotalCount; index++) {
-			flag = 0;
-			String tmpIp = "";
-			for (RemainVpn vpn : whiteIpList) {
-				String[] ipList = vpn.getIpList().split("\\|");
-				for (String ip : ipList) {
-					tmpIp = ip;
-					for (VpnTask tast : mStockIpList) {
-						StaticVpnTask process = (StaticVpnTask) tast;
-						if (ip.equals(process.getIp())) { // 如果发现相等的IP
-							flag = 1;
-							break;
-						}
+		int index = 0;
+		for (RemainVpn vpn : whiteIpList) {
+			String[] ipList = vpn.getIpList().split("\\|");
+			for (int yiwan = 0; yiwan < 10000; yiwan++) { 
+				// ip 不能在 stock中存在
+				int random = (int)(Math.random()*ipList.length);// 随机取
+				String ip = ipList[random];
+				flag = 0;
+				for (VpnTask tast : mStockIpList) {
+					StaticVpnTask process = (StaticVpnTask) tast;
+					if (ip.equals(process.getIp())) { // 如果发现相等的IP
+						flag = 1;
+						break;
+					}
+				}
+				//ip也不能在 stock中存在
+				for (VpnTask tast : mIncrementIpList) {
+					StaticVpnTask process = (StaticVpnTask) tast;
+					if (ip.equals(process.getIp())&&flag==0) { // 如果发现相等的IP
+						flag = 1;
+						break;
+					}
+				}
+				if(flag==0){
+					StaticVpnTask ipProcess = new StaticVpnTask();
+					ipProcess.setRunType(IS_RUN_INCREMENT);
+					ipProcess.setIp(ip);
+					ipProcess.setToken(RandomUtils
+							.getRandom(TaskEngine.VPN_TOKEN_LENGH));
+					mIncrementIpList.add(ipProcess);
+					index++;
+					if(index >= incrementTotalCount){
+						return;
 					}
 				}
 			}
-			if (flag == 0) {
-				StaticVpnTask ipProcess = new StaticVpnTask();
-				ipProcess.setRunType(IS_RUN_INCREMENT);
-				ipProcess.setIp(tmpIp);
-				ipProcess.setToken(RandomUtils
-						.getRandom(TaskEngine.VPN_TOKEN_LENGH));
-				mIncrementIpList.add(ipProcess);
-			}
 		}
+		index = 0;
 	}
 
 	private PhoneTask createPhoneTask(StaticVpnTask process, Device device) {
@@ -403,15 +415,10 @@ public class TaskStaticIpEngine implements TaskIF {
 		// --
 		RemainEngine.getInstance().generateRemainFile();
 		for (App app : TaskEngine.getInstance().getAppList()) { // 轮询每个文件
-			Date tomorrowMorning = DateUtils.getTomorrowMorning();
-			String todayRemain = RemainEngine.DateFormat(tomorrowMorning) + "_"
-					+ app.getId() + "_" + app.getPackageName() + ".json";
-			todayRemain = RemainEngine.remainDownload + app.getUserId() + "/"
-					+ app.getPlatformId() + "/" + todayRemain;
-			String tomPath = RemainEngine.remainRootPath + todayRemain;
+			String todayPath = RemainEngine.getInstance().getAppRemainFilePath(new Date(), app);
 			List<Device> deviceList = null;
-			if (FileUtil.isFileExist(tomPath)) {
-				File file = new File(tomPath);
+			if (FileUtil.isFileExist(todayPath)) {
+				File file = new File(todayPath);
 				try {
 					String json = FileUtils.readFileToString(file);
 					deviceList = JSON.parseObject(json,
@@ -449,9 +456,14 @@ public class TaskStaticIpEngine implements TaskIF {
 	}
 
 	private void clear() {
-		mIncrementIpList.clear();
-		mStockIpList.clear();
-		mCurrentRunVpnList.clear();
+		if(null != mIncrementIpList)
+			mIncrementIpList.clear();
+		
+		if(null != mStockIpList)
+			mStockIpList.clear();
+		
+		if(null != mCurrentRunVpnList)
+			mCurrentRunVpnList.clear();
 	}
 
 	private void setDataUpdateListen(DateUpdateListen listen) {

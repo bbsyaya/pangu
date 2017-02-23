@@ -1,16 +1,17 @@
 package org.turing.pangu.task;
 
-import org.turing.pangu.bean.ConnectVpnInfo;
+import org.turing.pangu.controller.pc.response.VpnConnectInfoRsp;
+
 
 
 /*静态VPN对应于数据库中静态VPN的条目*/
 public class StaticVpn {
-	private ConnectVpnInfo connectInfo = null;
+	private VpnConnectInfoRsp connectInfo = null;
 	private StaticVpnTask vpnTask = null;
-	public ConnectVpnInfo getConnectInfo() {
+	public VpnConnectInfoRsp getConnectInfo() {
 		return connectInfo;
 	}
-	public void setConnectInfo(ConnectVpnInfo connectInfo) {
+	public void setConnectInfo(VpnConnectInfoRsp connectInfo) {
 		this.connectInfo = connectInfo;
 	}
 	public StaticVpnTask getVpnTask() {

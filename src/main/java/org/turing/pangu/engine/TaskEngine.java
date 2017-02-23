@@ -1,8 +1,6 @@
 package org.turing.pangu.engine;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +13,6 @@ import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.model.App;
-import org.turing.pangu.model.Device;
 import org.turing.pangu.model.Platform;
 import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.model.Task;
@@ -26,10 +23,8 @@ import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.TaskService;
 import org.turing.pangu.task.DateUpdateListen;
 import org.turing.pangu.task.TaskExtend;
-import org.turing.pangu.task.TaskIF;
 import org.turing.pangu.task.VpnTask;
 import org.turing.pangu.utils.DateUtils;
-import org.turing.pangu.utils.RandomUtils;
 /*
  * 任务引擎，负责每日任务生成,配置任务,跟踪任务进展,
  * */
@@ -67,9 +62,13 @@ public class TaskEngine implements DateUpdateListen{
 		this.deviceService = deviceService;
 		this.taskService = taskService;
 		this.remainVpnService = remainVpnService;
+		RemainEngine.getInstance().setService(platformService, appService, deviceService);
 	}
 	public List<App> getAppList(){
 		return appList;
+	}
+	public List<Platform> getAllPlatformList(){
+		return platformList;
 	}
 	public List<TaskExtend> getTodayTaskList(){
 		return todayTaskList;
@@ -200,9 +199,9 @@ public class TaskEngine implements DateUpdateListen{
 	public synchronized String addVpnTask(VpnLoginReq req,String remoteIp,String realIp){
 		logger.info("addVpnTask---000");
 		if(req.getOperType() == INCREMENT_MONEY_TYPE || req.getOperType() == INCREMENT_WATERAMY_TYPE){
-			TaskDynamicIpEngine.getInstance().addVpnTask(req, remoteIp, realIp);
+			TaskDynamicIpEngine.getInstance().vpnLogin(req, remoteIp, realIp);
 		}else{
-			TaskStaticIpEngine.getInstance().addVpnTask(req, remoteIp, realIp);
+			TaskStaticIpEngine.getInstance().vpnLogin(req, remoteIp, realIp);
 		}
 		logger.info("addVpnTask---end");
 		return "";

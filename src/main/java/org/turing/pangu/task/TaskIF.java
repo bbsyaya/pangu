@@ -7,7 +7,7 @@ import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.model.Task;
 
 public interface TaskIF{
-	public String addVpnTask(VpnLoginReq req,String remoteIp,String realIp);
+	public String vpnLogin(VpnLoginReq req,String remoteIp,String realIp);
 	public VpnOperUpdateRsp vpnIsNeedSwitch(String token,String remoteIp,String realIp);
 	public boolean switchVpnFinish(String token,String remoteIp,String realIp);
 	

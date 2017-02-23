@@ -1,7 +1,6 @@
 package org.turing.pangu.zzztest;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -12,8 +11,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.turing.pangu.bean.TaskConfigureBean;
 import org.turing.pangu.engine.TaskEngine;
-import org.turing.pangu.model.Device;
-import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.PlatformService;
@@ -21,7 +18,6 @@ import org.turing.pangu.service.RemainDataService;
 import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.TaskService;
 import org.turing.pangu.service.UserService;
-import org.turing.pangu.utils.DateUtils;
 
 import com.alibaba.fastjson.JSON;
 
@@ -152,8 +148,11 @@ public class TestData {
 		}
 	}
 	*/
-
+	@Test
 	public void testUpdateDevice(){
+		TaskEngine.getInstance().setService(remainVpnService, platformService, appService, deviceService, taskService);
+		TaskEngine.getInstance().init();
+		/**
 		List<Device> list = deviceService.selectAll();
 		List<RemainVpn> vpnList =  remainVpnService.selectAll();
 		String ip = "";
@@ -165,7 +164,7 @@ public class TestData {
 			if(random % 8 == 0){
 				dev.setIsActived(1);
 			}
-			if( random % 5 == 0){
+			if( random % 2 == 0){
 				int tmp = (int)(Math.random()*100);
 				for(RemainVpn vpn : vpnList){
 					if(tmp % 2 == 0){
@@ -189,10 +188,12 @@ public class TestData {
 				dev.setUpdateDate(yesterdayNight);
 				deviceService.update(dev);
 			}
-		}
+		}*/
+
+		
 	}
 	
-	@Test
+	
 	public void remain(){
 		TaskEngine.getInstance().setService(remainVpnService,platformService, appService, deviceService,taskService);
 		//RemainEngine.getInstance().generateRemainFile();

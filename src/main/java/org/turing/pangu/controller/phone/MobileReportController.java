@@ -31,9 +31,7 @@ import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.engine.TimeZoneMng;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Platform;
-import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
-import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.utils.Const;
 import org.turing.pangu.utils.RandomUtils;
 
