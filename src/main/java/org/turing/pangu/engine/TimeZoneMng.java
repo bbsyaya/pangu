@@ -6,11 +6,14 @@ package org.turing.pangu.engine;
  * */
 public class TimeZoneMng {
 	public static int SPAN_TIME = 10;// 10S 
+	
 	public static int INCREMENT_MONEY_TIMEOUT = 6*60*1000;
 	public static int INCREMENT_WATERAMY_TIMEOUT = 3*60*1000;
 	public static int STOCK_MONEY_TIMEOUT = 6*60*1000;
 	public static int STOCK_WATERAMY_TIMEOUT = 3*60*1000;
+	public static int FREE_TIMEOUT = INCREMENT_MONEY_TIMEOUT;
 	public static float OPEN_MAX_VPN_PHONE_WEIGHT = 1;
+
 	public static int MAX_SEND_COUNT_FOR_APP = 1;
 	private static TimeZoneMng mInstance = new TimeZoneMng();
 	public static TimeZoneMng getInstance()

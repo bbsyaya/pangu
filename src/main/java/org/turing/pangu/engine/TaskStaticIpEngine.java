@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Synchronization;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.turing.pangu.bean.VpnConnectInfo;
@@ -13,7 +15,6 @@ import org.turing.pangu.controller.common.PhoneTask;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.pc.response.VpnConnectInfoRsp;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
-import org.turing.pangu.controller.phone.request.ReportReq;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
@@ -21,9 +22,6 @@ import org.turing.pangu.model.RemainIp;
 import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.model.Task;
 import org.turing.pangu.model.VpnGroup;
-import org.turing.pangu.service.AppService;
-import org.turing.pangu.service.DeviceService;
-import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.service.RemainIpService;
 import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.VpnGroupService;
@@ -41,6 +39,7 @@ import org.turing.pangu.utils.RandomUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 /*存量任务管理器*/
 public class TaskStaticIpEngine implements TaskIF {
@@ -50,11 +49,13 @@ public class TaskStaticIpEngine implements TaskIF {
 	private List<StaticVpnTask> mStockIpList = new ArrayList<StaticVpnTask>(); // 固定IP中用来做增量的IP,来源由存量库
 	private List<StaticVpn> mCurrentRunVpnList = new ArrayList<StaticVpn>(); // 当前在跑的VPN
 	private List<BusinessVpnGroup> mBusVpnGroup = new ArrayList<BusinessVpnGroup>();
-	public static final int IP_INIT = 0;// 0:初始 1:已下发 2:已连接 3:已完成
+	
+	public static final int IP_INIT = 0;// 0:初始 1:已下发 2:已连接 3:已完成 4:超时
 	public static final int IP_SEND = 1;// 0:初始 1:已下发 2:已连接 3:已完成
 	public static final int IP_CONNECTED = 2;// 0:初始 1:已下发 2:已连接 3:已完成
 	public static final int IP_FINISHED = 3;// 0:初始 1:已下发 2:已连接 3:已完成
-
+	public static final int IP_TIMEOUT = 4;// 0:初始 1:已下发 2:已连接 3:已完成
+	
 	public static final int IS_RUN_INCREMENT = 0;// 0:跑增量 1:跑存量
 	public static final int IS_RUN_STOCK = 1;
 	private RemainVpnService remainVpnService;
@@ -126,9 +127,12 @@ public class TaskStaticIpEngine implements TaskIF {
 		return null;
 	}
 	private RemainIp getRandomRemainIp(){
-		int random = (int)Math.random()*mBusVpnGroup.size();
-		int randomVpn = (int)Math.random()*mBusVpnGroup.get(random).getStaticVpnList().size();
-		int randomIp = (int)Math.random()*mBusVpnGroup.get(random).getStaticVpnList().get(randomVpn).getIpList().size();
+		int size = mBusVpnGroup.size();
+		int random = (int)(Math.random()* size);
+		size = mBusVpnGroup.get(random).getStaticVpnList().size();
+		int randomVpn = (int)(Math.random()*size);
+		size = mBusVpnGroup.get(random).getStaticVpnList().get(randomVpn).getIpList().size();
+		int randomIp = (int)(Math.random()* size);
 		return mBusVpnGroup.get(random).getStaticVpnList().get(randomVpn).getIpList().get(randomIp);
 	}
 	private void initRunVpn() {
@@ -174,7 +178,7 @@ public class TaskStaticIpEngine implements TaskIF {
 	}
 
 	@Override
-	public PhoneTask getTask(String deviceId, String remoteIp, String realIp) {
+	public synchronized PhoneTask getTask(String deviceId, String remoteIp, String realIp) {
 		PhoneTask pTask = null;
 		for (StaticVpn vpn : mCurrentRunVpnList) {
 			if (vpn.getConnectInfo().getIp().equals(remoteIp)) {
@@ -283,15 +287,13 @@ public class TaskStaticIpEngine implements TaskIF {
 				vpn.getVpnTask().setStatu(IP_CONNECTED);
 				vpn.getVpnTask().setDeviceId(req.getDeviceId());
 				vpn.getVpnTask().setCreateTime(new Date());
-				// 同步到任务...
 				return vpn.getVpnTask().getToken(); // 返回token
 			}
 		}
 		return null;
 	}
-
 	@Override
-	public VpnOperUpdateRsp vpnIsNeedSwitch(String token, String remoteIp,
+	public synchronized VpnOperUpdateRsp vpnIsNeedSwitch(String token, String remoteIp,
 			String realIp) {
 		// TODO Auto-generated method stub
 		VpnOperUpdateRsp dataRsp = new VpnOperUpdateRsp();
@@ -320,20 +322,44 @@ public class TaskStaticIpEngine implements TaskIF {
 		}
 		// 需要切换VPN了
 		if (dataRsp.getIsSwitchVpn() == 1) {
-			for (StaticVpn vpn : mCurrentRunVpnList) {
+			for (int i = mCurrentRunVpnList.size()-1; i >=0; i--){
+				StaticVpn vpn = mCurrentRunVpnList.get(i);
 				if (vpn.getConnectInfo().getIp().equals(remoteIp)) {
 					vpn.getConnectInfo().setUsed(false);
 					vpn.getVpnTask().setStatu(IP_FINISHED);
 					// 同步到任务
+					vpn.getVpnTask().getIpInfo().setSuccessCount(vpn.getVpnTask().getIpInfo().getSuccessCount()+1);
+					updateRemainIpInfo(vpn.getVpnTask());
+					mCurrentRunVpnList.remove(vpn);//删除这个已结束的VPN
 					break;
 				}
 			}
-			dataRsp.setConnectInfo(getConnectVpnInfo());
+			dataRsp.setConnectInfo(getConnectVpnInfo()); // 换一个新的VPN
 		}
 		logger.info("vpnIsNeedSwitch---true---end");
 		return dataRsp;
 	}
-
+	private synchronized void updateRemainIpInfo(StaticVpnTask vpnTask){
+		//------------登陆成功后更新IP信息至DB
+		vpnTask.getIpInfo().setUpdateDate(new Date());
+		remainIpService.update(vpnTask.getIpInfo());
+		//-------------
+		if(vpnTask.getRunType() == IS_RUN_INCREMENT){
+			for(int index = 0;index < mIncrementIpList.size();index++){
+				StaticVpnTask tmp =  mIncrementIpList.get(index);
+				if(tmp.getToken().equals(vpnTask.getToken())){
+					mIncrementIpList.set(index, vpnTask);
+				}
+			}
+		}else{
+			for(int index = 0;index < mStockIpList.size();index++){
+				StaticVpnTask tmp =  mStockIpList.get(index);
+				if(tmp.getToken().equals(vpnTask.getToken())){
+					mStockIpList.set(index, vpnTask);
+				}
+			}
+		}
+	}
 	@Override
 	public boolean switchVpnFinish(String token, String remoteIp, String realIp) {
 		// TODO Auto-generated method stub
@@ -341,7 +367,7 @@ public class TaskStaticIpEngine implements TaskIF {
 	}
 
 	@Override
-	public void taskFinish(TaskFinishReq req, String remoteIp, String realIp) {
+	public synchronized void taskFinish(TaskFinishReq req, String remoteIp, String realIp) {
 		// TODO Auto-generated method stub
 		logger.info("taskFinish---000");
 		logger.info("taskFinish---taskId:"+req.getTaskId()+"--remoteIp:"+remoteIp+"--realIp:"+realIp);
@@ -368,7 +394,7 @@ public class TaskStaticIpEngine implements TaskIF {
 	}
 
 	/* 获得一个连接VPN信息 */
-	public VpnConnectInfoRsp getConnectVpnInfo() {
+	public synchronized VpnConnectInfoRsp getConnectVpnInfo() {
 		StaticVpnTask task = null;
 		int random = (int) (Math.random() * 10) + 1;
 		int flag = 0;
@@ -416,10 +442,13 @@ public class TaskStaticIpEngine implements TaskIF {
 	}
 
 	/* 获取一个可以使用的VPN */
-	private StaticVpnTask getCanUsedVpn(List<StaticVpnTask> list) {
+	private synchronized StaticVpnTask getCanUsedVpn(List<StaticVpnTask> list) {
 		for (StaticVpnTask process : list) {
 			if (process.getStatu() == IP_INIT) { // 发现还没下发的IP
 				process.setStatu(IP_SEND);
+				process.setCreateTime(new Date());
+				process.setSendCount(process.getSendCount() + 1);
+				process.getIpInfo().setAllocCount(process.getIpInfo().getAllocCount()+1);
 				return process;
 			}
 		}
@@ -542,5 +571,23 @@ public class TaskStaticIpEngine implements TaskIF {
 
 	private void setDataUpdateListen(DateUpdateListen listen) {
 		mListen = listen;
+	}
+	@Override
+	public void CheckVpnTimeoutJob() {
+		// TODO Auto-generated method stub
+		for (int i = mCurrentRunVpnList.size()-1; i >=0; i--){
+			StaticVpn vpn = mCurrentRunVpnList.get(i);
+			if(vpn.getVpnTask().getStatu() == IP_CONNECTED && true == TaskEngine.isTimeOut(vpn.getVpnTask())){
+				vpn.getVpnTask().setStatu(IP_TIMEOUT);
+				vpn.getVpnTask().getIpInfo().setSuccessCount(vpn.getVpnTask().getIpInfo().getSuccessCount()+1);
+				updateRemainIpInfo(vpn.getVpnTask());
+				mCurrentRunVpnList.remove(vpn);//删除这个已结束的VPN
+			}else{
+				if(true == TaskEngine.isFreeTimeOut(vpn.getVpnTask())){
+					updateRemainIpInfo(vpn.getVpnTask());
+					mCurrentRunVpnList.remove(vpn);//删除这个已结束的VPN
+				}
+			}
+		}
 	}
 }

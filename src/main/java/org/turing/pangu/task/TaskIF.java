@@ -15,4 +15,5 @@ public interface TaskIF{
 	public void taskFinish(TaskFinishReq req,String remoteIp,String realIp);
 	public void init(DateUpdateListen listen);
 	public boolean isHavaTaskByOperType(int type,Task dbTask);
+	public void CheckVpnTimeoutJob();
 }

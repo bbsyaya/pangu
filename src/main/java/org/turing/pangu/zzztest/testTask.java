@@ -3,6 +3,7 @@ package org.turing.pangu.zzztest;
 import java.util.Date;
 
 import org.junit.Test;
+import org.turing.pangu.controller.pc.request.VpnConnectInfoReq;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.phone.request.GetTaskReq;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
@@ -73,6 +74,11 @@ import com.alibaba.fastjson.TypeReference;
 public class testTask {
 	@Test
 	public void test(){
+		//for(int i = 0;i<1000;i++)
+		{
+			getConnectInfo();
+		}
+		/*
 		TaskExtend task = new TaskExtend();
 		task.setAllotIncrementMoney(100);
 		task.setAllotIncrementWaterAmy(19989);
@@ -80,7 +86,7 @@ public class testTask {
 		Task ts = new Task();
 		ts = task;
 		ts.setAllotIncrementMoney(1222);
-		/*
+		
 		try {
 			Calendar cal=Calendar.getInstance(TimeZone.getTimeZone( "GMT+8")); 
 			int hour =cal.get(Calendar.HOUR_OF_DAY);
@@ -136,6 +142,13 @@ public class testTask {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
+	}
+	public void getConnectInfo(){
+		String loginUrl = "http://localhost:8080/pc/getConnectInfo.pangu";
+		VpnConnectInfoReq req = new VpnConnectInfoReq();
+		String json = JSON.toJSONString(req);
+		String contentStr = HttpUtils.doPost(loginUrl, json, HttpUtils.UTF8);
+		System.out.print("\n"+contentStr);
 	}
 	public void loginPangu(){
 		String loginUrl = "http://localhost:8080/pc/vpnLogin.pangu";

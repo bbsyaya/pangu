@@ -33,7 +33,7 @@ public class VpnConnectInfoRsp extends BaseRsp{
 	}
 
 	private String ip = "";
-	private List<VpnConnectInfo> vpnList = new ArrayList<VpnConnectInfo>();
+	private List<VpnConnectInfo> vpnList = new ArrayList<VpnConnectInfo>();// vpn 的连接信息
 	private Long groupId;
 	private boolean isUsed = false;
 }

@@ -11,6 +11,7 @@ import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.model.Task;
 import org.turing.pangu.task.DateUpdateListen;
+import org.turing.pangu.task.StaticVpn;
 import org.turing.pangu.task.TaskExtend;
 import org.turing.pangu.task.TaskIF;
 import org.turing.pangu.task.TaskListSort;
@@ -245,5 +246,14 @@ public class TaskDynamicIpEngine implements TaskIF{
 	private void clear(){
 		if(null != vpnTaskList)
 			vpnTaskList.clear();
+	}
+	@Override
+	public void CheckVpnTimeoutJob() {		
+		for (int i = vpnTaskList.size()-1; i >=0; i--){
+			VpnTask vpn = vpnTaskList.get(i);
+			if(true == TaskEngine.isTimeOut(vpn)){
+				vpnTaskList.remove(vpn);//删除这个已结束的VPN
+			}
+		}
 	}
 }

@@ -203,39 +203,53 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
        <property name="triggers">  
            <list>  
-              <ref bean="remainTrigger"/>  
-              <ref bean="updateRemainTrigger"/> 
+              <ref bean="createTaskJobTrigger"/>  
+              <ref bean="updateTaskToDBJobTrigger"/> 
+              <ref bean="checkVpnTimeoutJobTrigger"/> 
            </list>  
        </property>  
        <property name="autoStartup" value="true"/>  
 	</bean>  
 	
-	<bean id="remainTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
-       <property name="jobDetail" ref="remainJobDetail"/>  
+	<bean id="createTaskJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="createTaskJobDetail"/>  
        <!-- 每天24点执行一次 -->
        <property name="cronExpression" value="0 0 0 * * ?"/>   
 	</bean> 
-	<bean id="updateRemainTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
-       <property name="jobDetail" ref="updateRemainJobDetail"/>  
-       <!-- 每15分钟执行一次 -->
-       <property name="cronExpression" value="0 */15 * * * ?"/>  
-	</bean> 
-	 
-	<bean id="remainJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
-        <property name="targetObject" ref="remainJob"/>  
+	<bean id="createTaskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+        <property name="targetObject" ref="createTaskJob"/>  
         <property name="targetMethod" value="execute"/>  
         <property name="concurrent" value="false"/>
         <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
 	</bean>
-	<bean id="updateRemainJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
-        <property name="targetObject" ref="updateRemainJob"/>  
+	
+	<bean id="updateTaskToDBJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="updateTaskToDBJobDetail"/>  
+       <!-- 每15分钟执行一次 -->
+       <property name="cronExpression" value="0 */15 * * * ?"/>  
+	</bean> 
+	<bean id="updateTaskToDBJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+        <property name="targetObject" ref="updateTaskToDBJob"/>  
         <property name="targetMethod" value="execute"/>  
         <property name="concurrent" value="false"/>
         <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
 	</bean>  
 	
-	<bean id="remainJob" class="org.turing.pangu.quartz.CreateTaskJob"/> 
-	<bean id="updateRemainJob" class="org.turing.pangu.quartz.UpdateTaskToDBJob"/> 
+	<bean id="checkVpnTimeoutJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="checkVpnTimeoutJobDetail"/>  
+       <!-- 每3分钟执行一次,检查超时的任务 -->
+       <property name="cronExpression" value="0 */3 * * * ?"/>  
+	</bean> 
+	<bean id="checkVpnTimeoutJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+        <property name="targetObject" ref="checkVpnTimeoutJob"/>  
+        <property name="targetMethod" value="execute"/>  
+        <property name="concurrent" value="false"/>
+        <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
+	</bean>  
+	
+	<bean id="createTaskJob" class="org.turing.pangu.quartz.CreateTaskJob"/> 
+	<bean id="updateTaskToDBJob" class="org.turing.pangu.quartz.UpdateTaskToDBJob"/> 
+	<bean id="checkVpnTimeoutJob" class="org.turing.pangu.quartz.CheckVpnTimeoutJob"/> 
 	 
 	<!-- 生成留存文件定时器 end -->
 	<!-- 上传文件 -->

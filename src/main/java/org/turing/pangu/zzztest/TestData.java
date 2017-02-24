@@ -162,6 +162,8 @@ public class TestData {
 		TaskEngine.getInstance().setService(vpnGroupService, remainVpnService,
 				remainIpService, platformService, appService, deviceService,
 				taskService);
+		
+		/*
 		List<Device> list = deviceService.selectAll();
 		List<RemainVpn> vpnList = remainVpnService.selectAll();
 
@@ -179,7 +181,7 @@ public class TestData {
 			}
 			remainIpService.update(remainIp);
 		}
-		/*
+		
 		 * //---------------------------------------- for(Device dev :list){
 		 * dev.setIsWhiteIp(1); dev.setIsRemain(0); dev.setIsActived(0);
 		 * dev.setIsActived(1); for(RemainVpn vpn : vpnList){ String[] ipList =
@@ -191,7 +193,7 @@ public class TestData {
 		 * dev.setCreateDate(yesterdayMorning);
 		 * dev.setUpdateDate(yesterdayNight); deviceService.update(dev); }
 		 */
-		// TaskEngine.getInstance().init();
+		 TaskEngine.getInstance().init();
 	}
 
 	public void remain() {

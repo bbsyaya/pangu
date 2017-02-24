@@ -195,6 +195,11 @@ public class TaskEngine implements DateUpdateListen{
 	public boolean updateTaskConfigure(){
 		return true;
 	}
+	//检查VPN连接超时的job
+	public void CheckVpnTimeoutJob(){
+		TaskDynamicIpEngine.getInstance().CheckVpnTimeoutJob();
+		TaskStaticIpEngine.getInstance().CheckVpnTimeoutJob();
+	}
 	// 更新缓存任务信息至数据库
 	public void UpdateTaskToDBJob(){
 		for(Task task:todayTaskList){
@@ -351,6 +356,9 @@ public class TaskEngine implements DateUpdateListen{
 			}
 			count++;
 		}
+	}
+	public static boolean isFreeTimeOut(VpnTask task){
+		return (new Date().getTime() - task.getCreateTime().getTime() > TimeZoneMng.FREE_TIMEOUT)?true:false;
 	}
 	public static boolean isTimeOut(VpnTask task){
 		Date nowTime = new Date();

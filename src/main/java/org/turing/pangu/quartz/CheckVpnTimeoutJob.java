@@ -5,11 +5,11 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.turing.pangu.engine.TaskEngine;
 
-public class UpdateTaskToDBJob {
-	private static final Logger logger = Logger.getLogger(UpdateTaskToDBJob.class);
+public class CheckVpnTimeoutJob {
+	private static final Logger logger = Logger.getLogger(CheckVpnTimeoutJob.class);
 	public void execute(){  
         try{ 
-        	logger.info("execute - UpdateTaskToDBJob -- " + new Date());
+        	logger.info("execute - CheckVpnTimeoutJob -- " + new Date());
         	TaskEngine.getInstance().UpdateTaskToDBJob();
          }catch(Exception ex){  
              ex.printStackTrace();  
