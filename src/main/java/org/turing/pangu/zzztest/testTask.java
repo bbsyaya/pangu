@@ -1,8 +1,11 @@
 package org.turing.pangu.zzztest;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
+import org.turing.pangu.bean.VpnConnectInfo;
 import org.turing.pangu.controller.pc.request.VpnConnectInfoReq;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.phone.request.GetTaskReq;
@@ -76,7 +79,68 @@ public class testTask {
 	public void test(){
 		//for(int i = 0;i<1000;i++)
 		{
-			getConnectInfo();
+			//getConnectInfo();
+		}
+		List<VpnConnectInfo> lista = new ArrayList<VpnConnectInfo>();
+
+		VpnConnectInfo a = new VpnConnectInfo();
+		VpnConnectInfo b = new VpnConnectInfo();
+		VpnConnectInfo c = new VpnConnectInfo();
+		VpnConnectInfo d = new VpnConnectInfo();
+		
+		a.setVpnName("Turing");
+		a.setTunnelType("Automatic");
+		a.setIp("139.196.39.239");
+		a.setAuthenticationMethod("{Chap, MsChapv2}");
+		a.setEncryptionLevel("Optional");
+		a.setUserName("radiusyun04\\airobot");
+		a.setPassword("qwerfdsa");
+		lista.add(a);
+		
+		b.setVpnName("Turing");
+		b.setTunnelType("Automatic");
+		b.setIp("139.196.39.239");
+		b.setAuthenticationMethod("{Chap, MsChapv2}");
+		b.setEncryptionLevel("Optional");
+		b.setUserName("airobot");
+		b.setPassword("qwerfdsa");
+		lista.add(b);
+
+		c.setVpnName("Turing");
+		c.setTunnelType("Automatic");
+		c.setIp("139.196.39.239");
+		c.setAuthenticationMethod("{Chap, MsChapv2}");
+		c.setEncryptionLevel("Optional");
+		c.setUserName("chuanqi520");
+		c.setPassword("27933460ac9a");
+		lista.add(c);
+
+		d.setVpnName("Turing");
+		d.setTunnelType("Automatic");
+		d.setIp("139.196.39.239");
+		d.setAuthenticationMethod("{Chap, MsChapv2}");
+		d.setEncryptionLevel("Optional");
+		d.setUserName("moshouzx");
+		d.setPassword("b7d6a5358a6b");
+		lista.add(d);
+		
+		for(VpnConnectInfo tmp:lista){
+			// 判断是否连接成功
+			String result = "";
+			try {
+				VpnUtil.getInstance().editVpn(tmp);
+				result = VpnUtil.getInstance().connectVpn(tmp);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (result.indexOf("已连接") > 0) {
+				result = VpnUtil.getInstance().getAllUserConnection();
+				System.out.print(result);
+				break;
+			} else {
+				System.out.print("失败");
+			}
 		}
 		/*
 		TaskExtend task = new TaskExtend();

@@ -120,39 +120,60 @@ public class TestData {
 	
 	private String getStr(int index,String ip){
 		List<VpnConnectInfo> lista = new ArrayList<VpnConnectInfo>();
+
 		if( index == 1){
 			VpnConnectInfo a = new VpnConnectInfo();
+			VpnConnectInfo b = new VpnConnectInfo();
+			VpnConnectInfo c = new VpnConnectInfo();
+			VpnConnectInfo d = new VpnConnectInfo();
+			
+			a.setVpnName("Turing");
+			a.setTunnelType("Automatic");
 			a.setIp(ip);
+			a.setAuthenticationMethod("{Chap, MsChapv2}");
+			a.setEncryptionLevel("Optional");
 			a.setUserName("radiusyun04\\airobot");
 			a.setPassword("qwerfdsa");
-			a.setConnectType("Pptp");
-			VpnConnectInfo b = new VpnConnectInfo();
+			lista.add(a);
+			
+			b.setVpnName("Turing");
+			b.setTunnelType("Automatic");
 			b.setIp(ip);
+			b.setAuthenticationMethod("{Chap, MsChapv2}");
+			b.setEncryptionLevel("Optional");
 			b.setUserName("airobot");
 			b.setPassword("qwerfdsa");
-			b.setConnectType("Pptp");
-			VpnConnectInfo c = new VpnConnectInfo();
+			lista.add(b);
+	
+			c.setVpnName("Turing");
+			c.setTunnelType("Automatic");
 			c.setIp(ip);
+			c.setAuthenticationMethod("{Chap, MsChapv2}");
+			c.setEncryptionLevel("Optional");
 			c.setUserName("chuanqi520");
 			c.setPassword("27933460ac9a");
-			c.setConnectType("Pptp");
-			VpnConnectInfo d = new VpnConnectInfo();
+			lista.add(c);
+	
+			d.setVpnName("Turing");
+			d.setTunnelType("Automatic");
 			d.setIp(ip);
+			d.setAuthenticationMethod("{Chap, MsChapv2}");
+			d.setEncryptionLevel("Optional");
 			d.setUserName("moshouzx");
 			d.setPassword("b7d6a5358a6b");
-			d.setConnectType("Pptp");
-			lista.add(a);
-			lista.add(b);
-			lista.add(c);
 			lista.add(d);
 		}else{
-			VpnConnectInfo cdd = new VpnConnectInfo();
-			cdd.setIp(ip);
-			cdd.setUserName("airobot");
-			cdd.setPassword("qwerfdsa");
-			cdd.setConnectType("L2tp");
-			lista.add(cdd);
+			VpnConnectInfo a = new VpnConnectInfo();
+			a.setVpnName("Turing");
+			a.setTunnelType("Automatic");
+			a.setIp(ip);
+			a.setAuthenticationMethod("{Chap, MsChapv2, Pap}");
+			a.setEncryptionLevel("L2tp");
+			a.setUserName("airobot");
+			a.setPassword("qwerfdsa");
+			lista.add(a);
 		}
+		
 		String json = JSON.toJSONString(lista);
 		// L2tp Pptp	
 		return json;
@@ -163,7 +184,7 @@ public class TestData {
 				remainIpService, platformService, appService, deviceService,
 				taskService);
 		
-		/*
+
 		List<Device> list = deviceService.selectAll();
 		List<RemainVpn> vpnList = remainVpnService.selectAll();
 
@@ -181,19 +202,7 @@ public class TestData {
 			}
 			remainIpService.update(remainIp);
 		}
-		
-		 * //---------------------------------------- for(Device dev :list){
-		 * dev.setIsWhiteIp(1); dev.setIsRemain(0); dev.setIsActived(0);
-		 * dev.setIsActived(1); for(RemainVpn vpn : vpnList){ String[] ipList =
-		 * vpn.getIpList().split("\\|"); int index =
-		 * (int)(Math.random()*ipList.length); ip = ipList[index];
-		 * dev.setIp(ip); break; } dev.setIsActived(1); dev.setIsRemain(1); Date
-		 * yesterdayMorning = DateUtils.getYesterdayMorning(); Date
-		 * yesterdayNight = DateUtils.getYesterdayNight();
-		 * dev.setCreateDate(yesterdayMorning);
-		 * dev.setUpdateDate(yesterdayNight); deviceService.update(dev); }
-		 */
-		 TaskEngine.getInstance().init();
+		//TaskEngine.getInstance().init();
 	}
 
 	public void remain() {
