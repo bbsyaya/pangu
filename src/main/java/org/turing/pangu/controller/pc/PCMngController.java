@@ -225,7 +225,9 @@ public class PCMngController extends BaseController {
 	public @ResponseBody PGResponse<List<DynamicVpn>> getDynamicVpnList(@RequestBody GetDynamicVpnListReq req) {
 		logger.info("getDynamicVpnList---" + new Date());
 		PGResponse<List<DynamicVpn>> rsp = new PGResponse<List<DynamicVpn>>();
-		List<DynamicVpn> list = dynamicVpnService.selectAll();
+		DynamicVpn vpn = new DynamicVpn();
+		vpn.setIsValid(1);
+		List<DynamicVpn> list = dynamicVpnService.selectList(vpn);
 		rsp.setAllData(Const.common_ok, "common_ok", list);
 		logger.info("getDynamicVpnList---" + JSON.toJSONString(rsp).toString());
 		return rsp;

@@ -3,39 +3,47 @@
 <mapper namespace="org.turing.pangu.mapper.DynamicVpnMapper" >
   <resultMap id="BaseResultMap" type="org.turing.pangu.model.DynamicVpn" >
     <id column="id" property="id" jdbcType="BIGINT" />       
+    <result column="group_id" property="groupId" jdbcType="BIGINT" />          
+    <result column="is_valid" property="isValid" jdbcType="INTEGER" />          
     <result column="name" property="name" jdbcType="VARCHAR" />          
     <result column="domain" property="domain" jdbcType="VARCHAR" />          
     <result column="user" property="user" jdbcType="VARCHAR" />          
     <result column="password" property="password" jdbcType="VARCHAR" />          
-    <result column="ip_list" property="ipList" jdbcType="VARCHAR" />          
+    <result column="configure" property="configure" jdbcType="VARCHAR" />          
     <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
   </resultMap>   
   <sql id="Base_Column_List" >
     d.id,
+	d.group_id,
+	d.is_valid,
 	d.name,
 	d.domain,
 	d.user,
 	d.password,
-	d.ip_list,
+	d.configure,
 	d.create_date,
 	d.update_date
   </sql>
   <sql id="Base_Column_Value_List" >
-    #{name},
+    #{groupId},
+	#{isValid},
+	#{name},
 	#{domain},
 	#{user},
 	#{password},
-	#{ipList},
+	#{configure},
 	#{createDate},
 	#{updateDate}
   </sql>
   <sql id="Base_Column_Update_List" >
-    name=#{name},
+    group_id=#{groupId},
+	is_valid=#{isValid},
+	name=#{name},
 	domain=#{domain},
 	user=#{user},
 	password=#{password},
-	ip_list=#{ipList},
+	configure=#{configure},
 	create_date=#{createDate},
 	update_date=#{updateDate}
   </sql> 
@@ -55,25 +63,28 @@
     <include refid="Base_Column_List" />
     from dynamic_vpn d
     where 1=1 
+    <if test="groupId != null" >and d.group_id= #{groupId,jdbcType=BIGINT}</if>
+    <if test="isValid != null" >and d.is_valid= #{isValid,jdbcType=INTEGER}</if>
     <if test="name != null" >and d.name= #{name,jdbcType=VARCHAR}</if>
     <if test="domain != null" >and d.domain= #{domain,jdbcType=VARCHAR}</if>
     <if test="user != null" >and d.user= #{user,jdbcType=VARCHAR}</if>
     <if test="password != null" >and d.password= #{password,jdbcType=VARCHAR}</if>
-    <if test="ipList != null" >and d.ip_list= #{ipList,jdbcType=VARCHAR}</if>
+    <if test="configure != null" >and d.configure= #{configure,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and d.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and d.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
-    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
   </select>
   <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.DynamicVpn" >
     select 
     <include refid="Base_Column_List" />
     from dynamic_vpn d
     where 1=1 
+    <if test="groupId != null" >and d.group_id= #{groupId,jdbcType=BIGINT}</if>
+    <if test="isValid != null" >and d.is_valid= #{isValid,jdbcType=INTEGER}</if>
     <if test="name != null" >and d.name= #{name,jdbcType=VARCHAR}</if>
     <if test="domain != null" >and d.domain= #{domain,jdbcType=VARCHAR}</if>
     <if test="user != null" >and d.user= #{user,jdbcType=VARCHAR}</if>
     <if test="password != null" >and d.password= #{password,jdbcType=VARCHAR}</if>
-    <if test="ipList != null" >and d.ip_list= #{ipList,jdbcType=VARCHAR}</if>
+    <if test="configure != null" >and d.configure= #{configure,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and d.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and d.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
@@ -82,11 +93,13 @@
     <include refid="Base_Column_List" />
     from dynamic_vpn d
     where 1=1 
+    <if test="model.groupId != null" >and d.group_id= #{model.groupId,jdbcType=BIGINT}</if>
+    <if test="model.isValid != null" >and d.is_valid= #{model.isValid,jdbcType=INTEGER}</if>
     <if test="model.name != null" >and d.name= #{model.name,jdbcType=VARCHAR}</if>
     <if test="model.domain != null" >and d.domain= #{model.domain,jdbcType=VARCHAR}</if>
     <if test="model.user != null" >and d.user= #{model.user,jdbcType=VARCHAR}</if>
     <if test="model.password != null" >and d.password= #{model.password,jdbcType=VARCHAR}</if>
-    <if test="model.ipList != null" >and d.ip_list= #{model.ipList,jdbcType=VARCHAR}</if>
+    <if test="model.configure != null" >and d.configure= #{model.configure,jdbcType=VARCHAR}</if>
     <if test="model.createDate != null" >and d.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
     <if test="model.updateDate != null" >and d.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
     <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
@@ -95,11 +108,13 @@
     select count(0) totalCount
     from dynamic_vpn d
     where 1=1 
+    <if test="groupId != null" >and d.group_id= #{groupId,jdbcType=BIGINT}</if>
+    <if test="isValid != null" >and d.is_valid= #{isValid,jdbcType=INTEGER}</if>
     <if test="name != null" >and d.name= #{name,jdbcType=VARCHAR}</if>
     <if test="domain != null" >and d.domain= #{domain,jdbcType=VARCHAR}</if>
     <if test="user != null" >and d.user= #{user,jdbcType=VARCHAR}</if>
     <if test="password != null" >and d.password= #{password,jdbcType=VARCHAR}</if>
-    <if test="ipList != null" >and d.ip_list= #{ipList,jdbcType=VARCHAR}</if>
+    <if test="configure != null" >and d.configure= #{configure,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and d.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and d.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
@@ -110,20 +125,24 @@
   <insert id="insert" parameterType="org.turing.pangu.model.DynamicVpn" >
     insert into dynamic_vpn 
     <trim prefix="(" suffix=")" suffixOverrides="," >
+        group_id,    
+        is_valid,    
         name,    
         domain,    
         user,    
         password,    
-        ip_list,    
+        configure,    
         create_date,    
         update_date,    
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{groupId,jdbcType=BIGINT},  
+        #{isValid,jdbcType=INTEGER},  
         #{name,jdbcType=VARCHAR},  
         #{domain,jdbcType=VARCHAR},  
         #{user,jdbcType=VARCHAR},  
         #{password,jdbcType=VARCHAR},  
-        #{ipList,jdbcType=VARCHAR},  
+        #{configure,jdbcType=VARCHAR},  
         #{createDate,jdbcType=TIMESTAMP},  
         #{updateDate,jdbcType=TIMESTAMP},  
     </trim>
@@ -131,20 +150,24 @@
   <insert id="insertDynamicVpnByTrim" parameterType="org.turing.pangu.model.DynamicVpn" >
     insert into dynamic_vpn 
     <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="groupId != null" >group_id,</if>
+        <if test="isValid != null" >is_valid,</if>
         <if test="name != null" >name,</if>
         <if test="domain != null" >domain,</if>
         <if test="user != null" >user,</if>
         <if test="password != null" >password,</if>
-        <if test="ipList != null" >ip_list,</if>
+        <if test="configure != null" >configure,</if>
         <if test="createDate != null" >create_date,</if>
         <if test="updateDate != null" >update_date,</if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="groupId != null" >#{groupId,jdbcType=BIGINT},</if>  
+        <if test="isValid != null" >#{isValid,jdbcType=INTEGER},</if>  
         <if test="name != null" >#{name,jdbcType=VARCHAR},</if>  
         <if test="domain != null" >#{domain,jdbcType=VARCHAR},</if>  
         <if test="user != null" >#{user,jdbcType=VARCHAR},</if>  
         <if test="password != null" >#{password,jdbcType=VARCHAR},</if>  
-        <if test="ipList != null" >#{ipList,jdbcType=VARCHAR},</if>  
+        <if test="configure != null" >#{configure,jdbcType=VARCHAR},</if>  
         <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
         <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
     </trim>
@@ -152,11 +175,13 @@
   <update id="updateDynamicVpnById" parameterType="org.turing.pangu.model.DynamicVpn" >
     update dynamic_vpn set 
     <trim prefix="" suffix="" suffixOverrides="," >
+        group_id=#{groupId,jdbcType=BIGINT},    
+        is_valid=#{isValid,jdbcType=INTEGER},    
         name=#{name,jdbcType=VARCHAR},    
         domain=#{domain,jdbcType=VARCHAR},    
         user=#{user,jdbcType=VARCHAR},    
         password=#{password,jdbcType=VARCHAR},    
-        ip_list=#{ipList,jdbcType=VARCHAR},    
+        configure=#{configure,jdbcType=VARCHAR},    
         create_date=#{createDate,jdbcType=TIMESTAMP},    
         update_date=#{updateDate,jdbcType=TIMESTAMP},    
     </trim>
@@ -165,11 +190,13 @@
   <update id="update" parameterType="org.turing.pangu.model.DynamicVpn" >
     update dynamic_vpn set 
     <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="groupId != null" >group_id=#{groupId,jdbcType=BIGINT},</if>
+        <if test="isValid != null" >is_valid=#{isValid,jdbcType=INTEGER},</if>
         <if test="name != null" >name=#{name,jdbcType=VARCHAR},</if>
         <if test="domain != null" >domain=#{domain,jdbcType=VARCHAR},</if>
         <if test="user != null" >user=#{user,jdbcType=VARCHAR},</if>
         <if test="password != null" >password=#{password,jdbcType=VARCHAR},</if>
-        <if test="ipList != null" >ip_list=#{ipList,jdbcType=VARCHAR},</if>
+        <if test="configure != null" >configure=#{configure,jdbcType=VARCHAR},</if>
         <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
         <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
     </trim>

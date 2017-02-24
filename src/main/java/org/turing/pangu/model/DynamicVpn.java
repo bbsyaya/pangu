@@ -4,24 +4,31 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年01月18日 
- * @since 2017年01月18日 
+ * @version 1.0, 2017年02月24日 
+ * @since 2017年02月24日 
  */
 
 package org.turing.pangu.model;
 
 import java.util.Date;
-
-import org.hibernate.validator.constraints.Length;
-
+import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
  /**DynamicVpn*/
  public class DynamicVpn extends BaseModel<DynamicVpn>
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 8046511484738694423L;
+  private static final long serialVersionUID = 1935281487944956902L;
+
+  /***/
+  private Long groupId;
+
+  /***/
+  private Integer isValid;
 
   /***/
   private String name;
@@ -36,7 +43,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   private String password;
 
   /***/
-  private String ipList;
+  private String configure;
 
   /***/
   private Date createDate;
@@ -44,6 +51,34 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   /***/
   private Date updateDate;
 
+
+  
+  /**获取*/
+  @JsonProperty
+  public Long getGroupId()
+  {
+   return this.groupId;
+  }
+
+  /**设置*/
+  public void setGroupId(Long groupId)
+  {
+    this.groupId=groupId;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  public Integer getIsValid()
+  {
+   return this.isValid;
+  }
+
+  /**设置*/
+  public void setIsValid(Integer isValid)
+  {
+    this.isValid=isValid;
+  }
 
   
   /**获取*/
@@ -108,16 +143,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
-  @Length(max =715827882 )
-  public String getIpList()
+  @Length(max =255 )
+  public String getConfigure()
   {
-   return this.ipList;
+   return this.configure;
   }
 
   /**设置*/
-  public void setIpList(String ipList)
+  public void setConfigure(String configure)
   {
-    this.ipList=ipList;
+    this.configure=configure;
   }
 
   
