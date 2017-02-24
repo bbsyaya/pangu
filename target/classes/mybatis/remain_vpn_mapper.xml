@@ -3,35 +3,47 @@
 <mapper namespace="org.turing.pangu.mapper.RemainVpnMapper" >
   <resultMap id="BaseResultMap" type="org.turing.pangu.model.RemainVpn" >
     <id column="id" property="id" jdbcType="BIGINT" />       
+    <result column="group_id" property="groupId" jdbcType="BIGINT" />          
     <result column="ip_list" property="ipList" jdbcType="VARCHAR" />          
     <result column="name" property="name" jdbcType="VARCHAR" />          
     <result column="password" property="password" jdbcType="VARCHAR" />          
     <result column="user" property="user" jdbcType="VARCHAR" />          
+    <result column="configure" property="configure" jdbcType="VARCHAR" />          
+    <result column="is_valid" property="isValid" jdbcType="INTEGER" />          
     <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
   </resultMap>   
   <sql id="Base_Column_List" >
     r.id,
+	r.group_id,
 	r.ip_list,
 	r.name,
 	r.password,
 	r.user,
+	r.configure,
+	r.is_valid,
 	r.create_date,
 	r.update_date
   </sql>
   <sql id="Base_Column_Value_List" >
-    #{ipList},
+    #{groupId},
+	#{ipList},
 	#{name},
 	#{password},
 	#{user},
+	#{configure},
+	#{isValid},
 	#{createDate},
 	#{updateDate}
   </sql>
   <sql id="Base_Column_Update_List" >
-    ip_list=#{ipList},
+    group_id=#{groupId},
+	ip_list=#{ipList},
 	name=#{name},
 	password=#{password},
 	user=#{user},
+	configure=#{configure},
+	is_valid=#{isValid},
 	create_date=#{createDate},
 	update_date=#{updateDate}
   </sql> 
@@ -51,23 +63,28 @@
     <include refid="Base_Column_List" />
     from remain_vpn r
     where 1=1 
+    <if test="groupId != null" >and r.group_id= #{groupId,jdbcType=BIGINT}</if>
     <if test="ipList != null" >and r.ip_list= #{ipList,jdbcType=VARCHAR}</if>
     <if test="name != null" >and r.name= #{name,jdbcType=VARCHAR}</if>
     <if test="password != null" >and r.password= #{password,jdbcType=VARCHAR}</if>
     <if test="user != null" >and r.user= #{user,jdbcType=VARCHAR}</if>
+    <if test="configure != null" >and r.configure= #{configure,jdbcType=VARCHAR}</if>
+    <if test="isValid != null" >and r.is_valid= #{isValid,jdbcType=INTEGER}</if>
     <if test="createDate != null" >and r.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and r.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
-    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
-  </select>
+   </select>
   <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.RemainVpn" >
     select 
     <include refid="Base_Column_List" />
     from remain_vpn r
     where 1=1 
+    <if test="groupId != null" >and r.group_id= #{groupId,jdbcType=BIGINT}</if>
     <if test="ipList != null" >and r.ip_list= #{ipList,jdbcType=VARCHAR}</if>
     <if test="name != null" >and r.name= #{name,jdbcType=VARCHAR}</if>
     <if test="password != null" >and r.password= #{password,jdbcType=VARCHAR}</if>
     <if test="user != null" >and r.user= #{user,jdbcType=VARCHAR}</if>
+    <if test="configure != null" >and r.configure= #{configure,jdbcType=VARCHAR}</if>
+    <if test="isValid != null" >and r.is_valid= #{isValid,jdbcType=INTEGER}</if>
     <if test="createDate != null" >and r.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and r.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
@@ -76,10 +93,13 @@
     <include refid="Base_Column_List" />
     from remain_vpn r
     where 1=1 
+    <if test="model.groupId != null" >and r.group_id= #{model.groupId,jdbcType=BIGINT}</if>
     <if test="model.ipList != null" >and r.ip_list= #{model.ipList,jdbcType=VARCHAR}</if>
     <if test="model.name != null" >and r.name= #{model.name,jdbcType=VARCHAR}</if>
     <if test="model.password != null" >and r.password= #{model.password,jdbcType=VARCHAR}</if>
     <if test="model.user != null" >and r.user= #{model.user,jdbcType=VARCHAR}</if>
+    <if test="model.configure != null" >and r.configure= #{model.configure,jdbcType=VARCHAR}</if>
+    <if test="model.isValid != null" >and r.is_valid= #{model.isValid,jdbcType=INTEGER}</if>
     <if test="model.createDate != null" >and r.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
     <if test="model.updateDate != null" >and r.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
     <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
@@ -88,10 +108,13 @@
     select count(0) totalCount
     from remain_vpn r
     where 1=1 
+    <if test="groupId != null" >and r.group_id= #{groupId,jdbcType=BIGINT}</if>
     <if test="ipList != null" >and r.ip_list= #{ipList,jdbcType=VARCHAR}</if>
     <if test="name != null" >and r.name= #{name,jdbcType=VARCHAR}</if>
     <if test="password != null" >and r.password= #{password,jdbcType=VARCHAR}</if>
     <if test="user != null" >and r.user= #{user,jdbcType=VARCHAR}</if>
+    <if test="configure != null" >and r.configure= #{configure,jdbcType=VARCHAR}</if>
+    <if test="isValid != null" >and r.is_valid= #{isValid,jdbcType=INTEGER}</if>
     <if test="createDate != null" >and r.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and r.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
@@ -102,18 +125,24 @@
   <insert id="insert" parameterType="org.turing.pangu.model.RemainVpn" >
     insert into remain_vpn 
     <trim prefix="(" suffix=")" suffixOverrides="," >
+        group_id,    
         ip_list,    
         name,    
         password,    
         user,    
+        configure,    
+        is_valid,    
         create_date,    
         update_date,    
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{groupId,jdbcType=BIGINT},  
         #{ipList,jdbcType=VARCHAR},  
         #{name,jdbcType=VARCHAR},  
         #{password,jdbcType=VARCHAR},  
         #{user,jdbcType=VARCHAR},  
+        #{configure,jdbcType=VARCHAR},  
+        #{isValid,jdbcType=INTEGER},  
         #{createDate,jdbcType=TIMESTAMP},  
         #{updateDate,jdbcType=TIMESTAMP},  
     </trim>
@@ -121,18 +150,24 @@
   <insert id="insertRemainVpnByTrim" parameterType="org.turing.pangu.model.RemainVpn" >
     insert into remain_vpn 
     <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="groupId != null" >group_id,</if>
         <if test="ipList != null" >ip_list,</if>
         <if test="name != null" >name,</if>
         <if test="password != null" >password,</if>
         <if test="user != null" >user,</if>
+        <if test="configure != null" >configure,</if>
+        <if test="isValid != null" >is_valid,</if>
         <if test="createDate != null" >create_date,</if>
         <if test="updateDate != null" >update_date,</if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="groupId != null" >#{groupId,jdbcType=BIGINT},</if>  
         <if test="ipList != null" >#{ipList,jdbcType=VARCHAR},</if>  
         <if test="name != null" >#{name,jdbcType=VARCHAR},</if>  
         <if test="password != null" >#{password,jdbcType=VARCHAR},</if>  
         <if test="user != null" >#{user,jdbcType=VARCHAR},</if>  
+        <if test="configure != null" >#{configure,jdbcType=VARCHAR},</if>  
+        <if test="isValid != null" >#{isValid,jdbcType=INTEGER},</if>  
         <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
         <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
     </trim>
@@ -140,10 +175,13 @@
   <update id="updateRemainVpnById" parameterType="org.turing.pangu.model.RemainVpn" >
     update remain_vpn set 
     <trim prefix="" suffix="" suffixOverrides="," >
+        group_id=#{groupId,jdbcType=BIGINT},    
         ip_list=#{ipList,jdbcType=VARCHAR},    
         name=#{name,jdbcType=VARCHAR},    
         password=#{password,jdbcType=VARCHAR},    
         user=#{user,jdbcType=VARCHAR},    
+        configure=#{configure,jdbcType=VARCHAR},    
+        is_valid=#{isValid,jdbcType=INTEGER},    
         create_date=#{createDate,jdbcType=TIMESTAMP},    
         update_date=#{updateDate,jdbcType=TIMESTAMP},    
     </trim>
@@ -152,10 +190,13 @@
   <update id="update" parameterType="org.turing.pangu.model.RemainVpn" >
     update remain_vpn set 
     <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="groupId != null" >group_id=#{groupId,jdbcType=BIGINT},</if>
         <if test="ipList != null" >ip_list=#{ipList,jdbcType=VARCHAR},</if>
         <if test="name != null" >name=#{name,jdbcType=VARCHAR},</if>
         <if test="password != null" >password=#{password,jdbcType=VARCHAR},</if>
         <if test="user != null" >user=#{user,jdbcType=VARCHAR},</if>
+        <if test="configure != null" >configure=#{configure,jdbcType=VARCHAR},</if>
+        <if test="isValid != null" >is_valid=#{isValid,jdbcType=INTEGER},</if>
         <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
         <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
     </trim>

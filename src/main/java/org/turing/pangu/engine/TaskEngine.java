@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -19,8 +20,10 @@ import org.turing.pangu.model.Task;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.PlatformService;
+import org.turing.pangu.service.RemainIpService;
 import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.TaskService;
+import org.turing.pangu.service.VpnGroupService;
 import org.turing.pangu.task.DateUpdateListen;
 import org.turing.pangu.task.TaskExtend;
 import org.turing.pangu.task.VpnTask;
@@ -50,19 +53,24 @@ public class TaskEngine implements DateUpdateListen{
 	private DeviceService deviceService;
 	private TaskService taskService;
 	private RemainVpnService remainVpnService;
+	private RemainIpService remainIpService;
+	private VpnGroupService vpnGroupService;
 	public static TaskEngine getInstance(){
 		if(null == mInstance)
 			mInstance = new TaskEngine();
 		return mInstance;
 	}
 
-	public void setService(RemainVpnService remainVpnService,PlatformService platformService,AppService appService,DeviceService deviceService,TaskService taskService){
+	public void setService(VpnGroupService vpnGroupService,RemainVpnService remainVpnService,RemainIpService remainIpService,PlatformService platformService,AppService appService,DeviceService deviceService,TaskService taskService){
 		this.platformService = platformService;
 		this.appService = appService;
 		this.deviceService = deviceService;
 		this.taskService = taskService;
 		this.remainVpnService = remainVpnService;
+		this.remainIpService = remainIpService;
+		this.vpnGroupService = vpnGroupService;
 		RemainEngine.getInstance().setService(platformService, appService, deviceService);
+		TaskStaticIpEngine.getInstance().setService(remainVpnService, remainIpService, vpnGroupService);
 	}
 	public List<App> getAppList(){
 		return appList;
@@ -117,9 +125,7 @@ public class TaskEngine implements DateUpdateListen{
 		}
 		return false;
 	}
-	public List<RemainVpn> getStaticIpList(){
-		return whiteIpList;
-	}
+
 	public Platform getPlatformInfo(long pfId){
 		for(Platform pf:platformList){
 			if(pf.getId() == pfId){

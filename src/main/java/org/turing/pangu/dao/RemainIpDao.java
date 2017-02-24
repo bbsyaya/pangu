@@ -12,8 +12,8 @@ package org.turing.pangu.dao;
 
 import java.util.List;
 
-import org.turing.pangu.model.RemainData;
+import org.turing.pangu.model.RemainIp;
 
-public interface RemainDataDao extends BaseDao<RemainData, Long> {
-	public List<RemainData> selectRemainData(RemainData model);
+public interface RemainIpDao extends BaseDao<RemainIp, Long> {
+	public List<RemainIp> selectValid(RemainIp model);
 }

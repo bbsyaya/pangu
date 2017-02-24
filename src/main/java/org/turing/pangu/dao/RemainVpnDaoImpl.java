@@ -10,6 +10,8 @@
 
 package org.turing.pangu.dao;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -29,6 +31,12 @@ public class RemainVpnDaoImpl extends BaseDaoImpl<RemainVpn, Long> implements Re
 	@Autowired
 	public void setRemainVpnMapper(RemainVpnMapper mapper) {
 		super.setBaseMapper(mapper);
+	}
+
+	@Override
+	public List<RemainVpn> selectValid(RemainVpn model) {
+		// TODO Auto-generated method stub
+		return mapper.selectList(model);
 	}
 
 }

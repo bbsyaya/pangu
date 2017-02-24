@@ -1,45 +1,39 @@
 package org.turing.pangu.controller.pc.response;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.turing.pangu.bean.VpnConnectInfo;
 import org.turing.pangu.controller.common.BaseRsp;
 
-public class VpnConnectInfoRsp extends BaseRsp{
-	public String getIp() {
-		return ip;
-	}
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
-	public String getUserName() {
-		return userName;
-	}
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public Long getVpnId() {
-		return vpnId;
-	}
-	public void setVpnId(Long vpnId) {
-		this.vpnId = vpnId;
-	}
-
-	
+public class VpnConnectInfoRsp extends BaseRsp{	
 	public boolean isUsed() {
 		return isUsed;
 	}
 	public void setUsed(boolean isUsed) {
 		this.isUsed = isUsed;
 	}
+	public List<VpnConnectInfo> getVpnList() {
+		return vpnList;
+	}
+	public void setVpnList(List<VpnConnectInfo> vpnList) {
+		this.vpnList = vpnList;
+	}
+	public Long getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
+	}
+	public String getIp() {
+		return ip;
+	}
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
 
-
-	private String ip;
-	private String userName;
-	private String password;
-	private Long vpnId;
+	private String ip = "";
+	private List<VpnConnectInfo> vpnList = new ArrayList<VpnConnectInfo>();
+	private Long groupId;
 	private boolean isUsed = false;
 }

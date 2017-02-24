@@ -1,6 +1,6 @@
 /**
  * 
- * Title：RemainVpn
+ * Title：RemainIp
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
@@ -17,33 +17,30 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
- /**RemainVpn*/
- public class RemainVpn extends BaseModel<RemainVpn>
+ /**RemainIp*/
+ public class RemainIp extends BaseModel<RemainIp>
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 6952241487901338886L;
+  private static final long serialVersionUID = 1906951487909274208L;
 
   /***/
-  private Long groupId;
+  private Long vpnId;
 
   /***/
-  private String ipList;
+  private String ip;
 
   /***/
-  private String name;
-
-  /***/
-  private String password;
-
-  /***/
-  private String user;
+  private Integer isVaild;
 
   /***/
   private String configure;
 
   /***/
-  private Integer isValid;
+  private Integer allocCount;
+
+  /***/
+  private Integer successCount;
 
   /***/
   private Date createDate;
@@ -56,75 +53,44 @@ import org.hibernate.validator.constraints.NotEmpty;
   /**获取*/
   @JsonProperty
   @NotNull(groups = {Default.class,Save.class})
-  public Long getGroupId()
+  public Long getVpnId()
   {
-   return this.groupId;
+   return this.vpnId;
   }
 
   /**设置*/
-  public void setGroupId(Long groupId)
+  public void setVpnId(Long vpnId)
   {
-    this.groupId=groupId;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =5592405 )
-  public String getIpList()
-  {
-   return this.ipList;
-  }
-
-  /**设置*/
-  public void setIpList(String ipList)
-  {
-    this.ipList=ipList;
+    this.vpnId=vpnId;
   }
 
   
   /**获取*/
   @JsonProperty
   @Length(max =255 )
-  public String getName()
+  public String getIp()
   {
-   return this.name;
+   return this.ip;
   }
 
   /**设置*/
-  public void setName(String name)
+  public void setIp(String ip)
   {
-    this.name=name;
+    this.ip=ip;
   }
 
   
   /**获取*/
   @JsonProperty
-  @Length(max =255 )
-  public String getPassword()
+  public Integer getIsVaild()
   {
-   return this.password;
+   return this.isVaild;
   }
 
   /**设置*/
-  public void setPassword(String password)
+  public void setIsVaild(Integer isVaild)
   {
-    this.password=password;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getUser()
-  {
-   return this.user;
-  }
-
-  /**设置*/
-  public void setUser(String user)
-  {
-    this.user=user;
+    this.isVaild=isVaild;
   }
 
   
@@ -145,15 +111,29 @@ import org.hibernate.validator.constraints.NotEmpty;
   
   /**获取*/
   @JsonProperty
-  public Integer getIsValid()
+  public Integer getAllocCount()
   {
-   return this.isValid;
+   return this.allocCount;
   }
 
   /**设置*/
-  public void setIsValid(Integer isValid)
+  public void setAllocCount(Integer allocCount)
   {
-    this.isValid=isValid;
+    this.allocCount=allocCount;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  public Integer getSuccessCount()
+  {
+   return this.successCount;
+  }
+
+  /**设置*/
+  public void setSuccessCount(Integer successCount)
+  {
+    this.successCount=successCount;
   }
 
   

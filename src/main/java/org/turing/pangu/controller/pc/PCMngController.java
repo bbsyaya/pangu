@@ -44,10 +44,11 @@ import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.DynamicVpnService;
 import org.turing.pangu.service.PlatformService;
-import org.turing.pangu.service.RemainDataService;
+import org.turing.pangu.service.RemainIpService;
 import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.TaskService;
 import org.turing.pangu.service.UserService;
+import org.turing.pangu.service.VpnGroupService;
 import org.turing.pangu.utils.Const;
 
 import com.alibaba.fastjson.JSON;
@@ -78,8 +79,8 @@ public class PCMngController extends BaseController {
 	@Resource(name="dynamicVpnServiceImpl")
 	private DynamicVpnService dynamicVpnService;
 	
-	@Resource(name="remainDataServiceImpl")
-	private RemainDataService remainDataService;
+	@Resource(name="remainIpServiceImpl")
+	private RemainIpService remainIpService;
 	
 	@Resource(name="deviceServiceImpl")
 	private DeviceService deviceService;
@@ -89,12 +90,16 @@ public class PCMngController extends BaseController {
 	
 	@Resource(name="taskServiceImpl")
 	private TaskService taskService;
+	
+	@Resource(name="vpnGroupServiceImpl")
+	private VpnGroupService vpnGroupService;
+	
 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public @ResponseBody PGResponse<String> index() {
 		logger.info("index---" + new Date());
 		PGResponse<String> rsp = new PGResponse<String>();
-		TaskEngine.getInstance().setService(remainVpnService,platformService, appService, deviceService, taskService);
+		TaskEngine.getInstance().setService(vpnGroupService,remainVpnService,remainIpService,platformService, appService, deviceService, taskService);
 		TaskEngine.getInstance().init();
 		TaskConfigureEngine.getInstance().init();
 		rsp.setAllData(Const.common_ok, "common_ok", null);

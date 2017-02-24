@@ -8,15 +8,27 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.turing.pangu.bean.VpnConnectInfo;
 import org.turing.pangu.controller.common.PhoneTask;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.pc.response.VpnConnectInfoRsp;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
+import org.turing.pangu.controller.phone.request.ReportReq;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
+import org.turing.pangu.model.RemainIp;
 import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.model.Task;
+import org.turing.pangu.model.VpnGroup;
+import org.turing.pangu.service.AppService;
+import org.turing.pangu.service.DeviceService;
+import org.turing.pangu.service.PlatformService;
+import org.turing.pangu.service.RemainIpService;
+import org.turing.pangu.service.RemainVpnService;
+import org.turing.pangu.service.VpnGroupService;
+import org.turing.pangu.task.BusinessStaticVpn;
+import org.turing.pangu.task.BusinessVpnGroup;
 import org.turing.pangu.task.DateUpdateListen;
 import org.turing.pangu.task.StaticVpn;
 import org.turing.pangu.task.StaticVpnTask;
@@ -37,6 +49,7 @@ public class TaskStaticIpEngine implements TaskIF {
 	private List<StaticVpnTask> mIncrementIpList = new ArrayList<StaticVpnTask>(); // 固定IP中用来增量的IP,来源由存量文件中没有的固定IP
 	private List<StaticVpnTask> mStockIpList = new ArrayList<StaticVpnTask>(); // 固定IP中用来做增量的IP,来源由存量库
 	private List<StaticVpn> mCurrentRunVpnList = new ArrayList<StaticVpn>(); // 当前在跑的VPN
+	private List<BusinessVpnGroup> mBusVpnGroup = new ArrayList<BusinessVpnGroup>();
 	public static final int IP_INIT = 0;// 0:初始 1:已下发 2:已连接 3:已完成
 	public static final int IP_SEND = 1;// 0:初始 1:已下发 2:已连接 3:已完成
 	public static final int IP_CONNECTED = 2;// 0:初始 1:已下发 2:已连接 3:已完成
@@ -44,7 +57,16 @@ public class TaskStaticIpEngine implements TaskIF {
 
 	public static final int IS_RUN_INCREMENT = 0;// 0:跑增量 1:跑存量
 	public static final int IS_RUN_STOCK = 1;
+	private RemainVpnService remainVpnService;
+	private RemainIpService remainIpService;
+	private VpnGroupService vpnGroupService;
 
+	public void setService(RemainVpnService remainVpnService,
+			RemainIpService remainIpService, VpnGroupService vpnGroupService) {
+		this.remainVpnService = remainVpnService;
+		this.remainIpService = remainIpService;
+		this.vpnGroupService = vpnGroupService;
+	}
 	private DateUpdateListen mListen = null;
 
 	public static TaskStaticIpEngine getInstance() {
@@ -52,16 +74,69 @@ public class TaskStaticIpEngine implements TaskIF {
 			mInstance = new TaskStaticIpEngine();
 		return mInstance;
 	}
-
+	//初始化VPN组,从DB中取数据到内存
+	private void initVpnGroup(){
+		VpnGroup model = new VpnGroup();
+		model.setIsValid(1);
+		List<VpnGroup> list = vpnGroupService.selectList(model);
+		for(VpnGroup vpnGroup:list){	
+			BusinessVpnGroup busVpnGroup = new BusinessVpnGroup();
+			busVpnGroup.setGroup(vpnGroup);
+			RemainVpn remainVpnModel = new RemainVpn();
+			remainVpnModel.setIsValid(1);
+			remainVpnModel.setGroupId(vpnGroup.getId());
+			List<RemainVpn> remainVpnlist = remainVpnService.selectList(remainVpnModel);
+			for(RemainVpn remainVpn :remainVpnlist){
+				BusinessStaticVpn staticVpn = new BusinessStaticVpn();
+				staticVpn.setVpn(remainVpn);
+				RemainIp remainIpModel = new RemainIp();
+				remainIpModel.setIsVaild(1);
+				remainIpModel.setVpnId(remainVpn.getId());
+				List<RemainIp> remainIplist = remainIpService.selectList(remainIpModel);
+				staticVpn.setIpList(remainIplist);
+				busVpnGroup.getStaticVpnList().add(staticVpn);
+			}
+			mBusVpnGroup.add(busVpnGroup);
+		}
+	}
+	private RemainIp findRemainIpByIpAndGroup(String ip,Long groupId){
+		for(BusinessVpnGroup group:mBusVpnGroup){
+			if(group.getGroup().getId() == groupId){
+				for(BusinessStaticVpn staticVpn:group.getStaticVpnList()){
+					for(RemainIp remainIp:staticVpn.getIpList()){
+						if(remainIp.getIp().equals(ip)){
+							return remainIp;
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+	private RemainIp findRemainIpByIp(String ip){
+		for(BusinessVpnGroup group:mBusVpnGroup){
+			for(BusinessStaticVpn staticVpn:group.getStaticVpnList()){
+				for(RemainIp remainIp:staticVpn.getIpList()){
+					if(remainIp.getIp().equals(ip)){
+						return remainIp;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	private RemainIp getRandomRemainIp(){
+		int random = (int)Math.random()*mBusVpnGroup.size();
+		int randomVpn = (int)Math.random()*mBusVpnGroup.get(random).getStaticVpnList().size();
+		int randomIp = (int)Math.random()*mBusVpnGroup.get(random).getStaticVpnList().get(randomVpn).getIpList().size();
+		return mBusVpnGroup.get(random).getStaticVpnList().get(randomVpn).getIpList().get(randomIp);
+	}
 	private void initRunVpn() {
 		mCurrentRunVpnList.clear();
-		for (RemainVpn vpn : TaskEngine.getInstance().getStaticIpList()) {
+		for (BusinessVpnGroup group :mBusVpnGroup) { // 设置多少组
 			StaticVpn runVpn = new StaticVpn();
 			VpnConnectInfoRsp info = new VpnConnectInfoRsp();
-			info.setIp("");
-			info.setVpnId(vpn.getId());
-			info.setUserName(vpn.getUser());
-			info.setPassword(vpn.getPassword());
+			info.setGroupId(group.getGroup().getId());
 			runVpn.setConnectInfo(info);
 			mCurrentRunVpnList.add(runVpn);
 		}
@@ -72,6 +147,7 @@ public class TaskStaticIpEngine implements TaskIF {
 		// TODO Auto-generated method stub
 		setDataUpdateListen(listen);
 		clear();
+		initVpnGroup();
 		createStaticIpTask();
 		initRunVpn();
 	}
@@ -331,7 +407,11 @@ public class TaskStaticIpEngine implements TaskIF {
 			return null;
 		}
 		mCurrentRunVpnList.get(vpnIndex).setVpnTask(task);
-		mCurrentRunVpnList.get(vpnIndex).getConnectInfo().setIp(task.getIp());
+		mCurrentRunVpnList.get(vpnIndex).getConnectInfo().setIp(task.getIpInfo().getIp());
+		List<VpnConnectInfo> vpnList =  JSON.parseObject(task.getIpInfo().getConfigure(),
+				new TypeReference<List<VpnConnectInfo>>() {
+				});
+		mCurrentRunVpnList.get(vpnIndex).getConnectInfo().setVpnList(vpnList);
 		return mCurrentRunVpnList.get(vpnIndex).getConnectInfo();
 	}
 
@@ -357,47 +437,41 @@ public class TaskStaticIpEngine implements TaskIF {
 		}
 
 		int incrementTotalCount =(moneyCount + waterCount)/TaskEngine.getInstance().getTodayTaskList().size();
-		List<RemainVpn> whiteIpList = TaskEngine.getInstance()
-				.getStaticIpList();
+
 		int flag = 0;
 		int index = 0;
-		for (RemainVpn vpn : whiteIpList) {
-			String[] ipList = vpn.getIpList().split("\\|");
-			for (int yiwan = 0; yiwan < 10000; yiwan++) { 
-				// ip 不能在 stock中存在
-				int random = (int)(Math.random()*ipList.length);// 随机取
-				String ip = ipList[random];
-				flag = 0;
-				for (VpnTask tast : mStockIpList) {
-					StaticVpnTask process = (StaticVpnTask) tast;
-					if (ip.equals(process.getIp())) { // 如果发现相等的IP
-						flag = 1;
-						break;
-					}
+		for (int yiwan = 0; yiwan < 10000; yiwan++) { 
+			// ip 不能在 stock中存在
+			RemainIp remainIp = getRandomRemainIp();// 随机取
+			flag = 0;
+			for (VpnTask tast : mStockIpList) {
+				StaticVpnTask process = (StaticVpnTask) tast;
+				if (remainIp.getIp().equals(process.getIpInfo().getIp())) { // 如果发现相等的IP
+					flag = 1;
+					break;
 				}
-				//ip也不能在 stock中存在
-				for (VpnTask tast : mIncrementIpList) {
-					StaticVpnTask process = (StaticVpnTask) tast;
-					if (ip.equals(process.getIp())&&flag==0) { // 如果发现相等的IP
-						flag = 1;
-						break;
-					}
+			}
+			//ip也不能在 stock中存在
+			for (VpnTask tast : mIncrementIpList) {
+				StaticVpnTask process = (StaticVpnTask) tast;
+				if (remainIp.getIp().equals(process.getIpInfo().getIp())&&flag==0) { // 如果发现相等的IP
+					flag = 1;
+					break;
 				}
-				if(flag==0){
-					StaticVpnTask ipProcess = new StaticVpnTask();
-					ipProcess.setRunType(IS_RUN_INCREMENT);
-					ipProcess.setIp(ip);
-					ipProcess.setToken(RandomUtils
-							.getRandom(TaskEngine.VPN_TOKEN_LENGH));
-					mIncrementIpList.add(ipProcess);
-					index++;
-					if(index >= incrementTotalCount){
-						return;
-					}
+			}
+			if(flag==0){
+				StaticVpnTask ipProcess = new StaticVpnTask();
+				ipProcess.setRunType(IS_RUN_INCREMENT);
+				ipProcess.setIpInfo(remainIp);
+				ipProcess.setToken(RandomUtils
+						.getRandom(TaskEngine.VPN_TOKEN_LENGH));
+				mIncrementIpList.add(ipProcess);
+				index++;
+				if(index >= incrementTotalCount){
+					return;
 				}
 			}
 		}
-		index = 0;
 	}
 
 	private PhoneTask createPhoneTask(StaticVpnTask process, Device device) {
@@ -434,7 +508,7 @@ public class TaskStaticIpEngine implements TaskIF {
 				List<StaticVpnTask> list = mStockIpList;
 				flag = 0;
 				for (StaticVpnTask process : list) {
-					if (device.getIp().equals(process.getIp())) { // 如果Ip相等
+					if (device.getIp().equals(process.getIpInfo().getIp())) { // 如果Ip相等
 						PhoneTask task = createPhoneTask(process, device);
 						process.getPhoneTaskList().add(task);
 						flag = 1;
@@ -444,7 +518,7 @@ public class TaskStaticIpEngine implements TaskIF {
 				if (flag == 0) {
 					StaticVpnTask process = new StaticVpnTask();
 					process.setRunType(IS_RUN_STOCK);
-					process.setIp(device.getIp());
+					process.setIpInfo(findRemainIpByIp(device.getIp()));
 					process.setToken(RandomUtils
 							.getRandom(TaskEngine.VPN_TOKEN_LENGH));
 					PhoneTask task = createPhoneTask(process, device);

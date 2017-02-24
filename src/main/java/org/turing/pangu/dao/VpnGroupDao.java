@@ -11,8 +11,10 @@
 package org.turing.pangu.dao;
 
 import java.util.List;
-import org.turing.pangu.model.RemainVpn;
 
-public interface RemainVpnDao extends BaseDao<RemainVpn, Long> {
-	public List<RemainVpn> selectValid(RemainVpn model);
+import org.turing.pangu.model.RemainIp;
+import org.turing.pangu.model.VpnGroup;
+
+public interface VpnGroupDao extends BaseDao<VpnGroup, Long> {
+	public List<VpnGroup> selectValid(VpnGroup model);
 }

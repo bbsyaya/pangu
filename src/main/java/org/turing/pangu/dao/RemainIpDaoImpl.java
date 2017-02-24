@@ -15,30 +15,30 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.turing.pangu.mapper.RemainDataMapper;
-import org.turing.pangu.model.RemainData;
+import org.turing.pangu.mapper.RemainIpMapper;
+import org.turing.pangu.model.RemainIp;
 
 @Repository
-public class RemainDataDaoImpl extends BaseDaoImpl<RemainData, Long> implements RemainDataDao {
+public class RemainIpDaoImpl extends BaseDaoImpl<RemainIp, Long> implements RemainIpDao {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger logger = Logger.getLogger(RemainDataDaoImpl.class);
+	private static final Logger logger = Logger.getLogger(RemainIpDaoImpl.class);
 
 	@Autowired
-	private RemainDataMapper mapper;
+	private RemainIpMapper mapper;
 	
 	@Autowired
-	public void setRemainDataMapper(RemainDataMapper mapper) {
+	public void setRemainDataMapper(RemainIpMapper mapper) {
 		super.setBaseMapper(mapper);
 	}
 
 	@Override
-	public List<RemainData> selectRemainData(RemainData model) {
+	public List<RemainIp> selectValid(RemainIp model) {
 		// TODO Auto-generated method stub
-		List<RemainData> list = null;
+		List<RemainIp> list = null;
 		try {
-			list = mapper.selectRemainData(model);
+			list = mapper.selectList(model);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}

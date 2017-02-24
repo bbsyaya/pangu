@@ -1,15 +1,16 @@
 package org.turing.pangu.task;
 
+import org.turing.pangu.model.RemainIp;
+
 
 /*固定IP的生命周期*/
 public class StaticVpnTask extends VpnTask{
-	public String getIp() {
-		return ip;
+	public RemainIp getIpInfo() {
+		return ipInfo;
 	}
-	public void setIp(String ip) {
-		this.ip = ip;
+	public void setIpInfo(RemainIp ipInfo) {
+		this.ipInfo = ipInfo;
 	}
-
 	public int getStatu() {
 		return statu;
 	}
@@ -24,7 +25,7 @@ public class StaticVpnTask extends VpnTask{
 		this.runType = runType;
 	}
 
-	private String ip = "";
+	private RemainIp ipInfo;
 	private int statu = 0; // 0:初始  1:已下发 2:已连接 3:已完成
 	private int runType = 0;//0:跑增量  1:跑存量
 }
