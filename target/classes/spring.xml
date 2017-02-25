@@ -199,7 +199,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
         </property>
     </bean>
     
-	<!-- 生成留存文件定时器 start -->
+	<!-- 定时器 start -->
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
        <property name="triggers">  
            <list>  
@@ -251,7 +251,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 	<bean id="updateTaskToDBJob" class="org.turing.pangu.quartz.UpdateTaskToDBJob"/> 
 	<bean id="checkVpnTimeoutJob" class="org.turing.pangu.quartz.CheckVpnTimeoutJob"/> 
 	 
-	<!-- 生成留存文件定时器 end -->
+	<!-- 定时器 end -->
 	<!-- 上传文件 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="defaultEncoding" value="UTF-8" />

@@ -10,7 +10,7 @@ public class CheckVpnTimeoutJob {
 	public void execute(){  
         try{ 
         	logger.info("execute - CheckVpnTimeoutJob -- " + new Date());
-        	TaskEngine.getInstance().UpdateTaskToDBJob();
+        	TaskEngine.getInstance().CheckVpnTimeoutJob();
          }catch(Exception ex){  
              ex.printStackTrace();  
          }  

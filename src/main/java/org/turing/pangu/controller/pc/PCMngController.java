@@ -50,6 +50,7 @@ import org.turing.pangu.service.TaskService;
 import org.turing.pangu.service.UserService;
 import org.turing.pangu.service.VpnGroupService;
 import org.turing.pangu.utils.Const;
+import org.turing.pangu.utils.TraceUtils;
 
 import com.alibaba.fastjson.JSON;
 
@@ -135,6 +136,7 @@ public class PCMngController extends BaseController {
 	// vpn登录请求
 	@RequestMapping(value = "/getConnectInfo", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<VpnConnectInfoRsp> getConnectInfo(@RequestBody VpnConnectInfoReq req,HttpServletRequest request) {
+		TraceUtils.getTraceInfo();
 		PGResponse<VpnConnectInfoRsp> rsp = new PGResponse<VpnConnectInfoRsp>();
 		VpnConnectInfoRsp con = TaskStaticIpEngine.getInstance().getConnectVpnInfo();
 		if(null == con){
@@ -147,19 +149,21 @@ public class PCMngController extends BaseController {
 	// vpn登录请求
 	@RequestMapping(value = "/vpnLogin", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<VpnLoginRsp> vpnLogin(@RequestBody VpnLoginReq req,HttpServletRequest request) {
+		TraceUtils.getTraceInfo();
 		logger.info("vpnLogin---" + req.getDeviceId() + new Date());
 		PGResponse<VpnLoginRsp> rsp = new PGResponse<VpnLoginRsp>();
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);
-		String token = TaskEngine.getInstance().addVpnTask(req,remoteIp,realIp);
+		String token = TaskEngine.getInstance().vpnLogin(req,remoteIp,realIp);
 		VpnLoginRsp dataRsp = new VpnLoginRsp();
-		dataRsp.setToken(token);
 		dataRsp.setRemoteIp(remoteIp);
 		dataRsp.setRealIp(realIp);
 		dataRsp.setLoopTime(TimeZoneMng.SPAN_TIME);
 		if(null == token ){
+			dataRsp.setToken("");
 			rsp.setAllData(Const.common_error, "common_error", dataRsp);
 		}else{
+			dataRsp.setToken(token);
 			rsp.setAllData(Const.common_ok, "common_ok", dataRsp);
 		}
 		logger.info("vpnLogin---" + JSON.toJSONString(rsp).toString());
@@ -168,6 +172,7 @@ public class PCMngController extends BaseController {
 	// vpn操作请求
 	@RequestMapping(value = "/vpnOperUpdate", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<VpnOperUpdateRsp> vpnOperUpdate(@RequestBody VpnOperUpdateReq req,HttpServletRequest request) {
+		TraceUtils.getTraceInfo();
 		logger.info("vpnOperUpdate---" + req.getToken() + new Date());
 		PGResponse<VpnOperUpdateRsp> rsp = new PGResponse<VpnOperUpdateRsp>();
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
@@ -183,6 +188,7 @@ public class PCMngController extends BaseController {
 	// vpn切换完成
 	@RequestMapping(value = "/vpnSwitchFinish", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<String> vpnSwitchFinish(@RequestBody VpnSwitchFinishReq req,HttpServletRequest request) {
+		TraceUtils.getTraceInfo();
 		logger.info("vpnSwitchFinish---" + req.getToken() + new Date());
 		PGResponse<String> rsp = new PGResponse<String>();
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
@@ -200,6 +206,7 @@ public class PCMngController extends BaseController {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<String> login(@RequestBody LoginReq req) {
+		TraceUtils.getTraceInfo();
 		logger.info("login---" + req.getName() + "--" + new Date());
 		PGResponse<String> rsp = new PGResponse<String>();
 		User user = new User();
@@ -223,7 +230,7 @@ public class PCMngController extends BaseController {
 	 */
 	@RequestMapping(value = "/getDynamicVpnList", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<List<DynamicVpn>> getDynamicVpnList(@RequestBody GetDynamicVpnListReq req) {
-		logger.info("getDynamicVpnList---" + new Date());
+		TraceUtils.getTraceInfo();
 		PGResponse<List<DynamicVpn>> rsp = new PGResponse<List<DynamicVpn>>();
 		DynamicVpn vpn = new DynamicVpn();
 		vpn.setIsValid(1);
@@ -240,7 +247,7 @@ public class PCMngController extends BaseController {
 	 */
 	@RequestMapping(value = "/getTodayRemainIpList", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<String> getTodayRemainIpList(@RequestBody GetRemainIpListReq req) {
-		logger.info("getTodayRemainIpList---" + new Date());
+		TraceUtils.getTraceInfo();
 		PGResponse<String> rsp = new PGResponse<String>();
 		String iplist = deviceService.getRemainIpList();
 		rsp.setAllData(Const.common_ok, "common_ok", iplist);
@@ -254,7 +261,7 @@ public class PCMngController extends BaseController {
 	 */
 	@RequestMapping(value = "/getBlackIpList", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<String> getBlackIpList(@RequestBody GetBlackIpListReq req) {
-		logger.info("getBlackIpList---" + new Date());
+		TraceUtils.getTraceInfo();
 		PGResponse<String> rsp = new PGResponse<String>();
 		Platform platform = TaskEngine.getInstance().getPlatformInfo(req.getPlatformId());
 		rsp.setAllData(Const.common_ok, "common_ok", platform.getBlackIp());
@@ -268,7 +275,7 @@ public class PCMngController extends BaseController {
 	 */
 	@RequestMapping(value = "/saveBlackIpList", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<String> saveBlackIpList(@RequestBody SaveBlackIpListReq req) {
-		logger.info("saveBlackIpList---" + new Date());
+		TraceUtils.getTraceInfo();
 		PGResponse<String> rsp = new PGResponse<String>();
 		Platform platform  = platformService.select(req.getPlatformId());
 		if(platform != null && !req.getIpList().equals("")){
@@ -288,7 +295,7 @@ public class PCMngController extends BaseController {
 	 */
 	@RequestMapping(value = "/getFixedVpnList", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<List<RemainVpn>> getFixedVpnList(@RequestBody GetRemainVpnListReq req) {
-		logger.info("getRemainVpnList---" + new Date());
+		TraceUtils.getTraceInfo();
 		PGResponse<List<RemainVpn>> rsp = new PGResponse<List<RemainVpn>>();
 		List<RemainVpn> list = remainVpnService.selectAll();
 		rsp.setAllData(Const.common_ok, "common_ok", list);
@@ -302,7 +309,7 @@ public class PCMngController extends BaseController {
 	 */
 	@RequestMapping(value = "/getAppList", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<List<App>> getAppList(@RequestBody GetAppListReq req) {
-		logger.info("getAppList---" + req.getUserId() + "--" + new Date());
+		TraceUtils.getTraceInfo();
 		PGResponse<List<App>> rsp = new PGResponse<List<App>>();
 		List<App> list = TaskEngine.getInstance().getAppList();
 		rsp.setAllData(Const.common_ok, "common_ok", list);
@@ -317,7 +324,7 @@ public class PCMngController extends BaseController {
 	 */
 	@RequestMapping(value = "/getTaskDataList", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<List<Task>> getTaskDataList(@RequestBody GetTaskListReq req) {
-		logger.info("getTaskDataList---" + req.getAppId() + "--" + new Date());
+		TraceUtils.getTraceInfo();
 		PGResponse<List<Task>> rsp = new PGResponse<List<Task>>();
 		List<Task> list = TaskEngine.getInstance().getAllDBTaskByAppId(req.getAppId());
 		rsp.setAllData(Const.common_ok, "common_ok", list);
@@ -332,7 +339,7 @@ public class PCMngController extends BaseController {
 	 */
 	@RequestMapping(value = "/curdVpn", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<String> curdVpn(@RequestBody CurdVpnReq req) {
-		logger.info("curdVpn---" + req.getName() + "--" + new Date());
+		TraceUtils.getTraceInfo();
 		PGResponse<String> rsp = new PGResponse<String>();
 		RemainVpn model = new RemainVpn();
 		if( req.getType() == 1 ) //增

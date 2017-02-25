@@ -33,6 +33,6 @@ public class StaticVpnTask extends VpnTask{
 
 	private RemainIp ipInfo;
 	private int statu = 0; // 0:初始  1:已下发 2:已连接 3:已完成
-	private int runType = 0;//0:跑增量  1:跑存量
+	private int runType = 0;// 用静态IP跑哪种 : 0:跑增量  1:跑存量
 	private int sendCount = 0; // 下发次数
 }

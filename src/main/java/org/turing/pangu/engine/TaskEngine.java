@@ -207,15 +207,14 @@ public class TaskEngine implements DateUpdateListen{
 			taskService.update(task);
 		}
 	}
-	public synchronized String addVpnTask(VpnLoginReq req,String remoteIp,String realIp){
-		logger.info("addVpnTask---000");
+	public synchronized String vpnLogin(VpnLoginReq req,String remoteIp,String realIp){
+		String ret = null;
 		if(req.getOperType() == INCREMENT_MONEY_TYPE || req.getOperType() == INCREMENT_WATERAMY_TYPE){
-			TaskDynamicIpEngine.getInstance().vpnLogin(req, remoteIp, realIp);
+			ret = TaskDynamicIpEngine.getInstance().vpnLogin(req, remoteIp, realIp);
 		}else{
-			TaskStaticIpEngine.getInstance().vpnLogin(req, remoteIp, realIp);
+			ret = TaskStaticIpEngine.getInstance().vpnLogin(req, remoteIp, realIp);
 		}
-		logger.info("addVpnTask---end");
-		return "";
+		return ret;
 	}
 
 	public synchronized VpnOperUpdateRsp vpnIsNeedSwitch(String token,String remoteIp,String realIp){
@@ -275,7 +274,11 @@ public class TaskEngine implements DateUpdateListen{
 		}
 		logger.info("createTodayTask---002");
 		todayTaskListInit();
-		IpMngEngine.getInstance().clearIpList();		
+		allTaskList.clear();
+		allTaskList = taskService.selectAll();
+		IpMngEngine.getInstance().clearIpList();
+		TaskStaticIpEngine.getInstance().init(this);
+		TaskDynamicIpEngine.getInstance().init(this);
 		logger.info("createTodayTask---end");
 	}
 	private List<Task> getTodayTaskList(Date fromTime,Date toTime){

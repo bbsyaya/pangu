@@ -34,6 +34,7 @@ import org.turing.pangu.model.Platform;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.utils.Const;
 import org.turing.pangu.utils.RandomUtils;
+import org.turing.pangu.utils.TraceUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
@@ -62,6 +63,7 @@ public class MobileReportController extends BaseController {
 	@RequestMapping(value = "/deviceLogin", method = RequestMethod.POST)
 	public @ResponseBody DeviceLoginRsp deviceLogin(HttpServletRequest request,
 			HttpServletResponse rsponsed) {
+		TraceUtils.getTraceInfo();
 		String contentStr = getRequestBody(request);
 		DeviceLoginReq req = JSON.parseObject(contentStr,
 				new TypeReference<DeviceLoginReq>() {
@@ -76,7 +78,7 @@ public class MobileReportController extends BaseController {
 	}
 	@RequestMapping(value = "/getBlackIpList", method = RequestMethod.POST)
 	public @ResponseBody GetBlackIpListRsp getBlackIpList(HttpServletRequest request) {
-		logger.info("getBlackIpList---" + new Date());
+		TraceUtils.getTraceInfo();
 		String contentStr = getRequestBody(request);
 		GetBlackIpListReq req = JSON.parseObject(contentStr,
 				new TypeReference<GetBlackIpListReq>() {
@@ -101,7 +103,7 @@ public class MobileReportController extends BaseController {
 	 */
 	@RequestMapping(value = "/getPlatformInfo", method = RequestMethod.POST)
 	public @ResponseBody Platform getPlatformInfo(HttpServletRequest request) {
-		logger.info("getPlatformInfo---" + new Date());
+		TraceUtils.getTraceInfo();
 		String contentStr = getRequestBody(request);
 		GetPlatformInfoReq req = JSON.parseObject(contentStr,
 				new TypeReference<GetPlatformInfoReq>() {
@@ -119,7 +121,7 @@ public class MobileReportController extends BaseController {
 	 */
 	@RequestMapping(value = "/getAppInfo", method = RequestMethod.POST)
 	public @ResponseBody App getAppInfo(HttpServletRequest request) {
-		logger.info("getAppInfo---" + new Date());
+		TraceUtils.getTraceInfo();
 		String contentStr = getRequestBody(request);
 		GetAppInfoReq req = JSON.parseObject(contentStr,
 				new TypeReference<GetAppInfoReq>() {
@@ -136,7 +138,7 @@ public class MobileReportController extends BaseController {
 	 * */
 	@RequestMapping(value = "/getTask", method = RequestMethod.POST)
 	public @ResponseBody GetTaskRsp getTask(HttpServletRequest request) {
-		logger.info("getTask---" + new Date());
+		TraceUtils.getTraceInfo();
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);
 		String contentStr = getRequestBody(request);
@@ -162,7 +164,7 @@ public class MobileReportController extends BaseController {
 	@RequestMapping(value = "/taskFinish", method = RequestMethod.POST)
 	public @ResponseBody String taskFinish(HttpServletRequest request,
 			HttpServletResponse rsp) {
-		logger.info("taskFinish---" + new Date());
+		TraceUtils.getTraceInfo();
 		String result = "";
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);
@@ -183,7 +185,7 @@ public class MobileReportController extends BaseController {
 	@RequestMapping(value = "/report", method = RequestMethod.POST)
 	public @ResponseBody String report(HttpServletRequest request,
 			HttpServletResponse rspod) {
-		logger.info("report---" + new Date());
+		TraceUtils.getTraceInfo();
 		String result = "";
 		PGResponse<String> rsp = new PGResponse<String>();
 		// ----------------------------------------------

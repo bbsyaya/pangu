@@ -188,8 +188,7 @@ public class TestData {
 		List<Device> list = deviceService.selectAll();
 		List<RemainVpn> vpnList = remainVpnService.selectAll();
 
-
-
+		/*
 		List<RemainIp> remainList = remainIpService.selectAll();
 
 		for (RemainIp remainIp : remainList) {
@@ -201,7 +200,7 @@ public class TestData {
 				remainIp.setIp(remainIp.getIp());
 			}
 			remainIpService.update(remainIp);
-		}
+		}*/
 		//TaskEngine.getInstance().init();
 	}
 
