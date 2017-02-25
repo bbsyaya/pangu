@@ -264,7 +264,12 @@ public class PCMngController extends BaseController {
 		TraceUtils.getTraceInfo();
 		PGResponse<String> rsp = new PGResponse<String>();
 		Platform platform = TaskEngine.getInstance().getPlatformInfo(req.getPlatformId());
-		rsp.setAllData(Const.common_ok, "common_ok", platform.getBlackIp());
+		if(null == platform){
+			rsp.setAllData(Const.common_error, "common_error", null);
+		}else{
+			rsp.setAllData(Const.common_ok, "common_ok", platform.getBlackIp());
+		}
+		
 		logger.info("getBlackIpList---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}

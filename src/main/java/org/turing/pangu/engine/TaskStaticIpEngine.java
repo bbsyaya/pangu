@@ -42,7 +42,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
-/*存量任务管理器*/
+//存量任务管理器
+/*
 public class TaskStaticIpEngine implements TaskIF {
 	private static final Logger logger = Logger.getLogger(TaskStaticIpEngine.class);
 	private static TaskStaticIpEngine mInstance = new TaskStaticIpEngine();
@@ -183,7 +184,7 @@ public class TaskStaticIpEngine implements TaskIF {
 		PhoneTask pTask = null;
 		logger.info("TaskStaticIpEngine getTask---000 |" + deviceId);
 		for (StaticVpn vpn : mCurrentRunVpnList) {
-			/*ip一样并且VPN已经登陆过才能下发任务*/
+			//ip一样并且VPN已经登陆过才能下发任务
 			if (vpn.getConnectInfo().getIp().equals(remoteIp)&&true == vpn.getConnectInfo().isUsed()){
 				if (vpn.getVpnTask().getRunType() == IS_RUN_STOCK) {//刷存量
 					for (PhoneTask task : vpn.getVpnTask().getPhoneTaskList()) {
@@ -425,7 +426,7 @@ public class TaskStaticIpEngine implements TaskIF {
 		createIncrementIpList();
 	}
 
-	/* 获得一个连接VPN信息 */
+	// 获得一个连接VPN信息 
 	public synchronized VpnConnectInfoRsp getConnectVpnInfo() {
 		StaticVpnTask task = null;
 		int random = (int) (Math.random() * 10) + 1;
@@ -436,9 +437,7 @@ public class TaskStaticIpEngine implements TaskIF {
 			logger.info("mCurrentRunVpnList is null or size = 0");
 			return null;
 		}
-		/*
-		 * 1.看有没有可用的vpn资源
-		 */
+		//1.看有没有可用的vpn资源
 		for (StaticVpn staticVpn : mCurrentRunVpnList) {
 			VpnConnectInfoRsp conInfo = staticVpn.getConnectInfo();
 			if (conInfo.isUsed() == true) {
@@ -484,7 +483,7 @@ public class TaskStaticIpEngine implements TaskIF {
 		return mCurrentRunVpnList.get(vpnIndex).getConnectInfo();
 	}
 
-	/* 获取一个可以使用的VPN */
+	// 获取一个可以使用的VPN
 	private synchronized StaticVpnTask getCanUsedVpn(List<StaticVpnTask> list) {
 		for (StaticVpnTask process : list) {
 			if (process.getStatu() == IP_INIT) { // 发现还没下发的IP
@@ -642,3 +641,4 @@ public class TaskStaticIpEngine implements TaskIF {
 		}
 	}
 }
+*/

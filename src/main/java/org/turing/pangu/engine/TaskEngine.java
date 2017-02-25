@@ -14,6 +14,7 @@ import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.model.App;
+import org.turing.pangu.model.Device;
 import org.turing.pangu.model.Platform;
 import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.model.Task;
@@ -70,7 +71,6 @@ public class TaskEngine implements DateUpdateListen{
 		this.remainIpService = remainIpService;
 		this.vpnGroupService = vpnGroupService;
 		RemainEngine.getInstance().setService(platformService, appService, deviceService);
-		TaskStaticIpEngine.getInstance().setService(remainVpnService, remainIpService, vpnGroupService);
 	}
 	public List<App> getAppList(){
 		return appList;
@@ -85,19 +85,21 @@ public class TaskEngine implements DateUpdateListen{
 		if(null != appService){
 			App model = new App();
 			model.setIsCanRun(1);
+			appList.clear();
 			appList = appService.selectCanRunApps(model);
 		}
 		if(null != platformService){
+			platformList.clear();
 			platformList = platformService.selectAll();
 		}
 		if(null != remainVpnService){
+			whiteIpList.clear();
 			whiteIpList = remainVpnService.selectAll();
 		}
 		todayTaskListInit();
 		allTaskList.clear();
 		allTaskList = taskService.selectAll();
 		IpMngEngine.getInstance().clearIpList();
-		TaskStaticIpEngine.getInstance().init(this);
 		TaskDynamicIpEngine.getInstance().init(this);
 	}
 	private void todayTaskListInit(){
@@ -198,7 +200,6 @@ public class TaskEngine implements DateUpdateListen{
 	//检查VPN连接超时的job
 	public void CheckVpnTimeoutJob(){
 		TaskDynamicIpEngine.getInstance().CheckVpnTimeoutJob();
-		TaskStaticIpEngine.getInstance().CheckVpnTimeoutJob();
 	}
 	// 更新缓存任务信息至数据库
 	public void UpdateTaskToDBJob(){
@@ -209,43 +210,25 @@ public class TaskEngine implements DateUpdateListen{
 	}
 	public synchronized String vpnLogin(VpnLoginReq req,String remoteIp,String realIp){
 		String ret = null;
-		if(req.getOperType() == INCREMENT_MONEY_TYPE || req.getOperType() == INCREMENT_WATERAMY_TYPE){
-			ret = TaskDynamicIpEngine.getInstance().vpnLogin(req, remoteIp, realIp);
-		}else{
-			ret = TaskStaticIpEngine.getInstance().vpnLogin(req, remoteIp, realIp);
-		}
+		ret = TaskDynamicIpEngine.getInstance().vpnLogin(req, remoteIp, realIp);
 		return ret;
 	}
 
 	public synchronized VpnOperUpdateRsp vpnIsNeedSwitch(String token,String remoteIp,String realIp){
-		if(true == TaskDynamicIpEngine.getInstance().isRunVpn(token)){
-			return TaskDynamicIpEngine.getInstance().vpnIsNeedSwitch(token,remoteIp,realIp);
-		}else{
-			return TaskStaticIpEngine.getInstance().vpnIsNeedSwitch(token,remoteIp,realIp);
-		}
+		return TaskDynamicIpEngine.getInstance().vpnIsNeedSwitch(token,remoteIp,realIp);
 	}
 	public synchronized boolean switchVpnFinish(String token,String remoteIp,String realIp){
-		if(true == TaskDynamicIpEngine.getInstance().isRunVpn(remoteIp)){
-			return TaskDynamicIpEngine.getInstance().switchVpnFinish(token,remoteIp,realIp);
-		}else{
-			return TaskStaticIpEngine.getInstance().switchVpnFinish(token,remoteIp,realIp);
-		}
+
+		return TaskDynamicIpEngine.getInstance().switchVpnFinish(token,remoteIp,realIp);
 	}
+	
 	// 手机端一个任务完成
 	public synchronized void taskFinish(TaskFinishReq req,String remoteIp,String realIp){
-		if(true == TaskDynamicIpEngine.getInstance().isRunVpn(remoteIp)){
-			TaskDynamicIpEngine.getInstance().taskFinish(req,remoteIp,realIp);
-		}else{
-			TaskStaticIpEngine.getInstance().taskFinish(req,remoteIp,realIp);
-		}
+		TaskDynamicIpEngine.getInstance().taskFinish(req,remoteIp,realIp);
 	}
 	//取一个任务
 	public synchronized PhoneTask getTask(String deviceId,String remoteIp,String realIp){
-		if(true == TaskDynamicIpEngine.getInstance().isRunVpn(remoteIp)){
-			return TaskDynamicIpEngine.getInstance().getTask(deviceId,remoteIp,realIp);
-		}else{
-			return TaskStaticIpEngine.getInstance().getTask(deviceId,remoteIp,realIp);
-		}
+		return TaskDynamicIpEngine.getInstance().getTask(deviceId,remoteIp,realIp);
 	}
 	
 	// 创建今日任务
@@ -277,7 +260,6 @@ public class TaskEngine implements DateUpdateListen{
 		allTaskList.clear();
 		allTaskList = taskService.selectAll();
 		IpMngEngine.getInstance().clearIpList();
-		TaskStaticIpEngine.getInstance().init(this);
 		TaskDynamicIpEngine.getInstance().init(this);
 		logger.info("createTodayTask---end");
 	}
@@ -290,7 +272,7 @@ public class TaskEngine implements DateUpdateListen{
 		logger.info("getTodayTaskList---end");
 		return list;
 	}	
-	public void updateExecuteTask(int vpnType,PhoneTask pTask){
+	public void updateExecuteTask(PhoneTask pTask){
 		logger.info("updateExecute---000");
 		for(TaskExtend task : todayTaskList){
 			if(pTask.getApp().getId() == task.getAppId()){
@@ -298,19 +280,9 @@ public class TaskEngine implements DateUpdateListen{
 				switch(pTask.getOperType()){
 				case INCREMENT_MONEY_TYPE:
 					task.setExecuteIncrementMoney(task.getExecuteIncrementMoney() + 1);
-					if(vpnType == USED_DYNAMIC_VPN){
-						task.setDynamicIpExecuteIncrementMoney(task.getDynamicIpExecuteIncrementMoney()+1);
-					}else{
-						task.setStaticIpExecuteIncrementMoney(task.getStaticIpExecuteIncrementMoney()+1);
-					}
 					break;
 				case INCREMENT_WATERAMY_TYPE:
 					task.setExecuteIncrementWaterAmy(task.getExecuteIncrementWaterAmy() + 1);
-					if(vpnType == USED_DYNAMIC_VPN){
-						task.setDynamicIpExecuteIncrementWaterAmy(task.getDynamicIpExecuteIncrementWaterAmy()+1);
-					}else{
-						task.setStaticIpExecuteIncrementWaterAmy(task.getStaticIpExecuteIncrementWaterAmy()+1);
-					}
 					break;
 				case STOCK_MONEY_TYPE:	
 					task.setExecuteStockMoney(task.getExecuteStockMoney() + 1);
@@ -323,24 +295,14 @@ public class TaskEngine implements DateUpdateListen{
 		}
 		logger.info("updateExecute---end");
 	}
-	public void updateAllocTask(int type,int vpnType,Task taskExt){
+	public void updateAllocTask(int type,Task taskExt){
 		TaskExtend task = (TaskExtend)taskExt;
 		switch(type){
 		case INCREMENT_MONEY_TYPE:
 			task.setAllotIncrementMoney(task.getAllotIncrementMoney() + 1);
-			if(vpnType == USED_DYNAMIC_VPN){
-				task.setDynamicIpAllocIncrementMoney(task.getDynamicIpAllocIncrementMoney()+1);
-			}else{
-				task.setStaticIpAllocIncrementMoney(task.getStaticIpAllocIncrementMoney()+1);
-			}
 			break;
 		case INCREMENT_WATERAMY_TYPE:
 			task.setAllotIncrementWaterAmy(task.getAllotIncrementWaterAmy() + 1);
-			if(vpnType == USED_DYNAMIC_VPN){
-				task.setDynamicIpAllocIncrementWaterAmy(task.getDynamicIpAllocIncrementWaterAmy()+1);
-			}else{
-				task.setStaticIpAllocIncrementWaterAmy(task.getStaticIpAllocIncrementWaterAmy()+1);
-			}
 			break;
 		case STOCK_MONEY_TYPE:	
 			task.setAllotStockMoney(task.getAllotStockMoney() + 1);
@@ -359,6 +321,11 @@ public class TaskEngine implements DateUpdateListen{
 			}
 			count++;
 		}
+	}
+	public List<Device> selectStockByIp(String ip){
+		Device model = new Device();
+		model.setIp(ip);
+		return deviceService.selectStockByIp(model);
 	}
 	public static boolean isFreeTimeOut(VpnTask task){
 		return (new Date().getTime() - task.getCreateTime().getTime() > TimeZoneMng.FREE_TIMEOUT)?true:false;
