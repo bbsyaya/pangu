@@ -10,7 +10,7 @@ public class UpdateTaskToDBJob {
 	public void execute(){  
         try{ 
         	logger.info("execute - UpdateTaskToDBJob -- " + new Date());
-        	TaskEngine.getInstance().UpdateTaskToDBJob();
+        	TaskEngine.getInstance().updateTaskToDBJob();
          }catch(Exception ex){  
              ex.printStackTrace();  
          }  

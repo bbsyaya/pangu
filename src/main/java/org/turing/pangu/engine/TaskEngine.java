@@ -71,6 +71,7 @@ public class TaskEngine implements DateUpdateListen{
 		this.remainIpService = remainIpService;
 		this.vpnGroupService = vpnGroupService;
 		RemainEngine.getInstance().setService(platformService, appService, deviceService);
+		DeviceEngine.getInstance().setService(deviceService);
 	}
 	public List<App> getAppList(){
 		return appList;
@@ -198,11 +199,11 @@ public class TaskEngine implements DateUpdateListen{
 		return true;
 	}
 	//检查VPN连接超时的job
-	public void CheckVpnTimeoutJob(){
+	public void checkVpnTimeoutJob(){
 		TaskDynamicIpEngine.getInstance().CheckVpnTimeoutJob();
 	}
 	// 更新缓存任务信息至数据库
-	public void UpdateTaskToDBJob(){
+	public void updateTaskToDBJob(){
 		for(Task task:todayTaskList){
 			task.setUpdateDate(new Date());
 			taskService.update(task);
@@ -235,7 +236,7 @@ public class TaskEngine implements DateUpdateListen{
 	public void createTodayTask(){
 		logger.info("createTodayTask---000");
 		List<TaskConfigureBean> list = TaskConfigureEngine.getInstance().getAllAppConfigure();
-		UpdateTaskToDBJob(); // 先保存
+		updateTaskToDBJob(); // 先保存
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
@@ -243,24 +244,28 @@ public class TaskEngine implements DateUpdateListen{
 			e.printStackTrace();
 		}
 		logger.info("createTodayTask---001");
-		for(TaskConfigureBean bean :list){
-			Task model = new Task();
-			model.init();//把变量设为0
-			model.setAppId(bean.getAppId());
-			model.setIncrementMoney(bean.getIncrementMoney());
-			model.setIncrementWaterAmy(bean.getIncrementWaterAmy());
-			model.setStockMoney(bean.getStockMoney());
-			model.setStockWaterAmy(bean.getStockWaterAmy());
-			model.setCreateDate(new Date());
-			model.setUpdateDate(new Date());
-			taskService.insert(model);
+		Task checkModel = new Task();
+		//先查下今天记录
+		List<Task> listFromDB = getTodayTaskList(DateUtils.getTimesMorning(), DateUtils.getTimesNight());
+		if(null == listFromDB || listFromDB.size() == 0){
+			for(TaskConfigureBean bean :list){
+				Task model = new Task();
+				model.init();//把变量设为0
+				model.setAppId(bean.getAppId());
+				model.setIncrementMoney(bean.getIncrementMoney());
+				model.setIncrementWaterAmy(bean.getIncrementWaterAmy());
+				model.setStockMoney(bean.getStockMoney());
+				model.setStockWaterAmy(bean.getStockWaterAmy());
+				model.setCreateDate(new Date());
+				model.setUpdateDate(new Date());
+				taskService.insert(model);
+			}
 		}
 		logger.info("createTodayTask---002");
 		todayTaskListInit();
 		allTaskList.clear();
 		allTaskList = taskService.selectAll();
 		IpMngEngine.getInstance().clearIpList();
-		TaskDynamicIpEngine.getInstance().init(this);
 		logger.info("createTodayTask---end");
 	}
 	private List<Task> getTodayTaskList(Date fromTime,Date toTime){

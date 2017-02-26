@@ -27,6 +27,7 @@ import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.controller.phone.response.DeviceLoginRsp;
 import org.turing.pangu.controller.phone.response.GetBlackIpListRsp;
 import org.turing.pangu.controller.phone.response.GetTaskRsp;
+import org.turing.pangu.engine.DeviceEngine;
 import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.engine.TimeZoneMng;
 import org.turing.pangu.model.App;
@@ -214,9 +215,9 @@ public class MobileReportController extends BaseController {
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		req.getDevice().setIp(remoteIp);
 		if (TaskEngine.getInstance().isWhiteIp(remoteIp)) {
-			deviceService.saveReport(req, true);
+			DeviceEngine.getInstance().saveReport(req, true);
 		} else {
-			deviceService.saveReport(req, false);
+			DeviceEngine.getInstance().saveReport(req, false);
 		}
 		rsp.setAllData(Const.common_ok, "common_ok", null);
 

@@ -153,7 +153,9 @@ public class testTask {
 	public void testLoop(){
 		//getConnectInfo();
 		//loginPangu();
-		//getTask();
+		getTask();
+		getTask();
+		getTask();
 		System.out.print("\n");
 	}
 	public void getConnectInfo(){
@@ -166,8 +168,8 @@ public class testTask {
 	public void loginPangu(){
 		String loginUrl = "http://localhost:8080/pc/vpnLogin.pangu";
 		VpnLoginReq req = new VpnLoginReq();
-		req.setOperType(2);
-		req.setDeviceId("232dsssddd");// 取电脑mac地址
+		req.setOperType(0);
+		req.setDeviceId("sss");// 取电脑mac地址
 		String json = JSON.toJSONString(req);
 		String contentStr = HttpUtils.doPost(loginUrl, json, HttpUtils.UTF8);
 		System.out.print("\n"+contentStr);
@@ -181,7 +183,7 @@ public class testTask {
 		Date data = new Date();
 		Long time = data.getTime();
 		req.setDeviceId(time.toString());
-		req.setDeviceId("18899882888");
+		req.setDeviceId("1889000000");
 		req.setAccessToken("");
 		String json = JSON.toJSONString(req);
 		String contentStr = HttpUtils.doPost(getTaskUrl, json, HttpUtils.UTF8);

@@ -32,7 +32,6 @@ import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.controller.phone.request.GetBlackIpListReq;
 import org.turing.pangu.engine.TaskConfigureEngine;
 import org.turing.pangu.engine.TaskEngine;
-import org.turing.pangu.engine.TaskStaticIpEngine;
 import org.turing.pangu.engine.TimeZoneMng;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.DynamicVpn;
@@ -138,12 +137,7 @@ public class PCMngController extends BaseController {
 	public @ResponseBody PGResponse<VpnConnectInfoRsp> getConnectInfo(@RequestBody VpnConnectInfoReq req,HttpServletRequest request) {
 		TraceUtils.getTraceInfo();
 		PGResponse<VpnConnectInfoRsp> rsp = new PGResponse<VpnConnectInfoRsp>();
-		VpnConnectInfoRsp con = TaskStaticIpEngine.getInstance().getConnectVpnInfo();
-		if(null == con){
-			rsp.setAllData(Const.common_error, "common_error", null);
-		}else{
-			rsp.setAllData(Const.common_ok, "common_ok", con);
-		}
+		//VpnConnectInfoRsp con = TaskStaticIpEngine.getInstance().getConnectVpnInfo();
 		return rsp;
 	}
 	// vpn登录请求
@@ -298,8 +292,8 @@ public class PCMngController extends BaseController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/getFixedVpnList", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<List<RemainVpn>> getFixedVpnList(@RequestBody GetRemainVpnListReq req) {
+	@RequestMapping(value = "/getStaticVpnList", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody PGResponse<List<RemainVpn>> getStaticVpnList(@RequestBody GetRemainVpnListReq req) {
 		TraceUtils.getTraceInfo();
 		PGResponse<List<RemainVpn>> rsp = new PGResponse<List<RemainVpn>>();
 		List<RemainVpn> list = remainVpnService.selectAll();

@@ -9,7 +9,6 @@ import org.turing.pangu.model.Device;
 
 /** InvestService */
 public interface DeviceService extends BaseService<Device, Long> {
-	public boolean saveReport(ReportReq req, boolean isRemainIp);
 	public List<Device> selectCanRemainData(Device device);
 	public String getRemainIpList();
 	public int selectCountByTimeSpan(Device device);
