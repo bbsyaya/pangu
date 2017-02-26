@@ -11,8 +11,10 @@ import org.turing.pangu.service.DeviceService;
 
 public class DeviceEngine {
 	private static DeviceEngine mInstance = new DeviceEngine();
-	private List<Device> deviceListCache1 = new ArrayList<Device>(); // 用于保存上报信息的两个缓存
-	private List<Device> deviceListCache2 = new ArrayList<Device>();
+	private List<Device> deviceReportListCache1 = new ArrayList<Device>(); // 用于保存上报信息的两个缓存
+	private List<Device> deviceReportListCache2 = new ArrayList<Device>();
+	
+	private List<Device> remainListCache = new ArrayList<Device>(); // 提前从数据库中查好数据放到缓存中
 	private int usedWhichList = 1; 
 	private DeviceService deviceService;
 	public static DeviceEngine getInstance()
@@ -26,14 +28,42 @@ public class DeviceEngine {
 		this.deviceService = deviceService;
 	}
 	
+	//从数据库中查出设备信息放入缓存, 由线程跑
+	public void selectDeviceByIp(String remoteIp){
+		for(Device device:remainListCache){
+			if(remoteIp.equals(device.getIp())){ // 命中
+				return;
+			}
+		}
+		List<Device> fromDbList = selectStockByIp(remoteIp);
+		for(Device fromDb:fromDbList){
+			remainListCache.add(fromDb);
+		}
+	}
+	
+	public List<Device> getStockListFromPhoneByIp(String remoteIp){
+		List<Device> stockList = new ArrayList<Device>();
+		for(Device cache:remainListCache){
+			if(remoteIp.equals(cache.getIp())){ // 手机端请求命中
+				stockList.add(cache);
+			}
+		}
+		return stockList;
+	}
+	
+	private List<Device> selectStockByIp(String ip){
+		Device model = new Device();
+		model.setIp(ip);
+		return deviceService.selectStockByIp(model);
+	}
 	// 由定时器调用
 	public void saveReportDateToDB(){
 		List<Device> needSaveList = null;
 		if(usedWhichList == 1){
-			needSaveList = deviceListCache1;
+			needSaveList = deviceReportListCache1;
 			usedWhichList = 2;
 		}else{
-			needSaveList = deviceListCache2;
+			needSaveList = deviceReportListCache2;
 			usedWhichList = 1;
 		}
 		for(Device device:needSaveList){
@@ -158,9 +188,9 @@ public class DeviceEngine {
 		device.setCreateDate(new Date());
 		device.setUpdateDate(new Date());
 		if(usedWhichList == 1){
-			deviceListCache1.add(device);
+			deviceReportListCache1.add(device);
 		}else{
-			deviceListCache2.add(device);
+			deviceReportListCache2.add(device);
 		}
 		return false;
 	}

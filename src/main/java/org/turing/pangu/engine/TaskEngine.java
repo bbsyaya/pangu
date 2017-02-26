@@ -327,11 +327,7 @@ public class TaskEngine implements DateUpdateListen{
 			count++;
 		}
 	}
-	public List<Device> selectStockByIp(String ip){
-		Device model = new Device();
-		model.setIp(ip);
-		return deviceService.selectStockByIp(model);
-	}
+	
 	public static boolean isFreeTimeOut(VpnTask task){
 		return (new Date().getTime() - task.getCreateTime().getTime() > TimeZoneMng.FREE_TIMEOUT)?true:false;
 	}

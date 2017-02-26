@@ -238,7 +238,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 	<bean id="checkVpnTimeoutJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="checkVpnTimeoutJobDetail"/>  
        <!-- 每3分钟执行一次,检查超时的任务 -->
-       <property name="cronExpression" value="0/5 * * * * ?"/>  
+       <property name="cronExpression" value="0 */3 * * * ?"/>  
 	</bean> 
 	<bean id="checkVpnTimeoutJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
         <property name="targetObject" ref="checkVpnTimeoutJob"/>  

@@ -144,7 +144,8 @@ public class PCMngController extends BaseController {
 	@RequestMapping(value = "/vpnLogin", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<VpnLoginRsp> vpnLogin(@RequestBody VpnLoginReq req,HttpServletRequest request) {
 		TraceUtils.getTraceInfo();
-		logger.info("vpnLogin---" + req.getDeviceId() + new Date());
+		logger.info("req:" + JSON.toJSONString(req).toString());
+		logger.info("ip:" + TaskEngine.getInstance().getRemoteIp(request));
 		PGResponse<VpnLoginRsp> rsp = new PGResponse<VpnLoginRsp>();
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);
@@ -160,14 +161,15 @@ public class PCMngController extends BaseController {
 			dataRsp.setToken(token);
 			rsp.setAllData(Const.common_ok, "common_ok", dataRsp);
 		}
-		logger.info("vpnLogin---" + JSON.toJSONString(rsp).toString());
+		logger.info("rsp:" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	// vpn操作请求
 	@RequestMapping(value = "/vpnOperUpdate", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<VpnOperUpdateRsp> vpnOperUpdate(@RequestBody VpnOperUpdateReq req,HttpServletRequest request) {
 		TraceUtils.getTraceInfo();
-		logger.info("vpnOperUpdate---" + req.getToken() + new Date());
+		logger.info("req:" + JSON.toJSONString(req).toString());
+		logger.info("ip:" + TaskEngine.getInstance().getRemoteIp(request));
 		PGResponse<VpnOperUpdateRsp> rsp = new PGResponse<VpnOperUpdateRsp>();
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);
@@ -176,14 +178,15 @@ public class PCMngController extends BaseController {
 		dataRsp.setRealIp(realIp);
 		dataRsp.setLoopTime(TimeZoneMng.SPAN_TIME);
 		rsp.setAllData(Const.common_ok, "common_ok", dataRsp);
-		logger.info("vpnOperUpdate---" + JSON.toJSONString(rsp).toString());
+		logger.info("rsp:" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	// vpn切换完成
 	@RequestMapping(value = "/vpnSwitchFinish", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<String> vpnSwitchFinish(@RequestBody VpnSwitchFinishReq req,HttpServletRequest request) {
 		TraceUtils.getTraceInfo();
-		logger.info("vpnSwitchFinish---" + req.getToken() + new Date());
+		logger.info("req:" + JSON.toJSONString(req).toString());
+		logger.info("ip:" + TaskEngine.getInstance().getRemoteIp(request));
 		PGResponse<String> rsp = new PGResponse<String>();
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);
@@ -193,7 +196,7 @@ public class PCMngController extends BaseController {
 			rsp.setAllData(Const.common_ok, "common_ok", "");
 		}
 		
-		logger.info("vpnSwitchFinish---" + JSON.toJSONString(rsp).toString());
+		logger.info("rsp:" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	

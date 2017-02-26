@@ -87,13 +87,14 @@ public class TaskDynamicIpEngine implements TaskIF{
 		if( vpnTaskList.size() > 0){
 			for (int i = vpnTaskList.size()-1; i >=0; i--){
 				VpnTask tmp = vpnTaskList.get(i);
-				if(tmp.getDeviceId().equals(task.getDeviceId())){
+				if(tmp.getRemoteIp().equals(task.getRemoteIp())){
 					vpnTaskList.remove(tmp); // 删除原来的VPN task
 					logger.info("vpnLogin---002--del old task");
 				}
 			}
 		}
 		vpnTaskList.add(task);
+		DeviceEngine.getInstance().selectDeviceByIp(remoteIp);//先去数据库中取好数据
 		logger.info("vpnLogin---end");
 		return task.getToken();
 	}
@@ -103,7 +104,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 		VpnOperUpdateRsp dataRsp = new VpnOperUpdateRsp();
 		dataRsp.setIsSwitchVpn(1);
 		for(VpnTask task :vpnTaskList){
-			if(task.getToken().equals(token)){
+			if(task.getRemoteIp().equals(remoteIp)){
 				if(task.getPhoneTaskList() == null || task.getPhoneTaskList().size() == 0){
 					logger.info("not task run");
 					dataRsp.setIsSwitchVpn(0);
@@ -133,7 +134,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 			return false;
 		}
 		for(VpnTask task :vpnTaskList){
-			if(task.getToken().equals(token)){
+			if(task.getRemoteIp().equals(remoteIp)){
 				if(!remoteIp.equals(task.getRemoteIp())){
 					logger.info("warn !!! newRemoteIp != oldRemoteIp");
 				}
@@ -196,7 +197,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 						}
 					}
 				}
-				pTask = getTask(task,deviceId,task.getOperType(),remoteIp,realIp);
+				pTask = getTask(task,deviceId,remoteIp,realIp);
 				if(pTask != null){
 					logger.info("Task:"+pTask.toString());
 					task.getPhoneTaskList().add(pTask);
@@ -207,9 +208,19 @@ public class TaskDynamicIpEngine implements TaskIF{
 		}
 		return pTask;
 	}
-	private synchronized PhoneTask getTask(VpnTask task,String deviceId,int operType,String remoteIp,String realIp){
+	private synchronized PhoneTask getTask(VpnTask task,String deviceId,String remoteIp,String realIp){
 		PhoneTask pTask = new PhoneTask();
-		long appId = getOptimalAppId(task,remoteIp,realIp);
+		int operType = task.getOperType();
+        List<Device> deviceList = DeviceEngine.getInstance().getStockListFromPhoneByIp(remoteIp);
+        if(deviceList.size() > 0){ //这时不管什么情况都改成存量
+        	if(task.getOperType() == TaskEngine.INCREMENT_MONEY_TYPE){
+        		operType = TaskEngine.STOCK_MONEY_TYPE;
+        	}else if(task.getOperType() == TaskEngine.INCREMENT_MONEY_TYPE){
+        		operType = TaskEngine.STOCK_WATERAMY_TYPE;
+        	}
+        }
+        
+		long appId = getOptimalAppId(task,operType,remoteIp,realIp);
 		if(appId == 0L){
 			return null;
 		}
@@ -224,21 +235,17 @@ public class TaskDynamicIpEngine implements TaskIF{
 		pTask.setStockInfo(null);
 		return pTask;
 	}
-    private synchronized long getOptimalAppId(VpnTask task,String remoteIp,String realIp){
+    private synchronized long getOptimalAppId(VpnTask task,int operType,String remoteIp,String realIp){
         // -- 排序
 		TraceUtils.getTraceInfo();
         mDevice = null;
-        logger.info("getOptimalAppId---000");
-        logger.info("getOptimalAppId---001--operType:"+task.getOperType()+"remoteIp:"+remoteIp+"realIp:"+realIp);
-        TaskListSort.taskSort(TaskEngine.getInstance().todayTaskList, task.getOperType());//对任务列表排序
+        logger.info("getOptimalAppId--operType:"+operType+" remoteIp:"+remoteIp+" realIp:"+realIp);
+        TaskListSort.taskSort(TaskEngine.getInstance().todayTaskList, operType);//对任务列表排序
+        
+        List<Device> deviceList = DeviceEngine.getInstance().getStockListFromPhoneByIp(remoteIp);
         // 处理存量
-        if(task.getOperType() == TaskEngine.STOCK_MONEY_TYPE || task.getOperType() == TaskEngine.STOCK_WATERAMY_TYPE ){
+        if(operType == TaskEngine.STOCK_MONEY_TYPE || operType == TaskEngine.STOCK_WATERAMY_TYPE ){
             logger.info("getOptimalAppId---002--STOCK");
-            List<Device> deviceList = TaskEngine.getInstance().selectStockByIp(remoteIp);
-            if(null == deviceList || deviceList.size() == 0){
-                logger.info("getOptimalAppId---003--not STOCK");
-                return 0L;
-            }
             int flag = 0;
             /*算法核心:
              * 一个IP只能运行一个APP,即便找到了很多符合条件的device,但只运行一次
@@ -247,17 +254,25 @@ public class TaskDynamicIpEngine implements TaskIF{
                 for(Task dbTask:TaskEngine.getInstance().todayTaskList){
                     flag = 0;
                     for(PhoneTask tmpTask:task.getPhoneTaskList()){
+    					// 同一个用户不下发两次
+    					App isSame = TaskEngine.getInstance().getAppInfo(dbTask.getAppId());
+    					if(tmpTask.getApp().getUserId() == isSame.getUserId()){
+    						flag = 1;
+    						logger.info("find same user ");
+    						break;
+    					}
+    					// 同一个应用也不下发两次
                         if(tmpTask.getApp().getId() == dbTask.getAppId()){
                             flag = 1;
                             logger.info("getOptimalAppId---005-- stock existed in run");
                             break;
                         }
                     }
-                    if(flag == 0 && dev.getAppId() == dbTask.getAppId() && isHavaTaskByOperType(task.getOperType(),dbTask)){
+                    if(flag == 0 && dev.getAppId() == dbTask.getAppId() && isHavaTaskByOperType(operType,dbTask)){
                         int random = (int)(1+Math.random()*(10-1+1));
                         //if(random%2 == 0)// 当有很多条数据时 50% 方式衰减
                         { 
-                        	mListen.updateAllocTask(task.getOperType(),dbTask); // 对应派发 ++ 
+                        	mListen.updateAllocTask(operType,dbTask); // 对应派发 ++ 
                             mDevice = dev; // 保存好不容易找到的存量信息，函数外赋值。
                             logger.info("getOptimalAppId---end--find STOCK mDevice:"+mDevice.toString());
                             return dbTask.getAppId();
@@ -287,8 +302,8 @@ public class TaskDynamicIpEngine implements TaskIF{
 						break;
 					}
                 }
-                if(flag == 0 && isHavaTaskByOperType(task.getOperType(),dbTask)){
-                	mListen.updateAllocTask(task.getOperType(),dbTask); // 对应派发 ++ 
+                if(flag == 0 && isHavaTaskByOperType(operType,dbTask)){
+                	mListen.updateAllocTask(operType,dbTask); // 对应派发 ++ 
                     logger.info("getOptimalAppId---end--return INCREMENT ");
                     return dbTask.getAppId();
                 }
@@ -340,6 +355,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 	}
 	@Override
 	public void CheckVpnTimeoutJob() {	
+		/*
 		if(null == vpnTaskList || vpnTaskList.size() == 0){
 			return;
 		}
@@ -351,5 +367,6 @@ public class TaskDynamicIpEngine implements TaskIF{
 				logger.info("remove isTimeOut vpn ");
 			}
 		}
+		*/
 	}
 }
