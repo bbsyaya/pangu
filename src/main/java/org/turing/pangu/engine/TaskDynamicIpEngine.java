@@ -212,11 +212,18 @@ public class TaskDynamicIpEngine implements TaskIF{
 		PhoneTask pTask = new PhoneTask();
 		int operType = task.getOperType();
         List<Device> deviceList = DeviceEngine.getInstance().getStockListFromPhoneByIp(remoteIp);
+        // 只要有存量即使跑增量也改成存量 , 没有存量即使跑存量也改成跑增量,
         if(deviceList.size() > 0){ //这时不管什么情况都改成存量
         	if(task.getOperType() == TaskEngine.INCREMENT_MONEY_TYPE){
         		operType = TaskEngine.STOCK_MONEY_TYPE;
         	}else if(task.getOperType() == TaskEngine.INCREMENT_MONEY_TYPE){
         		operType = TaskEngine.STOCK_WATERAMY_TYPE;
+        	}
+        }else{
+        	if(task.getOperType() == TaskEngine.STOCK_MONEY_TYPE){
+        		operType = TaskEngine.INCREMENT_MONEY_TYPE;
+        	}else if(task.getOperType() == TaskEngine.STOCK_WATERAMY_TYPE){
+        		operType = TaskEngine.INCREMENT_MONEY_TYPE;
         	}
         }
         
@@ -253,22 +260,16 @@ public class TaskDynamicIpEngine implements TaskIF{
             for(Device dev:deviceList){
                 for(Task dbTask:TaskEngine.getInstance().todayTaskList){
                     flag = 0;
-                    for(PhoneTask tmpTask:task.getPhoneTaskList()){
-    					// 同一个用户不下发两次
-    					App isSame = TaskEngine.getInstance().getAppInfo(dbTask.getAppId());
-    					if(tmpTask.getApp().getUserId() == isSame.getUserId()){
+                	for(PhoneTask tmpTask:task.getPhoneTaskList()){
+    					// 同一个用户,同一个应用不下发两次
+    					App isDiff = TaskEngine.getInstance().getAppInfo(dbTask.getAppId());
+    					if(tmpTask.getApp().getUserId() != isDiff.getUserId()){
     						flag = 1;
-    						logger.info("find same user ");
+    						logger.info("find diff user:"+isDiff.getUserId()+"|AppId:"+isDiff.getId());
     						break;
     					}
-    					// 同一个应用也不下发两次
-                        if(tmpTask.getApp().getId() == dbTask.getAppId()){
-                            flag = 1;
-                            logger.info("getOptimalAppId---005-- stock existed in run");
-                            break;
-                        }
                     }
-                    if(flag == 0 && dev.getAppId() == dbTask.getAppId() && isHavaTaskByOperType(operType,dbTask)){
+                    if(flag == 1 && dev.getAppId() == dbTask.getAppId() && isHavaTaskByOperType(operType,dbTask)){
                         int random = (int)(1+Math.random()*(10-1+1));
                         //if(random%2 == 0)// 当有很多条数据时 50% 方式衰减
                         { 
@@ -288,21 +289,15 @@ public class TaskDynamicIpEngine implements TaskIF{
             for(Task dbTask:TaskEngine.getInstance().todayTaskList){
                 flag = 0;
                 for(PhoneTask tmpTask:task.getPhoneTaskList()){
-					// 同一个用户不下发两次
-					App isSame = TaskEngine.getInstance().getAppInfo(dbTask.getAppId());
-					if(tmpTask.getApp().getUserId() == isSame.getUserId()){
+					// 同一个用户,同一个应用不下发两次,只要用户名不一样就可以分配
+					App isDiff = TaskEngine.getInstance().getAppInfo(dbTask.getAppId());
+					if(tmpTask.getApp().getUserId() != isDiff.getUserId()){
 						flag = 1;
-						logger.info("find same user ");
-						break;
-					}
-					// 同一个应用也不下发两次
-					if(tmpTask.getApp().getId() == dbTask.getAppId()){
-						flag = 1;
-						logger.info("find same app");
+						logger.info("find diff user:"+isDiff.getUserId()+"|AppId:"+isDiff.getId());
 						break;
 					}
                 }
-                if(flag == 0 && isHavaTaskByOperType(operType,dbTask)){
+                if(flag == 1 && isHavaTaskByOperType(operType,dbTask)){
                 	mListen.updateAllocTask(operType,dbTask); // 对应派发 ++ 
                     logger.info("getOptimalAppId---end--return INCREMENT ");
                     return dbTask.getAppId();

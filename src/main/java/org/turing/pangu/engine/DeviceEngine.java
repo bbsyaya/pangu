@@ -52,9 +52,11 @@ public class DeviceEngine {
 	}
 	
 	private List<Device> selectStockByIp(String ip){
+		List<Device> list = new ArrayList<Device>();
 		Device model = new Device();
 		model.setIp(ip);
-		return deviceService.selectStockByIp(model);
+		list = deviceService.selectStockByIp(model);
+		return list;
 	}
 	// 由定时器调用
 	public void saveReportDateToDB(){
@@ -70,6 +72,7 @@ public class DeviceEngine {
 			device.setUpdateDate(new Date());
 			deviceService.insert(device);
 		}
+		needSaveList.clear(); //清空
 	}
 	public boolean saveReport(ReportReq req,boolean isWhiteIp){
 		// TODO Auto-generated method stub
