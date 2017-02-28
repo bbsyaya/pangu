@@ -152,10 +152,10 @@ public class testTask {
 	@Test
 	public void testLoop(){
 		//getConnectInfo();
-		//loginPangu();
-		getTask();
-		getTask();
-		getTask();
+		loginPangu();
+		getTask("2333");
+		getTask("123444");
+		getTask("sdffff");
 		System.out.print("\n");
 	}
 	public void getConnectInfo(){
@@ -166,16 +166,16 @@ public class testTask {
 		System.out.print("\n"+contentStr);
 	}
 	public void loginPangu(){
-		String loginUrl = "http://localhost:8080/pc/vpnLogin.pangu";
+		String loginUrl = "http://pangu.u-app.cn/pc/vpnLogin.pangu";
 		VpnLoginReq req = new VpnLoginReq();
 		req.setOperType(0);
-		req.setDeviceId("sss");// 取电脑mac地址
+		req.setDeviceId("sss999999");// 取电脑mac地址
 		String json = JSON.toJSONString(req);
 		String contentStr = HttpUtils.doPost(loginUrl, json, HttpUtils.UTF8);
 		System.out.print("\n"+contentStr);
 	}
-	public GetTaskRsp getTask(){
-		String getTaskUrl = "http://localhost:8080/mobile/getTask.pangu";
+	public GetTaskRsp getTask(String deviceId){
+		String getTaskUrl = "http://pangu.u-app.cn/mobile/getTask.pangu";
 		//String getTaskUrl="http://pangu.u-app.cn/mobile/getTask.pangu";
 		//String taskFinishUrl = "http://localhost:8080/mobile/taskFinish.pangu";
 		
@@ -183,7 +183,7 @@ public class testTask {
 		Date data = new Date();
 		Long time = data.getTime();
 		req.setDeviceId(time.toString());
-		req.setDeviceId("1889000000");
+		req.setDeviceId(deviceId);
 		req.setAccessToken("");
 		String json = JSON.toJSONString(req);
 		String contentStr = HttpUtils.doPost(getTaskUrl, json, HttpUtils.UTF8);

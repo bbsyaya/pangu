@@ -262,14 +262,14 @@ public class TaskDynamicIpEngine implements TaskIF{
                     flag = 0;
                 	for(PhoneTask tmpTask:task.getPhoneTaskList()){
     					// 同一个用户,同一个应用不下发两次
-    					App isDiff = TaskEngine.getInstance().getAppInfo(dbTask.getAppId());
-    					if(tmpTask.getApp().getUserId() != isDiff.getUserId()){
+    					App same = TaskEngine.getInstance().getAppInfo(dbTask.getAppId());
+    					if(tmpTask.getApp().getUserId() == same.getUserId()){
     						flag = 1;
-    						logger.info("find diff user:"+isDiff.getUserId()+"|AppId:"+isDiff.getId());
+    						logger.info("find same user:"+same.getUserId()+"|AppId:"+same.getId());
     						break;
     					}
                     }
-                    if(flag == 1 && dev.getAppId() == dbTask.getAppId() && isHavaTaskByOperType(operType,dbTask)){
+                    if(flag == 0 && dev.getAppId() == dbTask.getAppId() && isHavaTaskByOperType(operType,dbTask)){
                         int random = (int)(1+Math.random()*(10-1+1));
                         //if(random%2 == 0)// 当有很多条数据时 50% 方式衰减
                         { 
@@ -290,14 +290,14 @@ public class TaskDynamicIpEngine implements TaskIF{
                 flag = 0;
                 for(PhoneTask tmpTask:task.getPhoneTaskList()){
 					// 同一个用户,同一个应用不下发两次,只要用户名不一样就可以分配
-					App isDiff = TaskEngine.getInstance().getAppInfo(dbTask.getAppId());
-					if(tmpTask.getApp().getUserId() != isDiff.getUserId()){
+					App same = TaskEngine.getInstance().getAppInfo(dbTask.getAppId());
+					if(tmpTask.getApp().getUserId() == same.getUserId()){
 						flag = 1;
-						logger.info("find diff user:"+isDiff.getUserId()+"|AppId:"+isDiff.getId());
+						logger.info("find same user:"+same.getUserId()+"|AppId:"+same.getId());
 						break;
 					}
                 }
-                if(flag == 1 && isHavaTaskByOperType(operType,dbTask)){
+                if(flag == 0 && isHavaTaskByOperType(operType,dbTask)){
                 	mListen.updateAllocTask(operType,dbTask); // 对应派发 ++ 
                     logger.info("getOptimalAppId---end--return INCREMENT ");
                     return dbTask.getAppId();
