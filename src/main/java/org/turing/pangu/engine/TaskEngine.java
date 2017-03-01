@@ -19,11 +19,14 @@ import org.turing.pangu.model.Platform;
 import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.model.Task;
 import org.turing.pangu.service.AppService;
+import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.PlatformService;
+import org.turing.pangu.service.PlatformServiceImpl;
 import org.turing.pangu.service.RemainIpService;
 import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.TaskService;
+import org.turing.pangu.service.TaskServiceImpl;
 import org.turing.pangu.service.VpnGroupService;
 import org.turing.pangu.task.DateUpdateListen;
 import org.turing.pangu.task.TaskExtend;
@@ -32,14 +35,12 @@ import org.turing.pangu.utils.DateUtils;
 /*
  * 任务引擎，负责每日任务生成,配置任务,跟踪任务进展,
  * */
-public class TaskEngine implements DateUpdateListen{
+public class TaskEngine implements DateUpdateListen,EngineListen{
 	private static final Logger logger = Logger.getLogger(TaskEngine.class);
 	private static TaskEngine mInstance = new TaskEngine();
 	private List<Task> allTaskList = new ArrayList<Task>();
 	public List<TaskExtend> todayTaskList = new ArrayList<TaskExtend>();
-	public List<App> appList = new ArrayList<App>();
-	private List<Platform> platformList = new ArrayList<Platform>();
-	private List<RemainVpn> whiteIpList = new ArrayList<RemainVpn>();
+
 	public static final int INCREMENT_MONEY_TYPE = 0;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	public static final int INCREMENT_WATERAMY_TYPE = 1;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	public static final int STOCK_MONEY_TYPE = 2;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
@@ -49,54 +50,26 @@ public class TaskEngine implements DateUpdateListen{
 	
 	public static final int USED_STATIC_VPN = 0;//操作类型  0:静态VPN 1:动态VPN
 	public static final int USED_DYNAMIC_VPN = 1;
-	private PlatformService platformService;
-	private AppService appService;
-	private DeviceService deviceService;
 	private TaskService taskService;
-	private RemainVpnService remainVpnService;
-	private RemainIpService remainIpService;
-	private VpnGroupService vpnGroupService;
 	public static TaskEngine getInstance(){
 		if(null == mInstance)
 			mInstance = new TaskEngine();
 		return mInstance;
 	}
-
-	public void setService(VpnGroupService vpnGroupService,RemainVpnService remainVpnService,RemainIpService remainIpService,PlatformService platformService,AppService appService,DeviceService deviceService,TaskService taskService){
-		this.platformService = platformService;
-		this.appService = appService;
-		this.deviceService = deviceService;
-		this.taskService = taskService;
-		this.remainVpnService = remainVpnService;
-		this.remainIpService = remainIpService;
-		this.vpnGroupService = vpnGroupService;
-		RemainEngine.getInstance().setService(platformService, appService, deviceService);
-		DeviceEngine.getInstance().setService(deviceService);
+	@Override
+	public void setService(List<BaseService> serviceList) {
+		// TODO Auto-generated method stub
+		for(BaseService service :serviceList){
+			if(service instanceof TaskServiceImpl ){
+				this.taskService = (TaskService)service;
+			}
+		}
 	}
-	public List<App> getAppList(){
-		return appList;
-	}
-	public List<Platform> getAllPlatformList(){
-		return platformList;
-	}
+	
 	public List<TaskExtend> getTodayTaskList(){
 		return todayTaskList;
 	}
 	public void init(){
-		if(null != appService){
-			App model = new App();
-			model.setIsCanRun(1);
-			appList.clear();
-			appList = appService.selectCanRunApps(model);
-		}
-		if(null != platformService){
-			platformList.clear();
-			platformList = platformService.selectAll();
-		}
-		if(null != remainVpnService){
-			whiteIpList.clear();
-			whiteIpList = remainVpnService.selectAll();
-		}
 		todayTaskListInit();
 		allTaskList.clear();
 		allTaskList = taskService.selectAll();
@@ -120,23 +93,6 @@ public class TaskEngine implements DateUpdateListen{
 			todayTaskList.add(tExd);
 		}
 	}
-	public boolean isWhiteIp(String ip){
-		for(RemainVpn remain :whiteIpList){
-			if(remain.getIpList().contains(ip)){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public Platform getPlatformInfo(long pfId){
-		for(Platform pf:platformList){
-			if(pf.getId() == pfId){
-				return pf;
-			}
-		}
-		return null;
-	}
 	public List<Task> getAllDBTaskByAppId(long appId){
 		List<Task> list = new ArrayList<Task>();
 		for(Task task:allTaskList){
@@ -146,14 +102,7 @@ public class TaskEngine implements DateUpdateListen{
 		}
 		return list;
 	}
-	public App getAppInfo(long appId){
-		for(App app:appList){
-			if(app.getId() == appId){
-				return app;
-			}
-		}
-		return null;
-	}
+
 	public synchronized String getRemoteIp(HttpServletRequest request){
 		String ip = request.getHeader("X-Real-IP"); 
 		if(null == ip ){
@@ -344,5 +293,19 @@ public class TaskEngine implements DateUpdateListen{
 			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeZoneMng.STOCK_WATERAMY_TIMEOUT)?true:false;
 		}
 		return true;
+	}
+
+
+
+	@Override
+	public void open() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void close() {
+		// TODO Auto-generated method stub
+		
 	}
 }

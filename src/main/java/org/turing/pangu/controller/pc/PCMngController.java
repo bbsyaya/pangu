@@ -1,5 +1,6 @@
 package org.turing.pangu.controller.pc;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +31,9 @@ import org.turing.pangu.controller.pc.response.VpnConnectInfoRsp;
 import org.turing.pangu.controller.pc.response.VpnLoginRsp;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.controller.phone.request.GetBlackIpListReq;
+import org.turing.pangu.engine.AppEngine;
+import org.turing.pangu.engine.EngineMng;
+import org.turing.pangu.engine.PlatformEngine;
 import org.turing.pangu.engine.TaskConfigureEngine;
 import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.engine.TimeZoneMng;
@@ -40,6 +44,7 @@ import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.model.Task;
 import org.turing.pangu.model.User;
 import org.turing.pangu.service.AppService;
+import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.DynamicVpnService;
 import org.turing.pangu.service.PlatformService;
@@ -94,13 +99,22 @@ public class PCMngController extends BaseController {
 	@Resource(name="vpnGroupServiceImpl")
 	private VpnGroupService vpnGroupService;
 	
-
+	private List<BaseService> getAllServiecInstance(){
+		List<BaseService> list = new ArrayList<BaseService>();
+		list.add(vpnGroupService);
+		list.add(remainVpnService);
+		list.add(remainIpService);
+		list.add(platformService);
+		list.add(appService);
+		list.add(deviceService);
+		list.add(taskService);
+		return list;
+	}
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public @ResponseBody PGResponse<String> index() {
 		logger.info("index---" + new Date());
 		PGResponse<String> rsp = new PGResponse<String>();
-		TaskEngine.getInstance().setService(vpnGroupService,remainVpnService,remainIpService,platformService, appService, deviceService, taskService);
-		TaskEngine.getInstance().init();
+		EngineMng.getInstance().initEngine(getAllServiecInstance());
 		TaskConfigureEngine.getInstance().init();
 		rsp.setAllData(Const.common_ok, "common_ok", null);
 		logger.info("index---" + JSON.toJSONString(rsp).toString());
@@ -260,7 +274,7 @@ public class PCMngController extends BaseController {
 	public @ResponseBody PGResponse<String> getBlackIpList(@RequestBody GetBlackIpListReq req) {
 		TraceUtils.getTraceInfo();
 		PGResponse<String> rsp = new PGResponse<String>();
-		Platform platform = TaskEngine.getInstance().getPlatformInfo(req.getPlatformId());
+		Platform platform = PlatformEngine.getInstance().getPlatformInfo(req.getPlatformId());
 		if(null == platform){
 			rsp.setAllData(Const.common_error, "common_error", null);
 		}else{
@@ -279,10 +293,11 @@ public class PCMngController extends BaseController {
 	public @ResponseBody PGResponse<String> saveBlackIpList(@RequestBody SaveBlackIpListReq req) {
 		TraceUtils.getTraceInfo();
 		PGResponse<String> rsp = new PGResponse<String>();
-		Platform platform  = platformService.select(req.getPlatformId());
+		Platform platform  = PlatformEngine.getInstance().getPlatformInfo(req.getPlatformId());
 		if(platform != null && !req.getIpList().equals("")){
 			platform.setBlackIp(req.getIpList());
 			platform.setUpdateDate(new Date());
+			
 			platformService.update(platform);
 		}
 		rsp.setAllData(Const.common_ok, "common_ok", "");
@@ -313,7 +328,7 @@ public class PCMngController extends BaseController {
 	public @ResponseBody PGResponse<List<App>> getAppList(@RequestBody GetAppListReq req) {
 		TraceUtils.getTraceInfo();
 		PGResponse<List<App>> rsp = new PGResponse<List<App>>();
-		List<App> list = TaskEngine.getInstance().getAppList();
+		List<App> list = AppEngine.getInstance().getAppList();
 		rsp.setAllData(Const.common_ok, "common_ok", list);
 		logger.info("getAppList---" + JSON.toJSONString(rsp).toString());
 		return rsp;

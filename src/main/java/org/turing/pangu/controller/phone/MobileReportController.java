@@ -27,9 +27,12 @@ import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.controller.phone.response.DeviceLoginRsp;
 import org.turing.pangu.controller.phone.response.GetBlackIpListRsp;
 import org.turing.pangu.controller.phone.response.GetTaskRsp;
+import org.turing.pangu.engine.AppEngine;
 import org.turing.pangu.engine.DeviceEngine;
+import org.turing.pangu.engine.PlatformEngine;
 import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.engine.TimeZoneMng;
+import org.turing.pangu.engine.VpnEngine;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Platform;
 import org.turing.pangu.service.DeviceService;
@@ -91,7 +94,7 @@ public class MobileReportController extends BaseController {
 				});
 		GetBlackIpListRsp rsp = new GetBlackIpListRsp();
 		Platform model = null;
-		model = TaskEngine.getInstance().getPlatformInfo(req.getPlatformId());
+		model = PlatformEngine.getInstance().getPlatformInfo(req.getPlatformId());
 		String[] ipList = model.getBlackIp().split("\\|");
 		int count = 0;
 		for(String ip :ipList){
@@ -115,7 +118,7 @@ public class MobileReportController extends BaseController {
 				new TypeReference<GetPlatformInfoReq>() {
 				});
 		Platform model = null;
-		model = TaskEngine.getInstance().getPlatformInfo(req.getPlatformId());
+		model = PlatformEngine.getInstance().getPlatformInfo(req.getPlatformId());
 		logger.info("getPlatformInfo---end" + model.toString());
 		return model;
 	}
@@ -134,7 +137,7 @@ public class MobileReportController extends BaseController {
 				});
 		
 		App model = null;
-		model = TaskEngine.getInstance().getAppInfo(req.getAppId());
+		model = AppEngine.getInstance().getAppInfo(req.getAppId());
 		logger.info("getAppInfo---end" + model.toString());
 		return model;
 	}
@@ -214,7 +217,7 @@ public class MobileReportController extends BaseController {
 		// ----------------------------------------------
 
 		// 1. 先验证是否为有效appid
-		App app = TaskEngine.getInstance().getAppInfo(req.getAppId());
+		App app = AppEngine.getInstance().getAppInfo(req.getAppId());
 		if (app == null) {
 			rsp.setAllData(Const.common_error, "common_error", null);
 			result = JSON.toJSONString(rsp);
@@ -224,7 +227,7 @@ public class MobileReportController extends BaseController {
 		// 3. 写入DB
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		req.getDevice().setIp(remoteIp);
-		if (TaskEngine.getInstance().isWhiteIp(remoteIp)) {
+		if (VpnEngine.getInstance().isWhiteIp(remoteIp)) {
 			DeviceEngine.getInstance().saveReport(req, true);
 		} else {
 			DeviceEngine.getInstance().saveReport(req, false);

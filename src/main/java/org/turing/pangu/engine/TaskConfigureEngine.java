@@ -42,7 +42,7 @@ public class TaskConfigureEngine {
 		configureList = JSON.parseObject(contentStr,
 				new TypeReference<List<TaskConfigureBean>>() {
 				});
-		List<App> appList = TaskEngine.getInstance().getAppList();
+		List<App> appList = AppEngine.getInstance().getAppList();
 		for(App app : appList){
 			flag = 0;
 			for(TaskConfigureBean bean:configureList){

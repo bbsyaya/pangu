@@ -13,6 +13,7 @@ import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.model.Platform;
 import org.turing.pangu.service.AppService;
+import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.utils.DateUtils;
@@ -21,8 +22,8 @@ import org.turing.pangu.utils.JsonUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-
-public class RemainEngine {
+/*
+public class RemainEngine implements EngineListen{
 	private static final Logger logger = Logger.getLogger(RemainEngine.class);
 	private static RemainEngine mInstance = new RemainEngine();
 	public static String remainRootPath = PropertyEngine.getProperty(
@@ -34,13 +35,6 @@ public class RemainEngine {
 	private PlatformService platformService;
 	private AppService appService;
 	private DeviceService deviceService;
-
-	public void setService(PlatformService platformService,
-			AppService appService, DeviceService deviceService) {
-		this.platformService = platformService;
-		this.appService = appService;
-		this.deviceService = deviceService;
-	}
 
 	public static RemainEngine getInstance() {
 		if (null == mInstance)
@@ -81,12 +75,11 @@ public class RemainEngine {
 
 	public boolean generateRemainFile() {
 		List<Device> deviceRemainList = null;
-		List<Platform> list = PlatformEngine.getInstance().getList();
-		List<App> appList = AppEngine.getInstance().getList();
+		List<Platform> list = PlatformEngine.getInstance().getPlatformList();
+		List<App> appList = AppEngine.getInstance().getAppList();
 		if (null == list || null == appList) {
-			list = TaskEngine.getInstance().getAllPlatformList();
-			appList = TaskEngine.getInstance().getAppList();
-			AppEngine.getInstance().setList(appList);
+			list = PlatformEngine.getInstance().getPlatformList();
+			appList = AppEngine.getInstance().getAppList();
 		}
 		if (null == list || list.size() == 0 || null == appList
 				|| appList.size() == 0)
@@ -167,4 +160,30 @@ public class RemainEngine {
 		}
 		return newlist;
 	}
-}
+
+	@Override
+	public void setService(List<BaseService> serviceList) {
+		// TODO Auto-generated method stub
+		this.platformService = platformService
+		this.appService = appService;
+		this.deviceService = deviceService;
+	}
+
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void open() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void close() {
+		// TODO Auto-generated method stub
+		
+	}
+}*/

@@ -182,7 +182,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 		logger.info("deviceId:"+deviceId+"--remoteIp:"+remoteIp+"--realIp:"+realIp);
 		for(VpnTask task:vpnTaskList){
 			if(task.getRemoteIp().equals(remoteIp)){
-				if(task.getPhoneTaskList().size() > TaskEngine.getInstance().appList.size() * TimeZoneMng.getInstance().getTimeZoneWeight() ){
+				if(task.getPhoneTaskList().size() > AppEngine.getInstance().appList.size() * TimeZoneMng.getInstance().getTimeZoneWeight() ){
 					return pTask;
 				}
 				for(PhoneTask tmpTask:task.getPhoneTaskList()){
@@ -235,7 +235,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 		pTask.setVpnToken(task.getToken());
 		pTask.setOperType(operType);
 		pTask.setTaskId(task.getToken() + RandomUtils.getRandom(TaskEngine.PHONE_TASKID_LENGH/2));//32位
-		pTask.setApp(TaskEngine.getInstance().getAppInfo(appId));
+		pTask.setApp(AppEngine.getInstance().getAppInfo(appId));
 		pTask.setOperType(task.getOperType());
 		pTask.setTimes(1);// 暂定一次
 		pTask.setSpanTime(5);//暂定5S 
@@ -262,7 +262,7 @@ public class TaskDynamicIpEngine implements TaskIF{
                     flag = 0;
                 	for(PhoneTask tmpTask:task.getPhoneTaskList()){
     					// 同一个用户,同一个应用不下发两次
-    					App same = TaskEngine.getInstance().getAppInfo(dbTask.getAppId());
+    					App same = AppEngine.getInstance().getAppInfo(dbTask.getAppId());
     					if(tmpTask.getApp().getUserId() == same.getUserId()){
     						flag = 1;
     						logger.info("find same user:"+same.getUserId()+"|AppId:"+same.getId());
@@ -290,7 +290,7 @@ public class TaskDynamicIpEngine implements TaskIF{
                 flag = 0;
                 for(PhoneTask tmpTask:task.getPhoneTaskList()){
 					// 同一个用户,同一个应用不下发两次,只要用户名不一样就可以分配
-					App same = TaskEngine.getInstance().getAppInfo(dbTask.getAppId());
+					App same = AppEngine.getInstance().getAppInfo(dbTask.getAppId());
 					if(tmpTask.getApp().getUserId() == same.getUserId()){
 						flag = 1;
 						logger.info("find same user:"+same.getUserId()+"|AppId:"+same.getId());

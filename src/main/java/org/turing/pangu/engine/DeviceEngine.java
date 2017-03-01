@@ -7,9 +7,11 @@ import java.util.List;
 import org.turing.pangu.controller.phone.request.ReportReq;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
+import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.DeviceService;
+import org.turing.pangu.service.DeviceServiceImpl;
 
-public class DeviceEngine {
+public class DeviceEngine implements EngineListen{
 	private static DeviceEngine mInstance = new DeviceEngine();
 	private List<Device> deviceReportListCache1 = new ArrayList<Device>(); // 用于保存上报信息的两个缓存
 	private List<Device> deviceReportListCache2 = new ArrayList<Device>();
@@ -23,9 +25,15 @@ public class DeviceEngine {
 			mInstance = new DeviceEngine();
 		return mInstance;
 	}
-	
-	public void setService(DeviceService deviceService){
-		this.deviceService = deviceService;
+	@Override
+	public void setService(List<BaseService> serviceList) {
+		// TODO Auto-generated method stub
+		for(BaseService service :serviceList){
+			if(service instanceof DeviceServiceImpl ){
+				this.deviceService = (DeviceService)service;
+			}
+		}
+		
 	}
 	
 	//从数据库中查出设备信息放入缓存, 由线程跑
@@ -196,5 +204,25 @@ public class DeviceEngine {
 			deviceReportListCache2.add(device);
 		}
 		return false;
+	}
+
+
+
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void open() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void close() {
+		// TODO Auto-generated method stub
+		
 	}
 }

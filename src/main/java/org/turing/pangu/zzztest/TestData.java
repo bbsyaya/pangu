@@ -12,11 +12,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.turing.pangu.bean.TaskConfigureBean;
 import org.turing.pangu.bean.VpnConnectInfo;
+import org.turing.pangu.engine.EngineMng;
 import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.model.RemainIp;
 import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.service.AppService;
+import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.service.RemainIpService;
@@ -178,15 +180,24 @@ public class TestData {
 		// L2tp Pptp	
 		return json;
 	}
+	private List<BaseService> getAllServiecInstance(){
+		List<BaseService> list = new ArrayList<BaseService>();
+		list.add(vpnGroupService);
+		list.add(remainVpnService);
+		list.add(remainIpService);
+		list.add(platformService);
+		list.add(appService);
+		list.add(deviceService);
+		list.add(taskService);
+		return list;
+	}
 	@Test
 	public void testUpdateDevice() {
-		TaskEngine.getInstance().setService(vpnGroupService, remainVpnService,
-				remainIpService, platformService, appService, deviceService,
-				taskService);
 		
+		EngineMng.getInstance().initEngine(getAllServiecInstance());		
 
-		List<Device> list = deviceService.selectAll();
-		List<RemainVpn> vpnList = remainVpnService.selectAll();
+		//List<Device> list = deviceService.selectAll();
+		//List<RemainVpn> vpnList = remainVpnService.selectAll();
 
 		/*
 		List<RemainIp> remainList = remainIpService.selectAll();
@@ -205,9 +216,7 @@ public class TestData {
 	}
 
 	public void remain() {
-		TaskEngine.getInstance().setService(vpnGroupService, remainVpnService,
-				remainIpService, platformService, appService, deviceService,
-				taskService);
+		EngineMng.getInstance().initEngine(getAllServiecInstance());	
 		// RemainEngine.getInstance().generateRemainFile();
 		// testUpdateDevice();
 		List<TaskConfigureBean> list = new ArrayList<TaskConfigureBean>();
