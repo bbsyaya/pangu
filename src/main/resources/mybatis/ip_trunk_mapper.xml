@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.turing.pangu.mapper.IpTrunkMapper" >
+  <resultMap id="BaseResultMap" type="org.turing.pangu.model.IpTrunk" >
+    <id column="id" property="id" jdbcType="BIGINT" />       
+    <result column="ip" property="ip" jdbcType="VARCHAR" />          
+    <result column="address" property="address" jdbcType="VARCHAR" />          
+    <result column="city_code" property="cityCode" jdbcType="INTEGER" />          
+    <result column="is_vaild" property="isVaild" jdbcType="INTEGER" />          
+    <result column="configure" property="configure" jdbcType="VARCHAR" />          
+    <result column="alloc_count" property="allocCount" jdbcType="INTEGER" />          
+    <result column="success_count" property="successCount" jdbcType="INTEGER" />          
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
+  </resultMap>   
+  <sql id="Base_Column_List" >
+    i.id,
+	i.ip,
+	i.address,
+	i.city_code,
+	i.is_vaild,
+	i.configure,
+	i.alloc_count,
+	i.success_count,
+	i.create_date,
+	i.update_date
+  </sql>
+  <sql id="Base_Column_Value_List" >
+    #{ip},
+	#{address},
+	#{cityCode},
+	#{isVaild},
+	#{configure},
+	#{allocCount},
+	#{successCount},
+	#{createDate},
+	#{updateDate}
+  </sql>
+  <sql id="Base_Column_Update_List" >
+    ip=#{ip},
+	address=#{address},
+	city_code=#{cityCode},
+	is_vaild=#{isVaild},
+	configure=#{configure},
+	alloc_count=#{allocCount},
+	success_count=#{successCount},
+	create_date=#{createDate},
+	update_date=#{updateDate}
+  </sql> 
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from ip_trunk i
+    where i.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ip_trunk i
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.IpTrunk" >
+    select 
+    <include refid="Base_Column_List" />
+    from ip_trunk i
+    where 1=1 
+    <if test="ip != null" >and i.ip= #{ip,jdbcType=VARCHAR}</if>
+    <if test="address != null" >and i.address= #{address,jdbcType=VARCHAR}</if>
+    <if test="cityCode != null" >and i.city_code= #{cityCode,jdbcType=INTEGER}</if>
+    <if test="isVaild != null" >and i.is_vaild= #{isVaild,jdbcType=INTEGER}</if>
+    <if test="configure != null" >and i.configure= #{configure,jdbcType=VARCHAR}</if>
+    <if test="allocCount != null" >and i.alloc_count= #{allocCount,jdbcType=INTEGER}</if>
+    <if test="successCount != null" >and i.success_count= #{successCount,jdbcType=INTEGER}</if>
+    <if test="createDate != null" >and i.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and i.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.IpTrunk" >
+    select 
+    <include refid="Base_Column_List" />
+    from ip_trunk i
+    where 1=1 
+    <if test="ip != null" >and i.ip= #{ip,jdbcType=VARCHAR}</if>
+    <if test="address != null" >and i.address= #{address,jdbcType=VARCHAR}</if>
+    <if test="cityCode != null" >and i.city_code= #{cityCode,jdbcType=INTEGER}</if>
+    <if test="isVaild != null" >and i.is_vaild= #{isVaild,jdbcType=INTEGER}</if>
+    <if test="configure != null" >and i.configure= #{configure,jdbcType=VARCHAR}</if>
+    <if test="allocCount != null" >and i.alloc_count= #{allocCount,jdbcType=INTEGER}</if>
+    <if test="successCount != null" >and i.success_count= #{successCount,jdbcType=INTEGER}</if>
+    <if test="createDate != null" >and i.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and i.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.ParamModel" >
+    select 
+    <include refid="Base_Column_List" />
+    from ip_trunk i
+    where 1=1 
+    <if test="model.ip != null" >and i.ip= #{model.ip,jdbcType=VARCHAR}</if>
+    <if test="model.address != null" >and i.address= #{model.address,jdbcType=VARCHAR}</if>
+    <if test="model.cityCode != null" >and i.city_code= #{model.cityCode,jdbcType=INTEGER}</if>
+    <if test="model.isVaild != null" >and i.is_vaild= #{model.isVaild,jdbcType=INTEGER}</if>
+    <if test="model.configure != null" >and i.configure= #{model.configure,jdbcType=VARCHAR}</if>
+    <if test="model.allocCount != null" >and i.alloc_count= #{model.allocCount,jdbcType=INTEGER}</if>
+    <if test="model.successCount != null" >and i.success_count= #{model.successCount,jdbcType=INTEGER}</if>
+    <if test="model.createDate != null" >and i.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
+    <if test="model.updateDate != null" >and i.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="org.turing.pangu.model.IpTrunk" >
+    select count(0) totalCount
+    from ip_trunk i
+    where 1=1 
+    <if test="ip != null" >and i.ip= #{ip,jdbcType=VARCHAR}</if>
+    <if test="address != null" >and i.address= #{address,jdbcType=VARCHAR}</if>
+    <if test="cityCode != null" >and i.city_code= #{cityCode,jdbcType=INTEGER}</if>
+    <if test="isVaild != null" >and i.is_vaild= #{isVaild,jdbcType=INTEGER}</if>
+    <if test="configure != null" >and i.configure= #{configure,jdbcType=VARCHAR}</if>
+    <if test="allocCount != null" >and i.alloc_count= #{allocCount,jdbcType=INTEGER}</if>
+    <if test="successCount != null" >and i.success_count= #{successCount,jdbcType=INTEGER}</if>
+    <if test="createDate != null" >and i.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and i.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Long" >
+    delete from ip_trunk
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.turing.pangu.model.IpTrunk" >
+    insert into ip_trunk 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        ip,    
+        address,    
+        city_code,    
+        is_vaild,    
+        configure,    
+        alloc_count,    
+        success_count,    
+        create_date,    
+        update_date,    
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{ip,jdbcType=VARCHAR},  
+        #{address,jdbcType=VARCHAR},  
+        #{cityCode,jdbcType=INTEGER},  
+        #{isVaild,jdbcType=INTEGER},  
+        #{configure,jdbcType=VARCHAR},  
+        #{allocCount,jdbcType=INTEGER},  
+        #{successCount,jdbcType=INTEGER},  
+        #{createDate,jdbcType=TIMESTAMP},  
+        #{updateDate,jdbcType=TIMESTAMP},  
+    </trim>
+  </insert>
+  <insert id="insertIpTrunkByTrim" parameterType="org.turing.pangu.model.IpTrunk" >
+    insert into ip_trunk 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="ip != null" >ip,</if>
+        <if test="address != null" >address,</if>
+        <if test="cityCode != null" >city_code,</if>
+        <if test="isVaild != null" >is_vaild,</if>
+        <if test="configure != null" >configure,</if>
+        <if test="allocCount != null" >alloc_count,</if>
+        <if test="successCount != null" >success_count,</if>
+        <if test="createDate != null" >create_date,</if>
+        <if test="updateDate != null" >update_date,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="ip != null" >#{ip,jdbcType=VARCHAR},</if>  
+        <if test="address != null" >#{address,jdbcType=VARCHAR},</if>  
+        <if test="cityCode != null" >#{cityCode,jdbcType=INTEGER},</if>  
+        <if test="isVaild != null" >#{isVaild,jdbcType=INTEGER},</if>  
+        <if test="configure != null" >#{configure,jdbcType=VARCHAR},</if>  
+        <if test="allocCount != null" >#{allocCount,jdbcType=INTEGER},</if>  
+        <if test="successCount != null" >#{successCount,jdbcType=INTEGER},</if>  
+        <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
+        <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
+    </trim>
+  </insert>
+  <update id="updateIpTrunkById" parameterType="org.turing.pangu.model.IpTrunk" >
+    update ip_trunk set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        ip=#{ip,jdbcType=VARCHAR},    
+        address=#{address,jdbcType=VARCHAR},    
+        city_code=#{cityCode,jdbcType=INTEGER},    
+        is_vaild=#{isVaild,jdbcType=INTEGER},    
+        configure=#{configure,jdbcType=VARCHAR},    
+        alloc_count=#{allocCount,jdbcType=INTEGER},    
+        success_count=#{successCount,jdbcType=INTEGER},    
+        create_date=#{createDate,jdbcType=TIMESTAMP},    
+        update_date=#{updateDate,jdbcType=TIMESTAMP},    
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="org.turing.pangu.model.IpTrunk" >
+    update ip_trunk set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="ip != null" >ip=#{ip,jdbcType=VARCHAR},</if>
+        <if test="address != null" >address=#{address,jdbcType=VARCHAR},</if>
+        <if test="cityCode != null" >city_code=#{cityCode,jdbcType=INTEGER},</if>
+        <if test="isVaild != null" >is_vaild=#{isVaild,jdbcType=INTEGER},</if>
+        <if test="configure != null" >configure=#{configure,jdbcType=VARCHAR},</if>
+        <if test="allocCount != null" >alloc_count=#{allocCount,jdbcType=INTEGER},</if>
+        <if test="successCount != null" >success_count=#{successCount,jdbcType=INTEGER},</if>
+        <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

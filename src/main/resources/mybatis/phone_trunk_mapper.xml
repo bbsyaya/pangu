@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.turing.pangu.mapper.PhoneTrunkMapper" >
+  <resultMap id="BaseResultMap" type="org.turing.pangu.model.PhoneTrunk" >
+    <id column="id" property="id" jdbcType="INTEGER" />       
+    <result column="num" property="num" jdbcType="INTEGER" />          
+    <result column="quhao" property="quhao" jdbcType="VARCHAR" />          
+    <result column="city" property="city" jdbcType="VARCHAR" />          
+    <result column="type" property="type" jdbcType="VARCHAR" />          
+  </resultMap>   
+  <sql id="Base_Column_List" >
+    p.id,
+	p.num,
+	p.quhao,
+	p.city,
+	p.type
+  </sql>
+  <sql id="Base_Column_Value_List" >
+    #{num},
+	#{quhao},
+	#{city},
+	#{type}
+  </sql>
+  <sql id="Base_Column_Update_List" >
+    num=#{num},
+	quhao=#{quhao},
+	city=#{city},
+	type=#{type}
+  </sql> 
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from phone_trunk p
+    where p.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from phone_trunk p
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.PhoneTrunk" >
+    select 
+    <include refid="Base_Column_List" />
+    from phone_trunk p
+    where 1=1 
+    <if test="num != null" >and p.num= #{num,jdbcType=INTEGER}</if>
+    <if test="quhao != null" >and p.quhao= #{quhao,jdbcType=VARCHAR}</if>
+    <if test="city != null" >and p.city= #{city,jdbcType=VARCHAR}</if>
+    <if test="type != null" >and p.type= #{type,jdbcType=VARCHAR}</if>
+    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.PhoneTrunk" >
+    select 
+    <include refid="Base_Column_List" />
+    from phone_trunk p
+    where 1=1 
+    <if test="num != null" >and p.num= #{num,jdbcType=INTEGER}</if>
+    <if test="quhao != null" >and p.quhao= #{quhao,jdbcType=VARCHAR}</if>
+    <if test="city != null" >and p.city= #{city,jdbcType=VARCHAR}</if>
+    <if test="type != null" >and p.type= #{type,jdbcType=VARCHAR}</if>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.ParamModel" >
+    select 
+    <include refid="Base_Column_List" />
+    from phone_trunk p
+    where 1=1 
+    <if test="model.num != null" >and p.num= #{model.num,jdbcType=INTEGER}</if>
+    <if test="model.quhao != null" >and p.quhao= #{model.quhao,jdbcType=VARCHAR}</if>
+    <if test="model.city != null" >and p.city= #{model.city,jdbcType=VARCHAR}</if>
+    <if test="model.type != null" >and p.type= #{model.type,jdbcType=VARCHAR}</if>
+    <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="org.turing.pangu.model.PhoneTrunk" >
+    select count(0) totalCount
+    from phone_trunk p
+    where 1=1 
+    <if test="num != null" >and p.num= #{num,jdbcType=INTEGER}</if>
+    <if test="quhao != null" >and p.quhao= #{quhao,jdbcType=VARCHAR}</if>
+    <if test="city != null" >and p.city= #{city,jdbcType=VARCHAR}</if>
+    <if test="type != null" >and p.type= #{type,jdbcType=VARCHAR}</if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Long" >
+    delete from phone_trunk
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.turing.pangu.model.PhoneTrunk" >
+    insert into phone_trunk 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        num,    
+        quhao,    
+        city,    
+        type,    
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{num,jdbcType=INTEGER},  
+        #{quhao,jdbcType=VARCHAR},  
+        #{city,jdbcType=VARCHAR},  
+        #{type,jdbcType=VARCHAR},  
+    </trim>
+  </insert>
+  <insert id="insertPhoneTrunkByTrim" parameterType="org.turing.pangu.model.PhoneTrunk" >
+    insert into phone_trunk 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="num != null" >num,</if>
+        <if test="quhao != null" >quhao,</if>
+        <if test="city != null" >city,</if>
+        <if test="type != null" >type,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="num != null" >#{num,jdbcType=INTEGER},</if>  
+        <if test="quhao != null" >#{quhao,jdbcType=VARCHAR},</if>  
+        <if test="city != null" >#{city,jdbcType=VARCHAR},</if>  
+        <if test="type != null" >#{type,jdbcType=VARCHAR},</if>  
+    </trim>
+  </insert>
+  <update id="updatePhoneTrunkById" parameterType="org.turing.pangu.model.PhoneTrunk" >
+    update phone_trunk set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        num=#{num,jdbcType=INTEGER},    
+        quhao=#{quhao,jdbcType=VARCHAR},    
+        city=#{city,jdbcType=VARCHAR},    
+        type=#{type,jdbcType=VARCHAR},    
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="org.turing.pangu.model.PhoneTrunk" >
+    update phone_trunk set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="num != null" >num=#{num,jdbcType=INTEGER},</if>
+        <if test="quhao != null" >quhao=#{quhao,jdbcType=VARCHAR},</if>
+        <if test="city != null" >city=#{city,jdbcType=VARCHAR},</if>
+        <if test="type != null" >type=#{type,jdbcType=VARCHAR},</if>
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

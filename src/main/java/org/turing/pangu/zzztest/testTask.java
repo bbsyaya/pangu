@@ -3,6 +3,8 @@ package org.turing.pangu.zzztest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
 import org.turing.pangu.bean.VpnConnectInfo;
@@ -14,6 +16,7 @@ import org.turing.pangu.controller.phone.response.GetTaskRsp;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.model.Task;
 import org.turing.pangu.task.TaskExtend;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 public class testTask {
@@ -151,12 +154,37 @@ public class testTask {
 	}
 	@Test
 	public void testLoop(){
-		//getConnectInfo();
+		/*
+		String cost = "来自 111.206.227.118 的回复: 字节=32 时间=40ms TTL=49";
+		//Pattern compile = Pattern.compile("(\\d+\\.\\d+)|(\\d+)");
+		Pattern compile = Pattern.compile("(\\d+)ms");
+        Matcher matcher = compile.matcher(cost);
+        matcher.find();
+        String str = matcher.group();
+        String encoding=System.getProperty("file.encoding");
+        System.out.println("Default System Encoding: " + encoding);
+        */
+
 		loginPangu();
-		getTask("2333");
-		getTask("123444");
-		getTask("sdffff");
-		System.out.print("\n");
+		/*
+		for(int index = 0;index < 100;index++){
+			try {
+				GetTaskRsp rsp = getTask("2333");
+				GetTaskRsp rsp2 = getTask("2333333");
+				Thread.sleep(5000);
+				taskFinish(rsp,1);
+				taskFinish(rsp2,1);
+				Thread.sleep(30000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		*/
+		
+		//getTask("123444");
+		//getTask("sdffff");
+		//System.out.print("\n" + Pattern.compile("[^0-9]").matcher(str).replaceAll(""));
 	}
 	public void getConnectInfo(){
 		String loginUrl = "http://localhost:8080/pc/getConnectInfo.pangu";
@@ -198,7 +226,8 @@ public class testTask {
 	}
 	
 	public void taskFinish(GetTaskRsp rsp,int isFinished){
-		String taskFinishUrl = "http://localhost:8080/mobile/taskFinish.pangu";
+		//String taskFinishUrl = "http://localhost:8080/mobile/taskFinish.pangu";
+		String taskFinishUrl = "http://pangu.u-app.cn/mobile/taskFinish.pangu";
 		TaskFinishReq req = new TaskFinishReq();
 		req.setTaskId(rsp.getTask().getTaskId());
 		req.setVpnToken(rsp.getTask().getVpnToken());

@@ -28,23 +28,7 @@ public class RemainVpnServiceImpl extends BaseServiceImpl<RemainVpn,Long> implem
 
 	@Override
 	public boolean isWhileListIp(String ip) {
-		// TODO Auto-generated method stub
-		if(null == VpnEngine.getInstance().getList()){
-			VpnEngine.getInstance().setList(dao.selectCertainList(1L,2L));
-		}
-		
-		List<RemainVpn> list = VpnEngine.getInstance().getList();
-		if(null == list || list.size() == 0 )
-			return false;
-		
-		for(RemainVpn vpn :list ){
-			String[] ipList = vpn.getIpList().split("|");
-			for(String ipTmp :ipList)
-			{
-				if(ip.equals(ipTmp))
-					return true;
-			}
-		}
+		// TODO Auto-generated method stub		
 		return false;
 	}	
 }

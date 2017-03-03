@@ -65,7 +65,6 @@ public class TaskDynamicIpEngine implements TaskIF{
 			return (ext.getStockMoney() - ext.getAllotStockMoney()) > 0 ? true:false;
 		case TaskEngine.STOCK_WATERAMY_TYPE:
 			return (ext.getStockWaterAmy() - ext.getAllotIncrementWaterAmy()) > 0 ? true:false;
-
 		}
 		return false;
 	}
@@ -122,7 +121,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 				}
 			}
 		}
-		logger.info("vpnIsNeedSwitch---true---end");
+		logger.info("vpnIsNeedSwitch----end");
 		return dataRsp;
 	}
 	@Override
@@ -307,43 +306,7 @@ public class TaskDynamicIpEngine implements TaskIF{
         logger.info("getOptimalAppId---end--not task send ");
         return 0L;
     }
-    /*
-	// 获得最优 appID
-	private synchronized long getOptimalAppId(VpnTask task,String remoteIp,String realIp){
-		// -- 排序
-		TraceUtils.getTraceInfo();
-		logger.info("operType:"+task.getOperType()+"remoteIp:"+remoteIp+"realIp:"+realIp);
-		TaskListSort.taskSort(TaskEngine.getInstance().todayTaskList, task.getOperType());//对任务列表排序
-		{// 处理增量
-			int flag = 0;
-			for(Task dbTask:TaskEngine.getInstance().todayTaskList){
-				flag = 0;
-				for(PhoneTask tmpTask:task.getPhoneTaskList()){
-					// 同一个用户不下发两次
-					App isSame = TaskEngine.getInstance().getAppInfo(dbTask.getAppId());
-					if(tmpTask.getApp().getUserId() == isSame.getUserId()){
-						flag = 1;
-						logger.info("find same user ");
-						break;
-					}
-					// 同一个应用也不下发两次
-					if(tmpTask.getApp().getId() == dbTask.getAppId()){
-						flag = 1;
-						logger.info("find same app");
-						break;
-					}
-				}
-				if(flag == 0 && isHavaTaskByOperType(task.getOperType(),dbTask)){
-					mListen.updateAllocTask(TaskEngine.USED_DYNAMIC_VPN,task.getOperType(),dbTask); // 对应派发 ++ 
-					logger.info("new task send appId:" + dbTask.getAppId());
-					return dbTask.getAppId();
-				}
-			}
-		}
-		logger.info("end--not task send 0L");
-		return 0L;
-	}
-	*/
+    
 	private void clear(){
 		if(null != vpnTaskList)
 			vpnTaskList.clear();
