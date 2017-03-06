@@ -10,6 +10,7 @@ import org.turing.pangu.model.Device;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.DeviceServiceImpl;
+import org.turing.pangu.utils.DateUtils;
 
 public class DeviceEngine implements EngineListen{
 	private static final Logger logger = Logger.getLogger(DeviceEngine.class);
@@ -33,9 +34,37 @@ public class DeviceEngine implements EngineListen{
 				this.deviceService = (DeviceService)service;
 			}
 		}
-		
 	}
-	
+	// 查询最近一月记录
+	public List<Device> selectLastMonthExcludeTodayByIp(String ip){
+		List<Device> list = null;
+		Device dev = new Device();
+		dev.setIp(ip);
+		dev.setCreateDate(DateUtils.getMonthFromNow());
+		dev.setUpdateDate(DateUtils.getYesterdayNight());
+		list = deviceService.selectTimeSpan(dev);
+		return list;
+	}
+	// 查询最近一周记录
+	public List<Device> selectLastWeekExcludeTodayByIp(String ip){
+		List<Device> list = null;
+		Device dev = new Device();
+		dev.setIp(ip);
+		dev.setCreateDate(DateUtils.getWeekFromNow());
+		dev.setUpdateDate(DateUtils.getYesterdayNight());
+		list = deviceService.selectTimeSpan(dev);
+		return list;
+	}
+	// 查询最近一周记录
+	public List<Device> selectTodayListByIp(String ip){
+		List<Device> list = null;
+		Device dev = new Device();
+		dev.setIp(ip);
+		dev.setCreateDate(DateUtils.getTimesMorning());
+		dev.setUpdateDate(DateUtils.getTimesNight());
+		list = deviceService.selectTimeSpan(dev);
+		return list;
+	}
 	public List<Device> selectStockByIp(String ip){
 		List<Device> list = new ArrayList<Device>();
 		Device model = new Device();

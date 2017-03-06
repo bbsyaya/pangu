@@ -57,4 +57,16 @@ public class DeviceDaoImpl extends BaseDaoImpl<Device, Long> implements DeviceDa
 		return count;
 	}
 
+	@Override
+	public List<Device> selectTimeSpan(Device device) {
+		// TODO Auto-generated method stub
+		List<Device> list = null;
+		try {
+			list = mapper.selectTimeSpan(device);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return list;
+	}
+
 }

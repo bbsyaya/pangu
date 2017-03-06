@@ -172,7 +172,11 @@
     where 1=1 
     <if test="appId != null" >and d.app_id= #{appId,jdbcType=BIGINT}</if>
     <if test="isWhiteIp != null" >and d.is_white_ip= #{isWhiteIp,jdbcType=INTEGER}</if>
+    <if test="ip != null" >and d.ip= #{ip,jdbcType=VARCHAR}</if>
+    <if test="imei != null" >and d.imei= #{imei,jdbcType=VARCHAR}</if>
+    <if test="imsi != null" >and d.imsi= #{imsi,jdbcType=VARCHAR}</if>
     <if test="createDate != null and createDate!=''" >and d.create_date BETWEEN #{createDate,jdbcType=TIMESTAMP} AND #{updateDate,jdbcType=TIMESTAMP}</if>
+  	order by d.id desc
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select 

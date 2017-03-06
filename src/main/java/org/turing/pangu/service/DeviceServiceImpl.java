@@ -63,4 +63,10 @@ public class DeviceServiceImpl extends BaseServiceImpl<Device,Long> implements D
 		// TODO Auto-generated method stub
 		return dao.selectList(device);
 	}
+
+	@Override
+	public List<Device> selectTimeSpan(Device device) {
+		// TODO Auto-generated method stub
+		return dao.selectTimeSpan(device);
+	}
 }

@@ -11,7 +11,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.turing.pangu.bean.TaskConfigureBean;
 import org.turing.pangu.bean.VpnConnectInfo;
+import org.turing.pangu.engine.DeviceEngine;
 import org.turing.pangu.engine.EngineMng;
+import org.turing.pangu.engine.IpTrunkEngine;
+import org.turing.pangu.iptrunk.StockDevice;
+import org.turing.pangu.model.Device;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.DeviceService;
@@ -199,24 +203,18 @@ public class TestData {
 	@Test
 	public void testUpdateDevice() {
 		EngineMng.getInstance().initEngine(getAllServiecInstance());		
-
-		//List<Device> list = deviceService.selectAll();
-		//List<RemainVpn> vpnList = remainVpnService.selectAll();
-
-		/*
-		List<RemainIp> remainList = remainIpService.selectAll();
-
-		for (RemainIp remainIp : remainList) {
-			if (vpnList.get(1).getIpList().contains(remainIp.getIp())) {
-				remainIp.setConfigure(getStr(1,remainIp.getIp()));
-				remainIp.setIp(remainIp.getIp());
-			} else {
-				remainIp.setConfigure(getStr(0,remainIp.getIp()));
-				remainIp.setIp(remainIp.getIp());
-			}
-			remainIpService.update(remainIp);
-		}*/
-		//TaskEngine.getInstance().init();
+		int i = 0;
+		
+		//for(Device dev :list){
+			//IpTrunkEngine.getInstance().saveIpInfoToDb(dev.getIp());
+		//}119.90.141.77
+		List<Device> cityIpList = DeviceEngine.getInstance().selectLastWeekExcludeTodayByIp("119.90.141.77");
+		//List<StockDevice> stockList = IpTrunkEngine.getInstance().getStockInfoList("223.72.175.41");
+		List<Device> list = deviceService.selectAll();
+		for(Device dev :list){
+			//IpTrunkEngine.getInstance().saveIpInfoToDb(dev.getIp());
+			i++;
+		}
 	}
 
 	public void remain() {
@@ -235,7 +233,6 @@ public class TestData {
 		}
 		String json = JSON.toJSONString(list);
 		System.out.print(json);
-
 	}
 
 }

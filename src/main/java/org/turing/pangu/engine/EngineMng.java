@@ -3,6 +3,7 @@ package org.turing.pangu.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.turing.pangu.controller.common.PhoneTask;
 import org.turing.pangu.service.BaseService;
 
 public class EngineMng {
@@ -23,6 +24,7 @@ public class EngineMng {
 		ltnList.add(DeviceEngine.getInstance());
 		ltnList.add(PlatformEngine.getInstance());
 		ltnList.add(VpnEngine.getInstance());
+		ltnList.add(IpTrunkEngine.getInstance());
 	}
 	// 设置服务
 	private void setService(){

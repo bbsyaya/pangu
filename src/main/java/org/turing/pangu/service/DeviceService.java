@@ -12,5 +12,6 @@ public interface DeviceService extends BaseService<Device, Long> {
 	public String getRemainIpList();
 	public int selectCountByTimeSpan(Device device);
 	public List<Device> selectStockByIp(Device device);
+	public List<Device> selectTimeSpan(Device device);
 
 }

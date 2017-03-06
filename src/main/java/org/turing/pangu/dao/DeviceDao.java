@@ -16,5 +16,6 @@ import org.turing.pangu.model.Device;
 
 public interface DeviceDao extends BaseDao<Device, Long> {
 	public List<Device> selectCanRemainData(Device device);
+	public List<Device> selectTimeSpan(Device device);
 	public int selectCountByTimeSpan(Device device);
 }

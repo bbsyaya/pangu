@@ -55,9 +55,23 @@ public class DateUtils {
 
 	/** 获得当天近7天时间 */
 	public static Date getWeekFromNow() {
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(getTimesMorning().getTime() - 3600 * 24 * 1000 * 7);
-		return cal.getTime();
+		Calendar calendar = Calendar.getInstance();
+        Date date = new Date(System.currentTimeMillis());
+        calendar.setTime(date);
+        calendar.add(Calendar.WEEK_OF_YEAR, -1);
+        date = calendar.getTime();
+
+		return date;
+	}
+	/** 获得当天近30天时间 */
+	public static Date getMonthFromNow() {
+		Calendar calendar = Calendar.getInstance();
+        Date date = new Date(System.currentTimeMillis());
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, -1);
+        //calendar.add(Calendar.YEAR, -1);
+        date = calendar.getTime();
+		return date;
 	}
 	
 	/** 获得本周一0点时间 */

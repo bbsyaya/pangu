@@ -104,7 +104,7 @@ public class IpTrunkEngine implements EngineListen{
 				random = RandomUtils.getRandom(0, listFromDB.size());
 			}
 			IpTrunk tmpIp = listFromDB.get(random);
-			List<Device> cityIpList = DeviceEngine.getInstance().selectStockByIp(tmpIp.getIp());// 通过同城IP找到记录
+			List<Device> cityIpList = DeviceEngine.getInstance().selectLastMonthExcludeTodayByIp(ip);// 通过同城IP找到记录
 			for(Device dev :cityIpList){
 				if(true == AppEngine.getInstance().isActiveApp(dev.getAppId()) 
 						&& false == isExistInList(stockDeviceList,dev)){
