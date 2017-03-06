@@ -1,14 +1,8 @@
 package org.turing.pangu.iptrunk;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.turing.pangu.zzztest.HttpUtils;
 
-import java.io.IOException;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 
 /**
  * Created by turingkuang on 2017/2/28.

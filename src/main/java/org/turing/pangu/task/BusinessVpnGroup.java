@@ -2,6 +2,7 @@ package org.turing.pangu.task;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.turing.pangu.model.VpnGroup;
 
 public class BusinessVpnGroup {

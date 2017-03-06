@@ -11,6 +11,7 @@
 package org.turing.pangu.dao;
 
 import java.util.List;
+
 import org.turing.pangu.model.RemainVpn;
 
 public interface RemainVpnDao extends BaseDao<RemainVpn, Long> {

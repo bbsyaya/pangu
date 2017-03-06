@@ -47,8 +47,9 @@ import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.DynamicVpnService;
+import org.turing.pangu.service.IpTrunkService;
+import org.turing.pangu.service.PhoneTrunkService;
 import org.turing.pangu.service.PlatformService;
-import org.turing.pangu.service.RemainIpService;
 import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.TaskService;
 import org.turing.pangu.service.UserService;
@@ -84,9 +85,6 @@ public class PCMngController extends BaseController {
 	@Resource(name="dynamicVpnServiceImpl")
 	private DynamicVpnService dynamicVpnService;
 	
-	@Resource(name="remainIpServiceImpl")
-	private RemainIpService remainIpService;
-	
 	@Resource(name="deviceServiceImpl")
 	private DeviceService deviceService;
 	
@@ -99,15 +97,26 @@ public class PCMngController extends BaseController {
 	@Resource(name="vpnGroupServiceImpl")
 	private VpnGroupService vpnGroupService;
 	
+	@Resource(name = "ipTrunkServiceImpl")
+	private IpTrunkService ipTrunkService;
+	
+	@Resource(name = "phoneTrunkServiceImpl")
+	private PhoneTrunkService phoneTrunkService;
+	
+	
+	
 	private List<BaseService> getAllServiecInstance(){
 		List<BaseService> list = new ArrayList<BaseService>();
+		list.add(userService);
+		list.add(dynamicVpnService);
 		list.add(vpnGroupService);
 		list.add(remainVpnService);
-		list.add(remainIpService);
 		list.add(platformService);
 		list.add(appService);
 		list.add(deviceService);
 		list.add(taskService);
+		list.add(ipTrunkService);
+		list.add(phoneTrunkService);
 		return list;
 	}
 	@RequestMapping(value = "/index", method = RequestMethod.GET)

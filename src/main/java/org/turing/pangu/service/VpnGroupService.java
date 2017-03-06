@@ -4,7 +4,6 @@ package org.turing.pangu.service;
 
 import java.util.List;
 
-import org.turing.pangu.model.RemainIp;
 import org.turing.pangu.model.VpnGroup;
 
 /** InvestService */

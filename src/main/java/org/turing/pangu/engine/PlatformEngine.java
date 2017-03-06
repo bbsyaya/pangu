@@ -3,14 +3,14 @@ package org.turing.pangu.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.turing.pangu.model.Platform;
-import org.turing.pangu.service.AppService;
-import org.turing.pangu.service.AppServiceImpl;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.service.PlatformServiceImpl;
 
 public class PlatformEngine implements EngineListen{
+	private static final Logger logger = Logger.getLogger(PlatformEngine.class);
 	private static PlatformEngine mInstance = new PlatformEngine();
 	private List<Platform> platformList = new ArrayList<Platform>();
 	private PlatformService platformService;

@@ -3,6 +3,7 @@ package org.turing.pangu.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.turing.pangu.model.DynamicVpn;
 import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.service.BaseService;
@@ -10,11 +11,9 @@ import org.turing.pangu.service.DynamicVpnService;
 import org.turing.pangu.service.DynamicVpnServiceImpl;
 import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.RemainVpnServiceImpl;
-import org.turing.pangu.service.TaskService;
-import org.turing.pangu.service.TaskServiceImpl;
 
 public class VpnEngine implements EngineListen{
-	
+	private static final Logger logger = Logger.getLogger(VpnEngine.class);
 	private static VpnEngine mInstance = new VpnEngine();
 	private List<RemainVpn> remainVpnList = new ArrayList<RemainVpn>();
 	private List<DynamicVpn> dynamicVpnList = new ArrayList<DynamicVpn>();

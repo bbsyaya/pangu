@@ -1,25 +1,24 @@
 package org.turing.pangu.engine;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.turing.pangu.iptrunk.BaiduLocation;
 import org.turing.pangu.iptrunk.LocationMng;
 import org.turing.pangu.iptrunk.StockDevice;
-import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.model.IpTrunk;
-import org.turing.pangu.service.AppService;
-import org.turing.pangu.service.AppServiceImpl;
 import org.turing.pangu.service.BaseService;
-import org.turing.pangu.service.DeviceService;
-import org.turing.pangu.service.DeviceServiceImpl;
 import org.turing.pangu.service.IpTrunkService;
 import org.turing.pangu.service.IpTrunkServiceImpl;
-import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.utils.RandomUtils;
 
+import com.alibaba.fastjson.JSON;
+
 public class IpTrunkEngine implements EngineListen{
+	private static final Logger logger = Logger.getLogger(IpTrunkEngine.class);
 	private static IpTrunkEngine mInstance = new IpTrunkEngine();
 	public List<IpTrunk> ipTrunkList = new ArrayList<IpTrunk>();
 	private IpTrunkService ipTrunkService;
@@ -37,6 +36,35 @@ public class IpTrunkEngine implements EngineListen{
 			}
 		}
 		return false;
+	}
+	public void saveIpInfoToDb(String ip){
+		IpTrunk ipTrunk = new IpTrunk();
+		ipTrunk.setIp(ip);
+		List<IpTrunk> list = ipTrunkService.selectList(ipTrunk);
+		if(list == null || list.size() == 0){
+			LocationMng mng = new LocationMng();
+			BaiduLocation location = mng.getLocation(ip);
+			if(null == location ){
+				return;
+			}
+			ipTrunk.setIp(ip);
+			ipTrunk.setAllocCount(0);
+			ipTrunk.setSuccessCount(0);
+			ipTrunk.setCityCode(Integer.parseInt(location.getContent().getAddress_detail().getCityCode()));
+			ipTrunk.setCreateDate(new Date());
+			ipTrunk.setUpdateDate(new Date());
+			ipTrunk.setIsVaild(1);
+			ipTrunk.setAddress(location.getContent().getAddress());
+			ipTrunk.setConfigure(JSON.toJSONString(location).toString());
+			ipTrunkService.insert(ipTrunk);
+		}else
+		{
+			ipTrunk = list.get(0);
+			ipTrunk.setAllocCount(ipTrunk.getAllocCount() + 1);
+			ipTrunk.setSuccessCount(ipTrunk.getSuccessCount()+1);
+			ipTrunk.setUpdateDate(new Date());
+			ipTrunkService.update(ipTrunk);
+		}
 	}
 	// 获得每个应用的留存信息,每个应用都有对应的一个留存
 	public List<StockDevice> getStockInfoList(String ip){

@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.turing.pangu.controller.phone.request.ReportReq;
-import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.DeviceServiceImpl;
 
 public class DeviceEngine implements EngineListen{
+	private static final Logger logger = Logger.getLogger(DeviceEngine.class);
 	private static DeviceEngine mInstance = new DeviceEngine();
 	private List<Device> deviceReportListCache1 = new ArrayList<Device>(); // 用于保存上报信息的两个缓存
 	private List<Device> deviceReportListCache2 = new ArrayList<Device>();
@@ -55,6 +56,7 @@ public class DeviceEngine implements EngineListen{
 		for(Device device:needSaveList){
 			device.setUpdateDate(new Date());
 			deviceService.insert(device);
+			IpTrunkEngine.getInstance().saveIpInfoToDb(device.getIp());
 		}
 		needSaveList.clear(); //清空
 	}

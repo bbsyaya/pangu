@@ -3,8 +3,6 @@ package org.turing.pangu.zzztest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.junit.Test;
 import org.turing.pangu.bean.VpnConnectInfo;
@@ -14,8 +12,6 @@ import org.turing.pangu.controller.phone.request.GetTaskReq;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.controller.phone.response.GetTaskRsp;
 import org.turing.pangu.model.Device;
-import org.turing.pangu.model.Task;
-import org.turing.pangu.task.TaskExtend;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;

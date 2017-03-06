@@ -4,7 +4,6 @@ package org.turing.pangu.service;
 
 import java.util.List;
 
-import org.turing.pangu.controller.phone.request.ReportReq;
 import org.turing.pangu.model.Device;
 
 /** InvestService */

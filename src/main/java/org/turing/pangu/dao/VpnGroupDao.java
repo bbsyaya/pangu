@@ -12,7 +12,6 @@ package org.turing.pangu.dao;
 
 import java.util.List;
 
-import org.turing.pangu.model.RemainIp;
 import org.turing.pangu.model.VpnGroup;
 
 public interface VpnGroupDao extends BaseDao<VpnGroup, Long> {

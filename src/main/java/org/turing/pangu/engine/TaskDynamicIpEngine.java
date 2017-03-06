@@ -14,7 +14,6 @@ import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.model.Task;
 import org.turing.pangu.task.DateUpdateListen;
-import org.turing.pangu.task.StaticVpn;
 import org.turing.pangu.task.TaskExtend;
 import org.turing.pangu.task.TaskIF;
 import org.turing.pangu.task.TaskListSort;

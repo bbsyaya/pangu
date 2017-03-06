@@ -3,15 +3,14 @@ package org.turing.pangu.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.turing.pangu.model.App;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.AppServiceImpl;
 import org.turing.pangu.service.BaseService;
-import org.turing.pangu.service.DeviceService;
-import org.turing.pangu.service.DeviceServiceImpl;
-import org.turing.pangu.service.PlatformService;
 
 public class AppEngine implements EngineListen{
+	private static final Logger logger = Logger.getLogger(AppEngine.class);
 	private static AppEngine mInstance = new AppEngine();
 	public List<App> appList = new ArrayList<App>();
 	private AppService appService;

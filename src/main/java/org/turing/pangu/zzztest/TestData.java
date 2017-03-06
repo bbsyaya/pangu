@@ -1,7 +1,6 @@
 package org.turing.pangu.zzztest;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -13,20 +12,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.turing.pangu.bean.TaskConfigureBean;
 import org.turing.pangu.bean.VpnConnectInfo;
 import org.turing.pangu.engine.EngineMng;
-import org.turing.pangu.engine.TaskEngine;
-import org.turing.pangu.model.Device;
-import org.turing.pangu.model.RemainIp;
-import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.DeviceService;
+import org.turing.pangu.service.DynamicVpnService;
+import org.turing.pangu.service.IpTrunkService;
+import org.turing.pangu.service.PhoneTrunkService;
 import org.turing.pangu.service.PlatformService;
-import org.turing.pangu.service.RemainIpService;
 import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.TaskService;
 import org.turing.pangu.service.UserService;
 import org.turing.pangu.service.VpnGroupService;
-import org.turing.pangu.utils.DateUtils;
 
 import com.alibaba.fastjson.JSON;
 
@@ -35,29 +31,35 @@ import com.alibaba.fastjson.JSON;
 		"classpath:spring-mvc.xml", "classpath:spring-mybatis.xml" })
 public class TestData {
 
-	@Resource(name = "appServiceImpl")
-	private AppService appService;
-
-	@Resource(name = "platformServiceImpl")
+	@Resource(name="platformServiceImpl")
 	private PlatformService platformService;
-
-	@Resource(name = "userServiceImpl")
-	private UserService userService;
-
-	@Resource(name = "remainVpnServiceImpl")
+	
+	@Resource(name="appServiceImpl")
+	private AppService appService;
+	
+	@Resource(name="remainVpnServiceImpl")
 	private RemainVpnService remainVpnService;
-
-	@Resource(name = "remainIpServiceImpl")
-	private RemainIpService remainIpService;
-
-	@Resource(name = "deviceServiceImpl")
+	
+	@Resource(name="dynamicVpnServiceImpl")
+	private DynamicVpnService dynamicVpnService;
+	
+	@Resource(name="deviceServiceImpl")
 	private DeviceService deviceService;
-
-	@Resource(name = "taskServiceImpl")
+	
+	@Resource(name="userServiceImpl")
+	private UserService userService;
+	
+	@Resource(name="taskServiceImpl")
 	private TaskService taskService;
-
-	@Resource(name = "vpnGroupServiceImpl")
+	
+	@Resource(name="vpnGroupServiceImpl")
 	private VpnGroupService vpnGroupService;
+	
+	@Resource(name = "ipTrunkServiceImpl")
+	private IpTrunkService ipTrunkService;
+	
+	@Resource(name = "phoneTrunkServiceImpl")
+	private PhoneTrunkService phoneTrunkService;
 
 	/*
 	 * @Test public void testInsertPlatform(){ Platform pf = new Platform();
@@ -182,18 +184,20 @@ public class TestData {
 	}
 	private List<BaseService> getAllServiecInstance(){
 		List<BaseService> list = new ArrayList<BaseService>();
+		list.add(userService);
+		list.add(dynamicVpnService);
 		list.add(vpnGroupService);
 		list.add(remainVpnService);
-		list.add(remainIpService);
 		list.add(platformService);
 		list.add(appService);
 		list.add(deviceService);
 		list.add(taskService);
+		list.add(ipTrunkService);
+		list.add(phoneTrunkService);
 		return list;
 	}
 	@Test
 	public void testUpdateDevice() {
-		
 		EngineMng.getInstance().initEngine(getAllServiecInstance());		
 
 		//List<Device> list = deviceService.selectAll();
