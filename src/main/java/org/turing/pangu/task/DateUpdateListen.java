@@ -5,5 +5,5 @@ import org.turing.pangu.model.Task;
 
 public interface DateUpdateListen {
 	public void updateAllocTask(int operType,Task dbTask);
-	public void updateExecuteTask(PhoneTask pTask);
+	public void updateExecuteTask(PhoneTask pTask,Boolean isSuccess);
 }

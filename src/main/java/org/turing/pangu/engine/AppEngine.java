@@ -33,6 +33,14 @@ public class AppEngine implements EngineListen{
 		}
 		return null;
 	}
+	public boolean isActiveApp(Long appId){
+		for(App app:appList){
+			if(app.getId() == appId){
+				return true;
+			}
+		}
+		return false;
+	}
 	@Override
 	public void setService(List<BaseService> serviceList) {
 		// TODO Auto-generated method stub

@@ -71,8 +71,8 @@
     <if test="allocCount != null" >and i.alloc_count= #{allocCount,jdbcType=INTEGER}</if>
     <if test="successCount != null" >and i.success_count= #{successCount,jdbcType=INTEGER}</if>
     <if test="createDate != null" >and i.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
-    <if test="updateDate != null" >and i.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
-    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
+    <if test="updateDate != null" >and i.update_date= #{updateDate,jdbcType=TIMESTAMP} </if>
+    order by i.update_date desc limit 100
   </select>
   <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.IpTrunk" >
     select 

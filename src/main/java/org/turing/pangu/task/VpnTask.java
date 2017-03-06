@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.turing.pangu.controller.common.PhoneTask;
+import org.turing.pangu.iptrunk.StockDevice;
 
 /*
  * PC 端的 VPN 任务管理，与 PhoneTask 是 1对多的关系
@@ -53,11 +54,19 @@ public class VpnTask {
 		this.createTime = createTime;
 	}
 	
+	public List<StockDevice> getStockDeviceList() {
+		return stockDeviceList;
+	}
+	public void setStockDeviceList(List<StockDevice> stockDeviceList) {
+		this.stockDeviceList = stockDeviceList;
+	}
+
 	private String deviceId; //pc 设备ID
 	private String remoteIp;
 	private String realIp;
 	private String token; // 16位
 	private int operType; // 操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	private Date createTime;// Vpn 任务创建时间
+	private List<StockDevice> stockDeviceList = new ArrayList<StockDevice>(); //这个IP的留存都在这,注意 device中的IP会和remoteIp 不同，只是在同一个城市
 	private List<PhoneTask> phoneTaskList = new ArrayList<PhoneTask>();//PhoneTask 的 operType 必须和 VpnTask 的 operType 一致
 }

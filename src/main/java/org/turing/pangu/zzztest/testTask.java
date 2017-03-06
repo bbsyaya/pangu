@@ -197,7 +197,7 @@ public class testTask {
 		String loginUrl = "http://pangu.u-app.cn/pc/vpnLogin.pangu";
 		VpnLoginReq req = new VpnLoginReq();
 		req.setOperType(0);
-		req.setDeviceId("sss999999");// 取电脑mac地址
+		req.setDeviceId("JKHHFKJD");// 取电脑mac地址
 		String json = JSON.toJSONString(req);
 		String contentStr = HttpUtils.doPost(loginUrl, json, HttpUtils.UTF8);
 		System.out.print("\n"+contentStr);

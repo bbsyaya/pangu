@@ -226,23 +226,35 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		logger.info("getTodayTaskList---end");
 		return list;
 	}	
-	public void updateExecuteTask(PhoneTask pTask){
+	public void updateExecuteTask(PhoneTask pTask,Boolean isSuccess){
 		logger.info("updateExecute---000");
 		for(TaskExtend task : todayTaskList){
 			if(pTask.getApp().getId() == task.getAppId()){
 				logger.info("updateExecute---001--appId:"+pTask.getApp().getId());
 				switch(pTask.getOperType()){
 				case INCREMENT_MONEY_TYPE:
-					task.setExecuteIncrementMoney(task.getExecuteIncrementMoney() + 1);
+					if(isSuccess)
+						task.setExecuteIncrementMoney(task.getExecuteIncrementMoney() + 1);
+					else
+						task.setExecuteIncrementMoneyFail(task.getExecuteIncrementMoneyFail() + 1);
 					break;
 				case INCREMENT_WATERAMY_TYPE:
-					task.setExecuteIncrementWaterAmy(task.getExecuteIncrementWaterAmy() + 1);
+					if(isSuccess)
+						task.setExecuteIncrementWaterAmy(task.getExecuteIncrementWaterAmy() + 1);
+					else
+						task.setExecuteIncrementWaterAmy_fail(task.getExecuteIncrementWaterAmy_fail() + 1);
 					break;
 				case STOCK_MONEY_TYPE:	
-					task.setExecuteStockMoney(task.getExecuteStockMoney() + 1);
+					if(isSuccess)
+						task.setExecuteStockMoney(task.getExecuteStockMoney() + 1);
+					else
+						task.setExecuteStockMoneyFail(task.getExecuteStockMoneyFail() + 1);
 					break;
 				case STOCK_WATERAMY_TYPE:
-					task.setExecuteStockWaterAmy(task.getExecuteStockWaterAmy() + 1);
+					if(isSuccess)
+						task.setExecuteStockWaterAmy(task.getExecuteStockWaterAmy() + 1);
+					else
+						task.setExecuteStockWaterAmy_fail(task.getExecuteStockWaterAmy_fail() + 1);
 					break;
 				}
 			}

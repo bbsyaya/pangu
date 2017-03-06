@@ -4,25 +4,25 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年02月07日 
- * @since 2017年02月07日 
+ * @version 1.0, 2017年03月06日 
+ * @since 2017年03月06日 
  */
 
 package org.turing.pangu.model;
 
 import java.util.Date;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
  /**Task*/
  public class Task extends BaseModel<Task>
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 7037101486433532793L;
+  private static final long serialVersionUID = 2225971488785185221L;
 
   /***/
   private Long appId;
@@ -64,6 +64,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   private Integer executeStockWaterAmy;
 
   /***/
+  private Integer executeIncrementMoneyFail;
+
+  /***/
+  private Integer executeIncrementWaterAmy_fail;
+
+  /***/
+  private Integer executeStockMoneyFail;
+
+  /***/
+  private Integer executeStockWaterAmy_fail;
+
+  /***/
   private Date createDate;
 
   /***/
@@ -82,6 +94,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 	  setExecuteIncrementWaterAmy(0);
 	  setExecuteStockMoney(0);
 	  setExecuteStockWaterAmy(0);
+	  setExecuteIncrementMoneyFail(0);
+	  setExecuteIncrementWaterAmy_fail(0);
+	  setExecuteStockMoneyFail(0);
+	  setExecuteStockWaterAmy_fail(0);
   }
   
   /**获取*/
@@ -101,6 +117,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
   public Integer getIncrementMoney()
   {
    return this.incrementMoney;
@@ -115,6 +132,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
   public Integer getIncrementWaterAmy()
   {
    return this.incrementWaterAmy;
@@ -129,6 +147,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
   public Integer getStockMoney()
   {
    return this.stockMoney;
@@ -143,6 +162,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
   public Integer getStockWaterAmy()
   {
    return this.stockWaterAmy;
@@ -157,6 +177,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
   public Integer getAllotIncrementMoney()
   {
    return this.allotIncrementMoney;
@@ -171,6 +192,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
   public Integer getAllotIncrementWaterAmy()
   {
    return this.allotIncrementWaterAmy;
@@ -185,6 +207,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
   public Integer getAllotStockMoney()
   {
    return this.allotStockMoney;
@@ -199,6 +222,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
   public Integer getAllotStockWaterAmy()
   {
    return this.allotStockWaterAmy;
@@ -213,6 +237,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
   public Integer getExecuteIncrementMoney()
   {
    return this.executeIncrementMoney;
@@ -227,6 +252,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
   public Integer getExecuteIncrementWaterAmy()
   {
    return this.executeIncrementWaterAmy;
@@ -241,6 +267,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
   public Integer getExecuteStockMoney()
   {
    return this.executeStockMoney;
@@ -255,6 +282,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
   public Integer getExecuteStockWaterAmy()
   {
    return this.executeStockWaterAmy;
@@ -269,6 +297,67 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
+  public Integer getExecuteIncrementMoneyFail()
+  {
+   return this.executeIncrementMoneyFail;
+  }
+
+  /**设置*/
+  public void setExecuteIncrementMoneyFail(Integer executeIncrementMoneyFail)
+  {
+    this.executeIncrementMoneyFail=executeIncrementMoneyFail;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
+  public Integer getExecuteIncrementWaterAmy_fail()
+  {
+   return this.executeIncrementWaterAmy_fail;
+  }
+
+  /**设置*/
+  public void setExecuteIncrementWaterAmy_fail(Integer executeIncrementWaterAmy_fail)
+  {
+    this.executeIncrementWaterAmy_fail=executeIncrementWaterAmy_fail;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
+  public Integer getExecuteStockMoneyFail()
+  {
+   return this.executeStockMoneyFail;
+  }
+
+  /**设置*/
+  public void setExecuteStockMoneyFail(Integer executeStockMoneyFail)
+  {
+    this.executeStockMoneyFail=executeStockMoneyFail;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
+  public Integer getExecuteStockWaterAmy_fail()
+  {
+   return this.executeStockWaterAmy_fail;
+  }
+
+  /**设置*/
+  public void setExecuteStockWaterAmy_fail(Integer executeStockWaterAmy_fail)
+  {
+    this.executeStockWaterAmy_fail=executeStockWaterAmy_fail;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
   public Date getCreateDate()
   {
    return this.createDate;
@@ -283,6 +372,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
   public Date getUpdateDate()
   {
    return this.updateDate;

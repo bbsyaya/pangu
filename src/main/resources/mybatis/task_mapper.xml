@@ -16,6 +16,10 @@
     <result column="execute_increment_water_amy" property="executeIncrementWaterAmy" jdbcType="INTEGER" />          
     <result column="execute_stock_money" property="executeStockMoney" jdbcType="INTEGER" />          
     <result column="execute_stock_water_amy" property="executeStockWaterAmy" jdbcType="INTEGER" />          
+    <result column="execute_increment_money_fail" property="executeIncrementMoneyFail" jdbcType="INTEGER" />          
+    <result column="execute_increment_water_amy_fail" property="executeIncrementWaterAmy_fail" jdbcType="INTEGER" />          
+    <result column="execute_stock_money_fail" property="executeStockMoneyFail" jdbcType="INTEGER" />          
+    <result column="execute_stock_water_amy_fail" property="executeStockWaterAmy_fail" jdbcType="INTEGER" />          
     <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
   </resultMap>   
@@ -34,6 +38,10 @@
 	t.execute_increment_water_amy,
 	t.execute_stock_money,
 	t.execute_stock_water_amy,
+	t.execute_increment_money_fail,
+	t.execute_increment_water_amy_fail,
+	t.execute_stock_money_fail,
+	t.execute_stock_water_amy_fail,
 	t.create_date,
 	t.update_date
   </sql>
@@ -51,6 +59,10 @@
 	#{executeIncrementWaterAmy},
 	#{executeStockMoney},
 	#{executeStockWaterAmy},
+	#{executeIncrementMoneyFail},
+	#{executeIncrementWaterAmy_fail},
+	#{executeStockMoneyFail},
+	#{executeStockWaterAmy_fail},
 	#{createDate},
 	#{updateDate}
   </sql>
@@ -68,6 +80,10 @@
 	execute_increment_water_amy=#{executeIncrementWaterAmy},
 	execute_stock_money=#{executeStockMoney},
 	execute_stock_water_amy=#{executeStockWaterAmy},
+	execute_increment_money_fail=#{executeIncrementMoneyFail},
+	execute_increment_water_amy_fail=#{executeIncrementWaterAmy_fail},
+	execute_stock_money_fail=#{executeStockMoneyFail},
+	execute_stock_water_amy_fail=#{executeStockWaterAmy_fail},
 	create_date=#{createDate},
 	update_date=#{updateDate}
   </sql> 
@@ -82,27 +98,32 @@
     <include refid="Base_Column_List" />
     from task t order by t.create_date desc
   </select>
+  
   <select id="selectTimeSpan" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Task" >
-    select 
-    <include refid="Base_Column_List" />
-    from task t
-    where 1=1 
-    <if test="appId != null" >and t.app_id= #{appId,jdbcType=BIGINT}</if>
-    <if test="incrementMoney != null" >and t.increment_money= #{incrementMoney,jdbcType=INTEGER}</if>
-    <if test="incrementWaterAmy != null" >and t.increment_water_amy= #{incrementWaterAmy,jdbcType=INTEGER}</if>
-    <if test="stockMoney != null" >and t.stock_money= #{stockMoney,jdbcType=INTEGER}</if>
-    <if test="stockWaterAmy != null" >and t.stock_water_amy= #{stockWaterAmy,jdbcType=INTEGER}</if>
-    <if test="allotIncrementMoney != null" >and t.allot_increment_money= #{allotIncrementMoney,jdbcType=INTEGER}</if>
-    <if test="allotIncrementWaterAmy != null" >and t.allot_increment_water_amy= #{allotIncrementWaterAmy,jdbcType=INTEGER}</if>
-    <if test="allotStockMoney != null" >and t.allot_stock_money= #{allotStockMoney,jdbcType=INTEGER}</if>
-    <if test="allotStockWaterAmy != null" >and t.allot_stock_water_amy= #{allotStockWaterAmy,jdbcType=INTEGER}</if>
-    <if test="executeIncrementMoney != null" >and t.execute_increment_money= #{executeIncrementMoney,jdbcType=INTEGER}</if>
-    <if test="executeIncrementWaterAmy != null" >and t.execute_increment_water_amy= #{executeIncrementWaterAmy,jdbcType=INTEGER}</if>
-    <if test="executeStockMoney != null" >and t.execute_stock_money= #{executeStockMoney,jdbcType=INTEGER}</if>
-    <if test="executeStockWaterAmy != null" >and t.execute_stock_water_amy= #{executeStockWaterAmy,jdbcType=INTEGER}</if>
- 	<if test="createDate != null and createDate!=''" >and t.create_date BETWEEN #{createDate,jdbcType=TIMESTAMP} AND #{updateDate,jdbcType=TIMESTAMP}</if> 
+	  select 
+	  <include refid="Base_Column_List" />
+	  from task t
+	  where 1=1 
+	  <if test="appId != null" >and t.app_id= #{appId,jdbcType=BIGINT}</if>
+	  <if test="incrementMoney != null" >and t.increment_money= #{incrementMoney,jdbcType=INTEGER}</if>
+	  <if test="incrementWaterAmy != null" >and t.increment_water_amy= #{incrementWaterAmy,jdbcType=INTEGER}</if>
+	  <if test="stockMoney != null" >and t.stock_money= #{stockMoney,jdbcType=INTEGER}</if>
+	  <if test="stockWaterAmy != null" >and t.stock_water_amy= #{stockWaterAmy,jdbcType=INTEGER}</if>
+	  <if test="allotIncrementMoney != null" >and t.allot_increment_money= #{allotIncrementMoney,jdbcType=INTEGER}</if>
+	  <if test="allotIncrementWaterAmy != null" >and t.allot_increment_water_amy= #{allotIncrementWaterAmy,jdbcType=INTEGER}</if>
+	  <if test="allotStockMoney != null" >and t.allot_stock_money= #{allotStockMoney,jdbcType=INTEGER}</if>
+	  <if test="allotStockWaterAmy != null" >and t.allot_stock_water_amy= #{allotStockWaterAmy,jdbcType=INTEGER}</if>
+	  <if test="executeIncrementMoney != null" >and t.execute_increment_money= #{executeIncrementMoney,jdbcType=INTEGER}</if>
+	  <if test="executeIncrementWaterAmy != null" >and t.execute_increment_water_amy= #{executeIncrementWaterAmy,jdbcType=INTEGER}</if>
+	  <if test="executeStockMoney != null" >and t.execute_stock_money= #{executeStockMoney,jdbcType=INTEGER}</if>
+	  <if test="executeStockWaterAmy != null" >and t.execute_stock_water_amy= #{executeStockWaterAmy,jdbcType=INTEGER}</if>
+	  <if test="executeIncrementMoneyFail != null" >and t.execute_increment_money_fail= #{executeIncrementMoneyFail,jdbcType=INTEGER}</if>
+	  <if test="executeIncrementWaterAmy_fail != null" >and t.execute_increment_water_amy_fail= #{executeIncrementWaterAmy_fail,jdbcType=INTEGER}</if>
+	  <if test="executeStockMoneyFail != null" >and t.execute_stock_money_fail= #{executeStockMoneyFail,jdbcType=INTEGER}</if>
+	  <if test="executeStockWaterAmy_fail != null" >and t.execute_stock_water_amy_fail= #{executeStockWaterAmy_fail,jdbcType=INTEGER}</if>
+	  <if test="createDate != null and createDate!=''" >and t.create_date BETWEEN #{createDate,jdbcType=TIMESTAMP} AND #{updateDate,jdbcType=TIMESTAMP}</if> 
   </select>
-
+  
   <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Task" >
     select 
     <include refid="Base_Column_List" />
@@ -121,9 +142,13 @@
     <if test="executeIncrementWaterAmy != null" >and t.execute_increment_water_amy= #{executeIncrementWaterAmy,jdbcType=INTEGER}</if>
     <if test="executeStockMoney != null" >and t.execute_stock_money= #{executeStockMoney,jdbcType=INTEGER}</if>
     <if test="executeStockWaterAmy != null" >and t.execute_stock_water_amy= #{executeStockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="executeIncrementMoneyFail != null" >and t.execute_increment_money_fail= #{executeIncrementMoneyFail,jdbcType=INTEGER}</if>
+    <if test="executeIncrementWaterAmy_fail != null" >and t.execute_increment_water_amy_fail= #{executeIncrementWaterAmy_fail,jdbcType=INTEGER}</if>
+    <if test="executeStockMoneyFail != null" >and t.execute_stock_money_fail= #{executeStockMoneyFail,jdbcType=INTEGER}</if>
+    <if test="executeStockWaterAmy_fail != null" >and t.execute_stock_water_amy_fail= #{executeStockWaterAmy_fail,jdbcType=INTEGER}</if>
     <if test="createDate != null" >and t.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and t.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
-    order by t.create_date desc
+     order by t.create_date desc
   </select>
   <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Task" >
     select 
@@ -143,6 +168,10 @@
     <if test="executeIncrementWaterAmy != null" >and t.execute_increment_water_amy= #{executeIncrementWaterAmy,jdbcType=INTEGER}</if>
     <if test="executeStockMoney != null" >and t.execute_stock_money= #{executeStockMoney,jdbcType=INTEGER}</if>
     <if test="executeStockWaterAmy != null" >and t.execute_stock_water_amy= #{executeStockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="executeIncrementMoneyFail != null" >and t.execute_increment_money_fail= #{executeIncrementMoneyFail,jdbcType=INTEGER}</if>
+    <if test="executeIncrementWaterAmy_fail != null" >and t.execute_increment_water_amy_fail= #{executeIncrementWaterAmy_fail,jdbcType=INTEGER}</if>
+    <if test="executeStockMoneyFail != null" >and t.execute_stock_money_fail= #{executeStockMoneyFail,jdbcType=INTEGER}</if>
+    <if test="executeStockWaterAmy_fail != null" >and t.execute_stock_water_amy_fail= #{executeStockWaterAmy_fail,jdbcType=INTEGER}</if>
     <if test="createDate != null" >and t.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and t.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
@@ -164,6 +193,10 @@
     <if test="model.executeIncrementWaterAmy != null" >and t.execute_increment_water_amy= #{model.executeIncrementWaterAmy,jdbcType=INTEGER}</if>
     <if test="model.executeStockMoney != null" >and t.execute_stock_money= #{model.executeStockMoney,jdbcType=INTEGER}</if>
     <if test="model.executeStockWaterAmy != null" >and t.execute_stock_water_amy= #{model.executeStockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="model.executeIncrementMoneyFail != null" >and t.execute_increment_money_fail= #{model.executeIncrementMoneyFail,jdbcType=INTEGER}</if>
+    <if test="model.executeIncrementWaterAmy_fail != null" >and t.execute_increment_water_amy_fail= #{model.executeIncrementWaterAmy_fail,jdbcType=INTEGER}</if>
+    <if test="model.executeStockMoneyFail != null" >and t.execute_stock_money_fail= #{model.executeStockMoneyFail,jdbcType=INTEGER}</if>
+    <if test="model.executeStockWaterAmy_fail != null" >and t.execute_stock_water_amy_fail= #{model.executeStockWaterAmy_fail,jdbcType=INTEGER}</if>
     <if test="model.createDate != null" >and t.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
     <if test="model.updateDate != null" >and t.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
     <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
@@ -185,6 +218,10 @@
     <if test="executeIncrementWaterAmy != null" >and t.execute_increment_water_amy= #{executeIncrementWaterAmy,jdbcType=INTEGER}</if>
     <if test="executeStockMoney != null" >and t.execute_stock_money= #{executeStockMoney,jdbcType=INTEGER}</if>
     <if test="executeStockWaterAmy != null" >and t.execute_stock_water_amy= #{executeStockWaterAmy,jdbcType=INTEGER}</if>
+    <if test="executeIncrementMoneyFail != null" >and t.execute_increment_money_fail= #{executeIncrementMoneyFail,jdbcType=INTEGER}</if>
+    <if test="executeIncrementWaterAmy_fail != null" >and t.execute_increment_water_amy_fail= #{executeIncrementWaterAmy_fail,jdbcType=INTEGER}</if>
+    <if test="executeStockMoneyFail != null" >and t.execute_stock_money_fail= #{executeStockMoneyFail,jdbcType=INTEGER}</if>
+    <if test="executeStockWaterAmy_fail != null" >and t.execute_stock_water_amy_fail= #{executeStockWaterAmy_fail,jdbcType=INTEGER}</if>
     <if test="createDate != null" >and t.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and t.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
@@ -208,6 +245,10 @@
         execute_increment_water_amy,    
         execute_stock_money,    
         execute_stock_water_amy,    
+        execute_increment_money_fail,    
+        execute_increment_water_amy_fail,    
+        execute_stock_money_fail,    
+        execute_stock_water_amy_fail,    
         create_date,    
         update_date,    
     </trim>
@@ -225,6 +266,10 @@
         #{executeIncrementWaterAmy,jdbcType=INTEGER},  
         #{executeStockMoney,jdbcType=INTEGER},  
         #{executeStockWaterAmy,jdbcType=INTEGER},  
+        #{executeIncrementMoneyFail,jdbcType=INTEGER},  
+        #{executeIncrementWaterAmy_fail,jdbcType=INTEGER},  
+        #{executeStockMoneyFail,jdbcType=INTEGER},  
+        #{executeStockWaterAmy_fail,jdbcType=INTEGER},  
         #{createDate,jdbcType=TIMESTAMP},  
         #{updateDate,jdbcType=TIMESTAMP},  
     </trim>
@@ -245,6 +290,10 @@
         <if test="executeIncrementWaterAmy != null" >execute_increment_water_amy,</if>
         <if test="executeStockMoney != null" >execute_stock_money,</if>
         <if test="executeStockWaterAmy != null" >execute_stock_water_amy,</if>
+        <if test="executeIncrementMoneyFail != null" >execute_increment_money_fail,</if>
+        <if test="executeIncrementWaterAmy_fail != null" >execute_increment_water_amy_fail,</if>
+        <if test="executeStockMoneyFail != null" >execute_stock_money_fail,</if>
+        <if test="executeStockWaterAmy_fail != null" >execute_stock_water_amy_fail,</if>
         <if test="createDate != null" >create_date,</if>
         <if test="updateDate != null" >update_date,</if>
     </trim>
@@ -262,6 +311,10 @@
         <if test="executeIncrementWaterAmy != null" >#{executeIncrementWaterAmy,jdbcType=INTEGER},</if>  
         <if test="executeStockMoney != null" >#{executeStockMoney,jdbcType=INTEGER},</if>  
         <if test="executeStockWaterAmy != null" >#{executeStockWaterAmy,jdbcType=INTEGER},</if>  
+        <if test="executeIncrementMoneyFail != null" >#{executeIncrementMoneyFail,jdbcType=INTEGER},</if>  
+        <if test="executeIncrementWaterAmy_fail != null" >#{executeIncrementWaterAmy_fail,jdbcType=INTEGER},</if>  
+        <if test="executeStockMoneyFail != null" >#{executeStockMoneyFail,jdbcType=INTEGER},</if>  
+        <if test="executeStockWaterAmy_fail != null" >#{executeStockWaterAmy_fail,jdbcType=INTEGER},</if>  
         <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
         <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
     </trim>
@@ -282,6 +335,10 @@
         execute_increment_water_amy=#{executeIncrementWaterAmy,jdbcType=INTEGER},    
         execute_stock_money=#{executeStockMoney,jdbcType=INTEGER},    
         execute_stock_water_amy=#{executeStockWaterAmy,jdbcType=INTEGER},    
+        execute_increment_money_fail=#{executeIncrementMoneyFail,jdbcType=INTEGER},    
+        execute_increment_water_amy_fail=#{executeIncrementWaterAmy_fail,jdbcType=INTEGER},    
+        execute_stock_money_fail=#{executeStockMoneyFail,jdbcType=INTEGER},    
+        execute_stock_water_amy_fail=#{executeStockWaterAmy_fail,jdbcType=INTEGER},    
         create_date=#{createDate,jdbcType=TIMESTAMP},    
         update_date=#{updateDate,jdbcType=TIMESTAMP},    
     </trim>
@@ -303,6 +360,10 @@
         <if test="executeIncrementWaterAmy != null" >execute_increment_water_amy=#{executeIncrementWaterAmy,jdbcType=INTEGER},</if>
         <if test="executeStockMoney != null" >execute_stock_money=#{executeStockMoney,jdbcType=INTEGER},</if>
         <if test="executeStockWaterAmy != null" >execute_stock_water_amy=#{executeStockWaterAmy,jdbcType=INTEGER},</if>
+        <if test="executeIncrementMoneyFail != null" >execute_increment_money_fail=#{executeIncrementMoneyFail,jdbcType=INTEGER},</if>
+        <if test="executeIncrementWaterAmy_fail != null" >execute_increment_water_amy_fail=#{executeIncrementWaterAmy_fail,jdbcType=INTEGER},</if>
+        <if test="executeStockMoneyFail != null" >execute_stock_money_fail=#{executeStockMoneyFail,jdbcType=INTEGER},</if>
+        <if test="executeStockWaterAmy_fail != null" >execute_stock_water_amy_fail=#{executeStockWaterAmy_fail,jdbcType=INTEGER},</if>
         <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
         <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
     </trim>
