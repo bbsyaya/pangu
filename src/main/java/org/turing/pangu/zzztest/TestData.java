@@ -11,7 +11,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.turing.pangu.bean.TaskConfigureBean;
 import org.turing.pangu.bean.VpnConnectInfo;
-import org.turing.pangu.engine.DeviceEngine;
 import org.turing.pangu.engine.EngineMng;
 import org.turing.pangu.engine.IpTrunkEngine;
 import org.turing.pangu.model.Device;

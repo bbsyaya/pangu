@@ -3,7 +3,6 @@ package org.turing.pangu.task;
 import java.util.Date;
 
 import org.turing.pangu.model.App;
-import org.turing.pangu.model.Device;
 // 留存专用,先通过IP查询出每个应用的地域留存信息,供后续请求下发
 public class IncrementTask {
 	private boolean isUsed = false; // 1:已使用 0: 未使用

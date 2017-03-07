@@ -74,6 +74,13 @@ public class VpnTask {
 		this.statistics = statistics;
 	}
 
+	public List<PhoneTask> getPhoneStockTaskList() {
+		return phoneStockTaskList;
+	}
+	public void setPhoneStockTaskList(List<PhoneTask> phoneStockTaskList) {
+		this.phoneStockTaskList = phoneStockTaskList;
+	}
+
 	private String deviceId; //pc 设备ID
 	private String remoteIp;
 	private String realIp;
@@ -83,5 +90,6 @@ public class VpnTask {
 	private VpnTaskStatistics statistics = new VpnTaskStatistics();
 	private List<IncrementTask> incrementList = new ArrayList<IncrementTask>(); //这个IP可以跑的存量任务列表
 	private List<StockTask> stockDeviceList = new ArrayList<StockTask>(); //这个IP的留存都在这,注意 device中的IP会和remoteIp 不同，只是在同一个城市
-	private List<PhoneTask> phoneTaskList = new ArrayList<PhoneTask>();//这是实际在跑的任务列表 PhoneTask 的 operType 必须和 VpnTask 的 operType 一致
+	private List<PhoneTask> phoneStockTaskList = new ArrayList<PhoneTask>();//这是实际在跑的留存任务列表
+	private List<PhoneTask> phoneTaskList = new ArrayList<PhoneTask>();//这是实际在跑的增量
 }

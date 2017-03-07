@@ -3,7 +3,6 @@ package org.turing.pangu.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.turing.pangu.controller.common.PhoneTask;
 import org.turing.pangu.service.BaseService;
 
 public class EngineMng {

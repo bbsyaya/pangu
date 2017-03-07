@@ -1,7 +1,9 @@
 package org.turing.pangu.task;
 
+import org.apache.log4j.Logger;
+
 public class VpnTaskStatistics {
-	
+	private static final Logger logger = Logger.getLogger(VpnTaskStatistics.class);
 	public int getTaskIncrementTotalCount() {
 		return taskIncrementTotalCount;
 	}
@@ -46,4 +48,28 @@ public class VpnTaskStatistics {
 	private int taskReportFinishedCount= 0; // 上报已正常完成的数量
 	private int taskReportNotFinishedCount= 0; // 上报非正常完成的数量
 	//--------------------------------------------------------
+	public boolean isCanAllocIncrement(){
+		if(taskIncrementTotalCount > taskAllocIncrementCount)
+			return true;
+		
+		return false;
+	}
+	
+	public boolean isCanAllocStock(){
+		if(taskStockTotalCount > taskAllocStockCount)
+			return true;
+		
+		return false;
+	}
+	
+	public void print(){
+		StringBuffer buf = new StringBuffer();
+		buf.append("\n taskIncrementTotalCount:" + taskIncrementTotalCount);
+		buf.append("\n taskStockTotalCount:" + taskStockTotalCount);
+		buf.append("\n taskAllocIncrementCount:" + taskAllocIncrementCount);
+		buf.append("\n taskAllocStockCount:" + taskAllocStockCount);
+		buf.append("\n taskReportFinishedCount:" + taskReportFinishedCount);
+		buf.append("\n taskReportNotFinishedCount:" + taskReportNotFinishedCount);
+		logger.info(buf.toString());
+	}
 }
