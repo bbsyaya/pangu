@@ -41,19 +41,32 @@ public class testTask {
         String encoding=System.getProperty("file.encoding");
         System.out.println("Default System Encoding: " + encoding);
         */
-		VpnLoginRsp rsp = loginPangu(0,"kaaakkk0k");
+		VpnLoginRsp rsp = loginPangu(0,"kwwwkkk0k");
 		for(int index = 0;index < 1;index++){
 			try {
 				GetTaskRsp rsp1 = getTask("2333"+index);
 				Thread.sleep(1000);
-				GetTaskRsp rsp2 = getTask("2333333"+index);
-				Thread.sleep(1000);
+				taskFinish(rsp1,0);
 				operUpdate(rsp.getToken());
-				taskFinish(rsp1,1);
 				
+				
+				GetTaskRsp rsp2 = getTask("2333333"+index);				
 				Thread.sleep(1000);
 				operUpdate(rsp.getToken());
 				taskFinish(rsp2,1);
+				
+				
+				operUpdate(rsp.getToken());
+				
+				GetTaskRsp rsp3 = getTask("233999"+index);
+				Thread.sleep(1000);
+				taskFinish(rsp3,0);
+				
+				operUpdate(rsp.getToken());
+				
+				GetTaskRsp rsp4 = getTask("233555999"+index);
+				Thread.sleep(1000);
+				taskFinish(rsp4,0);
 				
 				operUpdate(rsp.getToken());
 			} catch (Exception e) {
@@ -87,8 +100,7 @@ public class testTask {
 		return rsp;
 	}
 	public GetTaskRsp getTask(String deviceId){
-		String getTaskUrl = host + "/mobile/getTask.pangu";
-		
+		String getTaskUrl = host + "mobile/getTask.pangu";
 		GetTaskReq req = new GetTaskReq();
 		Date data = new Date();
 		req.setDeviceId(deviceId);
@@ -110,7 +122,7 @@ public class testTask {
 		System.out.print("\n" + contentStr);
 	}
 	public void taskFinish(GetTaskRsp rsp,int isFinished){
-		String taskFinishUrl = host + "/mobile/taskFinish.pangu";
+		String taskFinishUrl = host + "mobile/taskFinish.pangu";
 		TaskFinishReq req = new TaskFinishReq();
 		req.setTaskId(rsp.getTask().getTaskId());
 		req.setVpnToken(rsp.getTask().getVpnToken());

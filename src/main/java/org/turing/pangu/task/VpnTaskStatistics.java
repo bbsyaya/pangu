@@ -62,6 +62,12 @@ public class VpnTaskStatistics {
 		return false;
 	}
 	
+	public boolean isTaskFinished(){
+		if(taskIncrementTotalCount + taskStockTotalCount == taskReportFinishedCount + taskReportNotFinishedCount)
+			return true;
+		
+		return false;
+	}
 	public void print(){
 		StringBuffer buf = new StringBuffer();
 		buf.append("\n taskIncrementTotalCount:" + taskIncrementTotalCount);

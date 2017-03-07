@@ -109,21 +109,25 @@ public class TaskDynamicIpEngine implements TaskIF{
 		dataRsp.setIsSwitchVpn(1);
 		for(VpnTask task :vpnTaskList){
 			if(task.getRemoteIp().equals(remoteIp)){
-				if(task.getPhoneTaskList() == null || task.getPhoneTaskList().size() == 0){
+				dataRsp.setStatistics(task.getStatistics());
+				if(task.getPhoneTaskList() == null || task.getPhoneTaskList().size() == 0 
+				|| task.getPhoneStockTaskList() == null || task.getPhoneStockTaskList().size() == 0  ){
 					logger.info("not task run");
 					dataRsp.setIsSwitchVpn(0);
 					dataRsp.setTaskTotal(0);
+					break;
 				}
-				for(PhoneTask pTask:task.getPhoneTaskList()){
-					if(pTask.getIsReport() == 0 && false == TaskEngine.isTimeOut(task)){ // 发现模拟器还有未上报的任务
-						logger.info("task not finish");
-						dataRsp.setIsSwitchVpn(0);
-					}
+				if(false == task.getStatistics().isTaskFinished()){
+					dataRsp.setIsSwitchVpn(0);
 				}
-				dataRsp.setStatistics(task.getStatistics());
+				//超时切就切
+				if(true == TaskEngine.isTimeOut(task)){ // 发现模拟器还有未上报的任务
+					logger.info("task not finish");
+					dataRsp.setIsSwitchVpn(1);
+					break;
+				}
 			}
 		}
-		
 		logger.info("vpnIsNeedSwitch----end");
 		return dataRsp;
 	}
@@ -163,6 +167,24 @@ public class TaskDynamicIpEngine implements TaskIF{
 		for(VpnTask task:vpnTaskList){
 			if(task.getToken().equals(req.getVpnToken())){
 				for(PhoneTask tmpTask:task.getPhoneTaskList()){
+					if(tmpTask.getTaskId().equals(req.getTaskId())){
+						if(req.getIsFinished() == 1 ){
+							tmpTask.setIsFinished(1);//找到任务并设为完成状态
+							tmpTask.setIsReport(1);
+							mListen.updateExecuteTask(tmpTask,true); // 更新执行任务
+							task.getStatistics().setTaskReportFinishedCount(task.getStatistics().getTaskReportFinishedCount()+1);
+							logger.info(" set tast Finished appId:"+tmpTask.getApp().getId());
+						}else{
+							tmpTask.setIsFinished(0);//找到任务并设为完成状态
+							tmpTask.setIsReport(1);
+							mListen.updateExecuteTask(tmpTask,false); // 更新执行任务
+							task.getStatistics().setTaskReportNotFinishedCount(task.getStatistics().getTaskReportNotFinishedCount()+1);
+							logger.info(" set tast not Finished appId:"+tmpTask.getApp().getId());
+						}
+					}
+				}
+				
+				for(PhoneTask tmpTask:task.getPhoneStockTaskList()){
 					if(tmpTask.getTaskId().equals(req.getTaskId())){
 						if(req.getIsFinished() == 1 ){
 							tmpTask.setIsFinished(1);//找到任务并设为完成状态
