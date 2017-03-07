@@ -1,1 +1,30 @@
-[{"appId":1,"incrementMoney":300,"incrementWaterAmy":3000,"stockMoney":60,"stockWaterAmy":180},{"appId":2,"incrementMoney":300,"incrementWaterAmy":3000,"stockMoney":60,"stockWaterAmy":180},{"appId":3,"incrementMoney":300,"incrementWaterAmy":3000,"stockMoney":60,"stockWaterAmy":180},{"appId":4,"incrementMoney":300,"incrementWaterAmy":3000,"stockMoney":60,"stockWaterAmy":180}]
+[
+    {
+        "appId": 1,
+        "incrementMoney": 3000,
+        "incrementWaterAmy": 30000,
+        "stockMoney": 600,
+        "stockWaterAmy": 1800
+    },
+    {
+        "appId": 2,
+        "incrementMoney": 3000,
+        "incrementWaterAmy": 30000,
+        "stockMoney": 600,
+        "stockWaterAmy": 1800
+    },
+    {
+        "appId": 3,
+        "incrementMoney": 3000,
+        "incrementWaterAmy": 30000,
+        "stockMoney": 600,
+        "stockWaterAmy": 1800
+    },
+    {
+        "appId": 4,
+        "incrementMoney": 3000,
+        "incrementWaterAmy": 30000,
+        "stockMoney": 600,
+        "stockWaterAmy": 1800
+    }
+]

@@ -40,6 +40,23 @@ public class AppEngine implements EngineListen{
 		}
 		return false;
 	}
+	public int getActiveUserCount(){
+		List<Long> list = new ArrayList<Long>();
+		int flag = 0;
+		for(App app:appList){
+			flag = 0;
+			for(Long count : list){
+				if(app.getUserId() == count){
+					flag = 1;
+				}
+			}
+			if(flag == 0){
+				list.add(app.getUserId());
+			}
+			
+		}
+		return list.size();
+	}
 	@Override
 	public void setService(List<BaseService> serviceList) {
 		// TODO Auto-generated method stub

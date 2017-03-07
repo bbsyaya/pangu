@@ -90,13 +90,15 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		}
 		return list;
 	}
-
-	public synchronized String getRemoteIp(HttpServletRequest request){
+	public synchronized String getRemoteIpReal(HttpServletRequest request){
 		String ip = request.getHeader("X-Real-IP"); 
 		if(null == ip ){
 			ip = request.getRemoteAddr();
 		}
 		return ip;
+	}
+	public synchronized String getRemoteIp(HttpServletRequest request){
+		return "119.90.141.77";
 	}
 	/** 
 	   * 获取用户真实IP地址，不使用request.getRemoteAddr();的原因是有可能用户使用了代理软件方式避免真实IP地址, 

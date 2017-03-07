@@ -14,7 +14,6 @@ import org.turing.pangu.bean.VpnConnectInfo;
 import org.turing.pangu.engine.DeviceEngine;
 import org.turing.pangu.engine.EngineMng;
 import org.turing.pangu.engine.IpTrunkEngine;
-import org.turing.pangu.iptrunk.StockDevice;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.BaseService;
@@ -27,6 +26,7 @@ import org.turing.pangu.service.RemainVpnService;
 import org.turing.pangu.service.TaskService;
 import org.turing.pangu.service.UserService;
 import org.turing.pangu.service.VpnGroupService;
+import org.turing.pangu.task.StockTask;
 
 import com.alibaba.fastjson.JSON;
 
@@ -208,8 +208,8 @@ public class TestData {
 		//for(Device dev :list){
 			//IpTrunkEngine.getInstance().saveIpInfoToDb(dev.getIp());
 		//}119.90.141.77
-		List<Device> cityIpList = DeviceEngine.getInstance().selectLastWeekExcludeTodayByIp("119.90.141.77");
-		//List<StockDevice> stockList = IpTrunkEngine.getInstance().getStockInfoList("223.72.175.41");
+		//List<Device> cityIpList = DeviceEngine.getInstance().selectLastWeekExcludeTodayByIp("119.90.141.77");
+		List<StockTask> stockList = IpTrunkEngine.getInstance().getStockInfoList("119.90.141.77");
 		List<Device> list = deviceService.selectAll();
 		for(Device dev :list){
 			//IpTrunkEngine.getInstance().saveIpInfoToDb(dev.getIp());

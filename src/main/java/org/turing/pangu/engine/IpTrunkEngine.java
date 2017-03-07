@@ -7,12 +7,12 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.turing.pangu.iptrunk.BaiduLocation;
 import org.turing.pangu.iptrunk.LocationMng;
-import org.turing.pangu.iptrunk.StockDevice;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.model.IpTrunk;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.IpTrunkService;
 import org.turing.pangu.service.IpTrunkServiceImpl;
+import org.turing.pangu.task.StockTask;
 import org.turing.pangu.utils.RandomUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -29,8 +29,8 @@ public class IpTrunkEngine implements EngineListen{
 			mInstance = new IpTrunkEngine();
 		return mInstance;
 	}
-	private boolean isExistInList(List<StockDevice> list ,Device device){
-		for(StockDevice deviceTmp :list){
+	private boolean isExistInList(List<StockTask> list ,Device device){
+		for(StockTask deviceTmp :list){
 			if(deviceTmp.getDevice().getAppId() == device.getAppId()){
 				return true;
 			}
@@ -67,14 +67,14 @@ public class IpTrunkEngine implements EngineListen{
 		}
 	}
 	// 获得每个应用的留存信息,每个应用都有对应的一个留存
-	public List<StockDevice> getStockInfoList(String ip){
-		List<StockDevice> stockDeviceList = new ArrayList<StockDevice>();
+	public List<StockTask> getStockInfoList(String ip){
+		List<StockTask> stockDeviceList = new ArrayList<StockTask>();
 		// 先查一样的IP存不存在
-		List<Device> sameIplist = DeviceEngine.getInstance().selectStockByIp(ip);// 通过IP找到记录
+		List<Device> sameIplist = DeviceEngine.getInstance().selectLastMonthExcludeTodayByIp(ip);// 通过IP找到记录
 		for(Device dev :sameIplist){
 			if(true == AppEngine.getInstance().isActiveApp(dev.getAppId()) 
 					&& false == isExistInList(stockDeviceList,dev)){
-				StockDevice tmpStock = new StockDevice();
+				StockTask tmpStock = new StockTask();
 				tmpStock.setDevice(dev);
 				stockDeviceList.add(tmpStock);
 			}
@@ -86,7 +86,7 @@ public class IpTrunkEngine implements EngineListen{
 		// 通过ip 得到 城市 code
 		LocationMng mng = new LocationMng();
 		BaiduLocation location = mng.getLocation(ip);
-		if( null == location)
+		if( null == location || location.getStatus().equals("1"))
 			return stockDeviceList;
 		
 		IpTrunk ipTrunk = new IpTrunk();
@@ -108,7 +108,7 @@ public class IpTrunkEngine implements EngineListen{
 			for(Device dev :cityIpList){
 				if(true == AppEngine.getInstance().isActiveApp(dev.getAppId()) 
 						&& false == isExistInList(stockDeviceList,dev)){
-					StockDevice tmpStock = new StockDevice();
+					StockTask tmpStock = new StockTask();
 					tmpStock.setDevice(dev);
 					stockDeviceList.add(tmpStock);
 				}

@@ -1,10 +1,10 @@
-package org.turing.pangu.iptrunk;
+package org.turing.pangu.task;
 
 import java.util.Date;
 
 import org.turing.pangu.model.Device;
 // 留存专用,先通过IP查询出每个应用的地域留存信息,供后续请求下发
-public class StockDevice {
+public class StockTask {
 	private boolean isUsed = false; // 1:已使用 0: 未使用
 	private Device device ; // 对应设备记录
 	private Date sendDate = new Date(); // 下发时间

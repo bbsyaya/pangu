@@ -161,7 +161,10 @@ public class testTask {
         System.out.println("Default System Encoding: " + encoding);
         */
 
-		loginPangu();
+		//loginPangu(2,"kkkjk");
+		getTask("12000ooo0044");
+		//getTask("1233333");
+		//getTask("6666666");
 		/*
 		for(int index = 0;index < 100;index++){
 			try {
@@ -189,19 +192,20 @@ public class testTask {
 		String contentStr = HttpUtils.doPost(loginUrl, json, HttpUtils.UTF8);
 		System.out.print("\n"+contentStr);
 	}
-	public void loginPangu(){
-		String loginUrl = "http://pangu.u-app.cn/pc/vpnLogin.pangu";
+	public void loginPangu(int operType,String deviceId){
+		//String loginUrl = "http://pangu.u-app.cn/pc/vpnLogin.pangu";
+		String loginUrl = "http://localhost:8080/pc/vpnLogin.pangu";
 		VpnLoginReq req = new VpnLoginReq();
-		req.setOperType(0);
-		req.setDeviceId("JKHHFKJD");// 取电脑mac地址
+		req.setOperType(operType);
+		req.setDeviceId(deviceId);// 取电脑mac地址
 		String json = JSON.toJSONString(req);
 		String contentStr = HttpUtils.doPost(loginUrl, json, HttpUtils.UTF8);
 		System.out.print("\n"+contentStr);
 	}
 	public GetTaskRsp getTask(String deviceId){
-		String getTaskUrl = "http://pangu.u-app.cn/mobile/getTask.pangu";
+		//String getTaskUrl = "http://pangu.u-app.cn/mobile/getTask.pangu";
 		//String getTaskUrl="http://pangu.u-app.cn/mobile/getTask.pangu";
-		//String taskFinishUrl = "http://localhost:8080/mobile/taskFinish.pangu";
+		String getTaskUrl = "http://localhost:8080/mobile/getTask.pangu";
 		
 		GetTaskReq req = new GetTaskReq();
 		Date data = new Date();
@@ -222,8 +226,8 @@ public class testTask {
 	}
 	
 	public void taskFinish(GetTaskRsp rsp,int isFinished){
-		//String taskFinishUrl = "http://localhost:8080/mobile/taskFinish.pangu";
-		String taskFinishUrl = "http://pangu.u-app.cn/mobile/taskFinish.pangu";
+		String taskFinishUrl = "http://localhost:8080/mobile/taskFinish.pangu";
+		//String taskFinishUrl = "http://pangu.u-app.cn/mobile/taskFinish.pangu";
 		TaskFinishReq req = new TaskFinishReq();
 		req.setTaskId(rsp.getTask().getTaskId());
 		req.setVpnToken(rsp.getTask().getVpnToken());
