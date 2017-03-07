@@ -70,6 +70,14 @@ public class PhoneTask {
 	public void setSendTimes(int sendTimes) {
 		this.sendTimes = sendTimes;
 	}
+	
+	public int getIsReport() {
+		return isReport;
+	}
+	public void setIsReport(int isReport) {
+		this.isReport = isReport;
+	}
+
 	private Device stockInfo; // 存量的设备信息
 	private String deviceId;
 	private String vpnToken; // 带上VPN的token
@@ -81,4 +89,5 @@ public class PhoneTask {
 	private int spanTime; // times > 1次 以上间隔时间,单位秒
 	private int sendTimes = 0;// 下发次数
 	private int isFinished = 0; // 是否完成,1: 是 0:否
+	private int isReport = 0; // 是否上报,1: 是 0:否
 }

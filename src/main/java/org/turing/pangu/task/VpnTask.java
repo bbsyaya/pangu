@@ -60,19 +60,6 @@ public class VpnTask {
 		this.stockDeviceList = stockDeviceList;
 	}
 
-	public int getTaskReportFinishedCount() {
-		return taskReportFinishedCount;
-	}
-	public void setTaskReportFinishedCount(int taskReportFinishedCount) {
-		this.taskReportFinishedCount = taskReportFinishedCount;
-	}
-	public int getTaskReportNotFinishedCount() {
-		return taskReportNotFinishedCount;
-	}
-	public void setTaskReportNotFinishedCount(int taskReportNotFinishedCount) {
-		this.taskReportNotFinishedCount = taskReportNotFinishedCount;
-	}
-
 	public List<IncrementTask> getIncrementList() {
 		return incrementList;
 	}
@@ -80,47 +67,20 @@ public class VpnTask {
 		this.incrementList = incrementList;
 	}
 
-	public int getTaskIncrementTotalCount() {
-		return taskIncrementTotalCount;
+	public VpnTaskStatistics getStatistics() {
+		return statistics;
 	}
-	public void setTaskIncrementTotalCount(int taskIncrementTotalCount) {
-		this.taskIncrementTotalCount = taskIncrementTotalCount;
+	public void setStatistics(VpnTaskStatistics statistics) {
+		this.statistics = statistics;
 	}
-	public int getTaskStockTotalCount() {
-		return taskStockTotalCount;
-	}
-	public void setTaskStockTotalCount(int taskStockTotalCount) {
-		this.taskStockTotalCount = taskStockTotalCount;
-	}
-	public int getTaskAllocIncrementCount() {
-		return taskAllocIncrementCount;
-	}
-	public void setTaskAllocIncrementCount(int taskAllocIncrementCount) {
-		this.taskAllocIncrementCount = taskAllocIncrementCount;
-	}
-	public int getTaskAllocStockCount() {
-		return taskAllocStockCount;
-	}
-	public void setTaskAllocStockCount(int taskAllocStockCount) {
-		this.taskAllocStockCount = taskAllocStockCount;
-	}
-
-
 
 	private String deviceId; //pc 设备ID
 	private String remoteIp;
 	private String realIp;
 	private String token; // 16位
-	private int operType; // 操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
-	private Date createTime;// Vpn 任务创建时间
-	//-------------小任务池------------------------------
-	private int taskIncrementTotalCount; // 一次ip 任务总数
-	private int taskStockTotalCount; // 一次ip 任务总数
-	private int taskAllocIncrementCount; // 已分配增量的数量
-	private int taskAllocStockCount; // 已分配增量的数量
-	private int taskReportFinishedCount; // 上报已正常完成的数量
-	private int taskReportNotFinishedCount; // 上报已正常完成的数量
-	//--------------------------------------------------------
+	private int operType = 0; // 操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
+	private Date createTime = new Date();// Vpn 任务创建时间
+	private VpnTaskStatistics statistics = new VpnTaskStatistics();
 	private List<IncrementTask> incrementList = new ArrayList<IncrementTask>(); //这个IP可以跑的存量任务列表
 	private List<StockTask> stockDeviceList = new ArrayList<StockTask>(); //这个IP的留存都在这,注意 device中的IP会和remoteIp 不同，只是在同一个城市
 	private List<PhoneTask> phoneTaskList = new ArrayList<PhoneTask>();//这是实际在跑的任务列表 PhoneTask 的 operType 必须和 VpnTask 的 operType 一致

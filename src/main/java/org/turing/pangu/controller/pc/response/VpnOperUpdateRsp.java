@@ -1,6 +1,7 @@
 package org.turing.pangu.controller.pc.response;
 
 import org.turing.pangu.controller.common.BaseRsp;
+import org.turing.pangu.task.VpnTaskStatistics;
 
 public class VpnOperUpdateRsp extends BaseRsp{
 	public String getRemoteIp() {
@@ -33,12 +34,6 @@ public class VpnOperUpdateRsp extends BaseRsp{
 	public void setTaskTotal(int taskTotal) {
 		this.taskTotal = taskTotal;
 	}
-	public int getFinishedTaskCount() {
-		return finishedTaskCount;
-	}
-	public void setFinishedTaskCount(int finishedTaskCount) {
-		this.finishedTaskCount = finishedTaskCount;
-	}
 	
 	public VpnConnectInfoRsp getConnectInfo() {
 		return connectInfo;
@@ -47,11 +42,21 @@ public class VpnOperUpdateRsp extends BaseRsp{
 		this.connectInfo = connectInfo;
 	}
 
+
+	public VpnTaskStatistics getStatistics() {
+		return statistics;
+	}
+	public void setStatistics(VpnTaskStatistics statistics) {
+		this.statistics = statistics;
+	}
+
+
 	private String remoteIp;	//getRemoteAddr
 	private String realIp; 		//x-forwarded-for
 	private int isSwitchVpn;    //1: 是 0:否
 	private int loopTime;		// 下次询问时长 单位秒
 	private int taskTotal = 0;		// 任务总数
-	private int finishedTaskCount = 0;//已完成的任务数
+	
+	private VpnTaskStatistics statistics;
 	private VpnConnectInfoRsp connectInfo;
 }

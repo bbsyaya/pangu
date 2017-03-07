@@ -93,12 +93,9 @@ public class TaskDynamicIpEngine implements TaskIF{
 		task.setRemoteIp(remoteIp);
 		task.setRealIp(realIp);
 		task.setToken(RandomUtils.getRandom(TaskEngine.VPN_TOKEN_LENGH));
-		task.setTaskReportFinishedCount(0);
-		task.setTaskReportNotFinishedCount(0);
-		task.setTaskAllocIncrementCount(0);
-		task.setTaskAllocStockCount(0);
-		task.setTaskStockTotalCount(task.getStockDeviceList().size()>0?1:0);
-		task.setTaskIncrementTotalCount((AppEngine.getInstance().getActiveUserCount() * 2)); // 按用户分配
+		task.getStatistics().setTaskStockTotalCount(task.getStockDeviceList().size()>0?1:0);
+		int activeUserCount = AppEngine.getInstance().getActiveUserCount();
+		task.getStatistics().setTaskIncrementTotalCount((activeUserCount + 1)); // 让脚本多跑一个
 		task.setCreateTime(new Date());
 		vpnTaskList.add(task);
 		logger.info("vpnLogin---end");
@@ -114,20 +111,18 @@ public class TaskDynamicIpEngine implements TaskIF{
 				if(task.getPhoneTaskList() == null || task.getPhoneTaskList().size() == 0){
 					logger.info("not task run");
 					dataRsp.setIsSwitchVpn(0);
-					dataRsp.setFinishedTaskCount(0);
 					dataRsp.setTaskTotal(0);
 				}
-				dataRsp.setTaskTotal(task.getPhoneTaskList().size());
 				for(PhoneTask pTask:task.getPhoneTaskList()){
-					dataRsp.setFinishedTaskCount(dataRsp.getFinishedTaskCount()+1);
-					if(pTask.getIsFinished() == 0 && false == TaskEngine.isTimeOut(task)){ // 发现模拟器还有未完成的任务
+					if(pTask.getIsReport() == 0 && false == TaskEngine.isTimeOut(task)){ // 发现模拟器还有未上报的任务
 						logger.info("task not finish");
 						dataRsp.setIsSwitchVpn(0);
-						dataRsp.setFinishedTaskCount(dataRsp.getFinishedTaskCount()-1);
 					}
 				}
+				dataRsp.setStatistics(task.getStatistics());
 			}
 		}
+		
 		logger.info("vpnIsNeedSwitch----end");
 		return dataRsp;
 	}
@@ -170,13 +165,15 @@ public class TaskDynamicIpEngine implements TaskIF{
 					if(tmpTask.getTaskId().equals(req.getTaskId())){
 						if(req.getIsFinished() == 1 ){
 							tmpTask.setIsFinished(1);//找到任务并设为完成状态
+							tmpTask.setIsReport(1);
 							mListen.updateExecuteTask(tmpTask,true); // 更新执行任务
-							task.setTaskReportFinishedCount(task.getTaskReportFinishedCount()+1);
+							task.getStatistics().setTaskReportFinishedCount(task.getStatistics().getTaskReportFinishedCount()+1);
 							logger.info(" set tast Finished appId:"+tmpTask.getApp().getId());
 						}else{
 							tmpTask.setIsFinished(0);//找到任务并设为完成状态
+							tmpTask.setIsReport(1);
 							mListen.updateExecuteTask(tmpTask,false); // 更新执行任务
-							task.setTaskReportNotFinishedCount(task.getTaskReportNotFinishedCount()+1);
+							task.getStatistics().setTaskReportNotFinishedCount(task.getStatistics().getTaskReportNotFinishedCount()+1);
 							logger.info(" set tast not Finished appId:"+tmpTask.getApp().getId());
 						}
 					}
@@ -205,7 +202,8 @@ public class TaskDynamicIpEngine implements TaskIF{
 						}
 						else{
 							// 只要小任务池里还有任务，就可以下发
-							if(task.getTaskIncrementTotalCount() + task.getTaskStockTotalCount() > task.getTaskAllocIncrementCount() + task.getTaskAllocStockCount() ){
+							if(task.getStatistics().getTaskIncrementTotalCount() + task.getStatistics().getTaskStockTotalCount() > 
+							task.getStatistics().getTaskAllocIncrementCount() + task.getStatistics().getTaskAllocStockCount() ){
 								break; //
 							}else{
 								logger.info("repeat task finished,return null task");
@@ -218,9 +216,9 @@ public class TaskDynamicIpEngine implements TaskIF{
 				if(pTask != null){
 					logger.info("Task:"+pTask.toString());
 					if(pTask.getOperType() == TaskEngine.INCREMENT_MONEY_TYPE || pTask.getOperType() == TaskEngine.INCREMENT_WATERAMY_TYPE ){
-						task.setTaskAllocIncrementCount(task.getTaskAllocIncrementCount()+ 1); // 分配任务++
+						task.getStatistics().setTaskAllocIncrementCount(task.getStatistics().getTaskAllocIncrementCount()+ 1); // 分配任务++
 					}else{
-						task.setTaskAllocStockCount(task.getTaskAllocStockCount()+1);
+						task.getStatistics().setTaskAllocStockCount(task.getStatistics().getTaskAllocStockCount()+1);
 					}
 					
 					task.getPhoneTaskList().add(pTask);
@@ -252,7 +250,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 		// 如果有存量的情况下
         if(true == isHavaStockDevice(task)){
         	int random = RandomUtils.getRandom(0, 100);
-        	if(random % 2 == 0 && task.getTaskStockTotalCount() > task.getTaskAllocStockCount() ){ // 1/5 跑存量
+        	if(random % 3 == 0 && task.getStatistics().getTaskStockTotalCount() > task.getStatistics().getTaskAllocStockCount() ){ // 1/5 跑存量
         		if(operType == TaskEngine.INCREMENT_MONEY_TYPE){
             		operType = TaskEngine.STOCK_MONEY_TYPE;
             	}else if(operType == TaskEngine.INCREMENT_MONEY_TYPE){
@@ -295,6 +293,8 @@ public class TaskDynamicIpEngine implements TaskIF{
             	}
                 for(Task dbTask:TaskEngine.getInstance().todayTaskList){
                     flag = 0;
+                    //-- 存量不做验证
+                    /**
                 	for(PhoneTask tmpTask:task.getPhoneTaskList()){
     					// 同一个用户,同一个应用不下发两次
     					App same = AppEngine.getInstance().getAppInfo(dbTask.getAppId());
@@ -303,7 +303,7 @@ public class TaskDynamicIpEngine implements TaskIF{
     						logger.info("find same user:"+same.getUserId()+"|AppId:"+same.getId());
     						break;
     					}
-                    }
+                    }**/
                     if(flag == 0 && dev.getDevice().getAppId() == dbTask.getAppId() && isHavaTaskByOperType(operType,dbTask)){
                     	mListen.updateAllocTask(operType,dbTask); // 对应派发 ++ 
                     	opt.setDevice(dev.getDevice()); // 保存好不容易找到的存量信息，函数外赋值。

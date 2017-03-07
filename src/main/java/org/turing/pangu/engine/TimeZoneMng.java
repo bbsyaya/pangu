@@ -7,9 +7,9 @@ package org.turing.pangu.engine;
 public class TimeZoneMng {
 	public static int SPAN_TIME = 10;// 10S 
 	
-	public static int INCREMENT_MONEY_TIMEOUT = 12*60*1000;
+	public static int INCREMENT_MONEY_TIMEOUT = 10*60*1000;
 	public static int INCREMENT_WATERAMY_TIMEOUT = 6*60*1000;
-	public static int STOCK_MONEY_TIMEOUT = 12*60*1000;
+	public static int STOCK_MONEY_TIMEOUT = 10*60*1000;
 	public static int STOCK_WATERAMY_TIMEOUT = 6*60*1000;
 	public static int FREE_TIMEOUT = INCREMENT_MONEY_TIMEOUT;
 	public static float OPEN_MAX_VPN_PHONE_WEIGHT = 1;

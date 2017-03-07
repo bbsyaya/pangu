@@ -161,10 +161,12 @@ public class testTask {
         System.out.println("Default System Encoding: " + encoding);
         */
 
-		//loginPangu(2,"kkkjk");
-		getTask("12000ooo0044");
+		//loginPangu(0,"kkkjk");
+		getTask("12000ooo00");
 		//getTask("1233333");
 		//getTask("6666666");
+		//getTask("pooooo");
+		//getTask("wwweee");
 		/*
 		for(int index = 0;index < 100;index++){
 			try {
