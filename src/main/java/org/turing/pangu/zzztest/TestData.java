@@ -16,12 +16,14 @@ import org.turing.pangu.engine.IpTrunkEngine;
 import org.turing.pangu.model.Device;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.BaseService;
+import org.turing.pangu.service.ComputerService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.DynamicVpnService;
 import org.turing.pangu.service.IpTrunkService;
 import org.turing.pangu.service.PhoneTrunkService;
 import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.service.RemainVpnService;
+import org.turing.pangu.service.SimulatorService;
 import org.turing.pangu.service.TaskService;
 import org.turing.pangu.service.UserService;
 import org.turing.pangu.service.VpnGroupService;
@@ -64,6 +66,11 @@ public class TestData {
 	@Resource(name = "phoneTrunkServiceImpl")
 	private PhoneTrunkService phoneTrunkService;
 
+	@Resource(name = "computerServiceImpl")
+	private ComputerService computerService;
+	
+	@Resource(name = "simulatorServiceImpl")
+	private SimulatorService simulatorService;
 	/*
 	 * @Test public void testInsertPlatform(){ Platform pf = new Platform();
 	 * pf.setCreateDate(new Date()); pf.setCreateDate(new Date());
@@ -197,6 +204,8 @@ public class TestData {
 		list.add(taskService);
 		list.add(ipTrunkService);
 		list.add(phoneTrunkService);
+		list.add(computerService);
+		list.add(simulatorService);
 		return list;
 	}
 	@Test

@@ -90,14 +90,14 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		}
 		return list;
 	}
-	public synchronized String getRemoteIpReal(HttpServletRequest request){
+	public synchronized String getRemoteIp(HttpServletRequest request){
 		String ip = request.getHeader("X-Real-IP"); 
 		if(null == ip ){
 			ip = request.getRemoteAddr();
 		}
 		return ip;
 	}
-	public synchronized String getRemoteIp(HttpServletRequest request){
+	public synchronized String getRemoteIpTest(HttpServletRequest request){
 		return "119.90.141.77";
 	}
 	/** 

@@ -4,30 +4,34 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年02月24日 
- * @since 2017年02月24日 
+ * @version 1.0, 2017年03月07日 
+ * @since 2017年03月07日 
  */
 
 package org.turing.pangu.model;
 
 import java.util.Date;
-
-import org.hibernate.validator.constraints.Length;
-
+import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
  /**DynamicVpn*/
  public class DynamicVpn extends BaseModel<DynamicVpn>
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 1935281487944956902L;
+  private static final long serialVersionUID = 1834421488892632823L;
 
   /***/
   private Long groupId;
 
   /***/
   private Integer isValid;
+
+  /***/
+  private String pcNumber;
 
   /***/
   private String name;
@@ -77,6 +81,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   public void setIsValid(Integer isValid)
   {
     this.isValid=isValid;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getPcNumber()
+  {
+   return this.pcNumber;
+  }
+
+  /**设置*/
+  public void setPcNumber(String pcNumber)
+  {
+    this.pcNumber=pcNumber;
   }
 
   
@@ -142,7 +161,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
-  @Length(max =255 )
+  @Length(max =21845 )
   public String getConfigure()
   {
    return this.configure;

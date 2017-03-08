@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.turing.pangu.mapper.SimulatorMapper" >
+  <resultMap id="BaseResultMap" type="org.turing.pangu.model.Simulator" >
+    <id column="id" property="id" jdbcType="BIGINT" />       
+    <result column="computer_id" property="computerId" jdbcType="BIGINT" />          
+    <result column="is_valid" property="isValid" jdbcType="INTEGER" />          
+    <result column="device_number" property="deviceNumber" jdbcType="VARCHAR" />          
+    <result column="device_token" property="deviceToken" jdbcType="VARCHAR" />          
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
+  </resultMap>   
+  <sql id="Base_Column_List" >
+    s.id,
+	s.computer_id,
+	s.is_valid,
+	s.device_number,
+	s.device_token,
+	s.create_date,
+	s.update_date
+  </sql>
+  <sql id="Base_Column_Value_List" >
+    #{computerId},
+	#{isValid},
+	#{deviceNumber},
+	#{deviceToken},
+	#{createDate},
+	#{updateDate}
+  </sql>
+  <sql id="Base_Column_Update_List" >
+    computer_id=#{computerId},
+	is_valid=#{isValid},
+	device_number=#{deviceNumber},
+	device_token=#{deviceToken},
+	create_date=#{createDate},
+	update_date=#{updateDate}
+  </sql> 
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from simulator s
+    where s.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from simulator s
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Simulator" >
+    select 
+    <include refid="Base_Column_List" />
+    from simulator s
+    where 1=1 
+    <if test="computerId != null" >and s.computer_id= #{computerId,jdbcType=BIGINT}</if>
+    <if test="isValid != null" >and s.is_valid= #{isValid,jdbcType=INTEGER}</if>
+    <if test="deviceNumber != null" >and s.device_number= #{deviceNumber,jdbcType=VARCHAR}</if>
+    <if test="deviceToken != null" >and s.device_token= #{deviceToken,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and s.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and s.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Simulator" >
+    select 
+    <include refid="Base_Column_List" />
+    from simulator s
+    where 1=1 
+    <if test="computerId != null" >and s.computer_id= #{computerId,jdbcType=BIGINT}</if>
+    <if test="isValid != null" >and s.is_valid= #{isValid,jdbcType=INTEGER}</if>
+    <if test="deviceNumber != null" >and s.device_number= #{deviceNumber,jdbcType=VARCHAR}</if>
+    <if test="deviceToken != null" >and s.device_token= #{deviceToken,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and s.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and s.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.ParamModel" >
+    select 
+    <include refid="Base_Column_List" />
+    from simulator s
+    where 1=1 
+    <if test="model.computerId != null" >and s.computer_id= #{model.computerId,jdbcType=BIGINT}</if>
+    <if test="model.isValid != null" >and s.is_valid= #{model.isValid,jdbcType=INTEGER}</if>
+    <if test="model.deviceNumber != null" >and s.device_number= #{model.deviceNumber,jdbcType=VARCHAR}</if>
+    <if test="model.deviceToken != null" >and s.device_token= #{model.deviceToken,jdbcType=VARCHAR}</if>
+    <if test="model.createDate != null" >and s.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
+    <if test="model.updateDate != null" >and s.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="org.turing.pangu.model.Simulator" >
+    select count(0) totalCount
+    from simulator s
+    where 1=1 
+    <if test="computerId != null" >and s.computer_id= #{computerId,jdbcType=BIGINT}</if>
+    <if test="isValid != null" >and s.is_valid= #{isValid,jdbcType=INTEGER}</if>
+    <if test="deviceNumber != null" >and s.device_number= #{deviceNumber,jdbcType=VARCHAR}</if>
+    <if test="deviceToken != null" >and s.device_token= #{deviceToken,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and s.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and s.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Long" >
+    delete from simulator
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.turing.pangu.model.Simulator" >
+    insert into simulator 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        computer_id,    
+        is_valid,    
+        device_number,    
+        device_token,    
+        create_date,    
+        update_date,    
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{computerId,jdbcType=BIGINT},  
+        #{isValid,jdbcType=INTEGER},  
+        #{deviceNumber,jdbcType=VARCHAR},  
+        #{deviceToken,jdbcType=VARCHAR},  
+        #{createDate,jdbcType=TIMESTAMP},  
+        #{updateDate,jdbcType=TIMESTAMP},  
+    </trim>
+  </insert>
+  <insert id="insertSimulatorByTrim" parameterType="org.turing.pangu.model.Simulator" >
+    insert into simulator 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="computerId != null" >computer_id,</if>
+        <if test="isValid != null" >is_valid,</if>
+        <if test="deviceNumber != null" >device_number,</if>
+        <if test="deviceToken != null" >device_token,</if>
+        <if test="createDate != null" >create_date,</if>
+        <if test="updateDate != null" >update_date,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="computerId != null" >#{computerId,jdbcType=BIGINT},</if>  
+        <if test="isValid != null" >#{isValid,jdbcType=INTEGER},</if>  
+        <if test="deviceNumber != null" >#{deviceNumber,jdbcType=VARCHAR},</if>  
+        <if test="deviceToken != null" >#{deviceToken,jdbcType=VARCHAR},</if>  
+        <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
+        <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
+    </trim>
+  </insert>
+  <update id="updateSimulatorById" parameterType="org.turing.pangu.model.Simulator" >
+    update simulator set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        computer_id=#{computerId,jdbcType=BIGINT},    
+        is_valid=#{isValid,jdbcType=INTEGER},    
+        device_number=#{deviceNumber,jdbcType=VARCHAR},    
+        device_token=#{deviceToken,jdbcType=VARCHAR},    
+        create_date=#{createDate,jdbcType=TIMESTAMP},    
+        update_date=#{updateDate,jdbcType=TIMESTAMP},    
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="org.turing.pangu.model.Simulator" >
+    update simulator set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="computerId != null" >computer_id=#{computerId,jdbcType=BIGINT},</if>
+        <if test="isValid != null" >is_valid=#{isValid,jdbcType=INTEGER},</if>
+        <if test="deviceNumber != null" >device_number=#{deviceNumber,jdbcType=VARCHAR},</if>
+        <if test="deviceToken != null" >device_token=#{deviceToken,jdbcType=VARCHAR},</if>
+        <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

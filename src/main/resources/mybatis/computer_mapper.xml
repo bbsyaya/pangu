@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.turing.pangu.mapper.ComputerMapper" >
+  <resultMap id="BaseResultMap" type="org.turing.pangu.model.Computer" >
+    <id column="id" property="id" jdbcType="BIGINT" />       
+    <result column="user_id" property="userId" jdbcType="BIGINT" />          
+    <result column="vpn_id" property="vpnId" jdbcType="BIGINT" />          
+    <result column="is_valid" property="isValid" jdbcType="INTEGER" />          
+    <result column="device_serial" property="deviceSerial" jdbcType="VARCHAR" />          
+    <result column="device_token" property="deviceToken" jdbcType="VARCHAR" />          
+    <result column="address" property="address" jdbcType="VARCHAR" />          
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
+  </resultMap>   
+  <sql id="Base_Column_List" >
+    c.id,
+	c.user_id,
+	c.vpn_id,
+	c.is_valid,
+	c.device_serial,
+	c.device_token,
+	c.address,
+	c.create_date,
+	c.update_date
+  </sql>
+  <sql id="Base_Column_Value_List" >
+    #{userId},
+	#{vpnId},
+	#{isValid},
+	#{deviceSerial},
+	#{deviceToken},
+	#{address},
+	#{createDate},
+	#{updateDate}
+  </sql>
+  <sql id="Base_Column_Update_List" >
+    user_id=#{userId},
+	vpn_id=#{vpnId},
+	is_valid=#{isValid},
+	device_serial=#{deviceSerial},
+	device_token=#{deviceToken},
+	address=#{address},
+	create_date=#{createDate},
+	update_date=#{updateDate}
+  </sql> 
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from computer c
+    where c.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from computer c
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Computer" >
+    select 
+    <include refid="Base_Column_List" />
+    from computer c
+    where 1=1 
+    <if test="userId != null" >and c.user_id= #{userId,jdbcType=BIGINT}</if>
+    <if test="vpnId != null" >and c.vpn_id= #{vpnId,jdbcType=BIGINT}</if>
+    <if test="isValid != null" >and c.is_valid= #{isValid,jdbcType=INTEGER}</if>
+    <if test="deviceSerial != null" >and c.device_serial= #{deviceSerial,jdbcType=VARCHAR}</if>
+    <if test="deviceToken != null" >and c.device_token= #{deviceToken,jdbcType=VARCHAR}</if>
+    <if test="address != null" >and c.address= #{address,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and c.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and c.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Computer" >
+    select 
+    <include refid="Base_Column_List" />
+    from computer c
+    where 1=1 
+    <if test="userId != null" >and c.user_id= #{userId,jdbcType=BIGINT}</if>
+    <if test="vpnId != null" >and c.vpn_id= #{vpnId,jdbcType=BIGINT}</if>
+    <if test="isValid != null" >and c.is_valid= #{isValid,jdbcType=INTEGER}</if>
+    <if test="deviceSerial != null" >and c.device_serial= #{deviceSerial,jdbcType=VARCHAR}</if>
+    <if test="deviceToken != null" >and c.device_token= #{deviceToken,jdbcType=VARCHAR}</if>
+    <if test="address != null" >and c.address= #{address,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and c.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and c.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.ParamModel" >
+    select 
+    <include refid="Base_Column_List" />
+    from computer c
+    where 1=1 
+    <if test="model.userId != null" >and c.user_id= #{model.userId,jdbcType=BIGINT}</if>
+    <if test="model.vpnId != null" >and c.vpn_id= #{model.vpnId,jdbcType=BIGINT}</if>
+    <if test="model.isValid != null" >and c.is_valid= #{model.isValid,jdbcType=INTEGER}</if>
+    <if test="model.deviceSerial != null" >and c.device_serial= #{model.deviceSerial,jdbcType=VARCHAR}</if>
+    <if test="model.deviceToken != null" >and c.device_token= #{model.deviceToken,jdbcType=VARCHAR}</if>
+    <if test="model.address != null" >and c.address= #{model.address,jdbcType=VARCHAR}</if>
+    <if test="model.createDate != null" >and c.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
+    <if test="model.updateDate != null" >and c.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="org.turing.pangu.model.Computer" >
+    select count(0) totalCount
+    from computer c
+    where 1=1 
+    <if test="userId != null" >and c.user_id= #{userId,jdbcType=BIGINT}</if>
+    <if test="vpnId != null" >and c.vpn_id= #{vpnId,jdbcType=BIGINT}</if>
+    <if test="isValid != null" >and c.is_valid= #{isValid,jdbcType=INTEGER}</if>
+    <if test="deviceSerial != null" >and c.device_serial= #{deviceSerial,jdbcType=VARCHAR}</if>
+    <if test="deviceToken != null" >and c.device_token= #{deviceToken,jdbcType=VARCHAR}</if>
+    <if test="address != null" >and c.address= #{address,jdbcType=VARCHAR}</if>
+    <if test="createDate != null" >and c.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and c.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Long" >
+    delete from computer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.turing.pangu.model.Computer" >
+    insert into computer 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        user_id,    
+        vpn_id,    
+        is_valid,    
+        device_serial,    
+        device_token,    
+        address,    
+        create_date,    
+        update_date,    
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{userId,jdbcType=BIGINT},  
+        #{vpnId,jdbcType=BIGINT},  
+        #{isValid,jdbcType=INTEGER},  
+        #{deviceSerial,jdbcType=VARCHAR},  
+        #{deviceToken,jdbcType=VARCHAR},  
+        #{address,jdbcType=VARCHAR},  
+        #{createDate,jdbcType=TIMESTAMP},  
+        #{updateDate,jdbcType=TIMESTAMP},  
+    </trim>
+  </insert>
+  <insert id="insertComputerByTrim" parameterType="org.turing.pangu.model.Computer" >
+    insert into computer 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="userId != null" >user_id,</if>
+        <if test="vpnId != null" >vpn_id,</if>
+        <if test="isValid != null" >is_valid,</if>
+        <if test="deviceSerial != null" >device_serial,</if>
+        <if test="deviceToken != null" >device_token,</if>
+        <if test="address != null" >address,</if>
+        <if test="createDate != null" >create_date,</if>
+        <if test="updateDate != null" >update_date,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="userId != null" >#{userId,jdbcType=BIGINT},</if>  
+        <if test="vpnId != null" >#{vpnId,jdbcType=BIGINT},</if>  
+        <if test="isValid != null" >#{isValid,jdbcType=INTEGER},</if>  
+        <if test="deviceSerial != null" >#{deviceSerial,jdbcType=VARCHAR},</if>  
+        <if test="deviceToken != null" >#{deviceToken,jdbcType=VARCHAR},</if>  
+        <if test="address != null" >#{address,jdbcType=VARCHAR},</if>  
+        <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
+        <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
+    </trim>
+  </insert>
+  <update id="updateComputerById" parameterType="org.turing.pangu.model.Computer" >
+    update computer set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        user_id=#{userId,jdbcType=BIGINT},    
+        vpn_id=#{vpnId,jdbcType=BIGINT},    
+        is_valid=#{isValid,jdbcType=INTEGER},    
+        device_serial=#{deviceSerial,jdbcType=VARCHAR},    
+        device_token=#{deviceToken,jdbcType=VARCHAR},    
+        address=#{address,jdbcType=VARCHAR},    
+        create_date=#{createDate,jdbcType=TIMESTAMP},    
+        update_date=#{updateDate,jdbcType=TIMESTAMP},    
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="org.turing.pangu.model.Computer" >
+    update computer set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="userId != null" >user_id=#{userId,jdbcType=BIGINT},</if>
+        <if test="vpnId != null" >vpn_id=#{vpnId,jdbcType=BIGINT},</if>
+        <if test="isValid != null" >is_valid=#{isValid,jdbcType=INTEGER},</if>
+        <if test="deviceSerial != null" >device_serial=#{deviceSerial,jdbcType=VARCHAR},</if>
+        <if test="deviceToken != null" >device_token=#{deviceToken,jdbcType=VARCHAR},</if>
+        <if test="address != null" >address=#{address,jdbcType=VARCHAR},</if>
+        <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
