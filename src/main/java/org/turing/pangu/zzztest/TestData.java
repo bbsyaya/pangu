@@ -13,7 +13,10 @@ import org.turing.pangu.bean.TaskConfigureBean;
 import org.turing.pangu.bean.VpnConnectInfo;
 import org.turing.pangu.engine.EngineMng;
 import org.turing.pangu.engine.IpTrunkEngine;
+import org.turing.pangu.engine.VpnEngine;
+import org.turing.pangu.model.Computer;
 import org.turing.pangu.model.Device;
+import org.turing.pangu.model.DynamicVpn;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.ComputerService;
@@ -211,18 +214,25 @@ public class TestData {
 	@Test
 	public void testUpdateDevice() {
 		EngineMng.getInstance().initEngine(getAllServiecInstance());		
-		int i = 0;
+		
+		for(DynamicVpn vpn :VpnEngine.getInstance().getDynamicVpnList()){
+			Computer cpt = new Computer();
+			cpt.setDeviceSerial("205096735");
+			cpt.setIsValid(1);
+			cpt.setVpnId(vpn.getId());
+			computerService.insert(cpt);
+		}
 		
 		//for(Device dev :list){
 			//IpTrunkEngine.getInstance().saveIpInfoToDb(dev.getIp());
 		//}119.90.141.77
 		//List<Device> cityIpList = DeviceEngine.getInstance().selectLastWeekExcludeTodayByIp("119.90.141.77");
-		List<StockTask> stockList = IpTrunkEngine.getInstance().getStockInfoList("119.90.141.77");
-		List<Device> list = deviceService.selectAll();
-		for(Device dev :list){
+		//List<StockTask> stockList = IpTrunkEngine.getInstance().getStockInfoList("119.90.141.77");
+		//List<Device> list = deviceService.selectAll();
+		//for(Device dev :list){
 			//IpTrunkEngine.getInstance().saveIpInfoToDb(dev.getIp());
-			i++;
-		}
+			//i++;
+		//}
 	}
 
 	public void remain() {

@@ -5,7 +5,6 @@
     <id column="id" property="id" jdbcType="BIGINT" />       
     <result column="group_id" property="groupId" jdbcType="BIGINT" />          
     <result column="is_valid" property="isValid" jdbcType="INTEGER" />          
-    <result column="pc_number" property="pcNumber" jdbcType="VARCHAR" />          
     <result column="name" property="name" jdbcType="VARCHAR" />          
     <result column="domain" property="domain" jdbcType="VARCHAR" />          
     <result column="user" property="user" jdbcType="VARCHAR" />          
@@ -18,7 +17,6 @@
     d.id,
 	d.group_id,
 	d.is_valid,
-	d.pc_number,
 	d.name,
 	d.domain,
 	d.user,
@@ -30,7 +28,6 @@
   <sql id="Base_Column_Value_List" >
     #{groupId},
 	#{isValid},
-	#{pcNumber},
 	#{name},
 	#{domain},
 	#{user},
@@ -42,7 +39,6 @@
   <sql id="Base_Column_Update_List" >
     group_id=#{groupId},
 	is_valid=#{isValid},
-	pc_number=#{pcNumber},
 	name=#{name},
 	domain=#{domain},
 	user=#{user},
@@ -69,7 +65,6 @@
     where 1=1 
     <if test="groupId != null" >and d.group_id= #{groupId,jdbcType=BIGINT}</if>
     <if test="isValid != null" >and d.is_valid= #{isValid,jdbcType=INTEGER}</if>
-    <if test="pcNumber != null" >and d.pc_number= #{pcNumber,jdbcType=VARCHAR}</if>
     <if test="name != null" >and d.name= #{name,jdbcType=VARCHAR}</if>
     <if test="domain != null" >and d.domain= #{domain,jdbcType=VARCHAR}</if>
     <if test="user != null" >and d.user= #{user,jdbcType=VARCHAR}</if>
@@ -85,7 +80,6 @@
     where 1=1 
     <if test="groupId != null" >and d.group_id= #{groupId,jdbcType=BIGINT}</if>
     <if test="isValid != null" >and d.is_valid= #{isValid,jdbcType=INTEGER}</if>
-    <if test="pcNumber != null" >and d.pc_number= #{pcNumber,jdbcType=VARCHAR}</if>
     <if test="name != null" >and d.name= #{name,jdbcType=VARCHAR}</if>
     <if test="domain != null" >and d.domain= #{domain,jdbcType=VARCHAR}</if>
     <if test="user != null" >and d.user= #{user,jdbcType=VARCHAR}</if>
@@ -101,7 +95,6 @@
     where 1=1 
     <if test="model.groupId != null" >and d.group_id= #{model.groupId,jdbcType=BIGINT}</if>
     <if test="model.isValid != null" >and d.is_valid= #{model.isValid,jdbcType=INTEGER}</if>
-    <if test="model.pcNumber != null" >and d.pc_number= #{model.pcNumber,jdbcType=VARCHAR}</if>
     <if test="model.name != null" >and d.name= #{model.name,jdbcType=VARCHAR}</if>
     <if test="model.domain != null" >and d.domain= #{model.domain,jdbcType=VARCHAR}</if>
     <if test="model.user != null" >and d.user= #{model.user,jdbcType=VARCHAR}</if>
@@ -117,7 +110,6 @@
     where 1=1 
     <if test="groupId != null" >and d.group_id= #{groupId,jdbcType=BIGINT}</if>
     <if test="isValid != null" >and d.is_valid= #{isValid,jdbcType=INTEGER}</if>
-    <if test="pcNumber != null" >and d.pc_number= #{pcNumber,jdbcType=VARCHAR}</if>
     <if test="name != null" >and d.name= #{name,jdbcType=VARCHAR}</if>
     <if test="domain != null" >and d.domain= #{domain,jdbcType=VARCHAR}</if>
     <if test="user != null" >and d.user= #{user,jdbcType=VARCHAR}</if>
@@ -135,7 +127,6 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
         group_id,    
         is_valid,    
-        pc_number,    
         name,    
         domain,    
         user,    
@@ -147,7 +138,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
         #{groupId,jdbcType=BIGINT},  
         #{isValid,jdbcType=INTEGER},  
-        #{pcNumber,jdbcType=VARCHAR},  
         #{name,jdbcType=VARCHAR},  
         #{domain,jdbcType=VARCHAR},  
         #{user,jdbcType=VARCHAR},  
@@ -162,7 +152,6 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
         <if test="groupId != null" >group_id,</if>
         <if test="isValid != null" >is_valid,</if>
-        <if test="pcNumber != null" >pc_number,</if>
         <if test="name != null" >name,</if>
         <if test="domain != null" >domain,</if>
         <if test="user != null" >user,</if>
@@ -174,7 +163,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
         <if test="groupId != null" >#{groupId,jdbcType=BIGINT},</if>  
         <if test="isValid != null" >#{isValid,jdbcType=INTEGER},</if>  
-        <if test="pcNumber != null" >#{pcNumber,jdbcType=VARCHAR},</if>  
         <if test="name != null" >#{name,jdbcType=VARCHAR},</if>  
         <if test="domain != null" >#{domain,jdbcType=VARCHAR},</if>  
         <if test="user != null" >#{user,jdbcType=VARCHAR},</if>  
@@ -189,7 +177,6 @@
     <trim prefix="" suffix="" suffixOverrides="," >
         group_id=#{groupId,jdbcType=BIGINT},    
         is_valid=#{isValid,jdbcType=INTEGER},    
-        pc_number=#{pcNumber,jdbcType=VARCHAR},    
         name=#{name,jdbcType=VARCHAR},    
         domain=#{domain,jdbcType=VARCHAR},    
         user=#{user,jdbcType=VARCHAR},    
@@ -205,7 +192,6 @@
     <trim prefix="" suffix="" suffixOverrides="," >
         <if test="groupId != null" >group_id=#{groupId,jdbcType=BIGINT},</if>
         <if test="isValid != null" >is_valid=#{isValid,jdbcType=INTEGER},</if>
-        <if test="pcNumber != null" >pc_number=#{pcNumber,jdbcType=VARCHAR},</if>
         <if test="name != null" >name=#{name,jdbcType=VARCHAR},</if>
         <if test="domain != null" >domain=#{domain,jdbcType=VARCHAR},</if>
         <if test="user != null" >user=#{user,jdbcType=VARCHAR},</if>

@@ -4,8 +4,8 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年03月07日 
- * @since 2017年03月07日 
+ * @version 1.0, 2017年03月08日 
+ * @since 2017年03月08日 
  */
 
 package org.turing.pangu.model;
@@ -22,16 +22,13 @@ import org.hibernate.validator.constraints.NotEmpty;
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 1834421488892632823L;
+  private static final long serialVersionUID = 2431481488935838615L;
 
   /***/
   private Long groupId;
 
   /***/
   private Integer isValid;
-
-  /***/
-  private String pcNumber;
 
   /***/
   private String name;
@@ -81,21 +78,6 @@ import org.hibernate.validator.constraints.NotEmpty;
   public void setIsValid(Integer isValid)
   {
     this.isValid=isValid;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getPcNumber()
-  {
-   return this.pcNumber;
-  }
-
-  /**设置*/
-  public void setPcNumber(String pcNumber)
-  {
-    this.pcNumber=pcNumber;
   }
 
   

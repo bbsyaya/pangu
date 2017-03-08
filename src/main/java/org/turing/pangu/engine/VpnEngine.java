@@ -48,6 +48,9 @@ public class VpnEngine implements EngineListen{
 			dynamicVpnList = dynamicVpnService.selectAll();
 		}
 	}
+	public List<DynamicVpn> getDynamicVpnList(){
+		return dynamicVpnList;
+	}
 	public boolean isWhiteIp(String ip){
 		for(RemainVpn remain :remainVpnList){
 			if(remain.getIpList().contains(ip)){

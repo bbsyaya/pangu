@@ -25,28 +25,28 @@ import org.hibernate.validator.constraints.NotEmpty;
   private static final long serialVersionUID = 4228931488933792837L;
 
   /***/
-  private Long userId;
+  private Long userId = 1L;
 
   /***/
-  private Long vpnId;
+  private Long vpnId = 1L;
 
   /***/
-  private Integer isValid;
+  private Integer isValid = 1;
 
   /***/
-  private String deviceSerial;
+  private String deviceSerial = "";
 
   /***/
-  private String deviceToken;
+  private String deviceToken = "";
 
   /***/
-  private String address;
+  private String address = "";
 
   /***/
-  private Date createDate;
+  private Date createDate = new Date();
 
   /***/
-  private Date updateDate;
+  private Date updateDate = new Date();
 
 
   

@@ -24,6 +24,9 @@ public class EngineMng {
 		ltnList.add(PlatformEngine.getInstance());
 		ltnList.add(VpnEngine.getInstance());
 		ltnList.add(IpTrunkEngine.getInstance());
+		ltnList.add(ComputerEngine.getInstance());
+		ltnList.add(SimulatorEngine.getInstance());
+		ltnList.add(PhoneTrunkEngine.getInstance());
 	}
 	// 设置服务
 	private void setService(){
