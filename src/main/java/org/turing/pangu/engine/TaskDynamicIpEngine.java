@@ -91,7 +91,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 		task.setOperType(req.getOperType());
 		task.setRemoteIp(remoteIp);
 		task.setRealIp(realIp);
-		task.setToken(RandomUtils.getRandom(TaskEngine.VPN_TOKEN_LENGH));
+		task.setToken(RandomUtils.getRandomNumbersAndCapitalLetters(TaskEngine.VPN_TOKEN_LENGH));
 		task.getStatistics().setTaskStockTotalCount(task.getStockDeviceList().size()>0?1:0);
 		int activeUserCount = AppEngine.getInstance().getActiveUserCount();
 		int random = RandomUtils.getRandom(0, 100);

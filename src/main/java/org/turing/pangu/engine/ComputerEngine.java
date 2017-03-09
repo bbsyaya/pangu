@@ -27,9 +27,9 @@ public class ComputerEngine implements EngineListen{
 	public List<Computer> getComputerList(){
 		return computerList;
 	}
-	public Computer getComputerInfo(long appId){
+	public Computer getComputerInfoByVpnId(long vpnId){
 		for(Computer cpt:computerList){
-			if(cpt.getId() == appId){
+			if(cpt.getVpnId() == vpnId){
 				return cpt;
 			}
 		}

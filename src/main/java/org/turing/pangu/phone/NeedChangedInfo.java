@@ -1,4 +1,4 @@
-package org.turing.pangu.controller.phone.request;
+package org.turing.pangu.phone;
 
 /**
  * Created by turingkuang on 2017/1/7.
@@ -156,31 +156,39 @@ public class NeedChangedInfo {
         this.osVersion = osVersion;
     }
 
-    public String getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
     public String getSimSerial() {
         return simSerial;
     }
-
+    
     public void setSimSerial(String simSerial) {
         this.simSerial = simSerial;
     }
 
-    public String getAndroidId() {
+    public String getSimStatus() {
+		return simStatus;
+	}
+
+	public void setSimStatus(String simStatus) {
+		this.simStatus = simStatus;
+	}
+
+	public String getAndroidId() {
         return androidId;
     }
 
@@ -228,13 +236,6 @@ public class NeedChangedInfo {
         this.display = display;
     }
 
-    public String getSimStatus() {
-        return simStatus;
-    }
-
-    public void setSimStatus(String simStatus) {
-        this.simStatus = simStatus;
-    }
 
     public String getPhoneStatus() {
         return phoneStatus;
@@ -302,8 +303,8 @@ public class NeedChangedInfo {
     private String osName = "";
     private String osArch = "";
     private String osVersion = "";
-    private String latitude = ""; // 纬度
-    private String longitude = "";// 经度
+    private Double latitude  = 0D; // 纬度
+    private Double longitude = 0D;// 经度
     private String simSerial = "";
     private String androidId = "";
     private String androidSerial = "";

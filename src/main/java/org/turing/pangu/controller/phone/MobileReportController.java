@@ -26,6 +26,7 @@ import org.turing.pangu.controller.phone.request.ReportReq;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.controller.phone.response.DeviceLoginRsp;
 import org.turing.pangu.controller.phone.response.GetBlackIpListRsp;
+import org.turing.pangu.controller.phone.response.GetNewPhoneInfoRsp;
 import org.turing.pangu.controller.phone.response.GetTaskRsp;
 import org.turing.pangu.engine.AppEngine;
 import org.turing.pangu.engine.DeviceEngine;
@@ -77,12 +78,19 @@ public class MobileReportController extends BaseController {
 		DeviceLoginRsp rsp = new DeviceLoginRsp();
 		rsp.setDeviceId(req.getDeviceId());
 		if(req.getDeviceId().equals("turing")){
-			rsp.setDeviceId(RandomUtils.getRandom(16));
+			rsp.setDeviceId(RandomUtils.getRandomNumbersAndCapitalLetters(16));
 		}
-		rsp.setDeviceToken(RandomUtils.getRandom(32));
+		rsp.setDeviceToken(RandomUtils.getRandomNumbersAndCapitalLetters(32));
 		logger.info("rsp:" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
+	// 取新设备信息 
+	@RequestMapping(value = "/getNewDeviceInfo", method = RequestMethod.POST)
+	public @ResponseBody GetNewPhoneInfoRsp getNewDeviceInfo(HttpServletRequest request) {
+		
+		return null;
+	}
+	
 	@RequestMapping(value = "/getBlackIpList", method = RequestMethod.POST)
 	public @ResponseBody GetBlackIpListRsp getBlackIpList(HttpServletRequest request) {
 		TraceUtils.getTraceInfo();

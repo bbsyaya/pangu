@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.turing.pangu.bean.DynamicVpnExtend;
 import org.turing.pangu.controller.common.BaseController;
 import org.turing.pangu.controller.common.PGResponse;
 import org.turing.pangu.controller.pc.request.CurdVpnReq;
@@ -32,12 +33,14 @@ import org.turing.pangu.controller.pc.response.VpnLoginRsp;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.controller.phone.request.GetBlackIpListReq;
 import org.turing.pangu.engine.AppEngine;
+import org.turing.pangu.engine.ComputerEngine;
 import org.turing.pangu.engine.EngineMng;
 import org.turing.pangu.engine.PlatformEngine;
 import org.turing.pangu.engine.TaskConfigureEngine;
 import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.engine.TimeZoneMng;
 import org.turing.pangu.model.App;
+import org.turing.pangu.model.Computer;
 import org.turing.pangu.model.DynamicVpn;
 import org.turing.pangu.model.Platform;
 import org.turing.pangu.model.RemainVpn;
@@ -257,13 +260,21 @@ public class PCMngController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getDynamicVpnList", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<List<DynamicVpn>> getDynamicVpnList(@RequestBody GetDynamicVpnListReq req) {
+	public @ResponseBody PGResponse<List<DynamicVpnExtend>> getDynamicVpnList(@RequestBody GetDynamicVpnListReq req) {
 		TraceUtils.getTraceInfo();
-		PGResponse<List<DynamicVpn>> rsp = new PGResponse<List<DynamicVpn>>();
+		PGResponse<List<DynamicVpnExtend>> rsp = new PGResponse<List<DynamicVpnExtend>>();
+		List<DynamicVpnExtend> extList = new ArrayList<DynamicVpnExtend>();
 		DynamicVpn vpn = new DynamicVpn();
 		vpn.setIsValid(1);
 		List<DynamicVpn> list = dynamicVpnService.selectList(vpn);
-		rsp.setAllData(Const.common_ok, "common_ok", list);
+		for(DynamicVpn tmpVpn :list){
+			DynamicVpnExtend ext = new DynamicVpnExtend();
+			Computer cpt = ComputerEngine.getInstance().getComputerInfoByVpnId(tmpVpn.getId());
+			ext.setVpn(tmpVpn);
+			ext.setComputer(cpt);
+			extList.add(ext);
+		}
+		rsp.setAllData(Const.common_ok, "common_ok", extList);
 		logger.info("getDynamicVpnList---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
