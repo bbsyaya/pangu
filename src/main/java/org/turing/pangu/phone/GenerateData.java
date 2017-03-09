@@ -1,7 +1,7 @@
 package org.turing.pangu.phone;
 
+import org.turing.pangu.utils.IMEIUtils;
 import org.turing.pangu.utils.RandomUtils;
-import org.turing.pangu.utils.TuringRandomUtils;
 
 
 /**
@@ -95,7 +95,7 @@ public class GenerateData {
     }
     private String generateBootloader(){
         return "Android/"+ info.getCpuABI() + "/" + info.getCpuABI() + ":" + info.getAndroidVersion()+"/"+info.getModel() + "/eng.work."+RandomUtils.getRandomNumbers(8)+"."+
-                RandomUtils.getRandom(6)+":eng/test-keys";
+                RandomUtils.getRandom(6);
     }
 
     private String generateCpu(){
@@ -122,10 +122,10 @@ public class GenerateData {
         int random = (int)(Math.random()*6);
         int wei = (int)(Math.random()*5);
         String display = "";
-        display = version + "."+ TuringRandomUtils.generate09String(3)+ "."+P[random]+ "."+brand+"."+TuringRandomUtils.generate0AString(wei);
+        display = version + "."+ RandomUtils.getRandomNumbers(3)+ "."+P[random]+ "."+brand+"."+RandomUtils.getRandomNumbersAndCapitalLetters(wei);
         return display;
     }
-    private  String generateBrand(String model){
+    private static String generateBrand(String model){
         if(model.contains("vivo")){
             return "vivo";
         }else if(model.contains("Lenovo")){
@@ -139,46 +139,26 @@ public class GenerateData {
         }else if(model.contains("ZTE")){
             return "ZTE";
         }else if(model.contains("金立")){
-            return "";
+            return "GIONEE";
         }else if(model.contains("乐视")){
             return "Letv";
+        }else if(model.contains("魅族")){
+            return "MEIZU";
         }else if(model.contains("OPPO")){
             return "OPPO";
         }else if(model.contains("酷派")||model.contains("Coolpad")){
             return "Coolpad";
         }else if(model.contains("米") || model.contains("MI")){
             return "Xiaomi";
-        }else {
+        }else if(model.contains("HTC")){
             return "HTC";
+        }else {
+            return "Coolpad";
         }
     }
 
     private static String generateManufacturer(String model){
-        if(model.contains("vivo")){
-            return "VIVO";
-        }else if(model.contains("Lenovo")){
-            return "LENOVO";
-        }else if(model.contains("三星")){
-            return "samsung";
-        }else if(model.contains("HUAWEI")){
-            return "HUAWEI";
-        }else if(model.contains("Nexus")){
-            return "google";
-        }else if(model.contains("ZTE")){
-            return "ZTE";
-        }else if(model.contains("金立")){
-            return "";
-        }else if(model.contains("乐视")){
-            return "Letv";
-        }else if(model.contains("OPPO")){
-            return "OPPO";
-        }else if(model.contains("酷派")||model.contains("Coolpad")){
-            return "Coolpad";
-        }else if(model.contains("米") || model.contains("MI")){
-            return "Xiaomi";
-        }else {
-            return "HTC";
-        }
+    	return generateBrand(model);
     }
 
     private static String generateModel(){
@@ -195,9 +175,9 @@ public class GenerateData {
 
         if(index > 4)
         {
-            return pre[0] + "(Linux; U; " + version +"; " + brand + " Build/" + TuringRandomUtils.generate0AString(5);
+            return pre[0] + "(Linux; U; " + version +"; " + brand + " Build/" + RandomUtils.getRandomNumbersAndCapitalLetters(5);
         }else{
-            return pre[1] + "(Linux; U; " + version +"; " + brand + " Build/"+ TuringRandomUtils.generate0AString(5);
+            return pre[1] + "(Linux; U; " + version +"; " + brand + " Build/"+ RandomUtils.getRandomNumbersAndCapitalLetters(5);
         }
     }
     private void generateBrands()
@@ -265,7 +245,7 @@ public class GenerateData {
         String[] wifiName = {"TPLINK","ChinaNet-","CMCC-",""};
         int random = (int)(Math.random() * 4);
         int count = (int)(Math.random() * 10);
-        return wifiName[random] + TuringRandomUtils.generate0aString(count);
+        return wifiName[random] + RandomUtils.getRandomNumbersAndLowerCaseLetters(count);
     }
     private  String generateMacAddress()
     {
@@ -344,7 +324,8 @@ public class GenerateData {
     // TAC + FAC + SNR + SP = 15
     private String generateImei()
     {
-        String imei = "86" + TuringRandomUtils.generate09String(4) + "03" + TuringRandomUtils.generate09String(6) + "0";
+        String imei = "86" + RandomUtils.getRandomNumbers(4) + "03" + RandomUtils.getRandomNumbers(6);
+        imei = IMEIUtils.genCode(imei);
         return imei;
     }
     private  String generateBluetooth(){
@@ -382,15 +363,15 @@ public class GenerateData {
             else
                 pre = "898602";
         }
-        return pre + TuringRandomUtils.generate09String(14);
+        return pre + RandomUtils.getRandomNumbers(14);
     }
     private  String generateAndroidSerial()
     {
-        return TuringRandomUtils.generate0aString(16);
+        return RandomUtils.getRandomNumbersAndCapitalLetters(16);
     }
     private String generateAndroidId()
     {
-        return TuringRandomUtils.generate0aString(16);
+        return RandomUtils.getRandomNumbersAndCapitalLetters(16);
     }
     /* MCC(3) + MNC(2) + MSIN(10)
     * MCC：Mobile Country Code，移动国家码，MCC的资源由国际电联（ITU）统一分配和管理，唯一识别移动用户所属的国家，共3位，中国为460;
@@ -422,7 +403,7 @@ public class GenerateData {
             int random = (int)(Math.random() * 3);
             carrior = mobile[random];
         }
-        return "460"+carrior+ TuringRandomUtils.generate09String(10);
+        return "460"+carrior+ RandomUtils.getRandomNumbers(10);
     }
     private String generateCarrier()
     {
@@ -462,35 +443,21 @@ public class GenerateData {
         String[] telecom={"133","153","180","181","189","177","173"};
         String[] unicom={"130","131","132","155","156","145","185","186","176","185"};
         String[] mobile={"134","135","136","137","138","139","150","151","152","158","157","159","182","183","184","187","188","147","178","184"};
+
         if( netType == 3 )
         {
-            int random = (int)(Math.random() * 7);
-            carrior = telecom[random];
+        	carrior = "电信";
         }else if(netType == 2)
         {
-            int random = (int)(Math.random() * 10);
-            carrior = unicom[random];
+        	carrior = "联通";
         }else
         {
-            int random = (int)(Math.random() * 20);
-            carrior = mobile[random];
+        	carrior = "移动"
         }
-        int random  = (int)(Math.random() * 10);
-        if( random%3 == 0 )
-        {
-            phone = "+86";
-        }
-        phone = phone + carrior;
-        phone = phone + TuringRandomUtils.generate09String(8);
+        //phone = phone + carrior;
+        
+        //phone = phone + RandomUtils.getRandomNumbers(8);
         return phone;
-    }
-    private String generateRandom(int count)
-    {
-        String strRand = "";
-        for(int i=0;i<count;i++){
-            strRand += String.valueOf((int)(Math.random() * 10)) ;
-        }
-        return strRand;
     }
 }
 

@@ -84,13 +84,7 @@ public class MobileReportController extends BaseController {
 		logger.info("rsp:" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
-	// 取新设备信息 
-	@RequestMapping(value = "/getNewDeviceInfo", method = RequestMethod.POST)
-	public @ResponseBody GetNewPhoneInfoRsp getNewDeviceInfo(HttpServletRequest request) {
-		
-		return null;
-	}
-	
+
 	@RequestMapping(value = "/getBlackIpList", method = RequestMethod.POST)
 	public @ResponseBody GetBlackIpListRsp getBlackIpList(HttpServletRequest request) {
 		TraceUtils.getTraceInfo();
@@ -149,7 +143,12 @@ public class MobileReportController extends BaseController {
 		logger.info("getAppInfo---end" + model.toString());
 		return model;
 	}
-	
+	// 取新设备信息 
+	@RequestMapping(value = "/getNewDeviceInfo", method = RequestMethod.POST)
+	public @ResponseBody GetNewPhoneInfoRsp getNewDeviceInfo(HttpServletRequest request) {
+		
+		return null;
+	}
 	/*
 	 * 手机端请求任务
 	 * */

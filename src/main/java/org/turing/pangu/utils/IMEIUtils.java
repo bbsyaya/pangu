@@ -1,9 +1,9 @@
-package org.turing.pangu.zzztest;
+package org.turing.pangu.utils;
 
 import java.util.ArrayList;  
 import java.util.List;  
   
-public class IMEIGen {  
+public class IMEIUtils {  
   
     /** 
      * @param args 

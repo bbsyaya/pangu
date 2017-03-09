@@ -12,6 +12,7 @@ import org.turing.pangu.model.IpTrunk;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.IpTrunkService;
 import org.turing.pangu.service.IpTrunkServiceImpl;
+import org.turing.pangu.task.IpQueryResult;
 import org.turing.pangu.task.StockTask;
 import org.turing.pangu.utils.RandomUtils;
 
@@ -67,7 +68,8 @@ public class IpTrunkEngine implements EngineListen{
 		}
 	}
 	// 获得每个应用的留存信息,每个应用都有对应的一个留存
-	public List<StockTask> getStockInfoList(String ip){
+	public IpQueryResult getStockInfoList(String ip){
+		IpQueryResult result = new IpQueryResult();
 		List<StockTask> stockDeviceList = new ArrayList<StockTask>();
 		// 先查一样的IP存不存在
 		List<Device> sameIplist = DeviceEngine.getInstance().selectLastMonthExcludeTodayByIp(ip);// 通过IP找到记录
@@ -80,21 +82,21 @@ public class IpTrunkEngine implements EngineListen{
 			}
 			// 每个应用都有留存,退出!
 			if( stockDeviceList.size() == AppEngine.getInstance().getAppList().size()){
-				return stockDeviceList;
+				return result;
 			}
 		}
 		// 通过ip 得到 城市 code
 		LocationMng mng = new LocationMng();
 		BaiduLocation location = mng.getLocation(ip);
 		if( null == location || location.getStatus().equals("1"))
-			return stockDeviceList;
+			return result;
 		
 		IpTrunk ipTrunk = new IpTrunk();
 		ipTrunk.setCityCode(Integer.parseInt(location.getContent().getAddress_detail().getCityCode())); // 城市code 一致就OK 
 		// 通过城市code 反查 有哪些 ip
 		List<IpTrunk> listFromDB = ipTrunkService.selectList(ipTrunk); // 取100条这个城市的IP
 		if(null == listFromDB || listFromDB.size() == 0 )
-			return stockDeviceList;
+			return result;
 		int loopTimes = listFromDB.size()>QUERY_COUNT?QUERY_COUNT:listFromDB.size();
 		for(int index = 0; index < loopTimes; index++ ){
 			int random = 0;
@@ -119,7 +121,9 @@ public class IpTrunkEngine implements EngineListen{
 			}
 		}
 		// 通过ip 查 对应的记录
-		return stockDeviceList;
+		result.setStockList(stockDeviceList);
+		result.setLocation(location);
+		return result;
 	}
 	@Override
 	public void setService(List<BaseService> serviceList) {

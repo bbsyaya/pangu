@@ -1,7 +1,7 @@
 package org.turing.pangu.controller.phone.request;
 
 import org.turing.pangu.controller.common.BaseReq;
-import org.turing.pangu.phone.NeedChangedInfo;
+import org.turing.pangu.phone.ChangeDeviceInfo;
 
 
 public class ReportReq extends BaseReq{
@@ -17,10 +17,10 @@ public class ReportReq extends BaseReq{
 	public void setAppId(Long appId) {
 		this.appId = appId;
 	}
-	public NeedChangedInfo getDevice() {
+	public ChangeDeviceInfo getDevice() {
 		return device;
 	}
-	public void setDevice(NeedChangedInfo device) {
+	public void setDevice(ChangeDeviceInfo device) {
 		this.device = device;
 	}
 	public int getDevice_type() {
@@ -43,7 +43,7 @@ public class ReportReq extends BaseReq{
 	}
 	private String accessToken; // 访问token,前期为空
 	private Long appId;
-	private NeedChangedInfo device;
+	private ChangeDeviceInfo device;
 	private int device_type; // 0: 模拟器 ，1:真机 	
 	private int is_active;	// 1:active 0:inactive
 	private int is_remain;	// 1:为留存数据 0:不为留存数据

@@ -10,8 +10,11 @@ import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.model.App;
+import org.turing.pangu.model.Device;
 import org.turing.pangu.model.Task;
+import org.turing.pangu.phone.ChangeDeviceInfo;
 import org.turing.pangu.task.DateUpdateListen;
+import org.turing.pangu.task.IpQueryResult;
 import org.turing.pangu.task.OptimalApp;
 import org.turing.pangu.task.StockTask;
 import org.turing.pangu.task.TaskExtend;
@@ -86,7 +89,9 @@ public class TaskDynamicIpEngine implements TaskIF{
 				}
 			}
 		}
-		task.setStockDeviceList(IpTrunkEngine.getInstance().getStockInfoList(remoteIp)); // 先从数据库中取好留存（同IP或同城IP）
+		IpQueryResult ipResult = IpTrunkEngine.getInstance().getStockInfoList(remoteIp);
+		task.setStockDeviceList(ipResult.getStockList()); // 先从数据库中取好留存（同IP或同城IP）
+		task.setLocation(ipResult.getLocation());
 		task.setDeviceId(req.getDeviceId());
 		task.setOperType(req.getOperType());
 		task.setRemoteIp(remoteIp);
@@ -259,6 +264,88 @@ public class TaskDynamicIpEngine implements TaskIF{
 		}
 		return false;
 	}
+	private ChangeDeviceInfo conversionDevice2ChangeDevice(Device dev){
+		ChangeDeviceInfo info = new ChangeDeviceInfo();
+        if(null != dev.getAndroidId() )
+            info.setAndroidId(dev.getAndroidId());
+
+        if(null != dev.getAndroidSerial() )
+            info.setAndroidSerial(dev.getAndroidSerial());
+
+        if(null != dev.getAndroidVersion() )
+            info.setAndroidVersion(dev.getAndroidVersion());
+
+        if(null != dev.getBlueTooth() )
+            info.setBlueTooth(dev.getBlueTooth());
+
+        if(null != dev.getBoard() )
+            info.setBoard(dev.getBoard());
+
+        if(null != dev.getBrand() )
+            info.setBrand(dev.getBrand());
+
+        if(null != dev.getBssid() )
+            info.setBssid(dev.getBssid());
+
+        if(null != dev.getCarrier() )
+            info.setCarrier(dev.getCarrier());
+
+        if(null != dev.getCarrierCode() )
+            info.setCarrierCode(dev.getCarrierCode());
+
+        if(null != dev.getCountryCode() )
+            info.setCountryCode(dev.getCountryCode());
+
+        if(null != dev.getDisplay() )
+            info.setDisplay(dev.getDisplay());
+
+        if(null != dev.getImei() )
+            info.setImei(dev.getImei());
+
+        if(null != dev.getImsi() )
+            info.setImsi(dev.getImsi());
+
+        if(null != dev.getIp() )
+            info.setIp(dev.getIp());
+
+        if(null != dev.getMac() )
+            info.setMac(dev.getMac());
+
+        if(null != dev.getManufacture() )
+            info.setManufacture(dev.getManufacture());
+
+        if(null != dev.getModel() )
+            info.setModel(dev.getModel());
+
+        if(null != dev.getPhone() )
+            info.setPhone(dev.getPhone());
+
+        if(null != dev.getPhoneStatus() )
+            info.setPhoneStatus(dev.getPhoneStatus().toString());
+
+        if(null != dev.getSdk() )
+            info.setSdk(dev.getSdk().toString());
+
+        if(null != dev.getSimStatus() )
+            info.setSimStatus(dev.getSimStatus().toString());
+
+        if(null != dev.getHeight() )
+            info.setHeight(dev.getHeight().toString());
+
+        if(null != dev.getWidth() )
+            info.setWidth(dev.getWidth().toString());
+
+        if(null != dev.getSimSerial() )
+            info.setSimSerial(dev.getSimSerial());
+
+        if(null != dev.getSsid() )
+            info.setSsid(dev.getSsid());
+
+        if(null != dev.getUa() )
+            info.setUa(dev.getUa());
+
+		return info;
+	}
 	private synchronized PhoneTask getTask(VpnTask task,String deviceId,String remoteIp,String realIp){
 		PhoneTask pTask = new PhoneTask();
 		int operType = task.getOperType();
@@ -296,7 +383,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 		pTask.setApp(opt.getApp());
 		pTask.setTimes(1);// 暂定一次
 		pTask.setSpanTime(5);//暂定5S 
-		pTask.setStockInfo(opt.getDevice());
+		pTask.setChangeDeviceInfo(conversionDevice2ChangeDevice(opt.getDevice()));
 		return pTask;
 	}
     private synchronized OptimalApp getOptimalApp(VpnTask task,int operType,String remoteIp,String realIp){

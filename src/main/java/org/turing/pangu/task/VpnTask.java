@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.turing.pangu.controller.common.PhoneTask;
+import org.turing.pangu.iptrunk.BaiduLocation;
 
 /*
  * PC 端的 VPN 任务管理，与 PhoneTask 是 1对多的关系
@@ -81,12 +82,20 @@ public class VpnTask {
 		this.phoneStockTaskList = phoneStockTaskList;
 	}
 
+	public BaiduLocation getLocation() {
+		return location;
+	}
+	public void setLocation(BaiduLocation location) {
+		this.location = location;
+	}
+
 	private String deviceId; //pc 设备ID
 	private String remoteIp;
 	private String realIp;
 	private String token; // 16位
 	private int operType = 0; // 操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	private Date createTime = new Date();// Vpn 任务创建时间
+	private BaiduLocation location = new BaiduLocation(); // 此IP的地理位置信息
 	private VpnTaskStatistics statistics = new VpnTaskStatistics();
 	private List<IncrementTask> incrementList = new ArrayList<IncrementTask>(); //这个IP可以跑的存量任务列表
 	private List<StockTask> stockDeviceList = new ArrayList<StockTask>(); //这个IP的留存都在这,注意 device中的IP会和remoteIp 不同，只是在同一个城市

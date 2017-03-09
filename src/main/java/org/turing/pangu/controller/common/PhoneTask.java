@@ -2,13 +2,14 @@ package org.turing.pangu.controller.common;
 
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
+import org.turing.pangu.phone.ChangeDeviceInfo;
 
 public class PhoneTask {
-	public Device getStockInfo() {
-		return stockInfo;
+	public ChangeDeviceInfo getChangeDeviceInfo() {
+		return changeDeviceInfo;
 	}
-	public void setStockInfo(Device stockInfo) {
-		this.stockInfo = stockInfo;
+	public void setChangeDeviceInfo(ChangeDeviceInfo changeDeviceInfo) {
+		this.changeDeviceInfo = changeDeviceInfo;
 	}
 	public String getDeviceId() {
 		return deviceId;
@@ -78,7 +79,7 @@ public class PhoneTask {
 		this.isReport = isReport;
 	}
 
-	private Device stockInfo; // 存量的设备信息
+	private ChangeDeviceInfo changeDeviceInfo; // 增量或存量设备信息
 	private String deviceId;
 	private String vpnToken; // 带上VPN的token
 	private String taskId; //任务id, 32位

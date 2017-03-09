@@ -3,7 +3,7 @@ package org.turing.pangu.phone;
 /**
  * Created by turingkuang on 2017/1/7.
  */
-public class NeedChangedInfo {
+public class ChangeDeviceInfo {
     public String getSdk() {
         return sdk;
     }
