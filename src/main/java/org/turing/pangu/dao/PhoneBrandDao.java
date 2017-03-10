@@ -10,8 +10,7 @@
 
 package org.turing.pangu.dao;
 
-import org.turing.pangu.model.Simulator;
+import org.turing.pangu.model.PhoneBrand;
 
-public interface SimulatorDao extends BaseDao<Simulator, Long> {
-
+public interface PhoneBrandDao extends BaseDao<PhoneBrand, Long> {
 }

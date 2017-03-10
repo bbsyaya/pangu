@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.turing.pangu.model.App;
 import org.turing.pangu.model.Computer;
-import org.turing.pangu.service.AppService;
-import org.turing.pangu.service.AppServiceImpl;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.ComputerService;
 import org.turing.pangu.service.ComputerServiceImpl;
@@ -65,6 +62,12 @@ public class ComputerEngine implements EngineListen{
 
 	@Override
 	public void close() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void upDate() {
 		// TODO Auto-generated method stub
 		
 	}

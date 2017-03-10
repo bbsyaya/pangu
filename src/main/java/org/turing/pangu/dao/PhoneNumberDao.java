@@ -10,7 +10,10 @@
 
 package org.turing.pangu.dao;
 
-import org.turing.pangu.model.PhoneTrunk;
+import java.util.List;
 
-public interface PhoneTrunkDao extends BaseDao<PhoneTrunk, Long> {
+import org.turing.pangu.model.PhoneNumber;
+
+public interface PhoneNumberDao extends BaseDao<PhoneNumber, Long> {
+	public List<PhoneNumber> selectPhoneNumber(PhoneNumber model);
 }

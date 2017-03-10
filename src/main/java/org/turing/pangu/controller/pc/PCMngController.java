@@ -52,9 +52,11 @@ import org.turing.pangu.service.ComputerService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.DynamicVpnService;
 import org.turing.pangu.service.IpTrunkService;
-import org.turing.pangu.service.PhoneTrunkService;
+import org.turing.pangu.service.PhoneBrandService;
+import org.turing.pangu.service.PhoneNumberService;
 import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.service.RemainVpnService;
+import org.turing.pangu.service.ResolutionService;
 import org.turing.pangu.service.SimulatorService;
 import org.turing.pangu.service.TaskService;
 import org.turing.pangu.service.UserService;
@@ -105,14 +107,20 @@ public class PCMngController extends BaseController {
 	@Resource(name = "ipTrunkServiceImpl")
 	private IpTrunkService ipTrunkService;
 	
-	@Resource(name = "phoneTrunkServiceImpl")
-	private PhoneTrunkService phoneTrunkService;
+	@Resource(name = "phoneNumberServiceImpl")
+	private PhoneNumberService phoneNumberService;
+	
+	@Resource(name = "phoneBrandServiceImpl")
+	private PhoneBrandService phoneBrandService;
 	
 	@Resource(name = "computerServiceImpl")
 	private ComputerService computerService;
 	
 	@Resource(name = "simulatorServiceImpl")
 	private SimulatorService simulatorService;
+	
+	@Resource(name = "resolutionServiceImpl")
+	private ResolutionService resolutionService;
 	
 	private List<BaseService> getAllServiecInstance(){
 		List<BaseService> list = new ArrayList<BaseService>();
@@ -125,9 +133,11 @@ public class PCMngController extends BaseController {
 		list.add(deviceService);
 		list.add(taskService);
 		list.add(ipTrunkService);
-		list.add(phoneTrunkService);
+		list.add(phoneNumberService);
+		list.add(phoneBrandService);
 		list.add(computerService);
 		list.add(simulatorService);
+		list.add(resolutionService);
 		return list;
 	}
 	@RequestMapping(value = "/index", method = RequestMethod.GET)

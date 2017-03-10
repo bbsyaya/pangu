@@ -39,7 +39,7 @@ public class GenerateData {
             ,"OPPO X909","金立GN708T","OPPO R821t","HTC D820t","Lenovo K50-T5","HUAWEI C8815","华为 H60-L01","K-Touch T789"
             ,"HM 2A","Nexus 6P","nubia NX501","Coolpad 8675"};
 
-    public NeedChangedInfo info = new NeedChangedInfo();
+    public ChangeDeviceInfo info = new ChangeDeviceInfo();
     private  static GenerateData mInstance = new GenerateData();
     public static GenerateData getInstance()
     {
@@ -55,7 +55,7 @@ public class GenerateData {
     SerialNumber:021YLJ212C001879
     SimSerialNumber:898600810110
     * */
-    public NeedChangedInfo GenerateAllInfo()
+    public ChangeDeviceInfo GenerateAllInfo()
     {
         int random = (int)(Math.random() * 100);
         if(random % 5 == 0)
@@ -452,7 +452,7 @@ public class GenerateData {
         	carrior = "联通";
         }else
         {
-        	carrior = "移动"
+        	carrior = "移动";
         }
         //phone = phone + carrior;
         

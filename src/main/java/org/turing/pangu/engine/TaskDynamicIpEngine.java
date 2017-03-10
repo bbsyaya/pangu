@@ -383,7 +383,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 		pTask.setApp(opt.getApp());
 		pTask.setTimes(1);// 暂定一次
 		pTask.setSpanTime(5);//暂定5S 
-		pTask.setChangeDeviceInfo(conversionDevice2ChangeDevice(opt.getDevice()));
+		pTask.setChangeDeviceInfo(opt.getInfo());
 		return pTask;
 	}
     private synchronized OptimalApp getOptimalApp(VpnTask task,int operType,String remoteIp,String realIp){
@@ -417,7 +417,7 @@ public class TaskDynamicIpEngine implements TaskIF{
                     }
                     if(flag == 0 && task.getStatistics().isCanAllocStock() &&dev.getDevice().getAppId() == dbTask.getAppId() && isHavaTaskByOperType(operType,dbTask)){
                     	mListen.updateAllocTask(operType,dbTask); // 对应派发 ++ 
-                    	opt.setDevice(dev.getDevice()); // 保存好不容易找到的存量信息，函数外赋值。
+                    	opt.setInfo(conversionDevice2ChangeDevice(dev.getDevice())); // 保存好不容易找到的存量信息，函数外赋值。
                         dev.setUsed(true);
                         dev.setSendDate(new Date());
                         logger.info("getOptimalAppId---end--find STOCK mDevice:"+dev.getDevice().toString());

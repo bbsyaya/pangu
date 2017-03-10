@@ -1,7 +1,7 @@
 package org.turing.pangu.utils;
 
-import java.util.ArrayList;  
-import java.util.List;  
+import java.util.ArrayList;
+import java.util.List;
   
 public class IMEIUtils {  
   

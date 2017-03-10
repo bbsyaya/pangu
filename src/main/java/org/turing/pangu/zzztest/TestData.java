@@ -1,6 +1,7 @@
 package org.turing.pangu.zzztest;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,28 +10,31 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.turing.pangu.bean.HeightWidth;
 import org.turing.pangu.bean.TaskConfigureBean;
 import org.turing.pangu.bean.VpnConnectInfo;
 import org.turing.pangu.engine.EngineMng;
-import org.turing.pangu.engine.IpTrunkEngine;
 import org.turing.pangu.engine.VpnEngine;
 import org.turing.pangu.model.Computer;
-import org.turing.pangu.model.Device;
 import org.turing.pangu.model.DynamicVpn;
+import org.turing.pangu.model.PhoneBrand;
+import org.turing.pangu.model.Resolution;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.ComputerService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.DynamicVpnService;
 import org.turing.pangu.service.IpTrunkService;
-import org.turing.pangu.service.PhoneTrunkService;
+import org.turing.pangu.service.PhoneBrandService;
+import org.turing.pangu.service.PhoneNumberService;
 import org.turing.pangu.service.PlatformService;
 import org.turing.pangu.service.RemainVpnService;
+import org.turing.pangu.service.ResolutionService;
 import org.turing.pangu.service.SimulatorService;
 import org.turing.pangu.service.TaskService;
 import org.turing.pangu.service.UserService;
 import org.turing.pangu.service.VpnGroupService;
-import org.turing.pangu.task.StockTask;
+import org.turing.pangu.utils.RandomUtils;
 
 import com.alibaba.fastjson.JSON;
 
@@ -66,14 +70,20 @@ public class TestData {
 	@Resource(name = "ipTrunkServiceImpl")
 	private IpTrunkService ipTrunkService;
 	
-	@Resource(name = "phoneTrunkServiceImpl")
-	private PhoneTrunkService phoneTrunkService;
+	@Resource(name = "phoneNumberServiceImpl")
+	private PhoneNumberService phoneNumberService;
+	
+	@Resource(name = "phoneBrandServiceImpl")
+	private PhoneBrandService phoneBrandService;
 
 	@Resource(name = "computerServiceImpl")
 	private ComputerService computerService;
 	
 	@Resource(name = "simulatorServiceImpl")
 	private SimulatorService simulatorService;
+	
+	@Resource(name = "resolutionServiceImpl")
+	private ResolutionService resolutionService;
 	/*
 	 * @Test public void testInsertPlatform(){ Platform pf = new Platform();
 	 * pf.setCreateDate(new Date()); pf.setCreateDate(new Date());
@@ -206,22 +216,59 @@ public class TestData {
 		list.add(deviceService);
 		list.add(taskService);
 		list.add(ipTrunkService);
-		list.add(phoneTrunkService);
+		list.add(phoneNumberService);
+		list.add(phoneBrandService);
 		list.add(computerService);
 		list.add(simulatorService);
+		list.add(resolutionService);
 		return list;
 	}
 	@Test
 	public void testUpdateDevice() {
-		EngineMng.getInstance().initEngine(getAllServiecInstance());		
-		
-		for(DynamicVpn vpn :VpnEngine.getInstance().getDynamicVpnList()){
-			Computer cpt = new Computer();
-			cpt.setDeviceSerial("205096735");
-			cpt.setIsValid(1);
-			cpt.setVpnId(vpn.getId());
-			computerService.insert(cpt);
+		//EngineMng.getInstance().initEngine(getAllServiecInstance());		
+		List<PhoneBrand> list = new ArrayList<PhoneBrand>();
+		list = phoneBrandService.selectAll();
+		List<HeightWidth> hwList = new ArrayList<HeightWidth>();
+		int flag = 0;
+		for(PhoneBrand brand:list){
+			flag = 0;
+			HeightWidth hwidth = new HeightWidth();
+			hwidth.setHeight(brand.getHeight());
+			hwidth.setWidth(brand.getWidth());
+			for(HeightWidth hw :hwList){
+				if(hwidth.getHeight() == hw.getHeight() && hwidth.getWidth() == hw.getWidth()){
+					flag = 1;
+					break;
+				}
+			}
+			if(flag == 0){
+				hwList.add(hwidth);
+			}
 		}
+		for(HeightWidth hw :hwList){
+			Resolution res = new Resolution();
+			res.setHeight(hw.getHeight());
+			res.setWidth(hw.getWidth());
+			res.setPlatformId(1L);
+			res.setIsSupport(1);
+			resolutionService.insert(res);
+		}
+		/*
+		for(PhoneBrand brand:list){
+			int random = RandomUtils.getRandom(100);
+			if(random % 20 == 0){
+				brand.setImeiHead("35");
+			}else{
+				brand.setImeiHead("46");
+			}
+			brand.setChinaMobile(1);
+			brand.setChinaTelecom(1);
+			brand.setChinaUnicom(1);
+			brand.setCreateDate(new Date());
+			brand.setUpdateDate(new Date());
+			phoneBrandService.update(brand);
+		}
+		*/
 		
 		//for(Device dev :list){
 			//IpTrunkEngine.getInstance().saveIpInfoToDb(dev.getIp());

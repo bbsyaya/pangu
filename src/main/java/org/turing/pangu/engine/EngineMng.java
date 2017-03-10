@@ -26,7 +26,9 @@ public class EngineMng {
 		ltnList.add(IpTrunkEngine.getInstance());
 		ltnList.add(ComputerEngine.getInstance());
 		ltnList.add(SimulatorEngine.getInstance());
-		ltnList.add(PhoneTrunkEngine.getInstance());
+		ltnList.add(PhoneNumberEngine.getInstance());
+		ltnList.add(PhoneBrandEngine.getInstance());
+		ltnList.add(ResolutionEngine.getInstance());
 	}
 	// 设置服务
 	private void setService(){

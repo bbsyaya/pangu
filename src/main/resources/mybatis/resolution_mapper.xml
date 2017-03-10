@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.turing.pangu.mapper.ResolutionMapper" >
+  <resultMap id="BaseResultMap" type="org.turing.pangu.model.Resolution" >
+    <id column="id" property="id" jdbcType="BIGINT" />       
+    <result column="platform_id" property="platformId" jdbcType="BIGINT" />          
+    <result column="height" property="height" jdbcType="INTEGER" />          
+    <result column="width" property="width" jdbcType="INTEGER" />          
+    <result column="is_support" property="isSupport" jdbcType="INTEGER" />          
+  </resultMap>   
+  <sql id="Base_Column_List" >
+    r.id,
+	r.platform_id,
+	r.height,
+	r.width,
+	r.is_support
+  </sql>
+  <sql id="Base_Column_Value_List" >
+    #{platformId},
+	#{height},
+	#{width},
+	#{isSupport}
+  </sql>
+  <sql id="Base_Column_Update_List" >
+    platform_id=#{platformId},
+	height=#{height},
+	width=#{width},
+	is_support=#{isSupport}
+  </sql> 
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from resolution r
+    where r.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from resolution r
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Resolution" >
+    select 
+    <include refid="Base_Column_List" />
+    from resolution r
+    where 1=1 
+    <if test="platformId != null" >and r.platform_id= #{platformId,jdbcType=BIGINT}</if>
+    <if test="height != null" >and r.height= #{height,jdbcType=INTEGER}</if>
+    <if test="width != null" >and r.width= #{width,jdbcType=INTEGER}</if>
+    <if test="isSupport != null" >and r.is_support= #{isSupport,jdbcType=INTEGER}</if>
+    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Resolution" >
+    select 
+    <include refid="Base_Column_List" />
+    from resolution r
+    where 1=1 
+    <if test="platformId != null" >and r.platform_id= #{platformId,jdbcType=BIGINT}</if>
+    <if test="height != null" >and r.height= #{height,jdbcType=INTEGER}</if>
+    <if test="width != null" >and r.width= #{width,jdbcType=INTEGER}</if>
+    <if test="isSupport != null" >and r.is_support= #{isSupport,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.ParamModel" >
+    select 
+    <include refid="Base_Column_List" />
+    from resolution r
+    where 1=1 
+    <if test="model.platformId != null" >and r.platform_id= #{model.platformId,jdbcType=BIGINT}</if>
+    <if test="model.height != null" >and r.height= #{model.height,jdbcType=INTEGER}</if>
+    <if test="model.width != null" >and r.width= #{model.width,jdbcType=INTEGER}</if>
+    <if test="model.isSupport != null" >and r.is_support= #{model.isSupport,jdbcType=INTEGER}</if>
+    <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="org.turing.pangu.model.Resolution" >
+    select count(0) totalCount
+    from resolution r
+    where 1=1 
+    <if test="platformId != null" >and r.platform_id= #{platformId,jdbcType=BIGINT}</if>
+    <if test="height != null" >and r.height= #{height,jdbcType=INTEGER}</if>
+    <if test="width != null" >and r.width= #{width,jdbcType=INTEGER}</if>
+    <if test="isSupport != null" >and r.is_support= #{isSupport,jdbcType=INTEGER}</if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Long" >
+    delete from resolution
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.turing.pangu.model.Resolution" >
+    insert into resolution 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        platform_id,    
+        height,    
+        width,    
+        is_support,    
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{platformId,jdbcType=BIGINT},  
+        #{height,jdbcType=INTEGER},  
+        #{width,jdbcType=INTEGER},  
+        #{isSupport,jdbcType=INTEGER},  
+    </trim>
+  </insert>
+  <insert id="insertResolutionByTrim" parameterType="org.turing.pangu.model.Resolution" >
+    insert into resolution 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="platformId != null" >platform_id,</if>
+        <if test="height != null" >height,</if>
+        <if test="width != null" >width,</if>
+        <if test="isSupport != null" >is_support,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="platformId != null" >#{platformId,jdbcType=BIGINT},</if>  
+        <if test="height != null" >#{height,jdbcType=INTEGER},</if>  
+        <if test="width != null" >#{width,jdbcType=INTEGER},</if>  
+        <if test="isSupport != null" >#{isSupport,jdbcType=INTEGER},</if>  
+    </trim>
+  </insert>
+  <update id="updateResolutionById" parameterType="org.turing.pangu.model.Resolution" >
+    update resolution set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        platform_id=#{platformId,jdbcType=BIGINT},    
+        height=#{height,jdbcType=INTEGER},    
+        width=#{width,jdbcType=INTEGER},    
+        is_support=#{isSupport,jdbcType=INTEGER},    
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="org.turing.pangu.model.Resolution" >
+    update resolution set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="platformId != null" >platform_id=#{platformId,jdbcType=BIGINT},</if>
+        <if test="height != null" >height=#{height,jdbcType=INTEGER},</if>
+        <if test="width != null" >width=#{width,jdbcType=INTEGER},</if>
+        <if test="isSupport != null" >is_support=#{isSupport,jdbcType=INTEGER},</if>
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

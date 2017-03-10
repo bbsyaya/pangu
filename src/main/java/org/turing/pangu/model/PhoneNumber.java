@@ -1,11 +1,11 @@
 /**
  * 
- * Title：PhoneTrunk
+ * Title：PhoneNumber
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年03月02日 
- * @since 2017年03月02日 
+ * @version 1.0, 2017年03月10日 
+ * @since 2017年03月10日 
  */
 
 package org.turing.pangu.model;
@@ -18,12 +18,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
- /**PhoneTrunk*/
- public class PhoneTrunk extends BaseModel<PhoneTrunk>
+ /**PhoneNumber*/
+ public class PhoneNumber extends BaseModel<PhoneNumber>
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 6999911488452201392L;
+  private static final long serialVersionUID = 3290371489107874390L;
 
   /***/
   private Integer num;

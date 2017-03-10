@@ -10,8 +10,10 @@
 
 package org.turing.pangu.dao;
 
-import org.turing.pangu.model.Simulator;
+import java.util.List;
 
-public interface SimulatorDao extends BaseDao<Simulator, Long> {
+import org.turing.pangu.model.PhoneNumber;
+import org.turing.pangu.model.Resolution;
 
+public interface ResolutionDao extends BaseDao<Resolution, Long> {
 }

@@ -7,6 +7,7 @@ import org.turing.pangu.service.BaseService;
 public interface EngineListen {
 	public void setService(List<BaseService> serviceList);
 	public void init();
+	public void upDate();
 	public void open();
 	public void close();
 }

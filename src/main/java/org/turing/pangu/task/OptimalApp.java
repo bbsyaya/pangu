@@ -1,11 +1,11 @@
 package org.turing.pangu.task;
 
 import org.turing.pangu.model.App;
-import org.turing.pangu.model.Device;
+import org.turing.pangu.phone.ChangeDeviceInfo;
 
 public class OptimalApp {
 	private App app;
-	private Device device;
+	private ChangeDeviceInfo info;
 	
 	public App getApp() {
 		return app;
@@ -13,10 +13,11 @@ public class OptimalApp {
 	public void setApp(App app) {
 		this.app = app;
 	}
-	public Device getDevice() {
-		return device;
+	public ChangeDeviceInfo getInfo() {
+		return info;
 	}
-	public void setDevice(Device device) {
-		this.device = device;
+	public void setInfo(ChangeDeviceInfo info) {
+		this.info = info;
 	}
+	
 }

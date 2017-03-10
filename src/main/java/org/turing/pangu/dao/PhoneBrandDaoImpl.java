@@ -13,21 +13,21 @@ package org.turing.pangu.dao;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.turing.pangu.mapper.PhoneTrunkMapper;
-import org.turing.pangu.model.PhoneTrunk;
+import org.turing.pangu.mapper.PhoneBrandMapper;
+import org.turing.pangu.model.PhoneBrand;
 
 @Repository
-public class PhoneTrunkDaoImpl extends BaseDaoImpl<PhoneTrunk, Long> implements PhoneTrunkDao {
+public class PhoneBrandDaoImpl extends BaseDaoImpl<PhoneBrand, Long> implements PhoneBrandDao {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger logger = Logger.getLogger(PhoneTrunkDaoImpl.class);
+	private static final Logger logger = Logger.getLogger(PhoneBrandDaoImpl.class);
 
 	@Autowired
-	private PhoneTrunkMapper mapper;
+	private PhoneBrandMapper mapper;
 	
 	@Autowired
-	public void setAppMapper(PhoneTrunkMapper mapper) {
+	public void setMapper(PhoneBrandMapper mapper) {
 		super.setBaseMapper(mapper);
 	}
 }

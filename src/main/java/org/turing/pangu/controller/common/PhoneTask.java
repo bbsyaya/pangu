@@ -1,7 +1,6 @@
 package org.turing.pangu.controller.common;
 
 import org.turing.pangu.model.App;
-import org.turing.pangu.model.Device;
 import org.turing.pangu.phone.ChangeDeviceInfo;
 
 public class PhoneTask {

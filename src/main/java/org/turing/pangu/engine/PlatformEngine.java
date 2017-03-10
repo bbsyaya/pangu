@@ -62,4 +62,10 @@ public class PlatformEngine implements EngineListen{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void upDate() {
+		// TODO Auto-generated method stub
+		
+	}
 }

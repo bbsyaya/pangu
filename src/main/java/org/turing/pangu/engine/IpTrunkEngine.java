@@ -154,6 +154,11 @@ public class IpTrunkEngine implements EngineListen{
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void upDate() {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 

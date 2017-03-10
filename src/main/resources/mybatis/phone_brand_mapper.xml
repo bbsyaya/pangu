@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.turing.pangu.mapper.PhoneBrandMapper" >
+  <resultMap id="BaseResultMap" type="org.turing.pangu.model.PhoneBrand" >
+    <id column="id" property="id" jdbcType="BIGINT" />       
+    <result column="imei_head" property="imeiHead" jdbcType="VARCHAR" />          
+    <result column="brand" property="brand" jdbcType="VARCHAR" />          
+    <result column="model" property="model" jdbcType="VARCHAR" />          
+    <result column="height" property="height" jdbcType="INTEGER" />          
+    <result column="width" property="width" jdbcType="INTEGER" />          
+    <result column="os" property="os" jdbcType="INTEGER" />          
+    <result column="cpu" property="cpu" jdbcType="VARCHAR" />          
+    <result column="gpu" property="gpu" jdbcType="VARCHAR" />          
+    <result column="cpu_frame" property="cpuFrame" jdbcType="VARCHAR" />          
+    <result column="gps" property="gps" jdbcType="INTEGER" />          
+    <result column="weight" property="weight" jdbcType="INTEGER" />          
+    <result column="china_mobile" property="chinaMobile" jdbcType="INTEGER" />          
+    <result column="china_unicom" property="chinaUnicom" jdbcType="INTEGER" />          
+    <result column="china_telecom" property="chinaTelecom" jdbcType="INTEGER" />          
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
+  </resultMap>   
+  <sql id="Base_Column_List" >
+    p.id,
+	p.imei_head,
+	p.brand,
+	p.model,
+	p.height,
+	p.width,
+	p.os,
+	p.cpu,
+	p.gpu,
+	p.cpu_frame,
+	p.gps,
+	p.weight,
+	p.china_mobile,
+	p.china_unicom,
+	p.china_telecom,
+	p.create_date,
+	p.update_date
+  </sql>
+  <sql id="Base_Column_Value_List" >
+    #{imeiHead},
+	#{brand},
+	#{model},
+	#{height},
+	#{width},
+	#{os},
+	#{cpu},
+	#{gpu},
+	#{cpuFrame},
+	#{gps},
+	#{weight},
+	#{chinaMobile},
+	#{chinaUnicom},
+	#{chinaTelecom},
+	#{createDate},
+	#{updateDate}
+  </sql>
+  <sql id="Base_Column_Update_List" >
+    imei_head=#{imeiHead},
+	brand=#{brand},
+	model=#{model},
+	height=#{height},
+	width=#{width},
+	os=#{os},
+	cpu=#{cpu},
+	gpu=#{gpu},
+	cpu_frame=#{cpuFrame},
+	gps=#{gps},
+	weight=#{weight},
+	china_mobile=#{chinaMobile},
+	china_unicom=#{chinaUnicom},
+	china_telecom=#{chinaTelecom},
+	create_date=#{createDate},
+	update_date=#{updateDate}
+  </sql> 
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from phone_brand p
+    where p.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from phone_brand p
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.PhoneBrand" >
+    select 
+    <include refid="Base_Column_List" />
+    from phone_brand p
+    where 1=1 
+    <if test="imeiHead != null" >and p.imei_head= #{imeiHead,jdbcType=VARCHAR}</if>
+    <if test="brand != null" >and p.brand= #{brand,jdbcType=VARCHAR}</if>
+    <if test="model != null" >and p.model= #{model,jdbcType=VARCHAR}</if>
+    <if test="height != null" >and p.height= #{height,jdbcType=INTEGER}</if>
+    <if test="width != null" >and p.width= #{width,jdbcType=INTEGER}</if>
+    <if test="os != null" >and p.os= #{os,jdbcType=INTEGER}</if>
+    <if test="cpu != null" >and p.cpu= #{cpu,jdbcType=VARCHAR}</if>
+    <if test="gpu != null" >and p.gpu= #{gpu,jdbcType=VARCHAR}</if>
+    <if test="cpuFrame != null" >and p.cpu_frame= #{cpuFrame,jdbcType=VARCHAR}</if>
+    <if test="gps != null" >and p.gps= #{gps,jdbcType=INTEGER}</if>
+    <if test="weight != null" >and p.weight= #{weight,jdbcType=INTEGER}</if>
+    <if test="chinaMobile != null" >and p.china_mobile= #{chinaMobile,jdbcType=INTEGER}</if>
+    <if test="chinaUnicom != null" >and p.china_unicom= #{chinaUnicom,jdbcType=INTEGER}</if>
+    <if test="chinaTelecom != null" >and p.china_telecom= #{chinaTelecom,jdbcType=INTEGER}</if>
+    <if test="createDate != null" >and p.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and p.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.PhoneBrand" >
+    select 
+    <include refid="Base_Column_List" />
+    from phone_brand p
+    where 1=1 
+    <if test="imeiHead != null" >and p.imei_head= #{imeiHead,jdbcType=VARCHAR}</if>
+    <if test="brand != null" >and p.brand= #{brand,jdbcType=VARCHAR}</if>
+    <if test="model != null" >and p.model= #{model,jdbcType=VARCHAR}</if>
+    <if test="height != null" >and p.height= #{height,jdbcType=INTEGER}</if>
+    <if test="width != null" >and p.width= #{width,jdbcType=INTEGER}</if>
+    <if test="os != null" >and p.os= #{os,jdbcType=INTEGER}</if>
+    <if test="cpu != null" >and p.cpu= #{cpu,jdbcType=VARCHAR}</if>
+    <if test="gpu != null" >and p.gpu= #{gpu,jdbcType=VARCHAR}</if>
+    <if test="cpuFrame != null" >and p.cpu_frame= #{cpuFrame,jdbcType=VARCHAR}</if>
+    <if test="gps != null" >and p.gps= #{gps,jdbcType=INTEGER}</if>
+    <if test="weight != null" >and p.weight= #{weight,jdbcType=INTEGER}</if>
+    <if test="chinaMobile != null" >and p.china_mobile= #{chinaMobile,jdbcType=INTEGER}</if>
+    <if test="chinaUnicom != null" >and p.china_unicom= #{chinaUnicom,jdbcType=INTEGER}</if>
+    <if test="chinaTelecom != null" >and p.china_telecom= #{chinaTelecom,jdbcType=INTEGER}</if>
+    <if test="createDate != null" >and p.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and p.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.ParamModel" >
+    select 
+    <include refid="Base_Column_List" />
+    from phone_brand p
+    where 1=1 
+    <if test="model.imeiHead != null" >and p.imei_head= #{model.imeiHead,jdbcType=VARCHAR}</if>
+    <if test="model.brand != null" >and p.brand= #{model.brand,jdbcType=VARCHAR}</if>
+    <if test="model.model != null" >and p.model= #{model.model,jdbcType=VARCHAR}</if>
+    <if test="model.height != null" >and p.height= #{model.height,jdbcType=INTEGER}</if>
+    <if test="model.width != null" >and p.width= #{model.width,jdbcType=INTEGER}</if>
+    <if test="model.os != null" >and p.os= #{model.os,jdbcType=INTEGER}</if>
+    <if test="model.cpu != null" >and p.cpu= #{model.cpu,jdbcType=VARCHAR}</if>
+    <if test="model.gpu != null" >and p.gpu= #{model.gpu,jdbcType=VARCHAR}</if>
+    <if test="model.cpuFrame != null" >and p.cpu_frame= #{model.cpuFrame,jdbcType=VARCHAR}</if>
+    <if test="model.gps != null" >and p.gps= #{model.gps,jdbcType=INTEGER}</if>
+    <if test="model.weight != null" >and p.weight= #{model.weight,jdbcType=INTEGER}</if>
+    <if test="model.chinaMobile != null" >and p.china_mobile= #{model.chinaMobile,jdbcType=INTEGER}</if>
+    <if test="model.chinaUnicom != null" >and p.china_unicom= #{model.chinaUnicom,jdbcType=INTEGER}</if>
+    <if test="model.chinaTelecom != null" >and p.china_telecom= #{model.chinaTelecom,jdbcType=INTEGER}</if>
+    <if test="model.createDate != null" >and p.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
+    <if test="model.updateDate != null" >and p.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="org.turing.pangu.model.PhoneBrand" >
+    select count(0) totalCount
+    from phone_brand p
+    where 1=1 
+    <if test="imeiHead != null" >and p.imei_head= #{imeiHead,jdbcType=VARCHAR}</if>
+    <if test="brand != null" >and p.brand= #{brand,jdbcType=VARCHAR}</if>
+    <if test="model != null" >and p.model= #{model,jdbcType=VARCHAR}</if>
+    <if test="height != null" >and p.height= #{height,jdbcType=INTEGER}</if>
+    <if test="width != null" >and p.width= #{width,jdbcType=INTEGER}</if>
+    <if test="os != null" >and p.os= #{os,jdbcType=INTEGER}</if>
+    <if test="cpu != null" >and p.cpu= #{cpu,jdbcType=VARCHAR}</if>
+    <if test="gpu != null" >and p.gpu= #{gpu,jdbcType=VARCHAR}</if>
+    <if test="cpuFrame != null" >and p.cpu_frame= #{cpuFrame,jdbcType=VARCHAR}</if>
+    <if test="gps != null" >and p.gps= #{gps,jdbcType=INTEGER}</if>
+    <if test="weight != null" >and p.weight= #{weight,jdbcType=INTEGER}</if>
+    <if test="chinaMobile != null" >and p.china_mobile= #{chinaMobile,jdbcType=INTEGER}</if>
+    <if test="chinaUnicom != null" >and p.china_unicom= #{chinaUnicom,jdbcType=INTEGER}</if>
+    <if test="chinaTelecom != null" >and p.china_telecom= #{chinaTelecom,jdbcType=INTEGER}</if>
+    <if test="createDate != null" >and p.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and p.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Long" >
+    delete from phone_brand
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.turing.pangu.model.PhoneBrand" >
+    insert into phone_brand 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        imei_head,    
+        brand,    
+        model,    
+        height,    
+        width,    
+        os,    
+        cpu,    
+        gpu,    
+        cpu_frame,    
+        gps,    
+        weight,    
+        china_mobile,    
+        china_unicom,    
+        china_telecom,    
+        create_date,    
+        update_date,    
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{imeiHead,jdbcType=VARCHAR},  
+        #{brand,jdbcType=VARCHAR},  
+        #{model,jdbcType=VARCHAR},  
+        #{height,jdbcType=INTEGER},  
+        #{width,jdbcType=INTEGER},  
+        #{os,jdbcType=INTEGER},  
+        #{cpu,jdbcType=VARCHAR},  
+        #{gpu,jdbcType=VARCHAR},  
+        #{cpuFrame,jdbcType=VARCHAR},  
+        #{gps,jdbcType=INTEGER},  
+        #{weight,jdbcType=INTEGER},  
+        #{chinaMobile,jdbcType=INTEGER},  
+        #{chinaUnicom,jdbcType=INTEGER},  
+        #{chinaTelecom,jdbcType=INTEGER},  
+        #{createDate,jdbcType=TIMESTAMP},  
+        #{updateDate,jdbcType=TIMESTAMP},  
+    </trim>
+  </insert>
+  <insert id="insertPhoneBrandByTrim" parameterType="org.turing.pangu.model.PhoneBrand" >
+    insert into phone_brand 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="imeiHead != null" >imei_head,</if>
+        <if test="brand != null" >brand,</if>
+        <if test="model != null" >model,</if>
+        <if test="height != null" >height,</if>
+        <if test="width != null" >width,</if>
+        <if test="os != null" >os,</if>
+        <if test="cpu != null" >cpu,</if>
+        <if test="gpu != null" >gpu,</if>
+        <if test="cpuFrame != null" >cpu_frame,</if>
+        <if test="gps != null" >gps,</if>
+        <if test="weight != null" >weight,</if>
+        <if test="chinaMobile != null" >china_mobile,</if>
+        <if test="chinaUnicom != null" >china_unicom,</if>
+        <if test="chinaTelecom != null" >china_telecom,</if>
+        <if test="createDate != null" >create_date,</if>
+        <if test="updateDate != null" >update_date,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="imeiHead != null" >#{imeiHead,jdbcType=VARCHAR},</if>  
+        <if test="brand != null" >#{brand,jdbcType=VARCHAR},</if>  
+        <if test="model != null" >#{model,jdbcType=VARCHAR},</if>  
+        <if test="height != null" >#{height,jdbcType=INTEGER},</if>  
+        <if test="width != null" >#{width,jdbcType=INTEGER},</if>  
+        <if test="os != null" >#{os,jdbcType=INTEGER},</if>  
+        <if test="cpu != null" >#{cpu,jdbcType=VARCHAR},</if>  
+        <if test="gpu != null" >#{gpu,jdbcType=VARCHAR},</if>  
+        <if test="cpuFrame != null" >#{cpuFrame,jdbcType=VARCHAR},</if>  
+        <if test="gps != null" >#{gps,jdbcType=INTEGER},</if>  
+        <if test="weight != null" >#{weight,jdbcType=INTEGER},</if>  
+        <if test="chinaMobile != null" >#{chinaMobile,jdbcType=INTEGER},</if>  
+        <if test="chinaUnicom != null" >#{chinaUnicom,jdbcType=INTEGER},</if>  
+        <if test="chinaTelecom != null" >#{chinaTelecom,jdbcType=INTEGER},</if>  
+        <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
+        <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
+    </trim>
+  </insert>
+  <update id="updatePhoneBrandById" parameterType="org.turing.pangu.model.PhoneBrand" >
+    update phone_brand set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        imei_head=#{imeiHead,jdbcType=VARCHAR},    
+        brand=#{brand,jdbcType=VARCHAR},    
+        model=#{model,jdbcType=VARCHAR},    
+        height=#{height,jdbcType=INTEGER},    
+        width=#{width,jdbcType=INTEGER},    
+        os=#{os,jdbcType=INTEGER},    
+        cpu=#{cpu,jdbcType=VARCHAR},    
+        gpu=#{gpu,jdbcType=VARCHAR},    
+        cpu_frame=#{cpuFrame,jdbcType=VARCHAR},    
+        gps=#{gps,jdbcType=INTEGER},    
+        weight=#{weight,jdbcType=INTEGER},    
+        china_mobile=#{chinaMobile,jdbcType=INTEGER},    
+        china_unicom=#{chinaUnicom,jdbcType=INTEGER},    
+        china_telecom=#{chinaTelecom,jdbcType=INTEGER},    
+        create_date=#{createDate,jdbcType=TIMESTAMP},    
+        update_date=#{updateDate,jdbcType=TIMESTAMP},    
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="org.turing.pangu.model.PhoneBrand" >
+    update phone_brand set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="imeiHead != null" >imei_head=#{imeiHead,jdbcType=VARCHAR},</if>
+        <if test="brand != null" >brand=#{brand,jdbcType=VARCHAR},</if>
+        <if test="model != null" >model=#{model,jdbcType=VARCHAR},</if>
+        <if test="height != null" >height=#{height,jdbcType=INTEGER},</if>
+        <if test="width != null" >width=#{width,jdbcType=INTEGER},</if>
+        <if test="os != null" >os=#{os,jdbcType=INTEGER},</if>
+        <if test="cpu != null" >cpu=#{cpu,jdbcType=VARCHAR},</if>
+        <if test="gpu != null" >gpu=#{gpu,jdbcType=VARCHAR},</if>
+        <if test="cpuFrame != null" >cpu_frame=#{cpuFrame,jdbcType=VARCHAR},</if>
+        <if test="gps != null" >gps=#{gps,jdbcType=INTEGER},</if>
+        <if test="weight != null" >weight=#{weight,jdbcType=INTEGER},</if>
+        <if test="chinaMobile != null" >china_mobile=#{chinaMobile,jdbcType=INTEGER},</if>
+        <if test="chinaUnicom != null" >china_unicom=#{chinaUnicom,jdbcType=INTEGER},</if>
+        <if test="chinaTelecom != null" >china_telecom=#{chinaTelecom,jdbcType=INTEGER},</if>
+        <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
