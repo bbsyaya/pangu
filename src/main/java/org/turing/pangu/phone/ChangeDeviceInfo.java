@@ -284,7 +284,40 @@ public class ChangeDeviceInfo {
     public void setBootloader(String bootloader) {
         this.bootloader = bootloader;
     }
-    private String sdk = ""; //19
+
+	public Integer getNetworkType() {
+		return networkType;
+	}
+
+	public void setNetworkType(Integer networkType) {
+		this.networkType = networkType;
+	}
+
+	public Integer getNetworkSubType() {
+		return networkSubType;
+	}
+
+	public void setNetworkSubType(Integer networkSubType) {
+		this.networkSubType = networkSubType;
+	}
+
+	public String getNetworkTypeName() {
+		return networkTypeName;
+	}
+
+	public void setNetworkTypeName(String networkTypeName) {
+		this.networkTypeName = networkTypeName;
+	}
+
+	public String getNetworkSubTypeName() {
+		return networkSubTypeName;
+	}
+
+	public void setNetworkSubTypeName(String networkSubTypeName) {
+		this.networkSubTypeName = networkSubTypeName;
+	}
+
+	private String sdk = ""; //19
     private String imei = "";//TAC + FAC + SNR + SP = 15
     private String imsi = "";// MCC+MNC+MSIN
     private String mac = "";//"6C:C4:08:BB:B1:28"
@@ -311,6 +344,11 @@ public class ChangeDeviceInfo {
     private String androidVersion = "";
     private String ua = "";
     private String ip = "";
+    private Integer networkType = 0; // 网络类型，wifi,mobile
+    private String networkTypeName = ""; // wifi,mobile
+    
+    private Integer networkSubType = 0;
+    private String networkSubTypeName = "";
     private String display = "";//显示版本
     private String simStatus = ""; // 手机卡状态
     private String phoneStatus = ""; // 手机状态

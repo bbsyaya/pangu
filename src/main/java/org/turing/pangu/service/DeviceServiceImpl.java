@@ -39,7 +39,7 @@ public class DeviceServiceImpl extends BaseServiceImpl<Device,Long> implements D
 		Device device = new Device();
 		Date yesterdayMorning = DateUtils.getYesterdayMorning();
 		Date yesterdayNight = DateUtils.getYesterdayNight();
-		device.setIsWhiteIp(1);
+		device.setIsStock(1);
 		device.setCreateDate(yesterdayMorning);
 		device.setUpdateDate(yesterdayNight);
 		List<Device> list = dao.selectCanRemainData(device);

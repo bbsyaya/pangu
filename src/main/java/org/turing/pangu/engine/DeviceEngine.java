@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.turing.pangu.controller.phone.request.ReportReq;
 import org.turing.pangu.model.Device;
+import org.turing.pangu.phone.ChangeDeviceInfo;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.DeviceServiceImpl;
@@ -92,117 +93,128 @@ public class DeviceEngine implements EngineListen{
 	public boolean saveReport(ReportReq req,boolean isWhiteIp){
 		// TODO Auto-generated method stub
 		Device device = new Device();
+		ChangeDeviceInfo changeInfo = req.getDevice();
 		//----------------------------------------------------------------------
-		if(null == req || null == req.getDevice())
+		if(null == req || null == changeInfo)
 			return false;
-		if( null != req.getDevice().getAndroidId())
-			device.setAndroidId(req.getDevice().getAndroidId());
+		if( null != changeInfo.getAndroidId())
+			device.setAndroidId(changeInfo.getAndroidId());
 		
-		if( null != req.getDevice().getAndroidSerial())
-			device.setAndroidSerial(req.getDevice().getAndroidSerial());
+		if( null != changeInfo.getAndroidSerial())
+			device.setAndroidSerial(changeInfo.getAndroidSerial());
 			
-		if( null != req.getDevice().getAndroidVersion())			
-			device.setAndroidVersion(req.getDevice().getAndroidVersion());
+		if( null != changeInfo.getAndroidVersion())			
+			device.setAndroidVersion(changeInfo.getAndroidVersion());
 			
-		if( null != req.getDevice().getBlueTooth())			
-			device.setBlueTooth(req.getDevice().getBlueTooth());
+		if( null != changeInfo.getBlueTooth())			
+			device.setBlueTooth(changeInfo.getBlueTooth());
 			
-		if( null != req.getDevice().getBoard())			
-			device.setBoard(req.getDevice().getBoard());
+		if( null != changeInfo.getBoard())			
+			device.setBoard(changeInfo.getBoard());
 		
-		if( null != req.getDevice().getBrand())
-			device.setBrand(req.getDevice().getBrand());
+		if( null != changeInfo.getBrand())
+			device.setBrand(changeInfo.getBrand());
 		
-		if( null != req.getDevice().getBssid())
-			device.setBssid(req.getDevice().getBssid());
+		if( null != changeInfo.getBssid())
+			device.setBssid(changeInfo.getBssid());
 		
-		if( null != req.getDevice().getCarrier())
-			device.setCarrier(req.getDevice().getCarrier());
+		if( null != changeInfo.getCarrier())
+			device.setCarrier(changeInfo.getCarrier());
 		
-		if( null != req.getDevice().getCarrierCode())
-			device.setCarrierCode(req.getDevice().getCarrierCode());
+		if( null != changeInfo.getCarrierCode())
+			device.setCarrierCode(changeInfo.getCarrierCode());
 		
-		if( null != req.getDevice().getCountryCode())
-			device.setCountryCode(req.getDevice().getCountryCode());
+		if( null != changeInfo.getCountryCode())
+			device.setCountryCode(changeInfo.getCountryCode());
 		
-		if( null != req.getDevice().getDisplay())
-			device.setDisplay(req.getDevice().getDisplay());
+		if( null != changeInfo.getDisplay())
+			device.setDisplay(changeInfo.getDisplay());
 		
-		if( null != req.getDevice().getImei())
-			device.setImei(req.getDevice().getImei());
+		if( null != changeInfo.getImei())
+			device.setImei(changeInfo.getImei());
 		
-		if( null != req.getDevice().getImsi())
-			device.setImsi(req.getDevice().getImsi());
+		if( null != changeInfo.getImsi())
+			device.setImsi(changeInfo.getImsi());
 		
-		if( null != req.getDevice().getIp())
-			device.setIp(req.getDevice().getIp());
+		if( null != changeInfo.getIp())
+			device.setIp(changeInfo.getIp());
 		
 
-			//device.set(req.getDevice().getLatitude());
-			//device.setAndroidSerial(req.getDevice().getLongitude());
-		if( null != req.getDevice().getMac())
-			device.setMac(req.getDevice().getMac());
+			//device.set(changeInfo.getLatitude());
+			//device.setAndroidSerial(changeInfo.getLongitude());
+		if( null != changeInfo.getMac())
+			device.setMac(changeInfo.getMac());
 		
-		if( null != req.getDevice().getManufacture())
-			device.setManufacture(req.getDevice().getManufacture());
+		if( null != changeInfo.getManufacture())
+			device.setManufacture(changeInfo.getManufacture());
 		
-		if( null != req.getDevice().getModel())
-			device.setModel(req.getDevice().getModel());
+		if( null != changeInfo.getModel())
+			device.setModel(changeInfo.getModel());
 		
-			//device.set(req.getDevice().getOsArch());
-			//device.setAndroidSerial(req.getDevice().getOsName());
-			//device.setAndroidSerial(req.getDevice().getOsVersion());
-		if( null != req.getDevice().getPhone())
-			device.setPhone(req.getDevice().getPhone());
+			//device.set(changeInfo.getOsArch());
+			//device.setAndroidSerial(changeInfo.getOsName());
+			//device.setAndroidSerial(changeInfo.getOsVersion());
+		if( null != changeInfo.getPhone())
+			device.setPhone(changeInfo.getPhone());
 		
-		if( null != req.getDevice().getSimSerial())
-			device.setSimSerial(req.getDevice().getSimSerial());
+		if( null != changeInfo.getSimSerial())
+			device.setSimSerial(changeInfo.getSimSerial());
 		
-		if( null != req.getDevice().getSsid())
-			device.setSsid(req.getDevice().getSsid());
+		if( null != changeInfo.getSsid())
+			device.setSsid(changeInfo.getSsid());
 		
-		if( null != req.getDevice().getUa())
-			device.setUa(req.getDevice().getUa());
+		if( null != changeInfo.getUa())
+			device.setUa(changeInfo.getUa());
 		
 		device.setPhoneStatus(1);
-		if( null != req.getDevice().getPhoneStatus() && !req.getDevice().getPhoneStatus().equals(""))
-			device.setPhoneStatus(Integer.valueOf(req.getDevice().getPhoneStatus()));
+		if( null != changeInfo.getPhoneStatus() && !changeInfo.getPhoneStatus().equals(""))
+			device.setPhoneStatus(Integer.valueOf(changeInfo.getPhoneStatus()));
 		
 		device.setSdk(19);
-		if( null != req.getDevice().getSdk() && !req.getDevice().getSdk().equals(""))
-			device.setSdk(Integer.valueOf(req.getDevice().getSdk()));
+		if( null != changeInfo.getSdk() && !changeInfo.getSdk().equals(""))
+			device.setSdk(Integer.valueOf(changeInfo.getSdk()));
 		
 		device.setSimStatus(5);
-		if( null != req.getDevice().getSimStatus() && !req.getDevice().getSimStatus().equals(""))
-			device.setSimStatus(Integer.valueOf(req.getDevice().getSimStatus()));
+		if( null != changeInfo.getSimStatus() && !changeInfo.getSimStatus().equals(""))
+			device.setSimStatus(Integer.valueOf(changeInfo.getSimStatus()));
 		
 		device.setHeight(1280);
-		if( null != req.getDevice().getHeight() && !req.getDevice().getHeight().equals(""))
-			device.setHeight(Integer.valueOf(req.getDevice().getHeight()));
+		if( null != changeInfo.getHeight() && !changeInfo.getHeight().equals(""))
+			device.setHeight(Integer.valueOf(changeInfo.getHeight()));
 		
 		device.setWidth(720);
-		if( null != req.getDevice().getWidth() && !req.getDevice().getWidth().equals(""))
-			device.setWidth(Integer.valueOf(req.getDevice().getWidth()));
+		if( null != changeInfo.getWidth() && !changeInfo.getWidth().equals(""))
+			device.setWidth(Integer.valueOf(changeInfo.getWidth()));
 		
-		if( null != req.getDevice().getDevice() && !req.getDevice().getDevice().equals(""))
-			device.setDevice(req.getDevice().getDevice());
+		if( null != changeInfo.getDevice() && !changeInfo.getDevice().equals(""))
+			device.setDevice(changeInfo.getDevice());
 		
-		if( null != req.getDevice().getCpuABI() && !req.getDevice().getCpuABI().equals(""))
-			device.setCpuAbi(req.getDevice().getCpuABI());
+		if( null != changeInfo.getCpuABI() && !changeInfo.getCpuABI().equals(""))
+			device.setCpuAbi(changeInfo.getCpuABI());
 		
-		if( null != req.getDevice().getBootloader() && !req.getDevice().getBootloader().equals(""))
-			device.setBootloader(req.getDevice().getBootloader());
+		if( null != changeInfo.getBootloader() && !changeInfo.getBootloader().equals(""))
+			device.setBootloader(changeInfo.getBootloader());
 		
-		if( null != req.getDevice().getProduct() && !req.getDevice().getProduct().equals(""))
-			device.setProduct(req.getDevice().getProduct());
+		if( null != changeInfo.getProduct() && !changeInfo.getProduct().equals(""))
+			device.setProduct(changeInfo.getProduct());
+		// --- 手机网络
+		if( null != changeInfo.getNetworkType() && !changeInfo.getNetworkType().equals(""))
+			device.setNetworkType(changeInfo.getNetworkType());
+		
+		if( null != changeInfo.getNetworkTypeName() && !changeInfo.getNetworkTypeName().equals(""))
+			device.setNetworkTypeName(changeInfo.getNetworkTypeName());
+		
+		if( null != changeInfo.getNetworkSubType() && !changeInfo.getNetworkSubType().equals(""))
+			device.setNetworkSubtype(changeInfo.getNetworkSubType());
+		
+		if( null != changeInfo.getNetworkSubTypeName() && !changeInfo.getNetworkSubTypeName().equals(""))
+			device.setNetworkSubtypeName(changeInfo.getNetworkSubTypeName());
 		//----------------------------------------------------------------------
 
 		device.setAppId(req.getAppId());
 		device.setDeviceType(req.getDevice_type());
 		device.setIsActived(req.getIs_active());
-		Integer whiteIp = (isWhiteIp == true) ? 1: 0;
-		device.setIsWhiteIp(whiteIp);
-		device.setIsRemain(req.getIs_remain());
+		device.setIsStock(req.getIs_remain());
 		device.setCreateDate(new Date());
 		device.setUpdateDate(new Date());
 		if(usedWhichList == 1){
@@ -212,9 +224,6 @@ public class DeviceEngine implements EngineListen{
 		}
 		return false;
 	}
-
-
-
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub

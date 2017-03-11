@@ -4,28 +4,25 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年01月23日 
- * @since 2017年01月23日 
+ * @version 1.0, 2017年03月11日 
+ * @since 2017年03月11日 
  */
 
 package org.turing.pangu.model;
 
 import java.util.Date;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
  /**Device*/
  public class Device extends BaseModel<Device>
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 4926311485184500978L;
+  private static final long serialVersionUID = 3716951489242858510L;
 
   /***/
   private Long appId;
@@ -34,10 +31,52 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   private Integer isActived;
 
   /***/
-  private Integer isRemain;
+  private Integer isStock;
 
   /***/
-  private Integer isWhiteIp;
+  private String phone;
+
+  /***/
+  private String ip;
+
+  /***/
+  private String imei;
+
+  /***/
+  private String imsi;
+
+  /***/
+  private Integer width;
+
+  /***/
+  private Integer height;
+
+  /***/
+  private String brand;
+
+  /***/
+  private String manufacture;
+
+  /***/
+  private String model;
+
+  /***/
+  private Integer sdk;
+
+  /***/
+  private Integer networkType;
+
+  /***/
+  private String networkTypeName;
+
+  /***/
+  private Integer networkSubtype;
+
+  /***/
+  private String networkSubtypeName;
+
+  /***/
+  private Integer simStatus;
 
   /***/
   private Integer deviceType;
@@ -58,9 +97,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   private String board;
 
   /***/
-  private String brand;
-
-  /***/
   private String bssid;
 
   /***/
@@ -76,43 +112,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   private String display;
 
   /***/
-  private Integer height;
-
-  /***/
-  private Integer width;
-
-  /***/
-  private String imei;
-
-  /***/
-  private String imsi;
-
-  /***/
-  private String ip;
-
-  /***/
   private String mac;
-
-  /***/
-  private String manufacture;
-
-  /***/
-  private String model;
-
-  /***/
-  private String phone;
 
   /***/
   private Integer phoneStatus;
 
   /***/
-  private Integer sdk;
-
-  /***/
   private String simSerial;
-
-  /***/
-  private Integer simStatus;
 
   /***/
   private String ssid;
@@ -172,31 +178,235 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
-  @NotNull(groups = {Default.class,Save.class})
-  public Integer getIsRemain()
+  public Integer getIsStock()
   {
-   return this.isRemain;
+   return this.isStock;
   }
 
   /**设置*/
-  public void setIsRemain(Integer isRemain)
+  public void setIsStock(Integer isStock)
   {
-    this.isRemain=isRemain;
+    this.isStock=isStock;
   }
 
   
   /**获取*/
   @JsonProperty
-  @NotNull(groups = {Default.class,Save.class})
-  public Integer getIsWhiteIp()
+  @Length(max =255 )
+  public String getPhone()
   {
-   return this.isWhiteIp;
+   return this.phone;
   }
 
   /**设置*/
-  public void setIsWhiteIp(Integer isWhiteIp)
+  public void setPhone(String phone)
   {
-    this.isWhiteIp=isWhiteIp;
+    this.phone=phone;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getIp()
+  {
+   return this.ip;
+  }
+
+  /**设置*/
+  public void setIp(String ip)
+  {
+    this.ip=ip;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  @NotEmpty(groups = {Default.class,Save.class})
+  public String getImei()
+  {
+   return this.imei;
+  }
+
+  /**设置*/
+  public void setImei(String imei)
+  {
+    this.imei=imei;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getImsi()
+  {
+   return this.imsi;
+  }
+
+  /**设置*/
+  public void setImsi(String imsi)
+  {
+    this.imsi=imsi;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  public Integer getWidth()
+  {
+   return this.width;
+  }
+
+  /**设置*/
+  public void setWidth(Integer width)
+  {
+    this.width=width;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  public Integer getHeight()
+  {
+   return this.height;
+  }
+
+  /**设置*/
+  public void setHeight(Integer height)
+  {
+    this.height=height;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getBrand()
+  {
+   return this.brand;
+  }
+
+  /**设置*/
+  public void setBrand(String brand)
+  {
+    this.brand=brand;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getManufacture()
+  {
+   return this.manufacture;
+  }
+
+  /**设置*/
+  public void setManufacture(String manufacture)
+  {
+    this.manufacture=manufacture;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getModel()
+  {
+   return this.model;
+  }
+
+  /**设置*/
+  public void setModel(String model)
+  {
+    this.model=model;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  public Integer getSdk()
+  {
+   return this.sdk;
+  }
+
+  /**设置*/
+  public void setSdk(Integer sdk)
+  {
+    this.sdk=sdk;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  public Integer getNetworkType()
+  {
+   return this.networkType;
+  }
+
+  /**设置*/
+  public void setNetworkType(Integer networkType)
+  {
+    this.networkType=networkType;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getNetworkTypeName()
+  {
+   return this.networkTypeName;
+  }
+
+  /**设置*/
+  public void setNetworkTypeName(String networkTypeName)
+  {
+    this.networkTypeName=networkTypeName;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  public Integer getNetworkSubtype()
+  {
+   return this.networkSubtype;
+  }
+
+  /**设置*/
+  public void setNetworkSubtype(Integer networkSubtype)
+  {
+    this.networkSubtype=networkSubtype;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getNetworkSubtypeName()
+  {
+   return this.networkSubtypeName;
+  }
+
+  /**设置*/
+  public void setNetworkSubtypeName(String networkSubtypeName)
+  {
+    this.networkSubtypeName=networkSubtypeName;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  public Integer getSimStatus()
+  {
+   return this.simStatus;
+  }
+
+  /**设置*/
+  public void setSimStatus(Integer simStatus)
+  {
+    this.simStatus=simStatus;
   }
 
   
@@ -293,21 +503,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   /**获取*/
   @JsonProperty
   @Length(max =255 )
-  public String getBrand()
-  {
-   return this.brand;
-  }
-
-  /**设置*/
-  public void setBrand(String brand)
-  {
-    this.brand=brand;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
   public String getBssid()
   {
    return this.bssid;
@@ -382,80 +577,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
-  public Integer getHeight()
-  {
-   return this.height;
-  }
-
-  /**设置*/
-  public void setHeight(Integer height)
-  {
-    this.height=height;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  public Integer getWidth()
-  {
-   return this.width;
-  }
-
-  /**设置*/
-  public void setWidth(Integer width)
-  {
-    this.width=width;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  @NotEmpty(groups = {Default.class,Save.class})
-  public String getImei()
-  {
-   return this.imei;
-  }
-
-  /**设置*/
-  public void setImei(String imei)
-  {
-    this.imei=imei;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getImsi()
-  {
-   return this.imsi;
-  }
-
-  /**设置*/
-  public void setImsi(String imsi)
-  {
-    this.imsi=imsi;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getIp()
-  {
-   return this.ip;
-  }
-
-  /**设置*/
-  public void setIp(String ip)
-  {
-    this.ip=ip;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
   @Length(max =255 )
   public String getMac()
   {
@@ -466,51 +587,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   public void setMac(String mac)
   {
     this.mac=mac;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getManufacture()
-  {
-   return this.manufacture;
-  }
-
-  /**设置*/
-  public void setManufacture(String manufacture)
-  {
-    this.manufacture=manufacture;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getModel()
-  {
-   return this.model;
-  }
-
-  /**设置*/
-  public void setModel(String model)
-  {
-    this.model=model;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getPhone()
-  {
-   return this.phone;
-  }
-
-  /**设置*/
-  public void setPhone(String phone)
-  {
-    this.phone=phone;
   }
 
   
@@ -530,20 +606,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
-  public Integer getSdk()
-  {
-   return this.sdk;
-  }
-
-  /**设置*/
-  public void setSdk(Integer sdk)
-  {
-    this.sdk=sdk;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
   @Length(max =255 )
   public String getSimSerial()
   {
@@ -554,20 +616,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   public void setSimSerial(String simSerial)
   {
     this.simSerial=simSerial;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  public Integer getSimStatus()
-  {
-   return this.simStatus;
-  }
-
-  /**设置*/
-  public void setSimStatus(Integer simStatus)
-  {
-    this.simStatus=simStatus;
   }
 
   
