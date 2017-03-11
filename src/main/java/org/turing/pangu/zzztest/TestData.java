@@ -15,6 +15,7 @@ import org.turing.pangu.bean.TaskConfigureBean;
 import org.turing.pangu.bean.VpnConnectInfo;
 import org.turing.pangu.engine.EngineMng;
 import org.turing.pangu.engine.VpnEngine;
+import org.turing.pangu.engine.WifiMngEngine;
 import org.turing.pangu.model.Computer;
 import org.turing.pangu.model.DynamicVpn;
 import org.turing.pangu.model.PhoneBrand;
@@ -224,6 +225,13 @@ public class TestData {
 		return list;
 	}
 	@Test
+	public void testWifi(){
+		WifiMngEngine.getInstance().init();
+		for(int index = 0;index < 100;index++){
+			System.out.print("\n" + WifiMngEngine.getInstance().getWifiName());
+		}
+	}
+	
 	public void testUpdateDevice() {
 		//EngineMng.getInstance().initEngine(getAllServiecInstance());		
 		List<PhoneBrand> list = new ArrayList<PhoneBrand>();

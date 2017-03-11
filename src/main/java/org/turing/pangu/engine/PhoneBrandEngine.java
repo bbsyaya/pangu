@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.turing.pangu.iptrunk.BaiduLocation;
+import org.turing.pangu.model.App;
 import org.turing.pangu.model.PhoneBrand;
 import org.turing.pangu.phone.ChangeDeviceInfo;
 import org.turing.pangu.service.BaseService;
@@ -38,7 +39,8 @@ public class PhoneBrandEngine implements EngineListen{
 			return CHINA_TELECOM;
 		}
 	}
-	public ChangeDeviceInfo getNewDeviceInfo(BaiduLocation location){
+	public ChangeDeviceInfo getNewDeviceInfo(BaiduLocation location,App app){
+		ChangeDeviceInfo info = new ChangeDeviceInfo();
 		// 6:3:1
 		//1.先产生品牌随机数
 		int operator = getOperator();
@@ -48,27 +50,39 @@ public class PhoneBrandEngine implements EngineListen{
 		for(int flag = 0;flag == 0;){
 			int random = RandomUtils.getRandom(0, phoneBrandList.size());
 			brand = phoneBrandList.get(random);
-			switch(operator){
-				case CHINA_MOBILE:
-					if(brand.getChinaMobile() == 1){
-						flag = 1;
-						operStr = "移动";
-					}
-					break;
-				case CHINA_UNICOM:
-					if(brand.getChinaUnicom() == 1){
-						flag = 1;
-						operStr = "联通";
-					}
-					break;
-				case CHINA_TELECOM:
-					if(brand.getChinaTelecom() == 1){
-						flag = 1;
-						operStr = "电信";
-					}
-					break;
+			// 选择支持分辨率的型号
+			if(true == ResolutionEngine.getInstance().isSupportResolution(brand,app.getPlatformId())){
+				break;
 			}
 		}
+		switch(operator){
+		case CHINA_MOBILE:
+			if(brand.getChinaMobile() == 1){
+				operStr = "移动";
+			}
+			break;
+		case CHINA_UNICOM:
+			if(brand.getChinaUnicom() == 1){
+				operStr = "联通";
+			}
+			break;
+		case CHINA_TELECOM:
+			if(brand.getChinaTelecom() == 1){
+				operStr = "电信";
+			}
+			break;
+		}
+		String number = PhoneNumberEngine.getInstance().getPhoneNumber(location.getContent().getAddress(), operStr);
+		if(null == number)
+			return null;
+		
+		info.setPhone(number);
+		info.setBrand(brand.getBrand());
+		info.setManufacture(brand.getBrand());
+		info.setModel(brand.getModel());
+		info.setHeight(brand.getHeight().toString());
+		info.setWidth(brand.getWidth().toString());
+		
 		return null;
 	}
 	@Override

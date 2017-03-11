@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.turing.pangu.bean.HeightWidth;
 import org.turing.pangu.model.App;
+import org.turing.pangu.model.PhoneBrand;
+import org.turing.pangu.model.Platform;
 import org.turing.pangu.model.Resolution;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.AppServiceImpl;
@@ -35,6 +38,15 @@ public class ResolutionEngine implements EngineListen{
 			}
 		}
 		return list;
+	}
+	public boolean isSupportResolution(PhoneBrand model,Long platform_id){
+		for(Resolution  res :resolutionList){
+			if(res.getIsSupport() == 1 && model.getHeight() == res.getHeight() 
+					&& model.getWidth() == res.getWidth() && res.getPlatformId() == platform_id){
+				return true;
+			}
+		}
+		return false;
 	}
 	@Override
 	public void setService(List<BaseService> serviceList) {
