@@ -75,7 +75,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 	public synchronized String vpnLogin(VpnLoginReq req,String remoteIp,String realIp){
 		TraceUtils.getTraceInfo();
 		// 此IP不能运行任务了
-		if(false == IpMngEngine.getInstance().isCanGetTask(remoteIp)){
+		if(false == IpLimitMngEngine.getInstance().isCanGetTask(remoteIp)){
 			return null;
 		}
 		VpnTask task = new VpnTask();
@@ -140,7 +140,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 	public synchronized boolean switchVpnFinish(String token,String remoteIp,String realIp){
 		// 此IP不能运行任务了
 		TraceUtils.getTraceInfo();
-		if(false == IpMngEngine.getInstance().isCanGetTask(remoteIp)){
+		if(false == IpLimitMngEngine.getInstance().isCanGetTask(remoteIp)){
 			logger.info("ip is Cannot GetTask ");
 			return false;
 		}
@@ -447,6 +447,7 @@ public class TaskDynamicIpEngine implements TaskIF{
                 	mListen.updateAllocTask(operType,dbTask); // 对应派发 ++ 
                     logger.info("getOptimalAppId---end--return INCREMENT ");
                     opt.setApp(AppEngine.getInstance().getAppInfo(dbTask.getAppId()));
+                    opt.setInfo(PhoneBrandEngine.getInstance().getNewDeviceInfo(task.getLocation(), opt.getApp()));
                     return opt;
                 }
             }
@@ -460,6 +461,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 			            mListen.updateAllocTask(operType,dbTask); // 对应派发 ++ 
 			            logger.info("getOptimalAppId---may be more run--- " + pt.getApp().getId());
 			            opt.setApp(AppEngine.getInstance().getAppInfo(dbTask.getAppId()));
+			            opt.setInfo(PhoneBrandEngine.getInstance().getNewDeviceInfo(task.getLocation(), opt.getApp()));
                         return opt;
 		            }
 	            }

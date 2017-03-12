@@ -90,7 +90,7 @@ public class DeviceEngine implements EngineListen{
 		}
 		needSaveList.clear(); //清空
 	}
-	public boolean saveReport(ReportReq req,boolean isWhiteIp){
+	public boolean saveReport(ReportReq req){
 		// TODO Auto-generated method stub
 		Device device = new Device();
 		ChangeDeviceInfo changeInfo = req.getDevice();

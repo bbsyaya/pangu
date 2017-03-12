@@ -11,6 +11,10 @@ AndroidAP-
 NETGEAR-Guest 
 NETGEAR-
 2.4GHz Wi-Fi network 
+5GHz Wi-Fi network 
+3GHz Wi-Fi network 
+4GHz Wi-Fi network 
+4GHz Wi-Fi network 
 Feixun_
 PHICOMM_
 UTT-HIPER_

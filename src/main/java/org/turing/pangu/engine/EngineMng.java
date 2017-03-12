@@ -29,6 +29,7 @@ public class EngineMng {
 		ltnList.add(PhoneNumberEngine.getInstance());
 		ltnList.add(PhoneBrandEngine.getInstance());
 		ltnList.add(ResolutionEngine.getInstance());
+		ltnList.add(WifiMngEngine.getInstance());
 	}
 	// 设置服务
 	private void setService(){

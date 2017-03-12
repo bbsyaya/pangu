@@ -346,7 +346,6 @@ public class ChangeDeviceInfo {
     private String ip = "";
     private Integer networkType = 0; // 网络类型，wifi,mobile
     private String networkTypeName = ""; // wifi,mobile
-    
     private Integer networkSubType = 0;
     private String networkSubTypeName = "";
     private String display = "";//显示版本

@@ -8,13 +8,13 @@ import org.turing.pangu.bean.ChangedIp;
 /*
  * ip 管理引擎
  * */
-public class IpMngEngine {
-	private static IpMngEngine mInstance = new IpMngEngine();
+public class IpLimitMngEngine {
+	private static IpLimitMngEngine mInstance = new IpLimitMngEngine();
 	private static int mIpMaxOccur = 5; // 此IP在今天最多能出现的次数
 	private List<ChangedIp> list = new ArrayList<ChangedIp>();
-	public static IpMngEngine getInstance(){
+	public static IpLimitMngEngine getInstance(){
 		if(null == mInstance)
-			mInstance = new IpMngEngine();
+			mInstance = new IpLimitMngEngine();
 		return mInstance;
 	}
 	public void clearIpList()

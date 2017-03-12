@@ -40,9 +40,11 @@ public class ResolutionEngine implements EngineListen{
 		return list;
 	}
 	public boolean isSupportResolution(PhoneBrand model,Long platform_id){
-		for(Resolution  res :resolutionList){
-			if(res.getIsSupport() == 1 && model.getHeight() == res.getHeight() 
-					&& model.getWidth() == res.getWidth() && res.getPlatformId() == platform_id){
+		List<Resolution> list = getPlatFormSupportResolution(platform_id);
+		for(Resolution  res :list){
+			System.out.print("\n model = "+model.getWidth() + "X" + model.getHeight());
+			System.out.print("\n res = "+res.getWidth() + "X" + res.getHeight());
+			if(model.getHeight().equals(res.getHeight())&& model.getWidth().equals(res.getWidth())){
 				return true;
 			}
 		}

@@ -220,9 +220,7 @@ public class MobileReportController extends BaseController {
 			result = JSON.toJSONString(rsp);
 			return result;
 		}
-
 		// ----------------------------------------------
-
 		// 1. 先验证是否为有效appid
 		App app = AppEngine.getInstance().getAppInfo(req.getAppId());
 		if (app == null) {
@@ -234,13 +232,8 @@ public class MobileReportController extends BaseController {
 		// 3. 写入DB
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		req.getDevice().setIp(remoteIp);
-		if (VpnEngine.getInstance().isWhiteIp(remoteIp)) {
-			DeviceEngine.getInstance().saveReport(req, true);
-		} else {
-			DeviceEngine.getInstance().saveReport(req, false);
-		}
+		DeviceEngine.getInstance().saveReport(req);
 		rsp.setAllData(Const.common_ok, "common_ok", null);
-
 		result = JSON.toJSONString(rsp);
 		logger.info("rsp:" + result.toString());
 		return result;

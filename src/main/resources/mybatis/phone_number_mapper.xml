@@ -49,14 +49,16 @@
     <if test="type != null" >and p.type= #{type,jdbcType=VARCHAR}</if>
     <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
   </select>
-  <!-- SELECT * from phone_number WHERE city like '%河南省南阳市%' and type like '%移动%' -->
+  <!-- SELECT * from phone_number WHERE city like '%河南省南阳市%' and type like '%移动%' 
+  LIKE '%${text}%'
+  -->
   <select id="selectPhoneNumber" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.PhoneNumber" >
     select 
     <include refid="Base_Column_List" />
     from phone_number p
     where 1=1 
-    <if test="city != null" >and p.city like  '%${city,jdbcType=VARCHAR}%'</if>
-    <if test="type != null" >and p.type like  '%${type,jdbcType=VARCHAR}%'</if>
+    <if test="city != null" >and p.city LIKE '%${city}%'</if>
+    <if test="type != null" >and p.type LIKE '%${type}%'</if>
   </select>
   
   <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.PhoneNumber" >

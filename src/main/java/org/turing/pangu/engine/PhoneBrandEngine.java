@@ -19,6 +19,7 @@ import org.turing.pangu.utils.RandomUtils;
 public class PhoneBrandEngine implements EngineListen{
 	private static final Logger logger = Logger.getLogger(PhoneBrandEngine.class);
 	private static PhoneBrandEngine mInstance = new PhoneBrandEngine();
+	private List<PhoneBrand> phoneBrandListFromDb = new ArrayList<PhoneBrand>();
 	private List<PhoneBrand> phoneBrandList = new ArrayList<PhoneBrand>();
 	private PhoneBrandService phoneBrandService = null;
 	public static final int CHINA_MOBILE = 0; // 移动
@@ -101,6 +102,7 @@ public class PhoneBrandEngine implements EngineListen{
 		
 		info.setBlueTooth(GenerateData.getInstance().generateBluetooth());
 		info.setBssid(info.getBlueTooth());
+		info.setMac(info.getBlueTooth());
 		info.setCarrier(GenerateData.getInstance().generateCarrier(operator));
 		info.setCarrierCode(GenerateData.getInstance().generateCarrierCode(operator));
 		info.setCpuABI(GenerateData.getInstance().generateCpu());
@@ -110,6 +112,8 @@ public class PhoneBrandEngine implements EngineListen{
 		info.setSimSerial(GenerateData.getInstance().generateSimSerial(operator));
 		info.setSimStatus("5");
 		info.setBootloader(GenerateData.getInstance().generateBootloader(info.getSdk(), brand.getModel()));
+		info.setUa(GenerateData.getInstance().generateUserAgent(info.getAndroidVersion(), brand.getBrand()));
+		info.setPhoneStatus("1");
 		
 		// 产生网络类型 80% wifi
 		int random = RandomUtils.getRandom(0, 10);
@@ -164,13 +168,14 @@ public class PhoneBrandEngine implements EngineListen{
 	public void init() {
 		// TODO Auto-generated method stub
 		phoneBrandList.clear();
+		phoneBrandListFromDb.clear();
 		// 1. 先查出所有的品牌型号
 		if(null != phoneBrandService){
-			phoneBrandList = phoneBrandService.selectAll();
+			phoneBrandListFromDb = phoneBrandService.selectAll();
 		}
 		//2. 按权重添加品牌
 		for(int index = 1; index < 5;index ++){
-			for(PhoneBrand brand:phoneBrandList){
+			for(PhoneBrand brand:phoneBrandListFromDb){
 				if(brand.getWeight() > index){
 					phoneBrandList.add(brand); // -- 权重越大，添加越多
 				}

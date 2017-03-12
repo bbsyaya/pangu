@@ -13,13 +13,19 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.turing.pangu.bean.HeightWidth;
 import org.turing.pangu.bean.TaskConfigureBean;
 import org.turing.pangu.bean.VpnConnectInfo;
+import org.turing.pangu.engine.AppEngine;
 import org.turing.pangu.engine.EngineMng;
+import org.turing.pangu.engine.PhoneBrandEngine;
 import org.turing.pangu.engine.VpnEngine;
 import org.turing.pangu.engine.WifiMngEngine;
+import org.turing.pangu.iptrunk.BaiduLocation;
+import org.turing.pangu.iptrunk.LocationMng;
+import org.turing.pangu.model.App;
 import org.turing.pangu.model.Computer;
 import org.turing.pangu.model.DynamicVpn;
 import org.turing.pangu.model.PhoneBrand;
 import org.turing.pangu.model.Resolution;
+import org.turing.pangu.phone.ChangeDeviceInfo;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.ComputerService;
@@ -226,10 +232,18 @@ public class TestData {
 	}
 	@Test
 	public void testWifi(){
+		EngineMng.getInstance().initEngine(getAllServiecInstance());
+		LocationMng mng = new LocationMng();
+		BaiduLocation location = mng.getLocation("116.5.244.222");
+		App app = AppEngine.getInstance().getAppInfo(1L);
+		ChangeDeviceInfo info = PhoneBrandEngine.getInstance().getNewDeviceInfo(location, app);
+		System.out.print("\n"+JSON.toJSONString(info));
+		/*
 		WifiMngEngine.getInstance().init();
 		for(int index = 0;index < 100;index++){
 			System.out.print("\n" + WifiMngEngine.getInstance().getWifiName());
 		}
+		*/
 	}
 	
 	public void testUpdateDevice() {

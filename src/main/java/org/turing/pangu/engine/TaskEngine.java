@@ -61,7 +61,7 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		todayTaskListInit();
 		allTaskList.clear();
 		allTaskList = taskService.selectAll();
-		IpMngEngine.getInstance().clearIpList();
+		IpLimitMngEngine.getInstance().clearIpList();
 		TaskDynamicIpEngine.getInstance().init(this);
 	}
 	private void todayTaskListInit(){
@@ -204,7 +204,7 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		todayTaskListInit();
 		allTaskList.clear();
 		allTaskList = taskService.selectAll();
-		IpMngEngine.getInstance().clearIpList();
+		IpLimitMngEngine.getInstance().clearIpList();
 		logger.info("createTodayTask---end");
 	}
 	private List<Task> getTodayTaskList(Date fromTime,Date toTime){
