@@ -13,6 +13,8 @@ import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.DeviceServiceImpl;
 import org.turing.pangu.utils.DateUtils;
 
+import com.alibaba.fastjson.JSON;
+
 public class DeviceEngine implements EngineListen{
 	private static final Logger logger = Logger.getLogger(DeviceEngine.class);
 	private static DeviceEngine mInstance = new DeviceEngine();
@@ -97,38 +99,15 @@ public class DeviceEngine implements EngineListen{
 		//----------------------------------------------------------------------
 		if(null == req || null == changeInfo)
 			return false;
-		if( null != changeInfo.getAndroidId())
-			device.setAndroidId(changeInfo.getAndroidId());
+
+		if(null != changeInfo){
+			device.setConfigure(JSON.toJSONString(changeInfo));
+		}
 		
-		if( null != changeInfo.getAndroidSerial())
-			device.setAndroidSerial(changeInfo.getAndroidSerial());
-			
-		if( null != changeInfo.getAndroidVersion())			
-			device.setAndroidVersion(changeInfo.getAndroidVersion());
-			
-		if( null != changeInfo.getBlueTooth())			
-			device.setBlueTooth(changeInfo.getBlueTooth());
-			
-		if( null != changeInfo.getBoard())			
-			device.setBoard(changeInfo.getBoard());
 		
-		if( null != changeInfo.getBrand())
-			device.setBrand(changeInfo.getBrand());
+		if( null != changeInfo.getBuildInfo().getBrand())
+			device.setBrand(changeInfo.getBuildInfo().getBrand());
 		
-		if( null != changeInfo.getBssid())
-			device.setBssid(changeInfo.getBssid());
-		
-		if( null != changeInfo.getCarrier())
-			device.setCarrier(changeInfo.getCarrier());
-		
-		if( null != changeInfo.getCarrierCode())
-			device.setCarrierCode(changeInfo.getCarrierCode());
-		
-		if( null != changeInfo.getCountryCode())
-			device.setCountryCode(changeInfo.getCountryCode());
-		
-		if( null != changeInfo.getDisplay())
-			device.setDisplay(changeInfo.getDisplay());
 		
 		if( null != changeInfo.getImei())
 			device.setImei(changeInfo.getImei());
@@ -138,45 +117,21 @@ public class DeviceEngine implements EngineListen{
 		
 		if( null != changeInfo.getIp())
 			device.setIp(changeInfo.getIp());
-		
 
-			//device.set(changeInfo.getLatitude());
-			//device.setAndroidSerial(changeInfo.getLongitude());
-		if( null != changeInfo.getMac())
-			device.setMac(changeInfo.getMac());
 		
-		if( null != changeInfo.getManufacture())
-			device.setManufacture(changeInfo.getManufacture());
+		if( null != changeInfo.getBuildInfo().getManufacture())
+			device.setManufacture(changeInfo.getBuildInfo().getManufacture());
 		
-		if( null != changeInfo.getModel())
-			device.setModel(changeInfo.getModel());
-		
-			//device.set(changeInfo.getOsArch());
-			//device.setAndroidSerial(changeInfo.getOsName());
-			//device.setAndroidSerial(changeInfo.getOsVersion());
+		if( null != changeInfo.getBuildInfo().getModel())
+			device.setModel(changeInfo.getBuildInfo().getModel());
+
 		if( null != changeInfo.getPhone())
 			device.setPhone(changeInfo.getPhone());
 		
-		if( null != changeInfo.getSimSerial())
-			device.setSimSerial(changeInfo.getSimSerial());
-		
-		if( null != changeInfo.getSsid())
-			device.setSsid(changeInfo.getSsid());
-		
-		if( null != changeInfo.getUa())
-			device.setUa(changeInfo.getUa());
-		
-		device.setPhoneStatus(1);
-		if( null != changeInfo.getPhoneStatus() && !changeInfo.getPhoneStatus().equals(""))
-			device.setPhoneStatus(Integer.valueOf(changeInfo.getPhoneStatus()));
-		
 		device.setSdk(19);
-		if( null != changeInfo.getSdk() && !changeInfo.getSdk().equals(""))
-			device.setSdk(Integer.valueOf(changeInfo.getSdk()));
+		if( null != changeInfo.getBuildInfo().getSdk() && !changeInfo.getBuildInfo().getSdk().equals(""))
+			device.setSdk(Integer.valueOf(changeInfo.getBuildInfo().getSdk()));
 		
-		device.setSimStatus(5);
-		if( null != changeInfo.getSimStatus() && !changeInfo.getSimStatus().equals(""))
-			device.setSimStatus(Integer.valueOf(changeInfo.getSimStatus()));
 		
 		device.setHeight(1280);
 		if( null != changeInfo.getHeight() && !changeInfo.getHeight().equals(""))
@@ -186,29 +141,14 @@ public class DeviceEngine implements EngineListen{
 		if( null != changeInfo.getWidth() && !changeInfo.getWidth().equals(""))
 			device.setWidth(Integer.valueOf(changeInfo.getWidth()));
 		
-		if( null != changeInfo.getDevice() && !changeInfo.getDevice().equals(""))
-			device.setDevice(changeInfo.getDevice());
-		
-		if( null != changeInfo.getCpuABI() && !changeInfo.getCpuABI().equals(""))
-			device.setCpuAbi(changeInfo.getCpuABI());
-		
-		if( null != changeInfo.getBootloader() && !changeInfo.getBootloader().equals(""))
-			device.setBootloader(changeInfo.getBootloader());
-		
-		if( null != changeInfo.getProduct() && !changeInfo.getProduct().equals(""))
-			device.setProduct(changeInfo.getProduct());
 		// --- 手机网络
 		if( null != changeInfo.getNetworkType() && !changeInfo.getNetworkType().equals(""))
 			device.setNetworkType(changeInfo.getNetworkType());
 		
-		if( null != changeInfo.getNetworkTypeName() && !changeInfo.getNetworkTypeName().equals(""))
-			device.setNetworkTypeName(changeInfo.getNetworkTypeName());
 		
 		if( null != changeInfo.getNetworkSubType() && !changeInfo.getNetworkSubType().equals(""))
 			device.setNetworkSubtype(changeInfo.getNetworkSubType());
 		
-		if( null != changeInfo.getNetworkSubTypeName() && !changeInfo.getNetworkSubTypeName().equals(""))
-			device.setNetworkSubtypeName(changeInfo.getNetworkSubTypeName());
 		//----------------------------------------------------------------------
 
 		device.setAppId(req.getAppId());

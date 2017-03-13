@@ -4,8 +4,8 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年03月10日 
- * @since 2017年03月10日 
+ * @version 1.0, 2017年03月13日 
+ * @since 2017年03月13日 
  */
 
 package org.turing.pangu.model;
@@ -22,7 +22,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 1913271489149972541L;
+  private static final long serialVersionUID = 356811489371957716L;
 
   /***/
   private String imeiHead;
@@ -34,25 +34,10 @@ import org.hibernate.validator.constraints.NotEmpty;
   private String model;
 
   /***/
-  private Integer height;
-
-  /***/
   private Integer width;
 
   /***/
-  private Integer os;
-
-  /***/
-  private String cpu;
-
-  /***/
-  private String gpu;
-
-  /***/
-  private String cpuFrame;
-
-  /***/
-  private Integer gps;
+  private Integer height;
 
   /***/
   private Integer weight;
@@ -65,6 +50,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 
   /***/
   private Integer chinaTelecom;
+
+  /***/
+  private String configure;
 
   /***/
   private Date createDate;
@@ -121,20 +109,6 @@ import org.hibernate.validator.constraints.NotEmpty;
   
   /**获取*/
   @JsonProperty
-  public Integer getHeight()
-  {
-   return this.height;
-  }
-
-  /**设置*/
-  public void setHeight(Integer height)
-  {
-    this.height=height;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
   public Integer getWidth()
   {
    return this.width;
@@ -149,74 +123,15 @@ import org.hibernate.validator.constraints.NotEmpty;
   
   /**获取*/
   @JsonProperty
-  public Integer getOs()
+  public Integer getHeight()
   {
-   return this.os;
+   return this.height;
   }
 
   /**设置*/
-  public void setOs(Integer os)
+  public void setHeight(Integer height)
   {
-    this.os=os;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getCpu()
-  {
-   return this.cpu;
-  }
-
-  /**设置*/
-  public void setCpu(String cpu)
-  {
-    this.cpu=cpu;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getGpu()
-  {
-   return this.gpu;
-  }
-
-  /**设置*/
-  public void setGpu(String gpu)
-  {
-    this.gpu=gpu;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getCpuFrame()
-  {
-   return this.cpuFrame;
-  }
-
-  /**设置*/
-  public void setCpuFrame(String cpuFrame)
-  {
-    this.cpuFrame=cpuFrame;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  public Integer getGps()
-  {
-   return this.gps;
-  }
-
-  /**设置*/
-  public void setGps(Integer gps)
-  {
-    this.gps=gps;
+    this.height=height;
   }
 
   
@@ -273,6 +188,21 @@ import org.hibernate.validator.constraints.NotEmpty;
   public void setChinaTelecom(Integer chinaTelecom)
   {
     this.chinaTelecom=chinaTelecom;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =21845 )
+  public String getConfigure()
+  {
+   return this.configure;
+  }
+
+  /**设置*/
+  public void setConfigure(String configure)
+  {
+    this.configure=configure;
   }
 
   

@@ -196,6 +196,34 @@ public class GenerateData {
         }
         return pre + RandomUtils.getRandomNumbers(14);
     }
+    public String generateBuildId(){
+    	return ""+RandomUtils.getRandomCapitalLetters(3)+RandomUtils.getRandomNumbers(2)+RandomUtils.getRandomCapitalLetters(1);
+    }
+    public String generateOsName()
+    {
+    	return "Linux";
+    }
+    public String generateOsArch(String cpu_abi){
+    	return cpu_abi;
+    }
+    public String generateOsVersion(){
+    	String[] linux = {"3.4.0","3.4.1","3.4.2","3.5.0","3.5.1","3.5.1","3.6.0","3.6.1","3.6.2"};
+    	return linux[RandomUtils.getRandom(0, linux.length)] + RandomUtils.getRandomNumbersAndLowerCaseLetters(8);
+    }
+    
+    public String generateDisplay(){
+    	return "";
+    }
+    public String generateIncremental(String model,String display){
+    	return model+"."+display;
+    }
+    public String generateBuildHost(){
+    	return "android-test-4.mtv.corp.google.com";
+    }
+    public String generateFingerprint(String brand,String product,String board,String id){
+    	String keys = ":user/release-keys";
+    	return brand+"/"+product+"/"+product+"/"+board+"/"+id+"/"+RandomUtils.getRandomNumbers(5)+keys;
+    }
     public  String generateAndroidSerial()
     {
         return RandomUtils.getRandomNumbersAndCapitalLetters(16);

@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.turing.pangu.iptrunk.BaiduLocation;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.PhoneBrand;
+import org.turing.pangu.phone.BrandBuildInfo;
 import org.turing.pangu.phone.ChangeDeviceInfo;
 import org.turing.pangu.phone.GenerateData;
 import org.turing.pangu.phone.NetworkSubType;
@@ -15,6 +16,9 @@ import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.PhoneBrandService;
 import org.turing.pangu.service.PhoneBrandServiceImpl;
 import org.turing.pangu.utils.RandomUtils;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 
 public class PhoneBrandEngine implements EngineListen{
 	private static final Logger logger = Logger.getLogger(PhoneBrandEngine.class);
@@ -79,16 +83,13 @@ public class PhoneBrandEngine implements EngineListen{
 		String number = PhoneNumberEngine.getInstance().getPhoneNumber(location.getContent().getAddress(), operStr);
 		if(null == number)
 			return null;
-		info.setSdk(GenerateData.getInstance().getSdk());
+		BrandBuildInfo buildInfo = JSON.parseObject(brand.getConfigure(),
+				new TypeReference<BrandBuildInfo>() {
+				});
+		info.setBuildInfo(buildInfo);
 		info.setImsi(GenerateData.getInstance().generateImsi(operator));
 		info.setImei(GenerateData.getInstance().generateImei(brand.getImeiHead()));
 		info.setPhone(number);
-		
-		info.setBrand(brand.getBrand()); // 品牌
-		info.setManufacture(brand.getBrand()); // 制造商
-		
-		info.setModel(brand.getModel());   //
-		info.setProduct(brand.getModel()); //
 		info.setHeight(brand.getHeight().toString());// 高
 		info.setWidth(brand.getWidth().toString()); // 宽
 		info.setSsid(WifiMngEngine.getInstance().getWifiName()); // wifi 名称
@@ -98,20 +99,16 @@ public class PhoneBrandEngine implements EngineListen{
 		
 		info.setAndroidId(GenerateData.getInstance().generateAndroidId());
 		info.setAndroidSerial(GenerateData.getInstance().generateAndroidSerial());
-		info.setAndroidVersion(GenerateData.getInstance().getAndroidVersion(Integer.parseInt(info.getSdk())));
+		info.setAndroidVersion(GenerateData.getInstance().getAndroidVersion(Integer.parseInt(info.getBuildInfo().getSdk())));
 		
 		info.setBlueTooth(GenerateData.getInstance().generateBluetooth());
 		info.setBssid(info.getBlueTooth());
 		info.setMac(info.getBlueTooth());
 		info.setCarrier(GenerateData.getInstance().generateCarrier(operator));
 		info.setCarrierCode(GenerateData.getInstance().generateCarrierCode(operator));
-		info.setCpuABI(GenerateData.getInstance().generateCpu());
-		info.setDisplay(GenerateData.getInstance().generateDisplay(info.getSdk(), brand.getBrand()));
-		
-		info.setBoard("unknown");
+
 		info.setSimSerial(GenerateData.getInstance().generateSimSerial(operator));
 		info.setSimStatus("5");
-		info.setBootloader(GenerateData.getInstance().generateBootloader(info.getSdk(), brand.getModel()));
 		info.setUa(GenerateData.getInstance().generateUserAgent(info.getAndroidVersion(), brand.getBrand()));
 		info.setPhoneStatus("1");
 		

@@ -4,8 +4,8 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年03月11日 
- * @since 2017年03月11日 
+ * @version 1.0, 2017年03月13日 
+ * @since 2017年03月13日 
  */
 
 package org.turing.pangu.model;
@@ -22,7 +22,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 3716951489242858510L;
+  private static final long serialVersionUID = 653941489370520017L;
 
   /***/
   private Long appId;
@@ -67,76 +67,13 @@ import org.hibernate.validator.constraints.NotEmpty;
   private Integer networkType;
 
   /***/
-  private String networkTypeName;
-
-  /***/
   private Integer networkSubtype;
-
-  /***/
-  private String networkSubtypeName;
-
-  /***/
-  private Integer simStatus;
 
   /***/
   private Integer deviceType;
 
   /***/
-  private String androidId;
-
-  /***/
-  private String androidSerial;
-
-  /***/
-  private String androidVersion;
-
-  /***/
-  private String blueTooth;
-
-  /***/
-  private String board;
-
-  /***/
-  private String bssid;
-
-  /***/
-  private String carrier;
-
-  /***/
-  private String carrierCode;
-
-  /***/
-  private String countryCode;
-
-  /***/
-  private String display;
-
-  /***/
-  private String mac;
-
-  /***/
-  private Integer phoneStatus;
-
-  /***/
-  private String simSerial;
-
-  /***/
-  private String ssid;
-
-  /***/
-  private String ua;
-
-  /***/
-  private String product;
-
-  /***/
-  private String cpuAbi;
-
-  /***/
-  private String device;
-
-  /***/
-  private String bootloader;
+  private String configure;
 
   /***/
   private Date createDate;
@@ -354,21 +291,6 @@ import org.hibernate.validator.constraints.NotEmpty;
   
   /**获取*/
   @JsonProperty
-  @Length(max =255 )
-  public String getNetworkTypeName()
-  {
-   return this.networkTypeName;
-  }
-
-  /**设置*/
-  public void setNetworkTypeName(String networkTypeName)
-  {
-    this.networkTypeName=networkTypeName;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
   public Integer getNetworkSubtype()
   {
    return this.networkSubtype;
@@ -378,35 +300,6 @@ import org.hibernate.validator.constraints.NotEmpty;
   public void setNetworkSubtype(Integer networkSubtype)
   {
     this.networkSubtype=networkSubtype;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getNetworkSubtypeName()
-  {
-   return this.networkSubtypeName;
-  }
-
-  /**设置*/
-  public void setNetworkSubtypeName(String networkSubtypeName)
-  {
-    this.networkSubtypeName=networkSubtypeName;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  public Integer getSimStatus()
-  {
-   return this.simStatus;
-  }
-
-  /**设置*/
-  public void setSimStatus(Integer simStatus)
-  {
-    this.simStatus=simStatus;
   }
 
   
@@ -427,285 +320,16 @@ import org.hibernate.validator.constraints.NotEmpty;
   
   /**获取*/
   @JsonProperty
-  @Length(max =255 )
-  public String getAndroidId()
+  @Length(max =21845 )
+  public String getConfigure()
   {
-   return this.androidId;
+   return this.configure;
   }
 
   /**设置*/
-  public void setAndroidId(String androidId)
+  public void setConfigure(String configure)
   {
-    this.androidId=androidId;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getAndroidSerial()
-  {
-   return this.androidSerial;
-  }
-
-  /**设置*/
-  public void setAndroidSerial(String androidSerial)
-  {
-    this.androidSerial=androidSerial;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getAndroidVersion()
-  {
-   return this.androidVersion;
-  }
-
-  /**设置*/
-  public void setAndroidVersion(String androidVersion)
-  {
-    this.androidVersion=androidVersion;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getBlueTooth()
-  {
-   return this.blueTooth;
-  }
-
-  /**设置*/
-  public void setBlueTooth(String blueTooth)
-  {
-    this.blueTooth=blueTooth;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getBoard()
-  {
-   return this.board;
-  }
-
-  /**设置*/
-  public void setBoard(String board)
-  {
-    this.board=board;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getBssid()
-  {
-   return this.bssid;
-  }
-
-  /**设置*/
-  public void setBssid(String bssid)
-  {
-    this.bssid=bssid;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getCarrier()
-  {
-   return this.carrier;
-  }
-
-  /**设置*/
-  public void setCarrier(String carrier)
-  {
-    this.carrier=carrier;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getCarrierCode()
-  {
-   return this.carrierCode;
-  }
-
-  /**设置*/
-  public void setCarrierCode(String carrierCode)
-  {
-    this.carrierCode=carrierCode;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getCountryCode()
-  {
-   return this.countryCode;
-  }
-
-  /**设置*/
-  public void setCountryCode(String countryCode)
-  {
-    this.countryCode=countryCode;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getDisplay()
-  {
-   return this.display;
-  }
-
-  /**设置*/
-  public void setDisplay(String display)
-  {
-    this.display=display;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getMac()
-  {
-   return this.mac;
-  }
-
-  /**设置*/
-  public void setMac(String mac)
-  {
-    this.mac=mac;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  public Integer getPhoneStatus()
-  {
-   return this.phoneStatus;
-  }
-
-  /**设置*/
-  public void setPhoneStatus(Integer phoneStatus)
-  {
-    this.phoneStatus=phoneStatus;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getSimSerial()
-  {
-   return this.simSerial;
-  }
-
-  /**设置*/
-  public void setSimSerial(String simSerial)
-  {
-    this.simSerial=simSerial;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getSsid()
-  {
-   return this.ssid;
-  }
-
-  /**设置*/
-  public void setSsid(String ssid)
-  {
-    this.ssid=ssid;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getUa()
-  {
-   return this.ua;
-  }
-
-  /**设置*/
-  public void setUa(String ua)
-  {
-    this.ua=ua;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getProduct()
-  {
-   return this.product;
-  }
-
-  /**设置*/
-  public void setProduct(String product)
-  {
-    this.product=product;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getCpuAbi()
-  {
-   return this.cpuAbi;
-  }
-
-  /**设置*/
-  public void setCpuAbi(String cpuAbi)
-  {
-    this.cpuAbi=cpuAbi;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getDevice()
-  {
-   return this.device;
-  }
-
-  /**设置*/
-  public void setDevice(String device)
-  {
-    this.device=device;
-  }
-
-  
-  /**获取*/
-  @JsonProperty
-  @Length(max =255 )
-  public String getBootloader()
-  {
-   return this.bootloader;
-  }
-
-  /**设置*/
-  public void setBootloader(String bootloader)
-  {
-    this.bootloader=bootloader;
+    this.configure=configure;
   }
 
   

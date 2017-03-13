@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.turing.pangu.controller.common.PhoneTask;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
+import org.turing.pangu.controller.phone.request.ReportReq;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Device;
@@ -24,6 +25,9 @@ import org.turing.pangu.task.VpnTask;
 import org.turing.pangu.task.VpnTaskStatistics;
 import org.turing.pangu.utils.RandomUtils;
 import org.turing.pangu.utils.TraceUtils;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 /*
  * 任务引擎，负责每日任务生成,配置任务,跟踪任务进展,
  * */
@@ -264,88 +268,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 		}
 		return false;
 	}
-	private ChangeDeviceInfo conversionDevice2ChangeDevice(Device dev){
-		ChangeDeviceInfo info = new ChangeDeviceInfo();
-        if(null != dev.getAndroidId() )
-            info.setAndroidId(dev.getAndroidId());
 
-        if(null != dev.getAndroidSerial() )
-            info.setAndroidSerial(dev.getAndroidSerial());
-
-        if(null != dev.getAndroidVersion() )
-            info.setAndroidVersion(dev.getAndroidVersion());
-
-        if(null != dev.getBlueTooth() )
-            info.setBlueTooth(dev.getBlueTooth());
-
-        if(null != dev.getBoard() )
-            info.setBoard(dev.getBoard());
-
-        if(null != dev.getBrand() )
-            info.setBrand(dev.getBrand());
-
-        if(null != dev.getBssid() )
-            info.setBssid(dev.getBssid());
-
-        if(null != dev.getCarrier() )
-            info.setCarrier(dev.getCarrier());
-
-        if(null != dev.getCarrierCode() )
-            info.setCarrierCode(dev.getCarrierCode());
-
-        if(null != dev.getCountryCode() )
-            info.setCountryCode(dev.getCountryCode());
-
-        if(null != dev.getDisplay() )
-            info.setDisplay(dev.getDisplay());
-
-        if(null != dev.getImei() )
-            info.setImei(dev.getImei());
-
-        if(null != dev.getImsi() )
-            info.setImsi(dev.getImsi());
-
-        if(null != dev.getIp() )
-            info.setIp(dev.getIp());
-
-        if(null != dev.getMac() )
-            info.setMac(dev.getMac());
-
-        if(null != dev.getManufacture() )
-            info.setManufacture(dev.getManufacture());
-
-        if(null != dev.getModel() )
-            info.setModel(dev.getModel());
-
-        if(null != dev.getPhone() )
-            info.setPhone(dev.getPhone());
-
-        if(null != dev.getPhoneStatus() )
-            info.setPhoneStatus(dev.getPhoneStatus().toString());
-
-        if(null != dev.getSdk() )
-            info.setSdk(dev.getSdk().toString());
-
-        if(null != dev.getSimStatus() )
-            info.setSimStatus(dev.getSimStatus().toString());
-
-        if(null != dev.getHeight() )
-            info.setHeight(dev.getHeight().toString());
-
-        if(null != dev.getWidth() )
-            info.setWidth(dev.getWidth().toString());
-
-        if(null != dev.getSimSerial() )
-            info.setSimSerial(dev.getSimSerial());
-
-        if(null != dev.getSsid() )
-            info.setSsid(dev.getSsid());
-
-        if(null != dev.getUa() )
-            info.setUa(dev.getUa());
-
-		return info;
-	}
 	private synchronized PhoneTask getTask(VpnTask task,String deviceId,String remoteIp,String realIp){
 		PhoneTask pTask = new PhoneTask();
 		int operType = task.getOperType();
@@ -417,7 +340,10 @@ public class TaskDynamicIpEngine implements TaskIF{
                     }
                     if(flag == 0 && task.getStatistics().isCanAllocStock() &&dev.getDevice().getAppId() == dbTask.getAppId() && isHavaTaskByOperType(operType,dbTask)){
                     	mListen.updateAllocTask(operType,dbTask); // 对应派发 ++ 
-                    	opt.setInfo(conversionDevice2ChangeDevice(dev.getDevice())); // 保存好不容易找到的存量信息，函数外赋值。
+	        			ChangeDeviceInfo info = JSON.parseObject(dev.getDevice().getConfigure(),
+	        					new TypeReference<ChangeDeviceInfo>() {
+	        					});
+                    	opt.setInfo(info); // 保存好不容易找到的存量信息，函数外赋值。
                         dev.setUsed(true);
                         dev.setSendDate(new Date());
                         logger.info("getOptimalAppId---end--find STOCK mDevice:"+dev.getDevice().toString());
