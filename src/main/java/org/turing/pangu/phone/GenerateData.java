@@ -214,15 +214,15 @@ public class GenerateData {
     public String generateDisplay(){
     	return "";
     }
-    public String generateIncremental(String model,String display){
-    	return model+"."+display;
+    public String generateIncremental(String model,String display,String time){
+    	return model+"."+display + "." + time;
     }
     public String generateBuildHost(){
     	return "android-test-4.mtv.corp.google.com";
     }
-    public String generateFingerprint(String brand,String product,String board,String id){
+    public String generateFingerprint(String brand,String product,String incremental,String id){
     	String keys = ":user/release-keys";
-    	return brand+"/"+product+"/"+product+"/"+board+"/"+id+"/"+RandomUtils.getRandomNumbers(5)+keys;
+    	return brand+"/"+product+"/"+incremental+"/"+id+"/"+RandomUtils.getRandomNumbers(5)+keys;
     }
     public  String generateAndroidSerial()
     {

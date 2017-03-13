@@ -131,6 +131,13 @@ public class BrandBuildInfo {
 		this.model = model;
 	}
 
+	public String getIncrement() {
+		return increment;
+	}
+	public void setIncrement(String increment) {
+		this.increment = increment;
+	}
+
 	private String board = "";
 	private String bootloader = "";
 	private String brand = "";
@@ -139,6 +146,7 @@ public class BrandBuildInfo {
 	private String device = "";
 	private String display = "";
 	private String radioVersion = "";
+	private String increment = "";
 	private String fingerPrint = "";
 	private String hardWare = "";
 	private String host = "";

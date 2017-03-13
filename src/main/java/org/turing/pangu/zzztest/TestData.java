@@ -1,5 +1,7 @@
 package org.turing.pangu.zzztest;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,7 +27,9 @@ import org.turing.pangu.model.Computer;
 import org.turing.pangu.model.DynamicVpn;
 import org.turing.pangu.model.PhoneBrand;
 import org.turing.pangu.model.Resolution;
+import org.turing.pangu.phone.BrandBuildInfo;
 import org.turing.pangu.phone.ChangeDeviceInfo;
+import org.turing.pangu.phone.GenerateData;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.ComputerService;
@@ -91,126 +95,10 @@ public class TestData {
 	
 	@Resource(name = "resolutionServiceImpl")
 	private ResolutionService resolutionService;
-	/*
-	 * @Test public void testInsertPlatform(){ Platform pf = new Platform();
-	 * pf.setCreateDate(new Date()); pf.setCreateDate(new Date());
-	 * pf.setName("小神灯"); pf.setIntroduce("介绍小神灯"); pf.setUpdateDate(new
-	 * Date()); platformService.insert(pf); }
-	 * 
-	 * @Test public void testInsertUser() { User user = new User();
-	 * user.setCreateDate(new Date()); user.setUpdateDate(new Date());
-	 * user.setIp("127.0.0.1"); user.setPhone("15817321796");
-	 * user.setName("turing"); user.setPassword("123123");
-	 * userService.insert(user);
-	 * 
-	 * }
-	 * 
-	 * @Test public void testInsertApp(){
-	 * 
-	 * App app = new App(); app.setCreateDate(new Date());
-	 * app.setPlatformId(1L); app.setUserId(1L); app.setUpdateDate(new Date());
-	 * 
-	 * app.setApkPath("wzq.apk"); app.setName("天天五子棋");
-	 * app.setPackageName("org.kyf.xsd.wzq");
-	 * app.setToken("3A667ACDE49623D32A39A316521F4"); appService.insert(app);
-	 * 
-	 * app.setApkPath("wzry.apk"); app.setName("亡者荣耀");
-	 * app.setPackageName("org.kyf.xsd.wzry");
-	 * app.setToken("BD395BF96128FC6339F4E3155C18F"); appService.insert(app);
-	 * 
-	 * app.setApkPath("wzt.apk"); app.setName("女王武则天");
-	 * app.setPackageName("org.kyf.xsd.wzt");
-	 * app.setToken("867BD3F1FE69A796BC523464497DA"); appService.insert(app);
-	 * 
-	 * app.setApkPath("test.apk"); app.setName("测试");
-	 * app.setPackageName("ni.wo.test");
-	 * app.setToken("90OKIJUHHHUUJ796BC523464497DA"); appService.insert(app); }
-	 * 
-	 * @Test public void testInsertVpn(){ RemainVpn vpn = new RemainVpn();
-	 * vpn.setCreateDate(new Date()); vpn.setUpdateDate(new Date());
-	 * vpn.setName("山东VPN"); vpn.setIpList(
-	 * "101.105.54.92|220.80.21.78|123.43.67.129|200.30.201.178|23.143.167.29|20.180.213.8|13.143.207.168"
-	 * ); remainVpnService.insert(vpn);
-	 * 
-	 * vpn.setName("广东VPN"); vpn.setIpList(
-	 * "10.205.154.192|120.180.221.178|230.63.79.29|140.130.101.78|123.43.67.129|207.18.138.82|103.143.107.68"
-	 * ); remainVpnService.insert(vpn); }
-	 */
-	/*
-	 * @Test public void testInsertDevice(){ Device dev = new Device();
-	 * dev.setCreateDate(new Date()); dev.setUpdateDate(new Date());
-	 * 
-	 * for(int index = 0; index < 1000; index++){
-	 * dev.setImei(RandomUtils.getRandom(16)); dev.setIsRemainIp(1);
-	 * dev.setDeviceType(0); dev.setIsActived(1); String ipAddress = ""; {
-	 * Integer ip0 = (int)(Math.random() * 255); Integer ip1 =
-	 * (int)(Math.random() * 255); Integer ip2 = (int)(Math.random() * 255);
-	 * Integer ip3 = (int)(Math.random() * 255); ipAddress = ip0.toString()+":"
-	 * +ip1.toString()+":" +ip2.toString()+":" +ip3.toString(); }
-	 * dev.setIp(ipAddress); int random = (int)(Math.random() * 100); int mod =
-	 * random%4 + 1; dev.setAppId((long) mod); deviceService.insert(dev);
-	 * dev.setCreateDate(new Date()); dev.setUpdateDate(new Date()); } }
-	 */
+
 	
 	private String getStr(int index,String ip){
-		List<VpnConnectInfo> lista = new ArrayList<VpnConnectInfo>();
-
-		if( index == 1){
-			VpnConnectInfo a = new VpnConnectInfo();
-			VpnConnectInfo b = new VpnConnectInfo();
-			VpnConnectInfo c = new VpnConnectInfo();
-			VpnConnectInfo d = new VpnConnectInfo();
-			
-			a.setVpnName("Turing");
-			a.setTunnelType("Automatic");
-			a.setIp(ip);
-			a.setAuthenticationMethod("{Chap, MsChapv2}");
-			a.setEncryptionLevel("Optional");
-			a.setUserName("radiusyun04\\airobot");
-			a.setPassword("qwerfdsa");
-			lista.add(a);
-			
-			b.setVpnName("Turing");
-			b.setTunnelType("Automatic");
-			b.setIp(ip);
-			b.setAuthenticationMethod("{Chap, MsChapv2}");
-			b.setEncryptionLevel("Optional");
-			b.setUserName("airobot");
-			b.setPassword("qwerfdsa");
-			lista.add(b);
-	
-			c.setVpnName("Turing");
-			c.setTunnelType("Automatic");
-			c.setIp(ip);
-			c.setAuthenticationMethod("{Chap, MsChapv2}");
-			c.setEncryptionLevel("Optional");
-			c.setUserName("chuanqi520");
-			c.setPassword("27933460ac9a");
-			lista.add(c);
-	
-			d.setVpnName("Turing");
-			d.setTunnelType("Automatic");
-			d.setIp(ip);
-			d.setAuthenticationMethod("{Chap, MsChapv2}");
-			d.setEncryptionLevel("Optional");
-			d.setUserName("moshouzx");
-			d.setPassword("b7d6a5358a6b");
-			lista.add(d);
-		}else{
-			VpnConnectInfo a = new VpnConnectInfo();
-			a.setVpnName("Turing");
-			a.setTunnelType("Automatic");
-			a.setIp(ip);
-			a.setAuthenticationMethod("{Chap, MsChapv2, Pap}");
-			a.setEncryptionLevel("L2tp");
-			a.setUserName("airobot");
-			a.setPassword("qwerfdsa");
-			lista.add(a);
-		}
-		
-		String json = JSON.toJSONString(lista);
-		// L2tp Pptp	
-		return json;
+		return null;
 	}
 	private List<BaseService> getAllServiecInstance(){
 		List<BaseService> list = new ArrayList<BaseService>();
@@ -230,7 +118,7 @@ public class TestData {
 		list.add(resolutionService);
 		return list;
 	}
-	@Test
+	
 	public void testWifi(){
 		EngineMng.getInstance().initEngine(getAllServiecInstance());
 		LocationMng mng = new LocationMng();
@@ -245,63 +133,80 @@ public class TestData {
 		}
 		*/
 	}
-	
+	@Test
 	public void testUpdateDevice() {
 		//EngineMng.getInstance().initEngine(getAllServiecInstance());		
 		List<PhoneBrand> list = new ArrayList<PhoneBrand>();
 		list = phoneBrandService.selectAll();
-		List<HeightWidth> hwList = new ArrayList<HeightWidth>();
-		int flag = 0;
-		for(PhoneBrand brand:list){
-			flag = 0;
-			HeightWidth hwidth = new HeightWidth();
-			hwidth.setHeight(brand.getHeight());
-			hwidth.setWidth(brand.getWidth());
-			for(HeightWidth hw :hwList){
-				if(hwidth.getHeight() == hw.getHeight() && hwidth.getWidth() == hw.getWidth()){
-					flag = 1;
-					break;
-				}
-			}
-			if(flag == 0){
-				hwList.add(hwidth);
-			}
-		}
-		for(HeightWidth hw :hwList){
-			Resolution res = new Resolution();
-			res.setHeight(hw.getHeight());
-			res.setWidth(hw.getWidth());
-			res.setPlatformId(1L);
-			res.setIsSupport(1);
-			resolutionService.insert(res);
-		}
 		/*
-		for(PhoneBrand brand:list){
-			int random = RandomUtils.getRandom(100);
-			if(random % 20 == 0){
-				brand.setImeiHead("35");
-			}else{
-				brand.setImeiHead("46");
-			}
-			brand.setChinaMobile(1);
-			brand.setChinaTelecom(1);
-			brand.setChinaUnicom(1);
-			brand.setCreateDate(new Date());
-			brand.setUpdateDate(new Date());
-			phoneBrandService.update(brand);
-		}
+		PRODUCT: soju,  
+		CPU_ABI: armeabi-v7a,  
+		TAGS: release-keys,    
+		VERSION_CODES.BASE: 1,  
+		MODEL: Nexus S,  
+		SDK: 10,  
+		VERSION.RELEASE: 2.3.6,  
+		DEVICE: crespo,  
+		DISPLAY: GRK39F,  
+		BRAND: google,  
+		BOARD: herring,    
+		FINGERPRINT: google/soju/crespo:2.3.6/GRK39F/189904:user/release-keys,  
+		ID: GRK39F,  
+		MANUFACTURER: samsung,  
+		USER: android-build  
 		*/
-		
-		//for(Device dev :list){
-			//IpTrunkEngine.getInstance().saveIpInfoToDb(dev.getIp());
-		//}119.90.141.77
-		//List<Device> cityIpList = DeviceEngine.getInstance().selectLastWeekExcludeTodayByIp("119.90.141.77");
-		//List<StockTask> stockList = IpTrunkEngine.getInstance().getStockInfoList("119.90.141.77");
-		//List<Device> list = deviceService.selectAll();
-		//for(Device dev :list){
-			//IpTrunkEngine.getInstance().saveIpInfoToDb(dev.getIp());
-			//i++;
-		//}
+		BrandBuildInfo buildInfo = new BrandBuildInfo();
+		String[] times = { "2015-11-04","2014-11-03","2015-01-24","2016-02-19","2015-08-07" };
+		 
+		//Flyme OS 4.1.3.5A，MIUI，华为EMUI 
+		// Huawei/JAZZ/hi3630:4.4.2/KOT49H/eng.jenkins.20141022.090132:user/test-keys
+		// cpu hi3630,Kirin 920
+		for(PhoneBrand brand:list){
+			buildInfo.setBrand(brand.getBrand());
+			buildInfo.setModel(brand.getModel());
+			buildInfo.setManufacture(brand.getModel());
+			buildInfo.setType("user");
+			buildInfo.setBootloader("unknown");
+			buildInfo.setTags("release-keys");
+			buildInfo.setId(GenerateData.getInstance().generateBuildId());
+			buildInfo.setSerial(RandomUtils.getRandomNumbers(3)+RandomUtils.getRandomCapitalLetters(9));
+			
+			buildInfo.setUser((RandomUtils.getRandom(10)%3==0)?"root":"user");
+			
+			buildInfo.setCpu_abi(GenerateData.getInstance().generateCpu());
+			buildInfo.setSdk(GenerateData.getInstance().getSdk());
+			buildInfo.setDevice(buildInfo.getDisplay());
+			buildInfo.setHardWare(buildInfo.getCpu_abi());
+			String[] products = {};
+			String product = "";
+			{
+				products = buildInfo.getModel().split(" ");
+				if(products.length == 1){
+					products = buildInfo.getModel().split("-");
+				}
+				product = products[products.length-1];
+			}
+			buildInfo.setProduct(product);
+			buildInfo.setDisplay(product);
+			buildInfo.setBoard(product);
+			buildInfo.setRadioVersion(buildInfo.getModel()+"."+RandomUtils.getRandomNumbersAndCapitalLetters(RandomUtils.getRandom(6, 8)));
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  
+			Date date = null;
+			try {
+				date = sdf.parse(times[RandomUtils.getRandom(0,times.length)]);
+				buildInfo.setTime(date.toString());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			buildInfo.setIncrement(GenerateData.getInstance().generateIncremental(buildInfo.getModel(), buildInfo.getDisplay(), buildInfo.getTime()));
+			buildInfo.setFingerPrint(GenerateData.getInstance().generateFingerprint(buildInfo.getBrand(), buildInfo.getModel(), buildInfo.getIncrement(), buildInfo.getId()));
+			if(!brand.getBrand().equalsIgnoreCase("oppo") && !brand.getBrand().equalsIgnoreCase("vivo")
+					&&!brand.getBrand().equalsIgnoreCase("huawei")){
+				brand.setConfigure(JSON.toJSONString(buildInfo));
+				phoneBrandService.update(brand);
+			}
+		}
 	}
 
 	public void remain() {
