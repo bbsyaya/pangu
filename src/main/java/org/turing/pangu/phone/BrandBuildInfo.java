@@ -138,6 +138,32 @@ public class BrandBuildInfo {
 		this.increment = increment;
 	}
 
+	public String getOsName() {
+		return osName;
+	}
+	public void setOsName(String osName) {
+		this.osName = osName;
+	}
+	public String getOsArch() {
+		return osArch;
+	}
+	public void setOsArch(String osArch) {
+		this.osArch = osArch;
+	}
+	public String getOsVersion() {
+		return osVersion;
+	}
+	public void setOsVersion(String osVersion) {
+		this.osVersion = osVersion;
+	}
+
+	public String getAndroidVersion() {
+		return androidVersion;
+	}
+	public void setAndroidVersion(String androidVersion) {
+		this.androidVersion = androidVersion;
+	}
+
 	private String board = "";
 	private String bootloader = "";
 	private String brand = "";
@@ -160,7 +186,10 @@ public class BrandBuildInfo {
 	private String user = "";
 	private String sdk = "";
 	private String model = "";
-	
+    private String osName = "";
+    private String osArch = "";
+    private String osVersion = "";
+    private String androidVersion = "";
 	/** * 获取指定字段信息 * @return 
     private String getDeviceInfo(){
         StringBuffer sb =new StringBuffer();

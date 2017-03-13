@@ -48,6 +48,7 @@ import org.turing.pangu.service.VpnGroupService;
 import org.turing.pangu.utils.RandomUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring.xml",
@@ -157,10 +158,21 @@ public class TestData {
 		*/
 		BrandBuildInfo buildInfo = new BrandBuildInfo();
 		String[] times = { "2015-11-04","2014-11-03","2015-01-24","2016-02-19","2015-08-07" };
-		 
+		for(PhoneBrand brand:list){
+			BrandBuildInfo info = JSON.parseObject(brand.getConfigure(),new TypeReference<BrandBuildInfo>(){
+	        });
+			info.setAndroidVersion(GenerateData.getInstance().getAndroidVersion(Integer.parseInt(info.getSdk())));
+			info.setOsName(GenerateData.getInstance().generateOsName());
+			info.setOsArch(GenerateData.getInstance().generateOsArch(info.getCpu_abi()));
+			info.setOsVersion(GenerateData.getInstance().generateOsVersion());
+			info.setHost(RandomUtils.getRandomNumbersAndCapitalLetters(RandomUtils.getRandom(5, 7)));
+			brand.setConfigure(JSON.toJSONString(info));
+			phoneBrandService.update(brand);
+		}
 		//Flyme OS 4.1.3.5A，MIUI，华为EMUI 
 		// Huawei/JAZZ/hi3630:4.4.2/KOT49H/eng.jenkins.20141022.090132:user/test-keys
 		// cpu hi3630,Kirin 920
+		/*
 		for(PhoneBrand brand:list){
 			buildInfo.setBrand(brand.getBrand());
 			buildInfo.setModel(brand.getModel());
@@ -206,7 +218,7 @@ public class TestData {
 				brand.setConfigure(JSON.toJSONString(buildInfo));
 				phoneBrandService.update(brand);
 			}
-		}
+		}*/
 	}
 
 	public void remain() {

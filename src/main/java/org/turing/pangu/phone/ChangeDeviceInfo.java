@@ -77,24 +77,6 @@ public class ChangeDeviceInfo {
 	public void setCountryCode(String countryCode) {
 		this.countryCode = countryCode;
 	}
-	public String getOsName() {
-		return osName;
-	}
-	public void setOsName(String osName) {
-		this.osName = osName;
-	}
-	public String getOsArch() {
-		return osArch;
-	}
-	public void setOsArch(String osArch) {
-		this.osArch = osArch;
-	}
-	public String getOsVersion() {
-		return osVersion;
-	}
-	public void setOsVersion(String osVersion) {
-		this.osVersion = osVersion;
-	}
 	public Double getLatitude() {
 		return latitude;
 	}
@@ -130,12 +112,6 @@ public class ChangeDeviceInfo {
 	}
 	public void setAndroidSerial(String androidSerial) {
 		this.androidSerial = androidSerial;
-	}
-	public String getAndroidVersion() {
-		return androidVersion;
-	}
-	public void setAndroidVersion(String androidVersion) {
-		this.androidVersion = androidVersion;
 	}
 	public String getUa() {
 		return ua;
@@ -197,16 +173,12 @@ public class ChangeDeviceInfo {
     private String carrier = "";
     private String carrierCode = "";
     private String countryCode = "CN";
-    private String osName = "";
-    private String osArch = "";
-    private String osVersion = "";
     private Double latitude  = 0D; // 纬度
     private Double longitude = 0D;// 经度
     private String simStatus = ""; // 手机卡状态
     private String simSerial = "";
     private String androidId = "";
     private String androidSerial = "";
-    private String androidVersion = "";
     private String ua = "";
     private String ip = "";
     private Integer networkType = 0; // 网络类型，wifi,mobile

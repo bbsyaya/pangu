@@ -99,7 +99,6 @@ public class PhoneBrandEngine implements EngineListen{
 		
 		info.setAndroidId(GenerateData.getInstance().generateAndroidId());
 		info.setAndroidSerial(GenerateData.getInstance().generateAndroidSerial());
-		info.setAndroidVersion(GenerateData.getInstance().getAndroidVersion(Integer.parseInt(info.getBuildInfo().getSdk())));
 		
 		info.setBlueTooth(GenerateData.getInstance().generateBluetooth());
 		info.setBssid(info.getBlueTooth());
@@ -109,8 +108,9 @@ public class PhoneBrandEngine implements EngineListen{
 
 		info.setSimSerial(GenerateData.getInstance().generateSimSerial(operator));
 		info.setSimStatus("5");
-		info.setUa(GenerateData.getInstance().generateUserAgent(info.getAndroidVersion(), brand.getBrand()));
+		info.setUa(GenerateData.getInstance().generateUserAgent(info.getBuildInfo().getAndroidVersion(), brand.getBrand()));
 		info.setPhoneStatus("1");
+
 		
 		// 产生网络类型 80% wifi
 		int random = RandomUtils.getRandom(0, 10);

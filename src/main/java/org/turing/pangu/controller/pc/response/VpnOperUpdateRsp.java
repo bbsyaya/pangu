@@ -49,14 +49,19 @@ public class VpnOperUpdateRsp extends BaseRsp{
 	public void setStatistics(VpnTaskStatistics statistics) {
 		this.statistics = statistics;
 	}
-
+	public int getRunningCount() {
+		return runningCount;
+	}
+	public void setRunningCount(int runningCount) {
+		this.runningCount = runningCount;
+	}
 
 	private String remoteIp;	//getRemoteAddr
 	private String realIp; 		//x-forwarded-for
 	private int isSwitchVpn;    //1: 是 0:否
 	private int loopTime;		// 下次询问时长 单位秒
 	private int taskTotal = 0;		// 任务总数
-	
+	private int runningCount = 0; // 正在运行任务数，正常始终等于模拟器的数量
 	private VpnTaskStatistics statistics;
 	private VpnConnectInfoRsp connectInfo;
 }

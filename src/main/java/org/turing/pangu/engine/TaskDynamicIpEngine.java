@@ -111,6 +111,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 		logger.info("vpnLogin---end");
 		return task.getToken();
 	}
+
 	@Override
 	public synchronized VpnOperUpdateRsp vpnIsNeedSwitch(String token,String remoteIp,String realIp){
 		TraceUtils.getTraceInfo();
@@ -135,6 +136,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 					dataRsp.setIsSwitchVpn(1);
 					break;
 				}
+				dataRsp.setRunningCount(task.getPhoneTaskList().size() + task.getPhoneStockTaskList().size());
 			}
 		}
 		logger.info("vpnIsNeedSwitch----end");
@@ -214,6 +216,19 @@ public class TaskDynamicIpEngine implements TaskIF{
 		}
 		logger.info("taskFinish---end");
 	}
+	// 删除该模拟器原有的任务
+	private void addTaskAndDelSame(List<PhoneTask> list,PhoneTask addTask){
+		if( list.size() > 0){
+			for (int i = list.size()-1; i >=0; i--){
+				PhoneTask tmp = list.get(i);
+				if(tmp.getDeviceId().equals(addTask.getDeviceId())){
+					list.remove(tmp); // 删除原来的VPN task
+					logger.info("addTaskAndDelSame--del old PhoneTask");
+				}
+			}
+		}
+		list.add(addTask);
+	}
 	//取一个任务
 	@Override
 	public synchronized PhoneTask getTask(String deviceId,String remoteIp,String realIp){
@@ -247,10 +262,10 @@ public class TaskDynamicIpEngine implements TaskIF{
 					logger.info("Task:"+pTask.toString());
 					if(pTask.getOperType() == TaskEngine.INCREMENT_MONEY_TYPE || pTask.getOperType() == TaskEngine.INCREMENT_WATERAMY_TYPE ){
 						task.getStatistics().setTaskAllocIncrementCount(task.getStatistics().getTaskAllocIncrementCount()+ 1); // 分配任务++
-						task.getPhoneTaskList().add(pTask);
+						addTaskAndDelSame(task.getPhoneTaskList(),pTask);
 					}else{
 						task.getStatistics().setTaskAllocStockCount(task.getStatistics().getTaskAllocStockCount()+1);
-						task.getPhoneStockTaskList().add(pTask);
+						addTaskAndDelSame(task.getPhoneStockTaskList(),pTask);
 					}
 				}else{
 					logger.info("this ip task all alloc ");

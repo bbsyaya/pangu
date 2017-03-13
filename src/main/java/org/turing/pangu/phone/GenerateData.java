@@ -208,7 +208,7 @@ public class GenerateData {
     }
     public String generateOsVersion(){
     	String[] linux = {"3.4.0","3.4.1","3.4.2","3.5.0","3.5.1","3.5.1","3.6.0","3.6.1","3.6.2"};
-    	return linux[RandomUtils.getRandom(0, linux.length)] + RandomUtils.getRandomNumbersAndLowerCaseLetters(8);
+    	return linux[RandomUtils.getRandom(0, linux.length)] + " " +RandomUtils.getRandomNumbersAndLowerCaseLetters(8);
     }
     
     public String generateDisplay(){
