@@ -11,12 +11,13 @@ import org.turing.pangu.controller.phone.request.GetTaskReq;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.controller.phone.response.GetTaskRsp;
 import org.turing.pangu.model.Device;
+import org.turing.pangu.utils.HttpUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 public class testTask {
 	private String host = "http://localhost:8080/";
-	//http://pangu.u-app.cn/
+	//private String host = "http://pangu.u-app.cn/";
 	public void test(){
 		String contentStr = "";
 		GetTaskRsp rsp = JSON.parseObject(contentStr,
@@ -37,32 +38,40 @@ public class testTask {
         String encoding=System.getProperty("file.encoding");
         System.out.println("Default System Encoding: " + encoding);
         */
-		VpnLoginRsp rsp = loginPangu(0,"kwwwkkk0k");
+		VpnLoginRsp rsp = loginPangu(0,"kwwwkkk0www");
 		for(int index = 0;index < 1;index++){
 			try {
 				GetTaskRsp rsp1 = getTask("2333"+index);
 				Thread.sleep(1000);
-				taskFinish(rsp1,0);
-				operUpdate(rsp.getToken());
+				if(rsp1.getIsHaveTask() == 1){
+					taskFinish(rsp1,0);
+				}
+				//operUpdate(rsp.getToken());
 				
 				
 				GetTaskRsp rsp2 = getTask("2333333"+index);				
 				Thread.sleep(1000);
-				operUpdate(rsp.getToken());
-				taskFinish(rsp2,1);
+				if(rsp2.getIsHaveTask() == 1){
+				//operUpdate(rsp.getToken());
+					taskFinish(rsp2,1);
+				}
 				
 				
-				operUpdate(rsp.getToken());
+				//operUpdate(rsp.getToken());
 				
 				GetTaskRsp rsp3 = getTask("233999"+index);
 				Thread.sleep(1000);
-				taskFinish(rsp3,0);
+				if(rsp3.getIsHaveTask() == 1){
+					taskFinish(rsp3,0);
+				}
 				
-				operUpdate(rsp.getToken());
+				//operUpdate(rsp.getToken());
 				
 				GetTaskRsp rsp4 = getTask("233555999"+index);
 				Thread.sleep(1000);
-				taskFinish(rsp4,0);
+				if(rsp4.getIsHaveTask() == 1){
+					taskFinish(rsp4,0);
+				}
 				
 				operUpdate(rsp.getToken());
 			} catch (Exception e) {

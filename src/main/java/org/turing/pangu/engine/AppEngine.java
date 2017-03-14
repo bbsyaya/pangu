@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.turing.pangu.bean.PlatformApp;
 import org.turing.pangu.model.App;
+import org.turing.pangu.model.Platform;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.AppServiceImpl;
 import org.turing.pangu.service.BaseService;
@@ -23,6 +25,20 @@ public class AppEngine implements EngineListen{
 
 	public List<App> getAppList(){
 		return appList;
+	}
+	public List<PlatformApp> getPlatformAppList(){
+		List<PlatformApp> list = new ArrayList<PlatformApp>();
+		for(Platform pf : PlatformEngine.getInstance().getPlatformList()){
+			PlatformApp pa = new PlatformApp();
+			for(App app:appList){
+				if( app.getPlatformId() == pf.getId()){
+					pa.getAppList().add(app);
+				}
+			}
+			pa.setPf(pf);
+			list.add(pa);
+		}
+		return list;
 	}
 	public App getAppInfo(long appId){
 		for(App app:appList){

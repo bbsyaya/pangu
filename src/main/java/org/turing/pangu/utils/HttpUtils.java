@@ -1,4 +1,4 @@
-package org.turing.pangu.zzztest;
+package org.turing.pangu.utils;
 
 
 import java.io.BufferedInputStream;

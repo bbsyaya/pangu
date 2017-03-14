@@ -238,7 +238,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 		logger.info("deviceId:"+deviceId+"--remoteIp:"+remoteIp+"--realIp:"+realIp);
 		for(VpnTask task:vpnTaskList){
 			if(task.getRemoteIp().equals(remoteIp)){
-				if(task.getPhoneTaskList().size() > (task.getStatistics().getTaskStockTotalCount() + task.getStatistics().getTaskIncrementTotalCount()) * TimeZoneMng.getInstance().getTimeZoneWeight() ){
+				if(task.getPhoneTaskList().size() > (task.getStatistics().getTaskStockTotalCount() + task.getStatistics().getTaskIncrementTotalCount()) * TimeMng.getInstance().getTimeZoneWeight() ){
 					return pTask;
 				}
 				for(PhoneTask tmpTask:task.getPhoneTaskList()){

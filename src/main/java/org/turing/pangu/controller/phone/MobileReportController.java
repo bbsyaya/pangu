@@ -32,7 +32,7 @@ import org.turing.pangu.engine.AppEngine;
 import org.turing.pangu.engine.DeviceEngine;
 import org.turing.pangu.engine.PlatformEngine;
 import org.turing.pangu.engine.TaskEngine;
-import org.turing.pangu.engine.TimeZoneMng;
+import org.turing.pangu.engine.TimeMng;
 import org.turing.pangu.engine.VpnEngine;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Platform;
@@ -143,17 +143,12 @@ public class MobileReportController extends BaseController {
 		logger.info("getAppInfo---end" + model.toString());
 		return model;
 	}
-	// 取新设备信息 
-	@RequestMapping(value = "/getNewDeviceInfo", method = RequestMethod.POST)
-	public @ResponseBody GetNewPhoneInfoRsp getNewDeviceInfo(HttpServletRequest request) {
-		
-		return null;
-	}
 	/*
 	 * 手机端请求任务
 	 * */
 	@RequestMapping(value = "/getTask", method = RequestMethod.POST)
 	public @ResponseBody GetTaskRsp getTask(HttpServletRequest request) {
+		Date start = new Date();
 		TraceUtils.getTraceInfo();
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);
@@ -171,19 +166,22 @@ public class MobileReportController extends BaseController {
 			rsp.setTask(task);
 			rsp.setIsHaveTask(1);
 		}
-		rsp.setLoopTime(TimeZoneMng.SPAN_TIME);
+		rsp.setLoopTime(TimeMng.SPAN_TIME);
 		rsp.setTaskIp(remoteIp);
 		logger.info("rsp:" + JSON.toJSONString(rsp).toString());
+		TimeMng.spellTime(start);
 		return rsp;
 	}
+
 	/*
 	 * 任务完成情况
 	 * */
 	@RequestMapping(value = "/taskFinish", method = RequestMethod.POST)
-	public @ResponseBody String taskFinish(HttpServletRequest request,
-			HttpServletResponse rsp) {
+	public @ResponseBody PGResponse<String> taskFinish(HttpServletRequest request,
+			HttpServletResponse rspod) {
+		Date start = new Date();
 		TraceUtils.getTraceInfo();
-		String result = "";
+		PGResponse<String> rsp = new PGResponse<String>();
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		String realIp = TaskEngine.getInstance().getRealIp(request);
 		String contentStr = getRequestBody(request);
@@ -194,8 +192,11 @@ public class MobileReportController extends BaseController {
 				});
 		
 		TaskEngine.getInstance().taskFinish(req,remoteIp,realIp);
-		logger.info("taskFinish---end" + new Date());
-		return "";
+		rsp.setAllData(Const.common_ok, "common_ok", null);
+		String result = JSON.toJSONString(rsp);
+		logger.info("taskFinish---end" + result);
+		TimeMng.spellTime(start);
+		return rsp;
 	}
 	/**
 	 * 获取短信接口
@@ -203,8 +204,9 @@ public class MobileReportController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/report", method = RequestMethod.POST)
-	public @ResponseBody String report(HttpServletRequest request,
+	public @ResponseBody PGResponse<String> report(HttpServletRequest request,
 			HttpServletResponse rspod) {
+		Date start = new Date();
 		TraceUtils.getTraceInfo();
 		String result = "";
 		PGResponse<String> rsp = new PGResponse<String>();
@@ -218,7 +220,8 @@ public class MobileReportController extends BaseController {
 		if (null == req || req.equals("")) {
 			rsp.setAllData(Const.common_error, "common_error", null);
 			result = JSON.toJSONString(rsp);
-			return result;
+			logger.info("rsp:" + result.toString());
+			return rsp;
 		}
 		// ----------------------------------------------
 		// 1. 先验证是否为有效appid
@@ -226,7 +229,8 @@ public class MobileReportController extends BaseController {
 		if (app == null) {
 			rsp.setAllData(Const.common_error, "common_error", null);
 			result = JSON.toJSONString(rsp);
-			return result;
+			logger.info("rsp:" + result.toString());
+			return rsp;
 		}
 		// 2. 验证是否为 VPN ip
 		// 3. 写入DB
@@ -236,7 +240,8 @@ public class MobileReportController extends BaseController {
 		rsp.setAllData(Const.common_ok, "common_ok", null);
 		result = JSON.toJSONString(rsp);
 		logger.info("rsp:" + result.toString());
-		return result;
+		TimeMng.spellTime(start);
+		return rsp;
 	}
 	
 	private String getRequestBody(HttpServletRequest request){

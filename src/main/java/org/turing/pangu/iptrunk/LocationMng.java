@@ -1,5 +1,7 @@
 package org.turing.pangu.iptrunk;
-import org.turing.pangu.zzztest.HttpUtils;
+
+
+import org.turing.pangu.utils.HttpUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;

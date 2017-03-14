@@ -88,8 +88,11 @@ public class IpTrunkEngine implements EngineListen{
 		// 通过ip 得到 城市 code
 		LocationMng mng = new LocationMng();
 		BaiduLocation location = mng.getLocation(ip);
-		if( null == location || location.getStatus().equals("1"))
+		if( null == location || location.getStatus().equals("1")){
 			return result;
+		}else{
+			result.setLocation(location); // 先设置好位置信息
+		}
 		
 		IpTrunk ipTrunk = new IpTrunk();
 		ipTrunk.setCityCode(Integer.parseInt(location.getContent().getAddress_detail().getCityCode())); // 城市code 一致就OK 
@@ -122,7 +125,7 @@ public class IpTrunkEngine implements EngineListen{
 		}
 		// 通过ip 查 对应的记录
 		result.setStockList(stockDeviceList);
-		result.setLocation(location);
+		
 		return result;
 	}
 	@Override

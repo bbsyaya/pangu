@@ -33,7 +33,8 @@ public class ResolutionEngine implements EngineListen{
 	public List<Resolution> getPlatFormSupportResolution(Long platform_id){
 		List<Resolution> list = new ArrayList<Resolution>();
 		for(Resolution  res :resolutionList){
-			if(res.getIsSupport() == 1 && res.getPlatformId() == platform_id){
+			//if(res.getIsSupport() == 1 && res.getPlatformId() == platform_id){ // 目前分辨率不分平台
+			if(res.getIsSupport() == 1){
 				list.add(res);
 			}
 		}

@@ -12,6 +12,7 @@ import org.turing.pangu.controller.common.PhoneTask;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
+import org.turing.pangu.model.App;
 import org.turing.pangu.model.Task;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.TaskService;
@@ -38,7 +39,14 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 	
 	public static final int USED_STATIC_VPN = 0;//操作类型  0:静态VPN 1:动态VPN
 	public static final int USED_DYNAMIC_VPN = 1;
+	
+	public static final int INCREMENT_MONEY_TASK_COUNT = 30000;
+	public static final int INCREMENT_WATER_AMY_TASK_COUNT = 300000;
+	public static final int STOCK_MONEY_TASK_COUNT = 6000;
+	public static final int STOCK_WATER_AMY_TASK_COUNT = 18000;
+
 	private TaskService taskService;
+	
 	public static TaskEngine getInstance(){
 		if(null == mInstance)
 			mInstance = new TaskEngine();
@@ -90,14 +98,14 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		}
 		return list;
 	}
-	public synchronized String getRemoteIp(HttpServletRequest request){
+	public synchronized String getRemoteIp11(HttpServletRequest request){
 		String ip = request.getHeader("X-Real-IP"); 
 		if(null == ip ){
 			ip = request.getRemoteAddr();
 		}
 		return ip;
 	}
-	public synchronized String getRemoteIpTest(HttpServletRequest request){
+	public synchronized String getRemoteIp(HttpServletRequest request){
 		return "119.90.141.77";
 	}
 	/** 
@@ -174,7 +182,7 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 	// 创建今日任务
 	public void createTodayTask(){
 		logger.info("createTodayTask---000");
-		List<TaskConfigureBean> list = TaskConfigureEngine.getInstance().getAllAppConfigure();
+		//List<TaskConfigureBean> list = TaskConfigureEngine.getInstance().getAllAppConfigure();
 		updateTaskToDBJob(); // 先保存
 		try {
 			Thread.sleep(1000);
@@ -187,14 +195,14 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		//先查下今天记录
 		List<Task> listFromDB = getTodayTaskList(DateUtils.getTimesMorning(), DateUtils.getTimesNight());
 		if(null == listFromDB || listFromDB.size() == 0){
-			for(TaskConfigureBean bean :list){
+			for(App app : AppEngine.getInstance().getAppList()){
 				Task model = new Task();
 				model.init();//把变量设为0
-				model.setAppId(bean.getAppId());
-				model.setIncrementMoney(bean.getIncrementMoney());
-				model.setIncrementWaterAmy(bean.getIncrementWaterAmy());
-				model.setStockMoney(bean.getStockMoney());
-				model.setStockWaterAmy(bean.getStockWaterAmy());
+				model.setAppId(app.getId());
+				model.setIncrementMoney(INCREMENT_MONEY_TASK_COUNT);
+				model.setIncrementWaterAmy(INCREMENT_WATER_AMY_TASK_COUNT);
+				model.setStockMoney(STOCK_MONEY_TASK_COUNT);
+				model.setStockWaterAmy(STOCK_WATER_AMY_TASK_COUNT);
 				model.setCreateDate(new Date());
 				model.setUpdateDate(new Date());
 				taskService.insert(model);
@@ -280,19 +288,19 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 	}
 	
 	public static boolean isFreeTimeOut(VpnTask task){
-		return (new Date().getTime() - task.getCreateTime().getTime() > TimeZoneMng.FREE_TIMEOUT)?true:false;
+		return (new Date().getTime() - task.getCreateTime().getTime() > TimeMng.FREE_TIMEOUT)?true:false;
 	}
 	public static boolean isTimeOut(VpnTask task){
 		Date nowTime = new Date();
 		switch(task.getOperType()){
 		case TaskEngine.INCREMENT_MONEY_TYPE:
-			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeZoneMng.INCREMENT_MONEY_TIMEOUT)?true:false;
+			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeMng.INCREMENT_MONEY_TIMEOUT)?true:false;
 		case TaskEngine.INCREMENT_WATERAMY_TYPE:
-			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeZoneMng.INCREMENT_WATERAMY_TIMEOUT)?true:false;	
+			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeMng.INCREMENT_WATERAMY_TIMEOUT)?true:false;	
 		case TaskEngine.STOCK_MONEY_TYPE:	
-			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeZoneMng.STOCK_MONEY_TIMEOUT)?true:false;
+			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeMng.STOCK_MONEY_TIMEOUT)?true:false;
 		case TaskEngine.STOCK_WATERAMY_TYPE:
-			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeZoneMng.STOCK_WATERAMY_TIMEOUT)?true:false;
+			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeMng.STOCK_WATERAMY_TIMEOUT)?true:false;
 		}
 		return true;
 	}

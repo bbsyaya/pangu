@@ -35,6 +35,6 @@
 		<url-pattern>*.pangu</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
-		<welcome-file>/pc/index.pangu</welcome-file>
+		<welcome-file>/pc/moneyIFuckYou.pangu</welcome-file>
 	</welcome-file-list>
 </web-app>

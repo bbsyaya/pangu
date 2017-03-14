@@ -16,6 +16,7 @@ import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.PhoneBrandService;
 import org.turing.pangu.service.PhoneBrandServiceImpl;
 import org.turing.pangu.utils.RandomUtils;
+import org.turing.pangu.utils.TraceUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
@@ -48,6 +49,7 @@ public class PhoneBrandEngine implements EngineListen{
 		}
 	}
 	public ChangeDeviceInfo getNewDeviceInfo(BaiduLocation location,App app){
+		TraceUtils.getTraceInfo();
 		ChangeDeviceInfo info = new ChangeDeviceInfo();
 		// 6:3:1
 		//1.先产生品牌随机数
@@ -67,22 +69,26 @@ public class PhoneBrandEngine implements EngineListen{
 		case CHINA_MOBILE:
 			if(brand.getChinaMobile() == 1){
 				operStr = "移动";
+				logger.info("---移动---");
 			}
 			break;
 		case CHINA_UNICOM:
 			if(brand.getChinaUnicom() == 1){
 				operStr = "联通";
+				logger.info("---联通---");
 			}
 			break;
 		case CHINA_TELECOM:
 			if(brand.getChinaTelecom() == 1){
 				operStr = "电信";
+				logger.info("---电信---");
 			}
 			break;
 		}
 		String number = PhoneNumberEngine.getInstance().getPhoneNumber(location.getContent().getAddress(), operStr);
 		if(null == number)
 			return null;
+		logger.info("phone number:" + number);
 		BrandBuildInfo buildInfo = JSON.parseObject(brand.getConfigure(),
 				new TypeReference<BrandBuildInfo>() {
 				});

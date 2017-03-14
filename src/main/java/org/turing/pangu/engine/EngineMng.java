@@ -18,6 +18,7 @@ public class EngineMng {
 	}
 	// 设置监听
 	private void setListen(){
+		ltnList.clear();
 		ltnList.add(AppEngine.getInstance());
 		ltnList.add(TaskEngine.getInstance());
 		ltnList.add(DeviceEngine.getInstance());

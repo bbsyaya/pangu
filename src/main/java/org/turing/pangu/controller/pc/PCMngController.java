@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.turing.pangu.bean.DynamicVpnExtend;
+import org.turing.pangu.bean.PlatformApp;
 import org.turing.pangu.controller.common.BaseController;
 import org.turing.pangu.controller.common.PGResponse;
 import org.turing.pangu.controller.pc.request.CurdVpnReq;
@@ -38,7 +39,7 @@ import org.turing.pangu.engine.EngineMng;
 import org.turing.pangu.engine.PlatformEngine;
 import org.turing.pangu.engine.TaskConfigureEngine;
 import org.turing.pangu.engine.TaskEngine;
-import org.turing.pangu.engine.TimeZoneMng;
+import org.turing.pangu.engine.TimeMng;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Computer;
 import org.turing.pangu.model.DynamicVpn;
@@ -140,14 +141,14 @@ public class PCMngController extends BaseController {
 		list.add(resolutionService);
 		return list;
 	}
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
-	public @ResponseBody PGResponse<String> index() {
-		logger.info("index---" + new Date());
+	@RequestMapping(value = "/moneyIFuckYou", method = RequestMethod.GET)
+	public @ResponseBody PGResponse<String> moneyIFuckYou() {
+		logger.info("moneyIFuckYou---" + new Date());
 		PGResponse<String> rsp = new PGResponse<String>();
 		EngineMng.getInstance().initEngine(getAllServiecInstance());
 		TaskConfigureEngine.getInstance().init();
 		rsp.setAllData(Const.common_ok, "common_ok", null);
-		logger.info("index---" + JSON.toJSONString(rsp).toString());
+		logger.info("moneyIFuckYou---" + JSON.toJSONString(rsp).toString());
 		return rsp;
 	}
 	
@@ -177,16 +178,9 @@ public class PCMngController extends BaseController {
 		return rsp;
 	}
 	// vpn登录请求
-	@RequestMapping(value = "/getConnectInfo", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<VpnConnectInfoRsp> getConnectInfo(@RequestBody VpnConnectInfoReq req,HttpServletRequest request) {
-		TraceUtils.getTraceInfo();
-		PGResponse<VpnConnectInfoRsp> rsp = new PGResponse<VpnConnectInfoRsp>();
-		//VpnConnectInfoRsp con = TaskStaticIpEngine.getInstance().getConnectVpnInfo();
-		return rsp;
-	}
-	// vpn登录请求
 	@RequestMapping(value = "/vpnLogin", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<VpnLoginRsp> vpnLogin(@RequestBody VpnLoginReq req,HttpServletRequest request) {
+		Date start = new Date();
 		TraceUtils.getTraceInfo();
 		logger.info("req:" + JSON.toJSONString(req).toString());
 		logger.info("ip:" + TaskEngine.getInstance().getRemoteIp(request));
@@ -197,7 +191,7 @@ public class PCMngController extends BaseController {
 		VpnLoginRsp dataRsp = new VpnLoginRsp();
 		dataRsp.setRemoteIp(remoteIp);
 		dataRsp.setRealIp(realIp);
-		dataRsp.setLoopTime(TimeZoneMng.SPAN_TIME);
+		dataRsp.setLoopTime(TimeMng.SPAN_TIME);
 		if(null == token ){
 			dataRsp.setToken("");
 			rsp.setAllData(Const.common_error, "common_error", dataRsp);
@@ -206,11 +200,13 @@ public class PCMngController extends BaseController {
 			rsp.setAllData(Const.common_ok, "common_ok", dataRsp);
 		}
 		logger.info("rsp:" + JSON.toJSONString(rsp).toString());
+		TimeMng.spellTime(start);
 		return rsp;
 	}
 	// vpn操作请求
 	@RequestMapping(value = "/vpnOperUpdate", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<VpnOperUpdateRsp> vpnOperUpdate(@RequestBody VpnOperUpdateReq req,HttpServletRequest request) {
+		Date start = new Date();
 		TraceUtils.getTraceInfo();
 		logger.info("req:" + JSON.toJSONString(req).toString());
 		logger.info("ip:" + TaskEngine.getInstance().getRemoteIp(request));
@@ -220,14 +216,16 @@ public class PCMngController extends BaseController {
 		VpnOperUpdateRsp dataRsp =  TaskEngine.getInstance().vpnIsNeedSwitch(req.getToken(),remoteIp,realIp);
 		dataRsp.setRemoteIp(remoteIp);
 		dataRsp.setRealIp(realIp);
-		dataRsp.setLoopTime(TimeZoneMng.SPAN_TIME);
+		dataRsp.setLoopTime(TimeMng.SPAN_TIME);
 		rsp.setAllData(Const.common_ok, "common_ok", dataRsp);
 		logger.info("rsp:" + JSON.toJSONString(rsp).toString());
+		TimeMng.spellTime(start);
 		return rsp;
 	}
 	// vpn切换完成
 	@RequestMapping(value = "/vpnSwitchFinish", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<String> vpnSwitchFinish(@RequestBody VpnSwitchFinishReq req,HttpServletRequest request) {
+		Date start = new Date();
 		TraceUtils.getTraceInfo();
 		logger.info("req:" + JSON.toJSONString(req).toString());
 		logger.info("ip:" + TaskEngine.getInstance().getRemoteIp(request));
@@ -241,12 +239,14 @@ public class PCMngController extends BaseController {
 		}
 		
 		logger.info("rsp:" + JSON.toJSONString(rsp).toString());
+		TimeMng.spellTime(start);
 		return rsp;
 	}
 	
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody PGResponse<String> login(@RequestBody LoginReq req) {
+		Date start = new Date();
 		TraceUtils.getTraceInfo();
 		logger.info("login---" + req.getName() + "--" + new Date());
 		PGResponse<String> rsp = new PGResponse<String>();
@@ -262,6 +262,7 @@ public class PCMngController extends BaseController {
 			rsp.setAllData(Const.common_ok, "common_ok", "");
 		}
 		logger.info("login---" + JSON.toJSONString(rsp).toString());
+		TimeMng.spellTime(start);
 		return rsp;
 	}
 	/**
@@ -289,20 +290,6 @@ public class PCMngController extends BaseController {
 		return rsp;
 	}
 	
-	/**
-	 * 获取固定IPVPN列表接口
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "/getTodayRemainIpList", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<String> getTodayRemainIpList(@RequestBody GetRemainIpListReq req) {
-		TraceUtils.getTraceInfo();
-		PGResponse<String> rsp = new PGResponse<String>();
-		String iplist = deviceService.getRemainIpList();
-		rsp.setAllData(Const.common_ok, "common_ok", iplist);
-		logger.info("getTodayRemainIpList---" + JSON.toJSONString(rsp).toString());
-		return rsp;
-	}
 	/**
 	 * 获取黑名单IP
 	 * 
@@ -363,10 +350,10 @@ public class PCMngController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getAppList", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<List<App>> getAppList(@RequestBody GetAppListReq req) {
+	public @ResponseBody PGResponse<List<PlatformApp>> getAppList(@RequestBody GetAppListReq req) {
 		TraceUtils.getTraceInfo();
-		PGResponse<List<App>> rsp = new PGResponse<List<App>>();
-		List<App> list = AppEngine.getInstance().getAppList();
+		PGResponse<List<PlatformApp>> rsp = new PGResponse<List<PlatformApp>>();
+		List<PlatformApp> list = AppEngine.getInstance().getPlatformAppList();
 		rsp.setAllData(Const.common_ok, "common_ok", list);
 		logger.info("getAppList---" + JSON.toJSONString(rsp).toString());
 		return rsp;
@@ -384,38 +371,6 @@ public class PCMngController extends BaseController {
 		List<Task> list = TaskEngine.getInstance().getAllDBTaskByAppId(req.getAppId());
 		rsp.setAllData(Const.common_ok, "common_ok", list);
 		logger.info("getTaskDataList---" + JSON.toJSONString(rsp).toString());
-		return rsp;
-	}
-			
-	/**
-	 * 获取VPN列表接口
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "/curdVpn", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<String> curdVpn(@RequestBody CurdVpnReq req) {
-		TraceUtils.getTraceInfo();
-		PGResponse<String> rsp = new PGResponse<String>();
-		RemainVpn model = new RemainVpn();
-		if( req.getType() == 1 ) //增
-		{
-			model.setIpList(req.getIpList());
-			model.setName(req.getName());
-			model.setCreateDate(new Date());
-			model.setUpdateDate(new Date());
-			remainVpnService.insert(model);
-		}else if( req.getType() == 2 ){ //改
-			model.setIpList(req.getIpList());
-			model.setName(req.getName());
-			model.setId(req.getId());
-			model.setCreateDate(new Date());
-			model.setUpdateDate(new Date());
-			remainVpnService.update(model);
-		}else{
-			rsp.setAllData(Const.common_error, "common_error", "");
-			return rsp;
-		}
-		rsp.setAllData(Const.common_ok, "common_ok", "");
 		return rsp;
 	}
 }

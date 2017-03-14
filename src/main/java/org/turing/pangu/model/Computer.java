@@ -4,52 +4,49 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年03月08日 
- * @since 2017年03月08日 
+ * @version 1.0, 2017年03月14日 
+ * @since 2017年03月14日 
  */
 
 package org.turing.pangu.model;
 
 import java.util.Date;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
  /**Computer*/
  public class Computer extends BaseModel<Computer>
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 4228931488933792837L;
+  private static final long serialVersionUID = 7710131489462338020L;
 
   /***/
-  private Long userId = 1L;
+  private Long userId;
 
   /***/
-  private Long vpnId = 1L;
+  private Long vpnId;
 
   /***/
-  private Integer isValid = 1;
+  private Integer isValid;
 
   /***/
-  private String deviceSerial = "";
+  private String deviceSerial;
 
   /***/
-  private String deviceToken = "";
+  private String deviceToken;
 
   /***/
-  private String address = "";
+  private String address;
 
   /***/
-  private Date createDate = new Date();
+  private Date createDate;
 
   /***/
-  private Date updateDate = new Date();
+  private Date updateDate;
 
 
   

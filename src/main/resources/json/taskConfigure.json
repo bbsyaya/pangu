@@ -1,30 +1,8 @@
 [
     {
-        "appId": 1,
-        "incrementMoney": 3000,
-        "incrementWaterAmy": 30000,
-        "stockMoney": 600,
-        "stockWaterAmy": 1800
-    },
-    {
-        "appId": 2,
-        "incrementMoney": 3000,
-        "incrementWaterAmy": 30000,
-        "stockMoney": 600,
-        "stockWaterAmy": 1800
-    },
-    {
-        "appId": 3,
-        "incrementMoney": 3000,
-        "incrementWaterAmy": 30000,
-        "stockMoney": 600,
-        "stockWaterAmy": 1800
-    },
-    {
-        "appId": 4,
-        "incrementMoney": 3000,
-        "incrementWaterAmy": 30000,
-        "stockMoney": 600,
-        "stockWaterAmy": 1800
+        "incrementMoney": 30000,
+        "incrementWaterAmy": 300000,
+        "stockMoney": 60000,
+        "stockWaterAmy": 180000
     }
 ]
