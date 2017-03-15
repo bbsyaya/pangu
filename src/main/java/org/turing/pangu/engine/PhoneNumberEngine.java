@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.quartz.simpl.RAMJobStore;
 import org.turing.pangu.model.PhoneNumber;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.PhoneNumberService;

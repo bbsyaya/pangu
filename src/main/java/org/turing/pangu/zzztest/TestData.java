@@ -1,6 +1,5 @@
 package org.turing.pangu.zzztest;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,21 +11,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.turing.pangu.bean.HeightWidth;
 import org.turing.pangu.bean.TaskConfigureBean;
-import org.turing.pangu.bean.VpnConnectInfo;
 import org.turing.pangu.engine.AppEngine;
 import org.turing.pangu.engine.EngineMng;
 import org.turing.pangu.engine.PhoneBrandEngine;
-import org.turing.pangu.engine.VpnEngine;
-import org.turing.pangu.engine.WifiMngEngine;
 import org.turing.pangu.iptrunk.BaiduLocation;
 import org.turing.pangu.iptrunk.LocationMng;
 import org.turing.pangu.model.App;
-import org.turing.pangu.model.Computer;
-import org.turing.pangu.model.DynamicVpn;
 import org.turing.pangu.model.PhoneBrand;
-import org.turing.pangu.model.Resolution;
 import org.turing.pangu.phone.BrandBuildInfo;
 import org.turing.pangu.phone.ChangeDeviceInfo;
 import org.turing.pangu.phone.GenerateData;
@@ -134,6 +126,11 @@ public class TestData {
 		}
 		*/
 	}
+	private String formartDate(Date d ){ 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd.HHmmss");  
+        String dateNowStr = sdf.format(d); 
+        return dateNowStr;
+	}
 	@Test
 	public void testUpdateDevice() {
 		//EngineMng.getInstance().initEngine(getAllServiecInstance());		
@@ -156,16 +153,45 @@ public class TestData {
 		MANUFACTURER: samsung,  
 		USER: android-build  
 		*/
-		BrandBuildInfo buildInfo = new BrandBuildInfo();
-		String[] times = { "2015-11-04","2014-11-03","2015-01-24","2016-02-19","2015-08-07" };
+		//BrandBuildInfo buildInfo = new BrandBuildInfo();
+		String[] times = { "20141007.031458","20130906.042453","20151104.091134","20160219.081521","20140928.120009",
+				"20150902.142639","20131506.132657","20121408.171139","20160419.080521","20140527.130809"};
 		for(PhoneBrand brand:list){
 			BrandBuildInfo info = JSON.parseObject(brand.getConfigure(),new TypeReference<BrandBuildInfo>(){
 	        });
-			info.setAndroidVersion(GenerateData.getInstance().getAndroidVersion(Integer.parseInt(info.getSdk())));
-			info.setOsName(GenerateData.getInstance().generateOsName());
-			info.setOsArch(GenerateData.getInstance().generateOsArch(info.getCpu_abi()));
-			info.setOsVersion(GenerateData.getInstance().generateOsVersion());
-			info.setHost(RandomUtils.getRandomNumbersAndCapitalLetters(RandomUtils.getRandom(5, 7)));
+			//info.setAndroidVersion(GenerateData.getInstance().getAndroidVersion(Integer.parseInt(info.getSdk())));
+			//info.setOsName(GenerateData.getInstance().generateOsName());
+			//info.setOsArch(GenerateData.getInstance().generateOsArch(info.getCpu_abi()));
+			//info.setOsVersion(GenerateData.getInstance().generateOsVersion());
+			//info.setHost(RandomUtils.getRandomNumbersAndCapitalLetters(RandomUtils.getRandom(5, 7)));
+			info.setType((RandomUtils.getRandom(10)%3==0)?"eng":"user");
+			info.setUser((RandomUtils.getRandom(10)%3==0)?"work":"root");
+			info.setManufacture(info.getBrand());
+			info.setTags((RandomUtils.getRandom(10)%3==0)?"test-keys":"release-keys");
+			info.setTime(times[RandomUtils.getRandom(0,times.length)]);
+			String[] products = {};
+			String product = "";
+			{
+				products = info.getModel().split(" ");
+				if(products.length == 1){
+					products = info.getModel().split("-");
+				}
+				if(products.length > 2){
+					for( int index = 1;index < products.length; index++){
+						
+						product = product + products[index] + " ";
+					}
+				}else{
+					product = products[products.length-1];
+				}
+			}
+			info.setProduct(product);
+			info.setDisplay(product);
+			info.setBoard(RandomUtils.getRandom(10)%5==0?"unknown":product);
+			info.setDevice(info.getProduct());
+			info.setIncrement(GenerateData.getInstance().generateIncremental(info.getType(), info.getUser(), info.getTime()));
+			info.setFingerPrint(GenerateData.getInstance().generateFingerprint(info));
+			info.setBootloader(RandomUtils.getRandom(10)%5==0?info.getIncrement():"unknown");
 			brand.setConfigure(JSON.toJSONString(info));
 			phoneBrandService.update(brand);
 		}

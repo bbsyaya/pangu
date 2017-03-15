@@ -1,5 +1,6 @@
 package org.turing.pangu.zzztest;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.junit.Test;
@@ -16,8 +17,8 @@ import org.turing.pangu.utils.HttpUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 public class testTask {
-	private String host = "http://localhost:8080/";
-	//private String host = "http://pangu.u-app.cn/";
+	//private String host = "http://localhost:8080/";
+	private String host = "http://pangu.u-app.cn/";
 	public void test(){
 		String contentStr = "";
 		GetTaskRsp rsp = JSON.parseObject(contentStr,
@@ -28,6 +29,11 @@ public class testTask {
 	}
 	@Test
 	public void testLoop(){
+		Date d = new Date();  
+        System.out.println(d);  
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd.HHmmss");  
+        String dateNowStr = sdf.format(d);  
+        System.out.println("格式化后的日期：" + dateNowStr);  
 		/*
 		String cost = "来自 111.206.227.118 的回复: 字节=32 时间=40ms TTL=49";
 		//Pattern compile = Pattern.compile("(\\d+\\.\\d+)|(\\d+)");
@@ -37,7 +43,7 @@ public class testTask {
         String str = matcher.group();
         String encoding=System.getProperty("file.encoding");
         System.out.println("Default System Encoding: " + encoding);
-        */
+        
 		VpnLoginRsp rsp = loginPangu(0,"kwwwkkk0www");
 		for(int index = 0;index < 1;index++){
 			try {
@@ -79,7 +85,7 @@ public class testTask {
 				e.printStackTrace();
 			}
 		}
-		
+		*/
 		//getTask("123444");
 		//getTask("sdffff");
 		//System.out.print("\n" + Pattern.compile("[^0-9]").matcher(str).replaceAll(""));

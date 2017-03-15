@@ -10,12 +10,10 @@
 
 package org.turing.pangu.model;
 
-import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
 
  /**Resolution*/
  public class Resolution extends BaseModel<Resolution>

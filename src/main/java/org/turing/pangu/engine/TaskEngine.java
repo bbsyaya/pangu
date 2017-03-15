@@ -7,7 +7,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.turing.pangu.bean.TaskConfigureBean;
 import org.turing.pangu.controller.common.PhoneTask;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
@@ -18,7 +17,6 @@ import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.TaskService;
 import org.turing.pangu.service.TaskServiceImpl;
 import org.turing.pangu.task.DateUpdateListen;
-import org.turing.pangu.task.TaskExtend;
 import org.turing.pangu.task.VpnTask;
 import org.turing.pangu.utils.DateUtils;
 /*
@@ -28,7 +26,7 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 	private static final Logger logger = Logger.getLogger(TaskEngine.class);
 	private static TaskEngine mInstance = new TaskEngine();
 	private List<Task> allTaskList = new ArrayList<Task>();
-	public List<TaskExtend> todayTaskList = new ArrayList<TaskExtend>();
+	public List<Task> todayTaskList = new ArrayList<Task>();
 
 	public static final int INCREMENT_MONEY_TYPE = 0;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
 	public static final int INCREMENT_WATERAMY_TYPE = 1;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
@@ -62,7 +60,7 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		}
 	}
 	
-	public List<TaskExtend> getTodayTaskList(){
+	public List<Task> getTodayTaskList(){
 		return todayTaskList;
 	}
 	public void init(){
@@ -76,18 +74,7 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		Date fromTime = DateUtils.getTimesMorning();
 		Date toTime = new Date();
 		todayTaskList.clear();
-		List<Task> listFromDB = getTodayTaskList(fromTime, toTime);
-		for(Task task:listFromDB){
-			TaskExtend tExd = new TaskExtend();
-			tExd.setDBTask(task);
-			int fixedIpIncrementMoney = task.getIncrementMoney() / 10;
-			int fixedIpIncrementWaterAmy = task.getIncrementWaterAmy() / 10;
-			tExd.setStaticIpIncrementMoney(fixedIpIncrementMoney);
-			tExd.setStaticIpIncrementWaterAmy(fixedIpIncrementWaterAmy);
-			tExd.setDynamicIpIncrementMoney(task.getIncrementMoney() - fixedIpIncrementMoney);
-			tExd.setDynamicIpIncrementWaterAmy(task.getIncrementWaterAmy() - fixedIpIncrementWaterAmy);
-			todayTaskList.add(tExd);
-		}
+		todayTaskList = getTodayTaskList(fromTime, toTime);
 	}
 	public List<Task> getAllDBTaskByAppId(long appId){
 		List<Task> list = new ArrayList<Task>();
@@ -98,14 +85,14 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		}
 		return list;
 	}
-	public synchronized String getRemoteIp11(HttpServletRequest request){
+	public synchronized String getRemoteIp(HttpServletRequest request){
 		String ip = request.getHeader("X-Real-IP"); 
 		if(null == ip ){
 			ip = request.getRemoteAddr();
 		}
 		return ip;
 	}
-	public synchronized String getRemoteIp(HttpServletRequest request){
+	public synchronized String getRemoteIp11(HttpServletRequest request){
 		return "119.90.141.77";
 	}
 	/** 
@@ -226,7 +213,7 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 	}	
 	public void updateExecuteTask(PhoneTask pTask,Boolean isSuccess){
 		logger.info("updateExecute---000");
-		for(TaskExtend task : todayTaskList){
+		for(Task task : todayTaskList){
 			if(pTask.getApp().getId() == task.getAppId()){
 				logger.info("updateExecute---001--appId:"+pTask.getApp().getId());
 				switch(pTask.getOperType()){
@@ -260,7 +247,7 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		logger.info("updateExecute---end");
 	}
 	public void updateAllocTask(int type,Task taskExt){
-		TaskExtend task = (TaskExtend)taskExt;
+		Task task = (Task)taskExt;
 		switch(type){
 		case INCREMENT_MONEY_TYPE:
 			task.setAllotIncrementMoney(task.getAllotIncrementMoney() + 1);

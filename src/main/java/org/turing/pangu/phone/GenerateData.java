@@ -1,7 +1,6 @@
 package org.turing.pangu.phone;
 
 import org.turing.pangu.engine.PhoneBrandEngine;
-import org.turing.pangu.model.PhoneBrand;
 import org.turing.pangu.utils.IMEIUtils;
 import org.turing.pangu.utils.RandomUtils;
 
@@ -220,9 +219,9 @@ public class GenerateData {
     public String generateBuildHost(){
     	return "android-test-4.mtv.corp.google.com";
     }
-    public String generateFingerprint(String brand,String product,String incremental,String id){
-    	String keys = ":user/release-keys";
-    	return brand+"/"+product+"/"+incremental+"/"+id+"/"+RandomUtils.getRandomNumbers(5)+keys;
+    public String generateFingerprint(BrandBuildInfo info){
+    	return info.getBrand()+"/"+info.getModel()+"/"+info.getProduct()+":"+info.getAndroidVersion()+"/"
+    			+info.getId()+"/"+info.getIncrement()+":"+info.getType()+"/"+info.getTags();
     }
     public  String generateAndroidSerial()
     {

@@ -10,14 +10,10 @@
 
 package org.turing.pangu.dao;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.turing.pangu.mapper.PhoneNumberMapper;
 import org.turing.pangu.mapper.ResolutionMapper;
-import org.turing.pangu.model.PhoneNumber;
 import org.turing.pangu.model.Resolution;
 
 @Repository

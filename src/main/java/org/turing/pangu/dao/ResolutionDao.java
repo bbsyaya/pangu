@@ -10,9 +10,6 @@
 
 package org.turing.pangu.dao;
 
-import java.util.List;
-
-import org.turing.pangu.model.PhoneNumber;
 import org.turing.pangu.model.Resolution;
 
 public interface ResolutionDao extends BaseDao<Resolution, Long> {

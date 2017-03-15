@@ -8,17 +8,14 @@ import org.apache.log4j.Logger;
 import org.turing.pangu.controller.common.PhoneTask;
 import org.turing.pangu.controller.pc.request.VpnLoginReq;
 import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
-import org.turing.pangu.controller.phone.request.ReportReq;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.model.App;
-import org.turing.pangu.model.Device;
 import org.turing.pangu.model.Task;
 import org.turing.pangu.phone.ChangeDeviceInfo;
 import org.turing.pangu.task.DateUpdateListen;
 import org.turing.pangu.task.IpQueryResult;
 import org.turing.pangu.task.OptimalApp;
 import org.turing.pangu.task.StockTask;
-import org.turing.pangu.task.TaskExtend;
 import org.turing.pangu.task.TaskIF;
 import org.turing.pangu.task.TaskListSort;
 import org.turing.pangu.task.VpnTask;
@@ -62,7 +59,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 	@Override
 	public boolean isHavaTaskByOperType(int type, Task dbTask) {
 		// TODO Auto-generated method stub
-		TaskExtend ext = (TaskExtend)dbTask;
+		Task ext = (Task)dbTask;
 		switch(type){
 		case TaskEngine.INCREMENT_MONEY_TYPE:
 			return (ext.getIncrementMoney() - ext.getExecuteIncrementMoney()) > 0 ? true:false;
@@ -120,8 +117,8 @@ public class TaskDynamicIpEngine implements TaskIF{
 		for(VpnTask task :vpnTaskList){
 			if(task.getRemoteIp().equals(remoteIp)){
 				dataRsp.setStatistics(task.getStatistics());
-				if(task.getPhoneTaskList() == null || task.getPhoneTaskList().size() == 0 
-				|| task.getPhoneStockTaskList() == null || task.getPhoneStockTaskList().size() == 0  ){
+				if((task.getPhoneTaskList() == null || task.getPhoneTaskList().size() == 0 )
+						&&(task.getPhoneStockTaskList() == null || task.getPhoneStockTaskList().size() == 0)){
 					logger.info("not task run");
 					dataRsp.setIsSwitchVpn(0);
 					dataRsp.setTaskTotal(0);
@@ -129,6 +126,8 @@ public class TaskDynamicIpEngine implements TaskIF{
 				}
 				if(false == task.getStatistics().isTaskFinished()){
 					dataRsp.setIsSwitchVpn(0);
+				}else{
+					dataRsp.setIsSwitchVpn(1);
 				}
 				//超时切就切
 				if(true == TaskEngine.isTimeOut(task)){ // 发现模拟器还有未上报的任务

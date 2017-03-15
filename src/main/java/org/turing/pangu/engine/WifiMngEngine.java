@@ -8,16 +8,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.aspectj.util.FileUtil;
-import org.turing.pangu.bean.HeightWidth;
-import org.turing.pangu.model.App;
-import org.turing.pangu.model.PhoneBrand;
-import org.turing.pangu.model.Platform;
 import org.turing.pangu.model.Resolution;
-import org.turing.pangu.service.AppService;
-import org.turing.pangu.service.AppServiceImpl;
 import org.turing.pangu.service.BaseService;
-import org.turing.pangu.service.ResolutionService;
-import org.turing.pangu.service.ResolutionServiceImpl;
 import org.turing.pangu.utils.RandomUtils;
 
 public class WifiMngEngine implements EngineListen{
