@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.turing.pangu.controller.phone.request.ReportReq;
 import org.turing.pangu.model.Device;
+import org.turing.pangu.model.DeviceFromNet;
 import org.turing.pangu.phone.ChangeDeviceInfo;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.DeviceService;
@@ -92,7 +93,76 @@ public class DeviceEngine implements EngineListen{
 		}
 		needSaveList.clear(); //清空
 	}
-	public boolean saveReport(ReportReq req){
+	// 保存外部设备上报的请求
+	public DeviceFromNet saveReportFromExt(ChangeDeviceInfo changeInfo){
+		// TODO Auto-generated method stub
+		DeviceFromNet device = new DeviceFromNet();
+		//----------------------------------------------------------------------
+		
+		if(null == changeInfo)
+			return null;
+
+		if(null != changeInfo){
+			device.setConfigure(JSON.toJSONString(changeInfo));
+		}
+		
+		
+		if( null != changeInfo.getBuildInfo().getBrand())
+			device.setBrand(changeInfo.getBuildInfo().getBrand());
+		
+		
+		if( null != changeInfo.getImei())
+			device.setImei(changeInfo.getImei());
+		
+		if( null != changeInfo.getImsi())
+			device.setImsi(changeInfo.getImsi());
+		
+		if( null != changeInfo.getIp())
+			device.setIp(changeInfo.getIp());
+
+		
+		if( null != changeInfo.getBuildInfo().getManufacture())
+			device.setManufacture(changeInfo.getBuildInfo().getManufacture());
+		
+		if( null != changeInfo.getBuildInfo().getModel())
+			device.setModel(changeInfo.getBuildInfo().getModel());
+
+		if( null != changeInfo.getPhone())
+			device.setPhone(changeInfo.getPhone());
+		
+		device.setSdk(19);
+		if( null != changeInfo.getBuildInfo().getSdk() && !changeInfo.getBuildInfo().getSdk().equals(""))
+			device.setSdk(Integer.valueOf(changeInfo.getBuildInfo().getSdk()));
+		
+		
+		device.setHeight(1280);
+		if( null != changeInfo.getHeight() && !changeInfo.getHeight().equals(""))
+			device.setHeight(Integer.valueOf(changeInfo.getHeight()));
+		
+		device.setWidth(720);
+		if( null != changeInfo.getWidth() && !changeInfo.getWidth().equals(""))
+			device.setWidth(Integer.valueOf(changeInfo.getWidth()));
+		
+		// --- 手机网络
+		if( null != changeInfo.getNetworkType() && !changeInfo.getNetworkType().equals(""))
+			device.setNetworkType(changeInfo.getNetworkType());
+		
+		
+		if( null != changeInfo.getNetworkSubType() && !changeInfo.getNetworkSubType().equals(""))
+			device.setNetworkSubtype(changeInfo.getNetworkSubType());
+		
+		//----------------------------------------------------------------------
+
+		device.setAppId(1L);
+		device.setDeviceType(1);
+		device.setIsActived(1);
+		device.setIsStock(1);
+		device.setCreateDate(new Date());
+		device.setUpdateDate(new Date());
+		return device;
+	}
+	// 保存外部设备上报的请求
+	public boolean saveReportToCache(ReportReq req){
 		// TODO Auto-generated method stub
 		Device device = new Device();
 		ChangeDeviceInfo changeInfo = req.getDevice();

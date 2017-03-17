@@ -18,6 +18,7 @@ import org.turing.pangu.engine.PhoneBrandEngine;
 import org.turing.pangu.iptrunk.BaiduLocation;
 import org.turing.pangu.iptrunk.LocationMng;
 import org.turing.pangu.model.App;
+import org.turing.pangu.model.DeviceFromNet;
 import org.turing.pangu.model.PhoneBrand;
 import org.turing.pangu.phone.BrandBuildInfo;
 import org.turing.pangu.phone.ChangeDeviceInfo;
@@ -25,6 +26,7 @@ import org.turing.pangu.phone.GenerateData;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.ComputerService;
+import org.turing.pangu.service.DeviceFromNetService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.DynamicVpnService;
 import org.turing.pangu.service.IpTrunkService;
@@ -89,6 +91,8 @@ public class TestData {
 	@Resource(name = "resolutionServiceImpl")
 	private ResolutionService resolutionService;
 
+	@Resource(name = "deviceFromNetServiceImpl")
+	private DeviceFromNetService deviceFromNetService;
 	
 	private String getStr(int index,String ip){
 		return null;
@@ -109,6 +113,7 @@ public class TestData {
 		list.add(computerService);
 		list.add(simulatorService);
 		list.add(resolutionService);
+		list.add(deviceFromNetService);
 		return list;
 	}
 	
@@ -132,6 +137,35 @@ public class TestData {
         return dateNowStr;
 	}
 	@Test
+	public void testModifySdk(){
+		List<PhoneBrand> list = new ArrayList<PhoneBrand>();
+		list = phoneBrandService.selectAll();
+		for(PhoneBrand brand:list){
+			if(brand.getBrand().equals("samsung") ){
+				brand.setImeiHead("35");
+				//BrandBuildInfo info = JSON.parseObject(brand.getConfigure(),new TypeReference<BrandBuildInfo>(){
+		        //});
+				//brand.setManufacture(brand.getBrand());
+				//brand.setSdk(Integer.parseInt(info.getSdk()));
+				phoneBrandService.update(brand);
+			}
+		}
+	}
+	
+	//-- 收集的数据转化成品牌
+	public void testFromNet(){
+		EngineMng.getInstance().initEngine(getAllServiecInstance());	
+		List<DeviceFromNet> list = new ArrayList<DeviceFromNet>();
+		list = deviceFromNetService.selectAll();
+		
+		for(DeviceFromNet tmp :list){
+			ChangeDeviceInfo info = JSON.parseObject(tmp.getConfigure(),new TypeReference<ChangeDeviceInfo>(){
+	        });
+			PhoneBrandEngine.getInstance().saveReportToDB(info);
+		}
+	}
+	
+	
 	public void testUpdateDevice() {
 		//EngineMng.getInstance().initEngine(getAllServiecInstance());		
 		List<PhoneBrand> list = new ArrayList<PhoneBrand>();

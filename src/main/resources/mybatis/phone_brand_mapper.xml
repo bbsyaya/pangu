@@ -4,7 +4,9 @@
   <resultMap id="BaseResultMap" type="org.turing.pangu.model.PhoneBrand" >
     <id column="id" property="id" jdbcType="BIGINT" />       
     <result column="imei_head" property="imeiHead" jdbcType="VARCHAR" />          
+    <result column="sdk" property="sdk" jdbcType="INTEGER" />          
     <result column="brand" property="brand" jdbcType="VARCHAR" />          
+    <result column="manufacture" property="manufacture" jdbcType="VARCHAR" />          
     <result column="model" property="model" jdbcType="VARCHAR" />          
     <result column="width" property="width" jdbcType="INTEGER" />          
     <result column="height" property="height" jdbcType="INTEGER" />          
@@ -19,7 +21,9 @@
   <sql id="Base_Column_List" >
     p.id,
 	p.imei_head,
+	p.sdk,
 	p.brand,
+	p.manufacture,
 	p.model,
 	p.width,
 	p.height,
@@ -33,7 +37,9 @@
   </sql>
   <sql id="Base_Column_Value_List" >
     #{imeiHead},
+	#{sdk},
 	#{brand},
+	#{manufacture},
 	#{model},
 	#{width},
 	#{height},
@@ -47,7 +53,9 @@
   </sql>
   <sql id="Base_Column_Update_List" >
     imei_head=#{imeiHead},
+	sdk=#{sdk},
 	brand=#{brand},
+	manufacture=#{manufacture},
 	model=#{model},
 	width=#{width},
 	height=#{height},
@@ -76,7 +84,9 @@
     from phone_brand p
     where 1=1 
     <if test="imeiHead != null" >and p.imei_head= #{imeiHead,jdbcType=VARCHAR}</if>
+    <if test="sdk != null" >and p.sdk= #{sdk,jdbcType=INTEGER}</if>
     <if test="brand != null" >and p.brand= #{brand,jdbcType=VARCHAR}</if>
+    <if test="manufacture != null" >and p.manufacture= #{manufacture,jdbcType=VARCHAR}</if>
     <if test="model != null" >and p.model= #{model,jdbcType=VARCHAR}</if>
     <if test="width != null" >and p.width= #{width,jdbcType=INTEGER}</if>
     <if test="height != null" >and p.height= #{height,jdbcType=INTEGER}</if>
@@ -94,7 +104,9 @@
     from phone_brand p
     where 1=1 
     <if test="imeiHead != null" >and p.imei_head= #{imeiHead,jdbcType=VARCHAR}</if>
+    <if test="sdk != null" >and p.sdk= #{sdk,jdbcType=INTEGER}</if>
     <if test="brand != null" >and p.brand= #{brand,jdbcType=VARCHAR}</if>
+    <if test="manufacture != null" >and p.manufacture= #{manufacture,jdbcType=VARCHAR}</if>
     <if test="model != null" >and p.model= #{model,jdbcType=VARCHAR}</if>
     <if test="width != null" >and p.width= #{width,jdbcType=INTEGER}</if>
     <if test="height != null" >and p.height= #{height,jdbcType=INTEGER}</if>
@@ -112,7 +124,9 @@
     from phone_brand p
     where 1=1 
     <if test="model.imeiHead != null" >and p.imei_head= #{model.imeiHead,jdbcType=VARCHAR}</if>
+    <if test="model.sdk != null" >and p.sdk= #{model.sdk,jdbcType=INTEGER}</if>
     <if test="model.brand != null" >and p.brand= #{model.brand,jdbcType=VARCHAR}</if>
+    <if test="model.manufacture != null" >and p.manufacture= #{model.manufacture,jdbcType=VARCHAR}</if>
     <if test="model.model != null" >and p.model= #{model.model,jdbcType=VARCHAR}</if>
     <if test="model.width != null" >and p.width= #{model.width,jdbcType=INTEGER}</if>
     <if test="model.height != null" >and p.height= #{model.height,jdbcType=INTEGER}</if>
@@ -130,7 +144,9 @@
     from phone_brand p
     where 1=1 
     <if test="imeiHead != null" >and p.imei_head= #{imeiHead,jdbcType=VARCHAR}</if>
+    <if test="sdk != null" >and p.sdk= #{sdk,jdbcType=INTEGER}</if>
     <if test="brand != null" >and p.brand= #{brand,jdbcType=VARCHAR}</if>
+    <if test="manufacture != null" >and p.manufacture= #{manufacture,jdbcType=VARCHAR}</if>
     <if test="model != null" >and p.model= #{model,jdbcType=VARCHAR}</if>
     <if test="width != null" >and p.width= #{width,jdbcType=INTEGER}</if>
     <if test="height != null" >and p.height= #{height,jdbcType=INTEGER}</if>
@@ -150,7 +166,9 @@
     insert into phone_brand 
     <trim prefix="(" suffix=")" suffixOverrides="," >
         imei_head,    
+        sdk,    
         brand,    
+        manufacture,    
         model,    
         width,    
         height,    
@@ -164,7 +182,9 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
         #{imeiHead,jdbcType=VARCHAR},  
+        #{sdk,jdbcType=INTEGER},  
         #{brand,jdbcType=VARCHAR},  
+        #{manufacture,jdbcType=VARCHAR},  
         #{model,jdbcType=VARCHAR},  
         #{width,jdbcType=INTEGER},  
         #{height,jdbcType=INTEGER},  
@@ -181,7 +201,9 @@
     insert into phone_brand 
     <trim prefix="(" suffix=")" suffixOverrides="," >
         <if test="imeiHead != null" >imei_head,</if>
+        <if test="sdk != null" >sdk,</if>
         <if test="brand != null" >brand,</if>
+        <if test="manufacture != null" >manufacture,</if>
         <if test="model != null" >model,</if>
         <if test="width != null" >width,</if>
         <if test="height != null" >height,</if>
@@ -195,7 +217,9 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
         <if test="imeiHead != null" >#{imeiHead,jdbcType=VARCHAR},</if>  
+        <if test="sdk != null" >#{sdk,jdbcType=INTEGER},</if>  
         <if test="brand != null" >#{brand,jdbcType=VARCHAR},</if>  
+        <if test="manufacture != null" >#{manufacture,jdbcType=VARCHAR},</if>  
         <if test="model != null" >#{model,jdbcType=VARCHAR},</if>  
         <if test="width != null" >#{width,jdbcType=INTEGER},</if>  
         <if test="height != null" >#{height,jdbcType=INTEGER},</if>  
@@ -212,7 +236,9 @@
     update phone_brand set 
     <trim prefix="" suffix="" suffixOverrides="," >
         imei_head=#{imeiHead,jdbcType=VARCHAR},    
+        sdk=#{sdk,jdbcType=INTEGER},    
         brand=#{brand,jdbcType=VARCHAR},    
+        manufacture=#{manufacture,jdbcType=VARCHAR},    
         model=#{model,jdbcType=VARCHAR},    
         width=#{width,jdbcType=INTEGER},    
         height=#{height,jdbcType=INTEGER},    
@@ -230,7 +256,9 @@
     update phone_brand set 
     <trim prefix="" suffix="" suffixOverrides="," >
         <if test="imeiHead != null" >imei_head=#{imeiHead,jdbcType=VARCHAR},</if>
+        <if test="sdk != null" >sdk=#{sdk,jdbcType=INTEGER},</if>
         <if test="brand != null" >brand=#{brand,jdbcType=VARCHAR},</if>
+        <if test="manufacture != null" >manufacture=#{manufacture,jdbcType=VARCHAR},</if>
         <if test="model != null" >model=#{model,jdbcType=VARCHAR},</if>
         <if test="width != null" >width=#{width,jdbcType=INTEGER},</if>
         <if test="height != null" >height=#{height,jdbcType=INTEGER},</if>

@@ -4,30 +4,37 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年03月13日 
- * @since 2017年03月13日 
+ * @version 1.0, 2017年03月17日 
+ * @since 2017年03月17日 
  */
 
 package org.turing.pangu.model;
 
 import java.util.Date;
-
-import org.hibernate.validator.constraints.Length;
-
+import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
  /**PhoneBrand*/
  public class PhoneBrand extends BaseModel<PhoneBrand>
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 356811489371957716L;
+  private static final long serialVersionUID = 4380451489731736556L;
 
   /***/
   private String imeiHead;
 
   /***/
+  private Integer sdk;
+
+  /***/
   private String brand;
+
+  /***/
+  private String manufacture;
 
   /***/
   private String model;
@@ -78,6 +85,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  public Integer getSdk()
+  {
+   return this.sdk;
+  }
+
+  /**设置*/
+  public void setSdk(Integer sdk)
+  {
+    this.sdk=sdk;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
   @Length(max =255 )
   public String getBrand()
   {
@@ -88,6 +109,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   public void setBrand(String brand)
   {
     this.brand=brand;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getManufacture()
+  {
+   return this.manufacture;
+  }
+
+  /**设置*/
+  public void setManufacture(String manufacture)
+  {
+    this.manufacture=manufacture;
   }
 
   

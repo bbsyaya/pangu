@@ -234,7 +234,7 @@ public class MobileReportController extends BaseController {
 		// 3. 写入DB
 		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
 		req.getDevice().setIp(remoteIp);
-		DeviceEngine.getInstance().saveReport(req);
+		DeviceEngine.getInstance().saveReportToCache(req);
 		rsp.setAllData(Const.common_ok, "common_ok", null);
 		result = JSON.toJSONString(rsp);
 		logger.info("rsp:" + result.toString());

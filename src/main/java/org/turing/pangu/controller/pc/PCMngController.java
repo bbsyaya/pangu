@@ -31,20 +31,24 @@ import org.turing.pangu.controller.pc.response.VpnOperUpdateRsp;
 import org.turing.pangu.controller.phone.request.GetBlackIpListReq;
 import org.turing.pangu.engine.AppEngine;
 import org.turing.pangu.engine.ComputerEngine;
+import org.turing.pangu.engine.DeviceEngine;
 import org.turing.pangu.engine.EngineMng;
 import org.turing.pangu.engine.PlatformEngine;
 import org.turing.pangu.engine.TaskConfigureEngine;
 import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.engine.TimeMng;
 import org.turing.pangu.model.Computer;
+import org.turing.pangu.model.DeviceFromNet;
 import org.turing.pangu.model.DynamicVpn;
 import org.turing.pangu.model.Platform;
 import org.turing.pangu.model.RemainVpn;
 import org.turing.pangu.model.Task;
 import org.turing.pangu.model.User;
+import org.turing.pangu.phone.ChangeDeviceInfo;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.ComputerService;
+import org.turing.pangu.service.DeviceFromNetService;
 import org.turing.pangu.service.DeviceService;
 import org.turing.pangu.service.DynamicVpnService;
 import org.turing.pangu.service.IpTrunkService;
@@ -118,6 +122,9 @@ public class PCMngController extends BaseController {
 	@Resource(name = "resolutionServiceImpl")
 	private ResolutionService resolutionService;
 	
+	@Resource(name = "deviceFromNetServiceImpl")
+	private DeviceFromNetService deviceFromNetService;
+	
 	private List<BaseService> getAllServiecInstance(){
 		List<BaseService> list = new ArrayList<BaseService>();
 		list.add(userService);
@@ -134,8 +141,10 @@ public class PCMngController extends BaseController {
 		list.add(computerService);
 		list.add(simulatorService);
 		list.add(resolutionService);
+		list.add(deviceFromNetService);
 		return list;
 	}
+	
 	@RequestMapping(value = "/moneyIFuckYou", method = RequestMethod.GET)
 	public @ResponseBody PGResponse<String> moneyIFuckYou() {
 		logger.info("moneyIFuckYou---" + new Date());
@@ -171,6 +180,22 @@ public class PCMngController extends BaseController {
 		String realIp = TaskEngine.getInstance().getRealIp(request);
 		rsp.setAllData(Const.common_ok, "common_ok", realIp);
 		return rsp;
+	}
+	@RequestMapping(value = "/reportExtDeviceInfo", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody String reportExtDeviceInfo(@RequestBody ChangeDeviceInfo req,HttpServletRequest request) {
+		String remoteIp = TaskEngine.getInstance().getRemoteIp(request);
+		if(!req.getImei().equals("")){
+			DeviceFromNet test = new DeviceFromNet();
+			test.setImei(req.getImei());
+			List<DeviceFromNet> list = deviceFromNetService.selectList(test); // 去重
+			if(null != list && list.size() > 0 )
+				return "OKle";
+		}
+		
+		req.setIp(remoteIp);
+		DeviceFromNet model = DeviceEngine.getInstance().saveReportFromExt(req);
+		deviceFromNetService.insert(model);
+		return "OK";
 	}
 	// vpn登录请求
 	@RequestMapping(value = "/vpnLogin", method = RequestMethod.POST, consumes = "application/json")

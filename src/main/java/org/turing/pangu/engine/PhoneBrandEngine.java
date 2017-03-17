@@ -1,11 +1,13 @@
 package org.turing.pangu.engine;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.turing.pangu.iptrunk.BaiduLocation;
 import org.turing.pangu.model.App;
+import org.turing.pangu.model.Device;
 import org.turing.pangu.model.PhoneBrand;
 import org.turing.pangu.phone.BrandBuildInfo;
 import org.turing.pangu.phone.ChangeDeviceInfo;
@@ -48,6 +50,57 @@ public class PhoneBrandEngine implements EngineListen{
 			return CHINA_TELECOM;
 		}
 	}
+	public void saveReportToDB(ChangeDeviceInfo changeInfo){
+		// TODO Auto-generated method stub
+		PhoneBrand device = new PhoneBrand();
+		//----------------------------------------------------------------------
+		
+		if(null == changeInfo)
+			return;
+
+		if(null != changeInfo){
+			device.setConfigure(JSON.toJSONString(changeInfo.getBuildInfo()));
+		}
+		
+		if( null != changeInfo.getBuildInfo().getBrand())
+			device.setBrand(changeInfo.getBuildInfo().getBrand());
+		
+		
+		if( null != changeInfo.getBuildInfo().getManufacture())
+			device.setManufacture(changeInfo.getBuildInfo().getManufacture());
+		
+		if( null != changeInfo.getBuildInfo().getModel())
+			device.setModel(changeInfo.getBuildInfo().getModel());
+
+		if(null == changeInfo.getBuildInfo().getSdk() || Integer.parseInt(changeInfo.getBuildInfo().getSdk()) > 20){
+			return;
+		}
+		device.setWeight(10);
+		device.setSdk(19);
+		device.setChinaMobile(1);
+		device.setChinaTelecom(1);
+		device.setChinaUnicom(1);
+		if( null != changeInfo.getBuildInfo().getSdk() && !changeInfo.getBuildInfo().getSdk().equals(""))
+			device.setSdk(Integer.valueOf(changeInfo.getBuildInfo().getSdk()));
+		
+		if(changeInfo.getImei().equals("")){
+			changeInfo.setImei("86789");
+		}
+		device.setImeiHead(changeInfo.getImei().substring(0, 2));
+		
+		device.setHeight(1280);
+		if( null != changeInfo.getHeight() && !changeInfo.getHeight().equals(""))
+			device.setHeight(Integer.valueOf(changeInfo.getHeight()));
+		
+		device.setWidth(720);
+		if( null != changeInfo.getWidth() && !changeInfo.getWidth().equals(""))
+			device.setWidth(Integer.valueOf(changeInfo.getWidth()));
+		
+		device.setCreateDate(new Date());
+		device.setUpdateDate(new Date());
+		phoneBrandService.insert(device);
+	}
+	
 	public ChangeDeviceInfo getNewDeviceInfo(BaiduLocation location,App app){
 		TraceUtils.getTraceInfo();
 		ChangeDeviceInfo info = new ChangeDeviceInfo();
