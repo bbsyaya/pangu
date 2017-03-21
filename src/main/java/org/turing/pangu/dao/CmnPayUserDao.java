@@ -10,7 +10,7 @@
 
 package org.turing.pangu.dao;
 
-import org.turing.pangu.model.DeviceFromNet;
+import org.turing.pangu.model.CmnPayUser;
 
-public interface DeviceFromNetDao extends BaseDao<DeviceFromNet, Long> {
+public interface CmnPayUserDao extends BaseDao<CmnPayUser, Long> {
 }

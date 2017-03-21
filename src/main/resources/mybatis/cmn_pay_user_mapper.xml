@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.turing.pangu.mapper.CmnPayUserMapper" >
+  <resultMap id="BaseResultMap" type="org.turing.pangu.model.CmnPayUser" >
+    <id column="id" property="id" jdbcType="BIGINT" />       
+    <result column="name" property="name" jdbcType="VARCHAR" />          
+    <result column="password" property="password" jdbcType="VARCHAR" />          
+    <result column="token" property="token" jdbcType="VARCHAR" />          
+    <result column="is_valid" property="isValid" jdbcType="INTEGER" />          
+    <result column="count" property="count" jdbcType="BIGINT" />          
+    <result column="pay_type" property="payType" jdbcType="INTEGER" />          
+    <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />          
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />          
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />          
+  </resultMap>   
+  <sql id="Base_Column_List" >
+    c.id,
+	c.name,
+	c.password,
+	c.token,
+	c.is_valid,
+	c.count,
+	c.pay_type,
+	c.pay_date,
+	c.create_date,
+	c.update_date
+  </sql>
+  <sql id="Base_Column_Value_List" >
+    #{name},
+	#{password},
+	#{token},
+	#{isValid},
+	#{count},
+	#{payType},
+	#{payDate},
+	#{createDate},
+	#{updateDate}
+  </sql>
+  <sql id="Base_Column_Update_List" >
+    name=#{name},
+	password=#{password},
+	token=#{token},
+	is_valid=#{isValid},
+	count=#{count},
+	pay_type=#{payType},
+	pay_date=#{payDate},
+	create_date=#{createDate},
+	update_date=#{updateDate}
+  </sql> 
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from cmn_pay_user c
+    where c.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cmn_pay_user c
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.CmnPayUser" >
+    select 
+    <include refid="Base_Column_List" />
+    from cmn_pay_user c
+    where 1=1 
+    <if test="name != null" >and c.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="password != null" >and c.password= #{password,jdbcType=VARCHAR}</if>
+    <if test="token != null" >and c.token= #{token,jdbcType=VARCHAR}</if>
+    <if test="isValid != null" >and c.is_valid= #{isValid,jdbcType=INTEGER}</if>
+    <if test="count != null" >and c.count= #{count,jdbcType=BIGINT}</if>
+    <if test="payType != null" >and c.pay_type= #{payType,jdbcType=INTEGER}</if>
+    <if test="payDate != null" >and c.pay_date= #{payDate,jdbcType=TIMESTAMP}</if>
+    <if test="createDate != null" >and c.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and c.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.CmnPayUser" >
+    select 
+    <include refid="Base_Column_List" />
+    from cmn_pay_user c
+    where 1=1 
+    <if test="name != null" >and c.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="password != null" >and c.password= #{password,jdbcType=VARCHAR}</if>
+    <if test="token != null" >and c.token= #{token,jdbcType=VARCHAR}</if>
+    <if test="isValid != null" >and c.is_valid= #{isValid,jdbcType=INTEGER}</if>
+    <if test="count != null" >and c.count= #{count,jdbcType=BIGINT}</if>
+    <if test="payType != null" >and c.pay_type= #{payType,jdbcType=INTEGER}</if>
+    <if test="payDate != null" >and c.pay_date= #{payDate,jdbcType=TIMESTAMP}</if>
+    <if test="createDate != null" >and c.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and c.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.ParamModel" >
+    select 
+    <include refid="Base_Column_List" />
+    from cmn_pay_user c
+    where 1=1 
+    <if test="model.name != null" >and c.name= #{model.name,jdbcType=VARCHAR}</if>
+    <if test="model.password != null" >and c.password= #{model.password,jdbcType=VARCHAR}</if>
+    <if test="model.token != null" >and c.token= #{model.token,jdbcType=VARCHAR}</if>
+    <if test="model.isValid != null" >and c.is_valid= #{model.isValid,jdbcType=INTEGER}</if>
+    <if test="model.count != null" >and c.count= #{model.count,jdbcType=BIGINT}</if>
+    <if test="model.payType != null" >and c.pay_type= #{model.payType,jdbcType=INTEGER}</if>
+    <if test="model.payDate != null" >and c.pay_date= #{model.payDate,jdbcType=TIMESTAMP}</if>
+    <if test="model.createDate != null" >and c.create_date= #{model.createDate,jdbcType=TIMESTAMP}</if>
+    <if test="model.updateDate != null" >and c.update_date= #{model.updateDate,jdbcType=TIMESTAMP}</if>
+    <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="org.turing.pangu.model.CmnPayUser" >
+    select count(0) totalCount
+    from cmn_pay_user c
+    where 1=1 
+    <if test="name != null" >and c.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="password != null" >and c.password= #{password,jdbcType=VARCHAR}</if>
+    <if test="token != null" >and c.token= #{token,jdbcType=VARCHAR}</if>
+    <if test="isValid != null" >and c.is_valid= #{isValid,jdbcType=INTEGER}</if>
+    <if test="count != null" >and c.count= #{count,jdbcType=BIGINT}</if>
+    <if test="payType != null" >and c.pay_type= #{payType,jdbcType=INTEGER}</if>
+    <if test="payDate != null" >and c.pay_date= #{payDate,jdbcType=TIMESTAMP}</if>
+    <if test="createDate != null" >and c.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
+    <if test="updateDate != null" >and c.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Long" >
+    delete from cmn_pay_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.turing.pangu.model.CmnPayUser" >
+    insert into cmn_pay_user 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        name,    
+        password,    
+        token,    
+        is_valid,    
+        count,    
+        pay_type,    
+        pay_date,    
+        create_date,    
+        update_date,    
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{name,jdbcType=VARCHAR},  
+        #{password,jdbcType=VARCHAR},  
+        #{token,jdbcType=VARCHAR},  
+        #{isValid,jdbcType=INTEGER},  
+        #{count,jdbcType=BIGINT},  
+        #{payType,jdbcType=INTEGER},  
+        #{payDate,jdbcType=TIMESTAMP},  
+        #{createDate,jdbcType=TIMESTAMP},  
+        #{updateDate,jdbcType=TIMESTAMP},  
+    </trim>
+  </insert>
+  <insert id="insertCmnPayUserByTrim" parameterType="org.turing.pangu.model.CmnPayUser" >
+    insert into cmn_pay_user 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="name != null" >name,</if>
+        <if test="password != null" >password,</if>
+        <if test="token != null" >token,</if>
+        <if test="isValid != null" >is_valid,</if>
+        <if test="count != null" >count,</if>
+        <if test="payType != null" >pay_type,</if>
+        <if test="payDate != null" >pay_date,</if>
+        <if test="createDate != null" >create_date,</if>
+        <if test="updateDate != null" >update_date,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="name != null" >#{name,jdbcType=VARCHAR},</if>  
+        <if test="password != null" >#{password,jdbcType=VARCHAR},</if>  
+        <if test="token != null" >#{token,jdbcType=VARCHAR},</if>  
+        <if test="isValid != null" >#{isValid,jdbcType=INTEGER},</if>  
+        <if test="count != null" >#{count,jdbcType=BIGINT},</if>  
+        <if test="payType != null" >#{payType,jdbcType=INTEGER},</if>  
+        <if test="payDate != null" >#{payDate,jdbcType=TIMESTAMP},</if>  
+        <if test="createDate != null" >#{createDate,jdbcType=TIMESTAMP},</if>  
+        <if test="updateDate != null" >#{updateDate,jdbcType=TIMESTAMP},</if>  
+    </trim>
+  </insert>
+  <update id="updateCmnPayUserById" parameterType="org.turing.pangu.model.CmnPayUser" >
+    update cmn_pay_user set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        name=#{name,jdbcType=VARCHAR},    
+        password=#{password,jdbcType=VARCHAR},    
+        token=#{token,jdbcType=VARCHAR},    
+        is_valid=#{isValid,jdbcType=INTEGER},    
+        count=#{count,jdbcType=BIGINT},    
+        pay_type=#{payType,jdbcType=INTEGER},    
+        pay_date=#{payDate,jdbcType=TIMESTAMP},    
+        create_date=#{createDate,jdbcType=TIMESTAMP},    
+        update_date=#{updateDate,jdbcType=TIMESTAMP},    
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="org.turing.pangu.model.CmnPayUser" >
+    update cmn_pay_user set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="name != null" >name=#{name,jdbcType=VARCHAR},</if>
+        <if test="password != null" >password=#{password,jdbcType=VARCHAR},</if>
+        <if test="token != null" >token=#{token,jdbcType=VARCHAR},</if>
+        <if test="isValid != null" >is_valid=#{isValid,jdbcType=INTEGER},</if>
+        <if test="count != null" >count=#{count,jdbcType=BIGINT},</if>
+        <if test="payType != null" >pay_type=#{payType,jdbcType=INTEGER},</if>
+        <if test="payDate != null" >pay_date=#{payDate,jdbcType=TIMESTAMP},</if>
+        <if test="createDate != null" >create_date=#{createDate,jdbcType=TIMESTAMP},</if>
+        <if test="updateDate != null" >update_date=#{updateDate,jdbcType=TIMESTAMP},</if>
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

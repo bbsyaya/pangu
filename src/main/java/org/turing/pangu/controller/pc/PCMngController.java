@@ -47,6 +47,7 @@ import org.turing.pangu.model.User;
 import org.turing.pangu.phone.ChangeDeviceInfo;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.BaseService;
+import org.turing.pangu.service.CmnPayUserService;
 import org.turing.pangu.service.ComputerService;
 import org.turing.pangu.service.DeviceFromNetService;
 import org.turing.pangu.service.DeviceService;
@@ -125,6 +126,10 @@ public class PCMngController extends BaseController {
 	@Resource(name = "deviceFromNetServiceImpl")
 	private DeviceFromNetService deviceFromNetService;
 	
+	@Resource(name = "cmnPayUserServiceImpl")
+	private CmnPayUserService cmnPayUserService;
+	
+	
 	private List<BaseService> getAllServiecInstance(){
 		List<BaseService> list = new ArrayList<BaseService>();
 		list.add(userService);
@@ -142,6 +147,7 @@ public class PCMngController extends BaseController {
 		list.add(simulatorService);
 		list.add(resolutionService);
 		list.add(deviceFromNetService);
+		list.add(cmnPayUserService);
 		return list;
 	}
 	

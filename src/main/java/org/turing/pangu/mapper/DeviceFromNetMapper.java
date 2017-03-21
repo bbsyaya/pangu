@@ -2,7 +2,6 @@ package org.turing.pangu.mapper;
 
 import java.util.List;
 
-import org.turing.pangu.model.Device;
 import org.turing.pangu.model.DeviceFromNet;
 
  /**AppMapper*/

@@ -75,6 +75,20 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		Date toTime = new Date();
 		todayTaskList.clear();
 		todayTaskList = getTodayTaskList(fromTime, toTime);
+		if( todayTaskList.size() > 0){
+			for (int i = todayTaskList.size()-1; i >=0; i--){
+				Task tmp = todayTaskList.get(i);
+				int flag = 0;
+				for(App run:AppEngine.getInstance().getAppList()){
+					if(tmp.getAppId() == run.getId()){
+						flag = 1;
+					}
+				}
+				if(flag == 0){ // 去除不可运行的app
+					todayTaskList.remove(i);
+				}
+			}
+		}
 	}
 	public List<Task> getAllDBTaskByAppId(long appId){
 		List<Task> list = new ArrayList<Task>();
@@ -90,10 +104,11 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		if(null == ip ){
 			ip = request.getRemoteAddr();
 		}
+		// 提供给本地调试
+		if(ip.equals("127.0.0.1") || ip.equals("0:0:0:0:0:0:0:1")){
+			ip = "113.83.191.141";
+		}
 		return ip;
-	}
-	public synchronized String getRemoteIp11(HttpServletRequest request){
-		return "119.90.141.77";
 	}
 	/** 
 	   * 获取用户真实IP地址，不使用request.getRemoteAddr();的原因是有可能用户使用了代理软件方式避免真实IP地址, 

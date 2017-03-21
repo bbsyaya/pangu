@@ -78,9 +78,9 @@ public class GenerateData {
         int index = RandomUtils.getRandom(0, 10);
         if(index > 4)
         {
-            return pre[0] + "(Linux; U; " + version +"; " + brand + " Build/" + RandomUtils.getRandomNumbersAndCapitalLetters(5);
+            return pre[0] + "(Linux; U; " + version +"; " + brand + " Build/" + RandomUtils.getRandomNumbersAndCapitalLetters(5)+")";
         }else{
-            return pre[1] + "(Linux; U; " + version +"; " + brand + " Build/"+ RandomUtils.getRandomNumbersAndCapitalLetters(5);
+            return pre[1] + "(Linux; U; " + version +"; " + brand + " Build/"+ RandomUtils.getRandomNumbersAndCapitalLetters(5)+")";
         }
     }
     public  String generateMacAddress()

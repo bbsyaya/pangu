@@ -316,7 +316,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 		pTask.setDeviceId(deviceId);
 		pTask.setVpnToken(task.getToken());
 		pTask.setOperType(operType);
-		pTask.setTaskId(task.getToken() + RandomUtils.getRandom(TaskEngine.PHONE_TASKID_LENGH/2));//32位
+		pTask.setTaskId(task.getToken() + RandomUtils.getRandomNumbersAndCapitalLetters(TaskEngine.PHONE_TASKID_LENGH/2));//32位
 		pTask.setApp(opt.getApp());
 		pTask.setTimes(1);// 暂定一次
 		pTask.setSpanTime(5);//暂定5S 
@@ -387,7 +387,7 @@ public class TaskDynamicIpEngine implements TaskIF{
                 	mListen.updateAllocTask(operType,dbTask); // 对应派发 ++ 
                     logger.info("getOptimalAppId---end--return INCREMENT ");
                     opt.setApp(AppEngine.getInstance().getAppInfo(dbTask.getAppId()));
-                    opt.setInfo(PhoneBrandEngine.getInstance().getNewDeviceInfo(task.getLocation(), opt.getApp()));
+                    opt.setInfo(PhoneBrandEngine.getInstance().getNewDeviceInfo(remoteIp,task.getLocation(), opt.getApp()));
                     return opt;
                 }
             }
@@ -401,7 +401,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 			            mListen.updateAllocTask(operType,dbTask); // 对应派发 ++ 
 			            logger.info("getOptimalAppId---may be more run--- " + pt.getApp().getId());
 			            opt.setApp(AppEngine.getInstance().getAppInfo(dbTask.getAppId()));
-			            opt.setInfo(PhoneBrandEngine.getInstance().getNewDeviceInfo(task.getLocation(), opt.getApp()));
+			            opt.setInfo(PhoneBrandEngine.getInstance().getNewDeviceInfo(remoteIp,task.getLocation(), opt.getApp()));
                         return opt;
 		            }
 	            }

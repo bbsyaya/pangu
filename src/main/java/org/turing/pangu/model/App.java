@@ -4,8 +4,8 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年01月24日 
- * @since 2017年01月24日 
+ * @version 1.0, 2017年03月18日 
+ * @since 2017年03月18日 
  */
 
 package org.turing.pangu.model;
@@ -25,13 +25,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 3584481485234878995L;
+  private static final long serialVersionUID = 4595641489806125781L;
 
   /***/
   private Long userId;
 
   /***/
   private Long platformId;
+
+  /***/
+  private String appKey;
+
+  /***/
+  private String channel;
 
   /***/
   private String name;
@@ -85,6 +91,36 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   public void setPlatformId(Long platformId)
   {
     this.platformId=platformId;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =255 )
+  public String getAppKey()
+  {
+   return this.appKey;
+  }
+
+  /**设置*/
+  public void setAppKey(String appKey)
+  {
+    this.appKey=appKey;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =512 )
+  public String getChannel()
+  {
+   return this.channel;
+  }
+
+  /**设置*/
+  public void setChannel(String channel)
+  {
+    this.channel=channel;
   }
 
   

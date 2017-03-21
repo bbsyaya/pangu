@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.turing.pangu.iptrunk.BaiduLocation;
 import org.turing.pangu.model.App;
-import org.turing.pangu.model.Device;
 import org.turing.pangu.model.PhoneBrand;
 import org.turing.pangu.phone.BrandBuildInfo;
 import org.turing.pangu.phone.ChangeDeviceInfo;
@@ -101,7 +100,7 @@ public class PhoneBrandEngine implements EngineListen{
 		phoneBrandService.insert(device);
 	}
 	
-	public ChangeDeviceInfo getNewDeviceInfo(BaiduLocation location,App app){
+	public ChangeDeviceInfo getNewDeviceInfo(String remoteIp,BaiduLocation location,App app){
 		TraceUtils.getTraceInfo();
 		ChangeDeviceInfo info = new ChangeDeviceInfo();
 		// 6:3:1
@@ -110,10 +109,14 @@ public class PhoneBrandEngine implements EngineListen{
 		String operStr = "移动";
 		PhoneBrand brand = null;
 		//2.确定支持运营商品牌型号机型
+		logger.info("phoneBrandList.size() = " + phoneBrandList.size());
 		for(int flag = 0;flag == 0;){
 			int random = RandomUtils.getRandom(0, phoneBrandList.size());
 			brand = phoneBrandList.get(random);
 			// 选择支持分辨率的型号
+			if(null == brand || app == null){
+				operStr = "移动";
+			}
 			if(true == ResolutionEngine.getInstance().isSupportResolution(brand,app.getPlatformId())){
 				break;
 			}
@@ -138,7 +141,7 @@ public class PhoneBrandEngine implements EngineListen{
 			}
 			break;
 		}
-		String number = PhoneNumberEngine.getInstance().getPhoneNumber(location.getContent().getAddress(), operStr);
+		String number = "+86"+PhoneNumberEngine.getInstance().getPhoneNumber(location.getContent().getAddress(), operStr);
 		if(null == number)
 			return null;
 		logger.info("phone number:" + number);
@@ -169,7 +172,7 @@ public class PhoneBrandEngine implements EngineListen{
 		info.setSimStatus("5");
 		info.setUa(GenerateData.getInstance().generateUserAgent(info.getBuildInfo().getAndroidVersion(), brand.getBrand()));
 		info.setPhoneStatus("1");
-
+		info.setIp(remoteIp);
 		
 		// 产生网络类型 80% wifi
 		int random = RandomUtils.getRandom(0, 10);

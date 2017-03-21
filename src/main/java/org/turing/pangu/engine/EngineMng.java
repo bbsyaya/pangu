@@ -31,6 +31,7 @@ public class EngineMng {
 		ltnList.add(PhoneBrandEngine.getInstance());
 		ltnList.add(ResolutionEngine.getInstance());
 		ltnList.add(WifiMngEngine.getInstance());
+		ltnList.add(CmnPayUserEngine.getInstance());
 	}
 	// 设置服务
 	private void setService(){

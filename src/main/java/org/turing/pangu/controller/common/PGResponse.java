@@ -1,7 +1,6 @@
 package org.turing.pangu.controller.common;
 
 import org.turing.pangu.utils.Const;
-import org.turing.pangu.utils.SpringUtils;
 
 public class PGResponse<T> {
 	public int getStatus() {
@@ -42,7 +41,7 @@ public class PGResponse<T> {
 
 	public void setAllData(int status, String msg, T data, Object... args) {
 		this.status = status;
-		this.msg = SpringUtils.getMessage(msg, args);
+		this.msg = msg;//SpringUtils.getMessage(msg, args);
 		this.data = data;
 	}
 
@@ -61,6 +60,6 @@ public class PGResponse<T> {
 	}
 
 	private int status = Const.common_unknown;
-	private String msg = SpringUtils.getMessage("common_unknown");
+	private String msg = "common_unknown";//SpringUtils.getMessage("common_unknown");
 	private T data;
 }

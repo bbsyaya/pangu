@@ -12,7 +12,9 @@ import org.turing.pangu.controller.phone.request.GetTaskReq;
 import org.turing.pangu.controller.phone.request.TaskFinishReq;
 import org.turing.pangu.controller.phone.response.GetTaskRsp;
 import org.turing.pangu.model.Device;
+import org.turing.pangu.utils.AESUtils;
 import org.turing.pangu.utils.HttpUtils;
+import org.turing.pangu.utils.RandomUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
@@ -43,17 +45,26 @@ public class testTask {
         String str = matcher.group();
         String encoding=System.getProperty("file.encoding");
         System.out.println("Default System Encoding: " + encoding);
+        */
+        String token = "*UJHGGG$%432HBNJklP)_+:?>Z!)(HJkQ!EDXSA=|]";
+        String tokenKey = "*&^%$EDc3@:{'?>B";
+        String str = AESUtils.encryptToBase64(token,tokenKey);
+        System.out.print(RandomUtils.getRandomNumbersAndCapitalLetters(64));
+        String str1 = AESUtils.decryptFromBase64(str, tokenKey);
+        //System.out.print(str1);
         
-		VpnLoginRsp rsp = loginPangu(0,"kwwwkkk0www");
+		//VpnLoginRsp rsp = loginPangu(0,"kwk0www");
+		
 		for(int index = 0;index < 1;index++){
 			try {
-				GetTaskRsp rsp1 = getTask("2333"+index);
 				Thread.sleep(1000);
-				if(rsp1.getIsHaveTask() == 1){
-					taskFinish(rsp1,0);
-				}
+				//GetTaskRsp rsp1 = getTask("2333"+index);
+				Thread.sleep(1000);
+				//if(rsp1.getIsHaveTask() == 1){
+					//taskFinish(rsp1,0);
+				//}
 				//operUpdate(rsp.getToken());
-				
+				/*
 				
 				GetTaskRsp rsp2 = getTask("2333333"+index);				
 				Thread.sleep(1000);
@@ -80,12 +91,13 @@ public class testTask {
 				}
 				
 				operUpdate(rsp.getToken());
+				*/
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		*/
+		
 		//getTask("123444");
 		//getTask("sdffff");
 		//System.out.print("\n" + Pattern.compile("[^0-9]").matcher(str).replaceAll(""));

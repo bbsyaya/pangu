@@ -5,6 +5,8 @@
     <id column="id" property="id" jdbcType="BIGINT" />       
     <result column="user_id" property="userId" jdbcType="BIGINT" />          
     <result column="platform_id" property="platformId" jdbcType="BIGINT" />          
+    <result column="app_key" property="appKey" jdbcType="VARCHAR" />          
+    <result column="channel" property="channel" jdbcType="VARCHAR" />          
     <result column="name" property="name" jdbcType="VARCHAR" />          
     <result column="package_name" property="packageName" jdbcType="VARCHAR" />          
     <result column="apk_path" property="apkPath" jdbcType="VARCHAR" />          
@@ -18,6 +20,8 @@
     a.id,
 	a.user_id,
 	a.platform_id,
+	a.app_key,
+	a.channel,
 	a.name,
 	a.package_name,
 	a.apk_path,
@@ -30,6 +34,8 @@
   <sql id="Base_Column_Value_List" >
     #{userId},
 	#{platformId},
+	#{appKey},
+	#{channel},
 	#{name},
 	#{packageName},
 	#{apkPath},
@@ -42,6 +48,8 @@
   <sql id="Base_Column_Update_List" >
     user_id=#{userId},
 	platform_id=#{platformId},
+	app_key=#{appKey},
+	channel=#{channel},
 	name=#{name},
 	package_name=#{packageName},
 	apk_path=#{apkPath},
@@ -69,6 +77,8 @@
     where 1=1 
     <if test="userId != null" >and a.user_id= #{userId,jdbcType=BIGINT}</if>
     <if test="platformId != null" >and a.platform_id= #{platformId,jdbcType=BIGINT}</if>
+    <if test="appKey != null" >and a.app_key= #{appKey,jdbcType=VARCHAR}</if>
+    <if test="channel != null" >and a.channel= #{channel,jdbcType=VARCHAR}</if>
     <if test="name != null" >and a.name= #{name,jdbcType=VARCHAR}</if>
     <if test="packageName != null" >and a.package_name= #{packageName,jdbcType=VARCHAR}</if>
     <if test="apkPath != null" >and a.apk_path= #{apkPath,jdbcType=VARCHAR}</if>
@@ -77,7 +87,6 @@
     <if test="isClose != null" >and a.is_close= #{isClose,jdbcType=INTEGER}</if>
     <if test="createDate != null" >and a.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and a.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
-    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
   </select>
   <select id="selectModelList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.App" >
     select 
@@ -102,6 +111,8 @@
     where 1=1 
     <if test="userId != null" >and a.user_id= #{userId,jdbcType=BIGINT}</if>
     <if test="platformId != null" >and a.platform_id= #{platformId,jdbcType=BIGINT}</if>
+    <if test="appKey != null" >and a.app_key= #{appKey,jdbcType=VARCHAR}</if>
+    <if test="channel != null" >and a.channel= #{channel,jdbcType=VARCHAR}</if>
     <if test="name != null" >and a.name= #{name,jdbcType=VARCHAR}</if>
     <if test="packageName != null" >and a.package_name= #{packageName,jdbcType=VARCHAR}</if>
     <if test="apkPath != null" >and a.apk_path= #{apkPath,jdbcType=VARCHAR}</if>
@@ -118,6 +129,8 @@
     where 1=1 
     <if test="model.userId != null" >and a.user_id= #{model.userId,jdbcType=BIGINT}</if>
     <if test="model.platformId != null" >and a.platform_id= #{model.platformId,jdbcType=BIGINT}</if>
+    <if test="model.appKey != null" >and a.app_key= #{model.appKey,jdbcType=VARCHAR}</if>
+    <if test="model.channel != null" >and a.channel= #{model.channel,jdbcType=VARCHAR}</if>
     <if test="model.name != null" >and a.name= #{model.name,jdbcType=VARCHAR}</if>
     <if test="model.packageName != null" >and a.package_name= #{model.packageName,jdbcType=VARCHAR}</if>
     <if test="model.apkPath != null" >and a.apk_path= #{model.apkPath,jdbcType=VARCHAR}</if>
@@ -134,6 +147,8 @@
     where 1=1 
     <if test="userId != null" >and a.user_id= #{userId,jdbcType=BIGINT}</if>
     <if test="platformId != null" >and a.platform_id= #{platformId,jdbcType=BIGINT}</if>
+    <if test="appKey != null" >and a.app_key= #{appKey,jdbcType=VARCHAR}</if>
+    <if test="channel != null" >and a.channel= #{channel,jdbcType=VARCHAR}</if>
     <if test="name != null" >and a.name= #{name,jdbcType=VARCHAR}</if>
     <if test="packageName != null" >and a.package_name= #{packageName,jdbcType=VARCHAR}</if>
     <if test="apkPath != null" >and a.apk_path= #{apkPath,jdbcType=VARCHAR}</if>
@@ -152,6 +167,8 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
         user_id,    
         platform_id,    
+        app_key,    
+        channel,    
         name,    
         package_name,    
         apk_path,    
@@ -164,6 +181,8 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
         #{userId,jdbcType=BIGINT},  
         #{platformId,jdbcType=BIGINT},  
+        #{appKey,jdbcType=VARCHAR},  
+        #{channel,jdbcType=VARCHAR},  
         #{name,jdbcType=VARCHAR},  
         #{packageName,jdbcType=VARCHAR},  
         #{apkPath,jdbcType=VARCHAR},  
@@ -179,6 +198,8 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
         <if test="userId != null" >user_id,</if>
         <if test="platformId != null" >platform_id,</if>
+        <if test="appKey != null" >app_key,</if>
+        <if test="channel != null" >channel,</if>
         <if test="name != null" >name,</if>
         <if test="packageName != null" >package_name,</if>
         <if test="apkPath != null" >apk_path,</if>
@@ -191,6 +212,8 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
         <if test="userId != null" >#{userId,jdbcType=BIGINT},</if>  
         <if test="platformId != null" >#{platformId,jdbcType=BIGINT},</if>  
+        <if test="appKey != null" >#{appKey,jdbcType=VARCHAR},</if>  
+        <if test="channel != null" >#{channel,jdbcType=VARCHAR},</if>  
         <if test="name != null" >#{name,jdbcType=VARCHAR},</if>  
         <if test="packageName != null" >#{packageName,jdbcType=VARCHAR},</if>  
         <if test="apkPath != null" >#{apkPath,jdbcType=VARCHAR},</if>  
@@ -206,6 +229,8 @@
     <trim prefix="" suffix="" suffixOverrides="," >
         user_id=#{userId,jdbcType=BIGINT},    
         platform_id=#{platformId,jdbcType=BIGINT},    
+        app_key=#{appKey,jdbcType=VARCHAR},    
+        channel=#{channel,jdbcType=VARCHAR},    
         name=#{name,jdbcType=VARCHAR},    
         package_name=#{packageName,jdbcType=VARCHAR},    
         apk_path=#{apkPath,jdbcType=VARCHAR},    
@@ -222,6 +247,8 @@
     <trim prefix="" suffix="" suffixOverrides="," >
         <if test="userId != null" >user_id=#{userId,jdbcType=BIGINT},</if>
         <if test="platformId != null" >platform_id=#{platformId,jdbcType=BIGINT},</if>
+        <if test="appKey != null" >app_key=#{appKey,jdbcType=VARCHAR},</if>
+        <if test="channel != null" >channel=#{channel,jdbcType=VARCHAR},</if>
         <if test="name != null" >name=#{name,jdbcType=VARCHAR},</if>
         <if test="packageName != null" >package_name=#{packageName,jdbcType=VARCHAR},</if>
         <if test="apkPath != null" >apk_path=#{apkPath,jdbcType=VARCHAR},</if>

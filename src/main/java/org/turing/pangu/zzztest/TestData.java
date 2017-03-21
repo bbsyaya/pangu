@@ -122,7 +122,7 @@ public class TestData {
 		LocationMng mng = new LocationMng();
 		BaiduLocation location = mng.getLocation("116.5.244.222");
 		App app = AppEngine.getInstance().getAppInfo(1L);
-		ChangeDeviceInfo info = PhoneBrandEngine.getInstance().getNewDeviceInfo(location, app);
+		ChangeDeviceInfo info = PhoneBrandEngine.getInstance().getNewDeviceInfo("116.5.244.222",location, app);
 		System.out.print("\n"+JSON.toJSONString(info));
 		/*
 		WifiMngEngine.getInstance().init();

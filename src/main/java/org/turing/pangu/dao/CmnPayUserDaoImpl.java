@@ -13,22 +13,21 @@ package org.turing.pangu.dao;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.turing.pangu.mapper.DeviceFromNetMapper;
-import org.turing.pangu.model.DeviceFromNet;
+import org.turing.pangu.mapper.CmnPayUserMapper;
+import org.turing.pangu.model.CmnPayUser;
 
 @Repository
-public class DeviceFromNetDaoImpl extends BaseDaoImpl<DeviceFromNet, Long> implements DeviceFromNetDao {
+public class CmnPayUserDaoImpl extends BaseDaoImpl<CmnPayUser, Long> implements CmnPayUserDao {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger logger = Logger.getLogger(DeviceFromNetDaoImpl.class);
+	private static final Logger logger = Logger.getLogger(CmnPayUserDaoImpl.class);
 
 	@Autowired
-	private DeviceFromNetMapper mapper;
+	private CmnPayUserMapper mapper;
 	
 	@Autowired
-	public void setDeviceFromNetMapper(DeviceFromNetMapper mapper) {
+	public void setMapper(CmnPayUserMapper mapper) {
 		super.setBaseMapper(mapper);
 	}
-
 }
