@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="org.turing.pangu.model.Platform" >
     <id column="id" property="id" jdbcType="BIGINT" />       
     <result column="name" property="name" jdbcType="VARCHAR" />          
+    <result column="is_valid" property="isValid" jdbcType="INTEGER" />          
     <result column="introduce" property="introduce" jdbcType="VARCHAR" />          
     <result column="shell_config" property="shellConfig" jdbcType="VARCHAR" />          
     <result column="fix_data" property="fixData" jdbcType="VARCHAR" />          
@@ -16,6 +17,7 @@
   <sql id="Base_Column_List" >
     p.id,
 	p.name,
+	p.is_valid,
 	p.introduce,
 	p.shell_config,
 	p.fix_data,
@@ -27,6 +29,7 @@
   </sql>
   <sql id="Base_Column_Value_List" >
     #{name},
+	#{isValid},
 	#{introduce},
 	#{shellConfig},
 	#{fixData},
@@ -38,6 +41,7 @@
   </sql>
   <sql id="Base_Column_Update_List" >
     name=#{name},
+	is_valid=#{isValid},
 	introduce=#{introduce},
 	shell_config=#{shellConfig},
 	fix_data=#{fixData},
@@ -64,6 +68,7 @@
     from platform p
     where 1=1 
     <if test="name != null" >and p.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="isValid != null" >and p.is_valid= #{isValid,jdbcType=INTEGER}</if>
     <if test="introduce != null" >and p.introduce= #{introduce,jdbcType=VARCHAR}</if>
     <if test="shellConfig != null" >and p.shell_config= #{shellConfig,jdbcType=VARCHAR}</if>
     <if test="fixData != null" >and p.fix_data= #{fixData,jdbcType=VARCHAR}</if>
@@ -72,7 +77,6 @@
     <if test="taskConfig != null" >and p.task_config= #{taskConfig,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and p.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and p.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
-    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
   </select>
   <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.Platform" >
     select 
@@ -80,6 +84,7 @@
     from platform p
     where 1=1 
     <if test="name != null" >and p.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="isValid != null" >and p.is_valid= #{isValid,jdbcType=INTEGER}</if>
     <if test="introduce != null" >and p.introduce= #{introduce,jdbcType=VARCHAR}</if>
     <if test="shellConfig != null" >and p.shell_config= #{shellConfig,jdbcType=VARCHAR}</if>
     <if test="fixData != null" >and p.fix_data= #{fixData,jdbcType=VARCHAR}</if>
@@ -95,6 +100,7 @@
     from platform p
     where 1=1 
     <if test="model.name != null" >and p.name= #{model.name,jdbcType=VARCHAR}</if>
+    <if test="model.isValid != null" >and p.is_valid= #{model.isValid,jdbcType=INTEGER}</if>
     <if test="model.introduce != null" >and p.introduce= #{model.introduce,jdbcType=VARCHAR}</if>
     <if test="model.shellConfig != null" >and p.shell_config= #{model.shellConfig,jdbcType=VARCHAR}</if>
     <if test="model.fixData != null" >and p.fix_data= #{model.fixData,jdbcType=VARCHAR}</if>
@@ -110,6 +116,7 @@
     from platform p
     where 1=1 
     <if test="name != null" >and p.name= #{name,jdbcType=VARCHAR}</if>
+    <if test="isValid != null" >and p.is_valid= #{isValid,jdbcType=INTEGER}</if>
     <if test="introduce != null" >and p.introduce= #{introduce,jdbcType=VARCHAR}</if>
     <if test="shellConfig != null" >and p.shell_config= #{shellConfig,jdbcType=VARCHAR}</if>
     <if test="fixData != null" >and p.fix_data= #{fixData,jdbcType=VARCHAR}</if>
@@ -127,6 +134,7 @@
     insert into platform 
     <trim prefix="(" suffix=")" suffixOverrides="," >
         name,    
+        is_valid,    
         introduce,    
         shell_config,    
         fix_data,    
@@ -138,6 +146,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
         #{name,jdbcType=VARCHAR},  
+        #{isValid,jdbcType=INTEGER},  
         #{introduce,jdbcType=VARCHAR},  
         #{shellConfig,jdbcType=VARCHAR},  
         #{fixData,jdbcType=VARCHAR},  
@@ -152,6 +161,7 @@
     insert into platform 
     <trim prefix="(" suffix=")" suffixOverrides="," >
         <if test="name != null" >name,</if>
+        <if test="isValid != null" >is_valid,</if>
         <if test="introduce != null" >introduce,</if>
         <if test="shellConfig != null" >shell_config,</if>
         <if test="fixData != null" >fix_data,</if>
@@ -163,6 +173,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
         <if test="name != null" >#{name,jdbcType=VARCHAR},</if>  
+        <if test="isValid != null" >#{isValid,jdbcType=INTEGER},</if>  
         <if test="introduce != null" >#{introduce,jdbcType=VARCHAR},</if>  
         <if test="shellConfig != null" >#{shellConfig,jdbcType=VARCHAR},</if>  
         <if test="fixData != null" >#{fixData,jdbcType=VARCHAR},</if>  
@@ -177,6 +188,7 @@
     update platform set 
     <trim prefix="" suffix="" suffixOverrides="," >
         name=#{name,jdbcType=VARCHAR},    
+        is_valid=#{isValid,jdbcType=INTEGER},    
         introduce=#{introduce,jdbcType=VARCHAR},    
         shell_config=#{shellConfig,jdbcType=VARCHAR},    
         fix_data=#{fixData,jdbcType=VARCHAR},    
@@ -192,6 +204,7 @@
     update platform set 
     <trim prefix="" suffix="" suffixOverrides="," >
         <if test="name != null" >name=#{name,jdbcType=VARCHAR},</if>
+        <if test="isValid != null" >is_valid=#{isValid,jdbcType=INTEGER},</if>
         <if test="introduce != null" >introduce=#{introduce,jdbcType=VARCHAR},</if>
         <if test="shellConfig != null" >shell_config=#{shellConfig,jdbcType=VARCHAR},</if>
         <if test="fixData != null" >fix_data=#{fixData,jdbcType=VARCHAR},</if>

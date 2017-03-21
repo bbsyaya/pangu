@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.turing.pangu.model.App;
-import org.turing.pangu.model.Platform;
+import org.turing.pangu.model.User;
 
-public class PlatformApp {
-	public Platform getPf() {
-		return pf;
+public class UserApp {
+	private User user;
+	private List<App> appList = new ArrayList<App>();
+	public User getUser() {
+		return user;
 	}
-	public void setPf(Platform pf) {
-		this.pf = pf;
+	public void setUser(User user) {
+		this.user = user;
 	}
 	public List<App> getAppList() {
 		return appList;
@@ -20,6 +22,5 @@ public class PlatformApp {
 		this.appList = appList;
 	}
 	
-	private Platform pf;
-	private List<App> appList = new ArrayList<App>();
+	
 }

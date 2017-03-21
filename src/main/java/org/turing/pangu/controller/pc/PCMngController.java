@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.turing.pangu.bean.DynamicVpnExtend;
-import org.turing.pangu.bean.PlatformApp;
+import org.turing.pangu.bean.PlatformUser;
 import org.turing.pangu.controller.common.BaseController;
 import org.turing.pangu.controller.common.PGResponse;
 import org.turing.pangu.controller.pc.request.GetAppListReq;
@@ -376,10 +376,10 @@ public class PCMngController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getAppList", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody PGResponse<List<PlatformApp>> getAppList(@RequestBody GetAppListReq req) {
+	public @ResponseBody PGResponse<List<PlatformUser>> getAppList(@RequestBody GetAppListReq req) {
 		TraceUtils.getTraceInfo();
-		PGResponse<List<PlatformApp>> rsp = new PGResponse<List<PlatformApp>>();
-		List<PlatformApp> list = AppEngine.getInstance().getPlatformAppList();
+		PGResponse<List<PlatformUser>> rsp = new PGResponse<List<PlatformUser>>();
+		List<PlatformUser> list = AppEngine.getInstance().getPlatformUserAppList();
 		rsp.setAllData(Const.common_ok, "common_ok", list);
 		logger.info("getAppList---" + JSON.toJSONString(rsp).toString());
 		return rsp;

@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.turing.pangu.bean.PlatformApp;
+import org.turing.pangu.bean.PlatformUser;
+import org.turing.pangu.bean.UserApp;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Platform;
+import org.turing.pangu.model.User;
 import org.turing.pangu.service.AppService;
 import org.turing.pangu.service.AppServiceImpl;
 import org.turing.pangu.service.BaseService;
@@ -26,15 +28,39 @@ public class AppEngine implements EngineListen{
 	public List<App> getAppList(){
 		return appList;
 	}
-	public List<PlatformApp> getPlatformAppList(){
-		List<PlatformApp> list = new ArrayList<PlatformApp>();
-		for(Platform pf : PlatformEngine.getInstance().getPlatformList()){
-			PlatformApp pa = new PlatformApp();
-			for(App app:appList){
-				if( app.getPlatformId() == pf.getId()){
-					pa.getAppList().add(app);
-				}
+	private List<App> getAppListByUserId(Long userId){
+		List<App> list = new ArrayList<App>();
+		for( App app :appList ){
+			if(app.getUserId() == userId){
+				list.add(app);
 			}
+		}
+		return list;
+	}
+	private List<User> getUserListByPlatformId(Long platformId){
+		List<User> list = new ArrayList<User>();
+		for( User usr :UserEngine.getInstance().getUserList() ){
+			if(usr.getPlatformId() == platformId){
+				list.add(usr);
+			}
+		}
+		return list;
+	}
+	
+	public List<PlatformUser> getPlatformUserAppList(){
+		List<PlatformUser> list = new ArrayList<PlatformUser>();
+		
+		for(Platform pf : PlatformEngine.getInstance().getPlatformList()){
+			PlatformUser pa = new PlatformUser();
+			List<UserApp> userAppList = new ArrayList<UserApp>();
+			List<User> userList = getUserListByPlatformId(pf.getId());
+			for(User user:userList){
+				UserApp userApp = new UserApp();
+				userApp.setUser(user);
+				userApp.setAppList(getAppListByUserId(user.getId()));
+				userAppList.add(userApp);
+			}
+			pa.setUserList(userAppList);
 			pa.setPf(pf);
 			list.add(pa);
 		}

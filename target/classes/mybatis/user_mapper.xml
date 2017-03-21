@@ -3,6 +3,8 @@
 <mapper namespace="org.turing.pangu.mapper.UserMapper" >
   <resultMap id="BaseResultMap" type="org.turing.pangu.model.User" >
     <id column="id" property="id" jdbcType="BIGINT" />       
+    <result column="platform_id" property="platformId" jdbcType="BIGINT" />          
+    <result column="is_valid" property="isValid" jdbcType="INTEGER" />          
     <result column="name" property="name" jdbcType="VARCHAR" />          
     <result column="password" property="password" jdbcType="VARCHAR" />          
     <result column="phone" property="phone" jdbcType="VARCHAR" />          
@@ -12,6 +14,8 @@
   </resultMap>   
   <sql id="Base_Column_List" >
     u.id,
+	u.platform_id,
+	u.is_valid,
 	u.name,
 	u.password,
 	u.phone,
@@ -20,7 +24,9 @@
 	u.update_date
   </sql>
   <sql id="Base_Column_Value_List" >
-    #{name},
+    #{platformId},
+	#{isValid},
+	#{name},
 	#{password},
 	#{phone},
 	#{ip},
@@ -28,7 +34,9 @@
 	#{updateDate}
   </sql>
   <sql id="Base_Column_Update_List" >
-    name=#{name},
+    platform_id=#{platformId},
+	is_valid=#{isValid},
+	name=#{name},
 	password=#{password},
 	phone=#{phone},
 	ip=#{ip},
@@ -51,19 +59,22 @@
     <include refid="Base_Column_List" />
     from user u
     where 1=1 
+    <if test="platformId != null" >and u.platform_id= #{platformId,jdbcType=BIGINT}</if>
+    <if test="isValid != null" >and u.is_valid= #{isValid,jdbcType=INTEGER}</if>
     <if test="name != null" >and u.name= #{name,jdbcType=VARCHAR}</if>
     <if test="password != null" >and u.password= #{password,jdbcType=VARCHAR}</if>
     <if test="phone != null" >and u.phone= #{phone,jdbcType=VARCHAR}</if>
     <if test="ip != null" >and u.ip= #{ip,jdbcType=VARCHAR}</if>
     <if test="createDate != null" >and u.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and u.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
-    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
   </select>
   <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.User" >
     select 
     <include refid="Base_Column_List" />
     from user u
     where 1=1 
+    <if test="platformId != null" >and u.platform_id= #{platformId,jdbcType=BIGINT}</if>
+    <if test="isValid != null" >and u.is_valid= #{isValid,jdbcType=INTEGER}</if>
     <if test="name != null" >and u.name= #{name,jdbcType=VARCHAR}</if>
     <if test="password != null" >and u.password= #{password,jdbcType=VARCHAR}</if>
     <if test="phone != null" >and u.phone= #{phone,jdbcType=VARCHAR}</if>
@@ -76,6 +87,8 @@
     <include refid="Base_Column_List" />
     from user u
     where 1=1 
+    <if test="model.platformId != null" >and u.platform_id= #{model.platformId,jdbcType=BIGINT}</if>
+    <if test="model.isValid != null" >and u.is_valid= #{model.isValid,jdbcType=INTEGER}</if>
     <if test="model.name != null" >and u.name= #{model.name,jdbcType=VARCHAR}</if>
     <if test="model.password != null" >and u.password= #{model.password,jdbcType=VARCHAR}</if>
     <if test="model.phone != null" >and u.phone= #{model.phone,jdbcType=VARCHAR}</if>
@@ -88,6 +101,8 @@
     select count(0) totalCount
     from user u
     where 1=1 
+    <if test="platformId != null" >and u.platform_id= #{platformId,jdbcType=BIGINT}</if>
+    <if test="isValid != null" >and u.is_valid= #{isValid,jdbcType=INTEGER}</if>
     <if test="name != null" >and u.name= #{name,jdbcType=VARCHAR}</if>
     <if test="password != null" >and u.password= #{password,jdbcType=VARCHAR}</if>
     <if test="phone != null" >and u.phone= #{phone,jdbcType=VARCHAR}</if>
@@ -102,6 +117,8 @@
   <insert id="insert" parameterType="org.turing.pangu.model.User" >
     insert into user 
     <trim prefix="(" suffix=")" suffixOverrides="," >
+        platform_id,    
+        is_valid,    
         name,    
         password,    
         phone,    
@@ -110,6 +127,8 @@
         update_date,    
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{platformId,jdbcType=BIGINT},  
+        #{isValid,jdbcType=INTEGER},  
         #{name,jdbcType=VARCHAR},  
         #{password,jdbcType=VARCHAR},  
         #{phone,jdbcType=VARCHAR},  
@@ -121,6 +140,8 @@
   <insert id="insertUserByTrim" parameterType="org.turing.pangu.model.User" >
     insert into user 
     <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="platformId != null" >platform_id,</if>
+        <if test="isValid != null" >is_valid,</if>
         <if test="name != null" >name,</if>
         <if test="password != null" >password,</if>
         <if test="phone != null" >phone,</if>
@@ -129,6 +150,8 @@
         <if test="updateDate != null" >update_date,</if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="platformId != null" >#{platformId,jdbcType=BIGINT},</if>  
+        <if test="isValid != null" >#{isValid,jdbcType=INTEGER},</if>  
         <if test="name != null" >#{name,jdbcType=VARCHAR},</if>  
         <if test="password != null" >#{password,jdbcType=VARCHAR},</if>  
         <if test="phone != null" >#{phone,jdbcType=VARCHAR},</if>  
@@ -140,6 +163,8 @@
   <update id="updateUserById" parameterType="org.turing.pangu.model.User" >
     update user set 
     <trim prefix="" suffix="" suffixOverrides="," >
+        platform_id=#{platformId,jdbcType=BIGINT},    
+        is_valid=#{isValid,jdbcType=INTEGER},    
         name=#{name,jdbcType=VARCHAR},    
         password=#{password,jdbcType=VARCHAR},    
         phone=#{phone,jdbcType=VARCHAR},    
@@ -152,6 +177,8 @@
   <update id="update" parameterType="org.turing.pangu.model.User" >
     update user set 
     <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="platformId != null" >platform_id=#{platformId,jdbcType=BIGINT},</if>
+        <if test="isValid != null" >is_valid=#{isValid,jdbcType=INTEGER},</if>
         <if test="name != null" >name=#{name,jdbcType=VARCHAR},</if>
         <if test="password != null" >password=#{password,jdbcType=VARCHAR},</if>
         <if test="phone != null" >phone=#{phone,jdbcType=VARCHAR},</if>

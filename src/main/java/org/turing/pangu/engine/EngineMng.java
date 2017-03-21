@@ -32,6 +32,7 @@ public class EngineMng {
 		ltnList.add(ResolutionEngine.getInstance());
 		ltnList.add(WifiMngEngine.getInstance());
 		ltnList.add(CmnPayUserEngine.getInstance());
+		ltnList.add(UserEngine.getInstance());
 	}
 	// 设置服务
 	private void setService(){

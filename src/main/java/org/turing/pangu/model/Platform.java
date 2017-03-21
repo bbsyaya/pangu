@@ -4,27 +4,31 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年02月17日 
- * @since 2017年02月17日 
+ * @version 1.0, 2017年03月21日 
+ * @since 2017年03月21日 
  */
 
 package org.turing.pangu.model;
 
 import java.util.Date;
-
-import org.hibernate.validator.constraints.Length;
-
+import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
  /**Platform*/
  public class Platform extends BaseModel<Platform>
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 8084751487329886826L;
+  private static final long serialVersionUID = 4827101490102097192L;
 
   /***/
   private String name;
+
+  /***/
+  private Integer isValid;
 
   /***/
   private String introduce;
@@ -64,6 +68,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   public void setName(String name)
   {
     this.name=name;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  public Integer getIsValid()
+  {
+   return this.isValid;
+  }
+
+  /**设置*/
+  public void setIsValid(Integer isValid)
+  {
+    this.isValid=isValid;
   }
 
   
