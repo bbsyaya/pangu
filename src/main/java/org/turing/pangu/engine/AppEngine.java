@@ -1,6 +1,7 @@
 package org.turing.pangu.engine;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -37,27 +38,37 @@ public class AppEngine implements EngineListen{
 		}
 		return list;
 	}
-	private List<User> getUserListByPlatformId(Long platformId){
-		List<User> list = new ArrayList<User>();
-		for( User usr :UserEngine.getInstance().getUserList() ){
-			if(usr.getPlatformId() == platformId){
-				list.add(usr);
-			}
-		}
+	private List<App> getAppListRealTimeByUserId(Long userId){
+		List<App> list = new ArrayList<App>();
+		App app = new App();
+		app.setUserId(userId);
+		list = appService.selectList(app);
 		return list;
 	}
-	
+	public void setAppValidByUserId(Long userId,int isValid){
+		App app = new App();
+		app.setUserId(userId);
+		List<App> list = appService.selectList(app);
+		if(null == list || list.size() == 0)
+			return;
+		
+		for(App tmp:list){
+			tmp.setIsCanRun(isValid);
+			tmp.setUpdateDate(new Date());
+			appService.update(tmp);
+		}
+	}
 	public List<PlatformUser> getPlatformUserAppList(){
 		List<PlatformUser> list = new ArrayList<PlatformUser>();
-		
-		for(Platform pf : PlatformEngine.getInstance().getPlatformList()){
+		List<Platform>  pfList = PlatformEngine.getInstance().getPlatformListRealTime();
+		for(Platform pf : pfList){
 			PlatformUser pa = new PlatformUser();
 			List<UserApp> userAppList = new ArrayList<UserApp>();
-			List<User> userList = getUserListByPlatformId(pf.getId());
+			List<User> userList = UserEngine.getInstance().getUserListRealTimeByPlatformId(pf.getId());
 			for(User user:userList){
 				UserApp userApp = new UserApp();
 				userApp.setUser(user);
-				userApp.setAppList(getAppListByUserId(user.getId()));
+				userApp.setAppList(getAppListRealTimeByUserId(user.getId()));
 				userAppList.add(userApp);
 			}
 			pa.setUserList(userAppList);

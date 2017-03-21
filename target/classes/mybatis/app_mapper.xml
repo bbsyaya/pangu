@@ -75,6 +75,7 @@
     <include refid="Base_Column_List" />
     from app a
     where 1=1 
+    <if test="id != null" >and a.id= #{id,jdbcType=BIGINT}</if>
     <if test="userId != null" >and a.user_id= #{userId,jdbcType=BIGINT}</if>
     <if test="platformId != null" >and a.platform_id= #{platformId,jdbcType=BIGINT}</if>
     <if test="appKey != null" >and a.app_key= #{appKey,jdbcType=VARCHAR}</if>

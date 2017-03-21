@@ -1,9 +1,11 @@
 package org.turing.pangu.engine;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.turing.pangu.model.App;
 import org.turing.pangu.model.User;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.UserService;
@@ -32,6 +34,28 @@ public class UserEngine implements EngineListen{
 		}
 		return null;
 	}
+	public List<User> getUserListRealTimeByPlatformId(Long platformId){
+		User user = new User();
+		user.setPlatformId(platformId);
+		List<User> list = userService.selectList(user);
+		return list;
+	}
+	
+	public void setUserValidByPlatformId(Long platformId,int isValid){
+		User user = new User();
+		user.setPlatformId(platformId);
+		List<User> list = userService.selectList(user);
+		if(null == list || list.size() == 0)
+			return;
+		
+		for(User tmp:list){
+			tmp.setIsValid(isValid);
+			tmp.setUpdateDate(new Date());
+			userService.update(tmp);
+			AppEngine.getInstance().setAppValidByUserId(tmp.getId(), tmp.getIsValid());
+		}
+	}
+	
 	@Override
 	public void setService(List<BaseService> serviceList) {
 		// TODO Auto-generated method stub

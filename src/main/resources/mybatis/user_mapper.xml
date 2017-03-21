@@ -59,6 +59,7 @@
     <include refid="Base_Column_List" />
     from user u
     where 1=1 
+    <if test="id != null" >and u.id= #{id,jdbcType=BIGINT}</if>
     <if test="platformId != null" >and u.platform_id= #{platformId,jdbcType=BIGINT}</if>
     <if test="isValid != null" >and u.is_valid= #{isValid,jdbcType=INTEGER}</if>
     <if test="name != null" >and u.name= #{name,jdbcType=VARCHAR}</if>

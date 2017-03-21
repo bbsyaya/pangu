@@ -20,6 +20,7 @@ import org.turing.pangu.controller.pc.request.PlatFormReq;
 import org.turing.pangu.controller.pc.request.UserReq;
 import org.turing.pangu.engine.AppEngine;
 import org.turing.pangu.engine.TaskEngine;
+import org.turing.pangu.engine.UserEngine;
 import org.turing.pangu.model.App;
 import org.turing.pangu.model.Platform;
 import org.turing.pangu.model.User;
@@ -70,6 +71,7 @@ public class PlatFormMngController extends BaseController {
 		}else{
 			platformService.update(req);
 		}
+		UserEngine.getInstance().setUserValidByPlatformId(req.getId(),req.getIsValid());
 		rsp.setAllData(Const.common_ok, "common_ok", null);
 		logger.info("managerPf---" + JSON.toJSONString(rsp).toString());
 		return rsp;
@@ -92,6 +94,7 @@ public class PlatFormMngController extends BaseController {
 		}else{
 			userService.update(req);
 		}
+		AppEngine.getInstance().setAppValidByUserId(req.getId(),req.getIsValid());
 		rsp.setAllData(Const.common_ok, "common_ok", null);
 		logger.info("managerUser---" + JSON.toJSONString(rsp).toString());
 		return rsp;

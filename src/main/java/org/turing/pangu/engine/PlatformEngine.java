@@ -21,6 +21,11 @@ public class PlatformEngine implements EngineListen{
 		return mInstance;
 	}
 	
+	public List<Platform> getPlatformListRealTime(){
+		List<Platform> list = platformService.selectAll();
+		return list;
+	}
+	
 	public List<Platform> getPlatformList(){
 		return platformList;
 	}

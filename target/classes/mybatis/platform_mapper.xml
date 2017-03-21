@@ -67,6 +67,7 @@
     <include refid="Base_Column_List" />
     from platform p
     where 1=1 
+    <if test="id != null" >and p.id= #{id,jdbcType=BIGINT}</if>
     <if test="name != null" >and p.name= #{name,jdbcType=VARCHAR}</if>
     <if test="isValid != null" >and p.is_valid= #{isValid,jdbcType=INTEGER}</if>
     <if test="introduce != null" >and p.introduce= #{introduce,jdbcType=VARCHAR}</if>
