@@ -150,6 +150,14 @@ public class PCMngController extends BaseController {
 		list.add(cmnPayUserService);
 		return list;
 	}
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	public @ResponseBody PGResponse<String> index() {
+		logger.info("index---" + new Date());
+		PGResponse<String> rsp = new PGResponse<String>();
+		rsp.setAllData(Const.common_ok, "common_ok", null);
+		logger.info("index---" + JSON.toJSONString(rsp).toString());
+		return rsp;
+	}
 	
 	@RequestMapping(value = "/moneyIFuckYou", method = RequestMethod.GET)
 	public @ResponseBody PGResponse<String> moneyIFuckYou() {

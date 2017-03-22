@@ -121,9 +121,20 @@ public class PlatFormMngController extends BaseController {
 		return rsp;
 	}
 	@RequestMapping(value = "/getAllInfo", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody List<PlatformUser> getAllInfo(HttpServletRequest request) {
+	public @ResponseBody PGResponse<List<PlatformUser>> getAllInfo(HttpServletRequest request) {
 		logger.info("getAllInfo---" + new Date());
+		PGResponse<List<PlatformUser>> rsp = new PGResponse<List<PlatformUser>>();
 		List<PlatformUser> list = AppEngine.getInstance().getPlatformUserAppList();
-		return list;
+		rsp.setAllData(Const.common_ok, "common_ok", list);
+		return rsp;
+	}
+	@RequestMapping(value = "/updateTask", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody PGResponse<String> updateTask(HttpServletRequest request) {
+		logger.info("updateTask---" + new Date());
+		PGResponse<String> rsp = new PGResponse<String>();
+		TaskEngine.getInstance().createTodayTask();
+		rsp.setAllData(Const.common_ok, "common_ok", null);
+		logger.info("updateTask---" + JSON.toJSONString(rsp).toString());
+		return rsp;
 	}
 }

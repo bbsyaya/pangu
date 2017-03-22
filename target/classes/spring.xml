@@ -258,6 +258,6 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 	</bean>
 
 	<bean id="springContextHolder" class="org.turing.pangu.utils.SpringContextHolder" />
-
+	<bean id="springBeanFactoryUtils" class="org.turing.pangu.utils.SpringBeanFactoryUtils" scope="singleton"/>
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 </beans>

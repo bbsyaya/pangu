@@ -53,7 +53,7 @@ public class testTask {
         String str1 = AESUtils.decryptFromBase64(str, tokenKey);
         //System.out.print(str1);
         
-		//VpnLoginRsp rsp = loginPangu(0,"kwk0www");
+		VpnLoginRsp rsp = loginPangu(0,"kwk0www");
 		
 		for(int index = 0;index < 1;index++){
 			try {

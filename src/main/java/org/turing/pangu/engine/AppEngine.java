@@ -38,7 +38,15 @@ public class AppEngine implements EngineListen{
 		}
 		return list;
 	}
-	private List<App> getAppListRealTimeByUserId(Long userId){
+	
+	public List<App> getAllAppListRealTime(){
+		List<App> list = new ArrayList<App>();
+		App app = new App();
+		list = appService.selectAll();
+		return list;
+	}
+	
+	public List<App> getAppListRealTimeByUserId(Long userId){
 		List<App> list = new ArrayList<App>();
 		App app = new App();
 		app.setUserId(userId);

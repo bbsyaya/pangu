@@ -2,6 +2,7 @@ package org.turing.pangu.bean;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.turing.pangu.model.Platform;
 
 public class PlatformUser {

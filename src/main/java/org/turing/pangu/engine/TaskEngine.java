@@ -184,7 +184,6 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 	// 创建今日任务
 	public void createTodayTask(){
 		logger.info("createTodayTask---000");
-		//List<TaskConfigureBean> list = TaskConfigureEngine.getInstance().getAllAppConfigure();
 		updateTaskToDBJob(); // 先保存
 		try {
 			Thread.sleep(1000);
@@ -196,8 +195,19 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		Task checkModel = new Task();
 		//先查下今天记录
 		List<Task> listFromDB = getTodayTaskList(DateUtils.getTimesMorning(), DateUtils.getTimesNight());
-		if(null == listFromDB || listFromDB.size() == 0){
-			for(App app : AppEngine.getInstance().getAppList()){
+		int flag = 0;
+		for(App app : AppEngine.getInstance().getAllAppListRealTime()){
+			flag = 0;
+			for(Task task:listFromDB){
+				if( app.getId() == task.getAppId()){
+					flag = 1;
+					break;
+				}
+			}
+			if( flag == 1){
+				continue;
+			}
+			if(app.getIsCanRun() == 1){
 				Task model = new Task();
 				model.init();//把变量设为0
 				model.setAppId(app.getId());
@@ -210,7 +220,12 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 				taskService.insert(model);
 			}
 		}
+
 		logger.info("createTodayTask---002");
+		PlatformEngine.getInstance().init();
+		UserEngine.getInstance().init();
+		AppEngine.getInstance().init();
+		
 		todayTaskListInit();
 		allTaskList.clear();
 		allTaskList = taskService.selectAll();

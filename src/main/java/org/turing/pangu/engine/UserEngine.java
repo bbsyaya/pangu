@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.turing.pangu.model.App;
 import org.turing.pangu.model.User;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.UserService;
