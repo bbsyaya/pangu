@@ -101,14 +101,28 @@ public class TaskDynamicIpEngine implements TaskIF{
 		task.getStatistics().setTaskStockTotalCount(task.getStockDeviceList().size()>0?1:0);
 		int activeUserCount = AppEngine.getInstance().getActiveUserCount();
 		int random = RandomUtils.getRandom(0, 100);
-		task.getStatistics().setTaskIncrementTotalCount((activeUserCount + ((random%2==0)?1:0))); // 尽量让脚本多跑一个
+		task.getStatistics().setTaskIncrementTotalCount((activeUserCount + ((random%3==0)?1:0))); // 尽量让脚本多跑一个
 		task.setCreateTime(new Date());
 		task.getStatistics().print();
 		vpnTaskList.add(task);
 		logger.info("vpnLogin---end");
 		return task.getToken();
 	}
-
+	//正在运行的模拟器数量
+	private int getRunningMoniterCount(VpnTask task){
+		int count = 0;
+		for(PhoneTask pt: task.getPhoneStockTaskList()){
+			if(pt.getIsFinished() == TaskEngine.TASK_STATE_INIT ){
+				count++;
+			}
+		}
+		for(PhoneTask pt: task.getPhoneTaskList()){
+			if(pt.getIsFinished() == TaskEngine.TASK_STATE_INIT ){
+				count++;
+			}
+		}
+		return count;
+	}
 	@Override
 	public synchronized VpnOperUpdateRsp vpnIsNeedSwitch(String token,String remoteIp,String realIp){
 		TraceUtils.getTraceInfo();
@@ -129,13 +143,7 @@ public class TaskDynamicIpEngine implements TaskIF{
 				}else{
 					dataRsp.setIsSwitchVpn(1);
 				}
-				//超时切就切
-				if(true == TaskEngine.isTimeOut(task)){ // 发现模拟器还有未上报的任务
-					logger.info("task not finish");
-					dataRsp.setIsSwitchVpn(1);
-					break;
-				}
-				dataRsp.setRunningCount(task.getPhoneTaskList().size() + task.getPhoneStockTaskList().size());
+				dataRsp.setRunningCount(getRunningMoniterCount(task));
 			}
 		}
 		logger.info("vpnIsNeedSwitch----end");
@@ -168,7 +176,20 @@ public class TaskDynamicIpEngine implements TaskIF{
 		logger.info("switchVpnFinish---end");
 		return true;
 	}
-
+	
+	private void updateVpnTaskInfo(VpnTaskStatistics statistics ,int state){
+		switch(state){
+			case TaskEngine.TASK_STATE_REPORT_FINISHED:
+				statistics.setTaskReportFinishedCount(statistics.getTaskReportFinishedCount()+1);
+				break;
+			case TaskEngine.TASK_STATE_REPORT_UNFINISHED:
+				statistics.setTaskReportNotFinishedCount(statistics.getTaskReportNotFinishedCount()+1);
+				break;
+			case TaskEngine.TASK_STATE_TIMEOUT:
+				statistics.setTaskReportNotFinishedCount(statistics.getTaskReportNotFinishedCount()+1);
+				break;
+		}
+	}
 	// 手机端一个任务完成
 	@Override
 	public synchronized void taskFinish(TaskFinishReq req,String remoteIp,String realIp){
@@ -177,18 +198,19 @@ public class TaskDynamicIpEngine implements TaskIF{
 		for(VpnTask task:vpnTaskList){
 			if(task.getToken().equals(req.getVpnToken())){
 				for(PhoneTask tmpTask:task.getPhoneTaskList()){
-					if(tmpTask.getTaskId().equals(req.getTaskId())){
+					// 任务ID相同,且状态未被设置过, timeout 也会设置状态 TaskEngine.TASK_STATE_TIMEOUT
+					if(tmpTask.getTaskId().equals(req.getTaskId())&& tmpTask.getIsFinished() == TaskEngine.TASK_STATE_INIT){
 						if(req.getIsFinished() == 1 ){
-							tmpTask.setIsFinished(1);//找到任务并设为完成状态
+							tmpTask.setIsFinished(TaskEngine.TASK_STATE_REPORT_FINISHED);//找到任务并设为完成状态
 							tmpTask.setIsReport(1);
 							mListen.updateExecuteTask(tmpTask,true); // 更新执行任务
-							task.getStatistics().setTaskReportFinishedCount(task.getStatistics().getTaskReportFinishedCount()+1);
+							updateVpnTaskInfo(task.getStatistics() ,TaskEngine.TASK_STATE_REPORT_FINISHED);
 							logger.info(" set tast Finished appId:"+tmpTask.getApp().getId());
 						}else{
-							tmpTask.setIsFinished(0);//找到任务并设为完成状态
+							tmpTask.setIsFinished(TaskEngine.TASK_STATE_REPORT_UNFINISHED);//找到任务并设为未完成状态
 							tmpTask.setIsReport(1);
 							mListen.updateExecuteTask(tmpTask,false); // 更新执行任务
-							task.getStatistics().setTaskReportNotFinishedCount(task.getStatistics().getTaskReportNotFinishedCount()+1);
+							updateVpnTaskInfo(task.getStatistics() ,TaskEngine.TASK_STATE_REPORT_UNFINISHED);
 							logger.info(" set tast not Finished appId:"+tmpTask.getApp().getId());
 						}
 					}
@@ -196,17 +218,17 @@ public class TaskDynamicIpEngine implements TaskIF{
 				
 				for(PhoneTask tmpTask:task.getPhoneStockTaskList()){
 					if(tmpTask.getTaskId().equals(req.getTaskId())){
-						if(req.getIsFinished() == 1 ){
-							tmpTask.setIsFinished(1);//找到任务并设为完成状态
+						if(req.getIsFinished() == 1 && tmpTask.getIsFinished() == TaskEngine.TASK_STATE_INIT){
+							tmpTask.setIsFinished(TaskEngine.TASK_STATE_REPORT_FINISHED);//找到任务并设为完成状态
 							tmpTask.setIsReport(1);
 							mListen.updateExecuteTask(tmpTask,true); // 更新执行任务
-							task.getStatistics().setTaskReportFinishedCount(task.getStatistics().getTaskReportFinishedCount()+1);
+							updateVpnTaskInfo(task.getStatistics() ,TaskEngine.TASK_STATE_REPORT_FINISHED);
 							logger.info(" set tast Finished appId:"+tmpTask.getApp().getId());
 						}else{
-							tmpTask.setIsFinished(0);//找到任务并设为完成状态
+							tmpTask.setIsFinished(TaskEngine.TASK_STATE_REPORT_UNFINISHED);//找到任务并设为未完成状态
 							tmpTask.setIsReport(1);
 							mListen.updateExecuteTask(tmpTask,false); // 更新执行任务
-							task.getStatistics().setTaskReportNotFinishedCount(task.getStatistics().getTaskReportNotFinishedCount()+1);
+							updateVpnTaskInfo(task.getStatistics(),TaskEngine.TASK_STATE_REPORT_UNFINISHED);
 							logger.info(" set tast not Finished appId:"+tmpTask.getApp().getId());
 						}
 					}
@@ -237,21 +259,20 @@ public class TaskDynamicIpEngine implements TaskIF{
 		logger.info("deviceId:"+deviceId+"--remoteIp:"+remoteIp+"--realIp:"+realIp);
 		for(VpnTask task:vpnTaskList){
 			if(task.getRemoteIp().equals(remoteIp)){
-				if(task.getPhoneTaskList().size() > (task.getStatistics().getTaskStockTotalCount() + task.getStatistics().getTaskIncrementTotalCount()) * TimeMng.getInstance().getTimeZoneWeight() ){
-					return pTask;
-				}
 				for(PhoneTask tmpTask:task.getPhoneTaskList()){
 					if(tmpTask.getDeviceId().equals(deviceId)){ // 发现取过任务了
-						if(tmpTask.getIsFinished() == 0){ // 任务没完成,返回原来的任务
+						if(tmpTask.getIsFinished() == TaskEngine.TASK_STATE_INIT){ // 任务没完成,返回原来的任务
 							logger.info("repeat task not finished,return old task");
+							tmpTask.setCreateTime(new Date());
 							return tmpTask; 
 						}
 					}
 				}
 				for(PhoneTask tmpTask:task.getPhoneStockTaskList()){
 					if(tmpTask.getDeviceId().equals(deviceId)){ // 发现取过任务了
-						if(tmpTask.getIsFinished() == 0){ // 任务没完成,返回原来的任务
+						if(tmpTask.getIsFinished() == TaskEngine.TASK_STATE_INIT){ // 任务没完成,返回原来的任务
 							logger.info("repeat task not finished,return old task");
+							tmpTask.setCreateTime(new Date());
 							return tmpTask; 
 						}
 					}
@@ -287,26 +308,12 @@ public class TaskDynamicIpEngine implements TaskIF{
 		PhoneTask pTask = new PhoneTask();
 		int operType = task.getOperType();
 		VpnTaskStatistics statistics = task.getStatistics();
+		// 先存量都变成增量
+		operType = TaskEngine.INCREMENT_MONEY_TYPE;
 		if(!statistics.isCanAllocIncrement() &&!statistics.isCanAllocStock()){
 			return null;
-		}
-		// 先存量都变成增量
-		if(task.getOperType() == TaskEngine.STOCK_MONEY_TYPE){
-    		operType = TaskEngine.INCREMENT_MONEY_TYPE;
-    	}else if(task.getOperType() == TaskEngine.STOCK_WATERAMY_TYPE){
-    		operType = TaskEngine.INCREMENT_MONEY_TYPE;
-    	}
-		int random = RandomUtils.getRandom(0, 100);
-		if(random % 3 == 0 && statistics.isCanAllocStock()){
-			if(operType == TaskEngine.INCREMENT_MONEY_TYPE){
-        		operType = TaskEngine.STOCK_MONEY_TYPE;
-        	}else if(operType == TaskEngine.INCREMENT_MONEY_TYPE){
-        		operType = TaskEngine.STOCK_WATERAMY_TYPE;
-        	}
-		}else{
-			if(!statistics.isCanAllocIncrement()){
-				return null;
-			}
+		}else if(statistics.isCanAllocStock()){ // 先跑存量
+			operType = TaskEngine.STOCK_MONEY_TYPE;
 		}
         
         OptimalApp opt = getOptimalApp(task,operType,remoteIp,realIp);
@@ -315,20 +322,50 @@ public class TaskDynamicIpEngine implements TaskIF{
 		}
 		pTask.setDeviceId(deviceId);
 		pTask.setVpnToken(task.getToken());
-		pTask.setOperType(operType);
 		pTask.setTaskId(task.getToken() + RandomUtils.getRandomNumbersAndCapitalLetters(TaskEngine.PHONE_TASKID_LENGH/2));//32位
+		pTask.setOperType(opt.getOperType());
 		pTask.setApp(opt.getApp());
 		pTask.setTimes(1);// 暂定一次
 		pTask.setSpanTime(5);//暂定5S 
 		pTask.setChangeDeviceInfo(opt.getInfo());
+		pTask.setCreateTime(new Date());
+		pTask.setIsFinished(TaskEngine.TASK_STATE_INIT);
 		return pTask;
+	}
+	private int getOptimalOperType(int operType, long appId){
+		Task task = TaskEngine.getInstance().getTaskInfoByAppId(appId);
+		switch(operType){
+			case TaskEngine.INCREMENT_MONEY_TYPE:
+			case TaskEngine.INCREMENT_WATERAMY_TYPE:
+				if(task.getAllotIncrementWaterAmy()== 0 && task.getAllotIncrementMoney()== 0){
+					return operType;
+				}
+				int increPercent = (int)(100 * ((float)task.getAllotIncrementMoney()/(float)(task.getAllotIncrementMoney() + task.getAllotIncrementWaterAmy())));
+				if(increPercent > TaskEngine.MONEY_PERCENT){
+					return TaskEngine.INCREMENT_WATERAMY_TYPE;
+				}else{
+					return TaskEngine.INCREMENT_MONEY_TYPE;
+				}
+			case TaskEngine.STOCK_MONEY_TYPE:
+			case TaskEngine.STOCK_WATERAMY_TYPE:
+				if(task.getAllotStockWaterAmy()== 0 && task.getAllotStockMoney()== 0){
+					return operType;
+				}
+				int stockPercent = (int)(100 * (float)(task.getAllotStockMoney()/(float)(task.getAllotStockMoney() + task.getAllotStockWaterAmy())));
+				if(stockPercent > TaskEngine.MONEY_PERCENT){
+					return TaskEngine.STOCK_WATERAMY_TYPE;
+				}else{
+					return TaskEngine.STOCK_MONEY_TYPE;
+				}
+		}
+		return operType;
 	}
     private synchronized OptimalApp getOptimalApp(VpnTask task,int operType,String remoteIp,String realIp){
         // -- 排序
     	OptimalApp opt = new OptimalApp();
 		TraceUtils.getTraceInfo();
         logger.info("getOptimalAppId--operType:"+operType+" remoteIp:"+remoteIp+" realIp:"+realIp);
-        TaskListSort.taskSort(TaskEngine.getInstance().todayTaskList, operType);//对任务列表排序
+        //TaskListSort.taskSort(TaskEngine.getInstance().todayTaskList, operType);//对任务列表排序
         List<StockTask> deviceList = task.getStockDeviceList();
         // 处理存量
         if(operType == TaskEngine.STOCK_MONEY_TYPE || operType == TaskEngine.STOCK_WATERAMY_TYPE ){
@@ -341,7 +378,10 @@ public class TaskDynamicIpEngine implements TaskIF{
             	if(true == dev.isUsed()){
             		continue;
             	}
-                for(Task dbTask:TaskEngine.getInstance().todayTaskList){
+            	// 因为随机取，所以乘2 最大程度确保每个能跑到
+                for(int index = 0;index < 2 * TaskEngine.getInstance().todayTaskList.size(); index ++){
+                	int random = RandomUtils.getRandom(0, TaskEngine.getInstance().todayTaskList.size());
+                	Task dbTask= TaskEngine.getInstance().todayTaskList.get(random);
                     flag = 0;
                 	for(PhoneTask tmpTask:task.getPhoneStockTaskList()){
     					// 同一个用户,同一个应用不下发两次
@@ -353,7 +393,6 @@ public class TaskDynamicIpEngine implements TaskIF{
     					}
                     }
                     if(flag == 0 && task.getStatistics().isCanAllocStock() &&dev.getDevice().getAppId() == dbTask.getAppId() && isHavaTaskByOperType(operType,dbTask)){
-                    	mListen.updateAllocTask(operType,dbTask); // 对应派发 ++ 
 	        			ChangeDeviceInfo info = JSON.parseObject(dev.getDevice().getConfigure(),
 	        					new TypeReference<ChangeDeviceInfo>() {
 	        					});
@@ -362,6 +401,9 @@ public class TaskDynamicIpEngine implements TaskIF{
                         dev.setSendDate(new Date());
                         logger.info("getOptimalAppId---end--find STOCK mDevice:"+dev.getDevice().toString());
                         opt.setApp(AppEngine.getInstance().getAppInfo(dbTask.getAppId()));
+                        int newOperType = getOptimalOperType(operType, dbTask.getAppId());
+                        mListen.updateAllocTask(newOperType,dbTask); // 对应派发 ++ 
+                        opt.setOperType(newOperType);
                         return opt;
                     }
                 }
@@ -372,7 +414,9 @@ public class TaskDynamicIpEngine implements TaskIF{
             logger.info("getOptimalAppId---004--INCREMENT");
             int flag = 0;
             //----------保证每个用户名下都能跑到-------------------------------
-            for(Task dbTask:TaskEngine.getInstance().todayTaskList){
+            for(int index = 0;index < 2 * TaskEngine.getInstance().todayTaskList.size(); index ++){
+            	int random = RandomUtils.getRandom(0, TaskEngine.getInstance().todayTaskList.size());
+            	Task dbTask= TaskEngine.getInstance().todayTaskList.get(random);
                 flag = 0;
                 for(PhoneTask tmpTask:task.getPhoneTaskList()){
 					// 同一个用户,同一个应用不下发两次,只要用户名不一样就可以分配
@@ -384,10 +428,12 @@ public class TaskDynamicIpEngine implements TaskIF{
 					}
                 }
                 if(flag == 0 && isHavaTaskByOperType(operType,dbTask)){
-                	mListen.updateAllocTask(operType,dbTask); // 对应派发 ++ 
                     logger.info("getOptimalAppId---end--return INCREMENT ");
                     opt.setApp(AppEngine.getInstance().getAppInfo(dbTask.getAppId()));
                     opt.setInfo(PhoneBrandEngine.getInstance().getNewDeviceInfo(remoteIp,task.getLocation(), opt.getApp()));
+                    int newOperType = getOptimalOperType(operType, dbTask.getAppId());
+                    mListen.updateAllocTask(newOperType,dbTask); // 对应派发 ++ 
+                    opt.setOperType(newOperType);
                     return opt;
                 }
             }
@@ -398,10 +444,12 @@ public class TaskDynamicIpEngine implements TaskIF{
 	            PhoneTask pt = task.getPhoneTaskList().get(random);
 	            for(Task dbTask:TaskEngine.getInstance().todayTaskList){
 	            	if(dbTask.getAppId() == pt.getApp().getId()){
-			            mListen.updateAllocTask(operType,dbTask); // 对应派发 ++ 
 			            logger.info("getOptimalAppId---may be more run--- " + pt.getApp().getId());
 			            opt.setApp(AppEngine.getInstance().getAppInfo(dbTask.getAppId()));
 			            opt.setInfo(PhoneBrandEngine.getInstance().getNewDeviceInfo(remoteIp,task.getLocation(), opt.getApp()));
+	                    int newOperType = getOptimalOperType(operType, dbTask.getAppId());
+	                    mListen.updateAllocTask(newOperType,dbTask); // 对应派发 ++ 
+	                    opt.setOperType(newOperType);
                         return opt;
 		            }
 	            }
@@ -415,20 +463,48 @@ public class TaskDynamicIpEngine implements TaskIF{
 		if(null != vpnTaskList)
 			vpnTaskList.clear();
 	}
+	
 	@Override
-	public void CheckVpnTimeoutJob() {	
-		/*
+	public void CheckVpnTimeoutJob() {	// 一分钟查一次
+		
 		if(null == vpnTaskList || vpnTaskList.size() == 0){
 			return;
 		}
-		TraceUtils.getTraceInfo();
+		for(VpnTask vpnTask : vpnTaskList){
+			for(PhoneTask ptask:vpnTask.getPhoneStockTaskList()){
+				if(ptask.getIsFinished() == TaskEngine.TASK_STATE_INIT){
+					if(true == TaskEngine.isTimeOut(ptask)){
+						ptask.setIsFinished(TaskEngine.TASK_STATE_TIMEOUT);
+						ptask.setIsReport(0);
+						logger.info("Timeout task"+ptask.getApp().getPackageName());
+						mListen.updateExecuteTask(ptask,false); // 更新执行任务
+						updateVpnTaskInfo(vpnTask.getStatistics() ,TaskEngine.TASK_STATE_TIMEOUT);
+					}
+				}
+			}
+			for(PhoneTask ptask:vpnTask.getPhoneTaskList()){
+				if(ptask.getIsFinished() == TaskEngine.TASK_STATE_INIT){
+					if(true == TaskEngine.isTimeOut(ptask)){
+						ptask.setIsFinished(TaskEngine.TASK_STATE_TIMEOUT);
+						ptask.setIsReport(0);
+						logger.info("Timeout task"+ptask.getApp().getPackageName());
+						mListen.updateExecuteTask(ptask,false); // 更新执行任务
+						updateVpnTaskInfo(vpnTask.getStatistics() ,TaskEngine.TASK_STATE_TIMEOUT);
+					}
+				}
+			}
+		}
+		/*
 		for (int i = vpnTaskList.size()-1; i >=0; i--){
 			VpnTask vpn = vpnTaskList.get(i);
+			
+			for()
+			
+			
 			if(true == TaskEngine.isTimeOut(vpn)){
 				vpnTaskList.remove(vpn);//删除这个已结束的VPN
 				logger.info("remove isTimeOut vpn ");
 			}
-		}
-		*/
+		}*/
 	}
 }

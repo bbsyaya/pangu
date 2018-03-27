@@ -154,8 +154,16 @@ public class GenerateData {
     // TAC + FAC + SNR + SP = 15
     public String generateImei(String pre)
     {
-        String imei = ""+pre + RandomUtils.getRandomNumbers(4) + "03" + RandomUtils.getRandomNumbers(6);
-        imei = ""+imei + IMEIUtils.genCode(imei);
+    	String imei = "";
+    	if(pre.length() == 15){//860576039864895
+    		imei = pre.substring(0, 8) + RandomUtils.getRandomNumbers(6);
+    		imei = imei + IMEIUtils.genCode(imei);
+    	}else if(pre.length() == 14){
+    		imei = pre.substring(0, 8) + RandomUtils.getRandomNumbers(6);
+    	}else{
+    		imei = "86057603" + RandomUtils.getRandomNumbers(6);
+    		imei = ""+imei + IMEIUtils.genCode(imei);
+    	}
         return imei;
     }
     public  String generateBluetooth(){

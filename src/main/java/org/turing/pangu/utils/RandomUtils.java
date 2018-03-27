@@ -7,9 +7,9 @@ public class RandomUtils {
 	public static final String NUMBERS = "0123456789";
 	public static final String LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	public static final String CAPITAL_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	public static final String NUMBERS_CAPITAL_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	public static final String NUMBERS_CAPITAL_LETTERS = "01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 	public static final String LOWER_CASE_LETTERS = "abcdefghijklmnopqrstuvwxyz";
-	public static final String NUMBERS_LOWER_CASE_LETTERS = "abcdefghijklmnopqrstuvwxyz0123456789";
+	public static final String NUMBERS_LOWER_CASE_LETTERS = "01234567890123456789abcdefghijklmnopqrstuvwxyz0123456789";
 
 	public static Random random = new Random();
 

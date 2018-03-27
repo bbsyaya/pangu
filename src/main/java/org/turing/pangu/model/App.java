@@ -4,28 +4,25 @@
  * Copyright: Copyright (c) 2016
  * Company: turing
  * @author turing
- * @version 1.0, 2017年03月18日 
- * @since 2017年03月18日 
+ * @version 1.0, 2017年03月30日 
+ * @since 2017年03月30日 
  */
 
 package org.turing.pangu.model;
 
 import java.util.Date;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
  /**App*/
  public class App extends BaseModel<App>
  {
     
   //自动生成区域开始
-  private static final long serialVersionUID = 4595641489806125781L;
+  private static final long serialVersionUID = 832281490871305404L;
 
   /***/
   private Long userId;
@@ -35,6 +32,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
   /***/
   private String appKey;
+
+  /***/
+  private String configure;
 
   /***/
   private String channel;
@@ -67,6 +67,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   
   /**获取*/
   @JsonProperty
+  @NotNull(groups = {Default.class,Save.class})
   public Long getUserId()
   {
    return this.userId;
@@ -106,6 +107,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   public void setAppKey(String appKey)
   {
     this.appKey=appKey;
+  }
+
+  
+  /**获取*/
+  @JsonProperty
+  @Length(max =85 )
+  public String getConfigure()
+  {
+   return this.configure;
+  }
+
+  /**设置*/
+  public void setConfigure(String configure)
+  {
+    this.configure=configure;
   }
 
   
@@ -174,7 +190,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
   /**获取*/
   @JsonProperty
   @Length(max =255 )
-  @NotEmpty(groups = {Default.class,Save.class})
   public String getToken()
   {
    return this.token;

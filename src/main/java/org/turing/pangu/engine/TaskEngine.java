@@ -25,7 +25,6 @@ import org.turing.pangu.utils.DateUtils;
 public class TaskEngine implements DateUpdateListen,EngineListen{
 	private static final Logger logger = Logger.getLogger(TaskEngine.class);
 	private static TaskEngine mInstance = new TaskEngine();
-	private List<Task> allTaskList = new ArrayList<Task>();
 	public List<Task> todayTaskList = new ArrayList<Task>();
 
 	public static final int INCREMENT_MONEY_TYPE = 0;//操作类型  0:增量赚钱 1:增量水军 2:存量赚钱 3:存量水军
@@ -42,6 +41,14 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 	public static final int INCREMENT_WATER_AMY_TASK_COUNT = 300000;
 	public static final int STOCK_MONEY_TASK_COUNT = 6000;
 	public static final int STOCK_WATER_AMY_TASK_COUNT = 18000;
+	
+	//-- 任务完成状态
+	public static final int TASK_STATE_INIT = -1;
+	public static final int TASK_STATE_REPORT_FINISHED = 0; 
+	public static final int TASK_STATE_REPORT_UNFINISHED = 1;
+	public static final int TASK_STATE_TIMEOUT = 2;
+	
+	public static final int MONEY_PERCENT = 30; // 赚钱百分比
 
 	private TaskService taskService;
 	
@@ -63,10 +70,15 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 	public List<Task> getTodayTaskList(){
 		return todayTaskList;
 	}
+	public Task getTaskInfoByAppId(long appId){
+		for(Task task:todayTaskList){
+			if(task.getAppId() == appId)
+				return task;
+		}
+		return null;
+	}
 	public void init(){
 		todayTaskListInit();
-		allTaskList.clear();
-		allTaskList = taskService.selectAll();
 		IpLimitMngEngine.getInstance().clearIpList();
 		TaskDynamicIpEngine.getInstance().init(this);
 	}
@@ -91,12 +103,9 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		}
 	}
 	public List<Task> getAllDBTaskByAppId(long appId){
-		List<Task> list = new ArrayList<Task>();
-		for(Task task:allTaskList){
-			if(task.getAppId() == appId){
-				list.add(task);
-			}
-		}
+		Task tmp = new Task();
+		tmp.setAppId(appId);
+		List<Task> list = taskService.selectList(tmp);
 		return list;
 	}
 	public synchronized String getRemoteIp(HttpServletRequest request){
@@ -105,8 +114,8 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 			ip = request.getRemoteAddr();
 		}
 		// 提供给本地调试
-		if(ip.equals("127.0.0.1") || ip.equals("0:0:0:0:0:0:0:1")){
-			ip = "113.83.191.141";
+		if(ip.contains("192.168") || ip.equals("127.0.0.1") || ip.equals("0:0:")){
+			ip = "123.169.35.140";
 		}
 		return ip;
 	}
@@ -152,7 +161,7 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		TaskDynamicIpEngine.getInstance().CheckVpnTimeoutJob();
 	}
 	// 更新缓存任务信息至数据库
-	public void updateTaskToDBJob(){
+	private void updateTaskToDBJob(){
 		for(Task task:todayTaskList){
 			task.setUpdateDate(new Date());
 			taskService.update(task);
@@ -225,10 +234,7 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		PlatformEngine.getInstance().init();
 		UserEngine.getInstance().init();
 		AppEngine.getInstance().init();
-		
 		todayTaskListInit();
-		allTaskList.clear();
-		allTaskList = taskService.selectAll();
 		IpLimitMngEngine.getInstance().clearIpList();
 		logger.info("createTodayTask---end");
 	}
@@ -242,7 +248,7 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		return list;
 	}	
 	public void updateExecuteTask(PhoneTask pTask,Boolean isSuccess){
-		logger.info("updateExecute---000");
+		logger.info("updateExecuteTask---000");
 		for(Task task : todayTaskList){
 			if(pTask.getApp().getId() == task.getAppId()){
 				logger.info("updateExecute---001--appId:"+pTask.getApp().getId());
@@ -274,10 +280,11 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 				}
 			}
 		}
-		logger.info("updateExecute---end");
+		updateTaskToDBJob(); // 实时同步到DB
+		logger.info("updateExecuteTask---end");
 	}
-	public void updateAllocTask(int type,Task taskExt){
-		Task task = (Task)taskExt;
+	public void updateAllocTask(int type,Task task){
+		logger.info("updateAllocTask---000");
 		switch(type){
 		case INCREMENT_MONEY_TYPE:
 			task.setAllotIncrementMoney(task.getAllotIncrementMoney() + 1);
@@ -292,22 +299,14 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 			task.setAllotStockWaterAmy(task.getAllotStockWaterAmy() + 1);
 			break;
 		}
-		synchronizedAppTaskData(task);
-	}
-	private synchronized void synchronizedAppTaskData(Task dbTask){
-		int count = 0;
-		for(Task tmp :allTaskList){
-			if(tmp.getId() == dbTask.getId()){
-				allTaskList.set(count, dbTask);
-			}
-			count++;
-		}
+		updateTaskToDBJob();
+		logger.info("updateAllocTask---end");
 	}
 	
 	public static boolean isFreeTimeOut(VpnTask task){
 		return (new Date().getTime() - task.getCreateTime().getTime() > TimeMng.FREE_TIMEOUT)?true:false;
 	}
-	public static boolean isTimeOut(VpnTask task){
+	public static boolean isTimeOut(PhoneTask task){
 		Date nowTime = new Date();
 		switch(task.getOperType()){
 		case TaskEngine.INCREMENT_MONEY_TYPE:
@@ -315,9 +314,9 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 		case TaskEngine.INCREMENT_WATERAMY_TYPE:
 			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeMng.INCREMENT_WATERAMY_TIMEOUT)?true:false;	
 		case TaskEngine.STOCK_MONEY_TYPE:	
-			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeMng.STOCK_MONEY_TIMEOUT)?true:false;
+			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeMng.INCREMENT_MONEY_TIMEOUT)?true:false;
 		case TaskEngine.STOCK_WATERAMY_TYPE:
-			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeMng.STOCK_WATERAMY_TIMEOUT)?true:false;
+			return (nowTime.getTime() - task.getCreateTime().getTime() > TimeMng.INCREMENT_WATERAMY_TIMEOUT)?true:false;
 		}
 		return true;
 	}
@@ -338,6 +337,6 @@ public class TaskEngine implements DateUpdateListen,EngineListen{
 	@Override
 	public void upDate() {
 		// TODO Auto-generated method stub
-		
+		updateTaskToDBJob(); 
 	}
 }

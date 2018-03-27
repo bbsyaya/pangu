@@ -254,6 +254,6 @@ public class DeviceEngine implements EngineListen{
 	@Override
 	public void upDate() {
 		// TODO Auto-generated method stub
-		
+		saveReportDateToDB();
 	}
 }

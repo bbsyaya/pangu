@@ -28,11 +28,11 @@ public class ResolutionEngine implements EngineListen{
 	public List<Resolution> getPlatFormSupportResolution(Long platform_id){
 		List<Resolution> list = new ArrayList<Resolution>();
 		for(Resolution  res :resolutionList){
-			//if(res.getIsSupport() == 1 && res.getPlatformId() == platform_id){ // 目前分辨率不分平台
-			if(res.getIsSupport() == 1){
+			if(res.getIsSupport() == 1 && res.getPlatformId() == platform_id){ // 每个平台都有自己所支持的分辨率
 				list.add(res);
 			}
 		}
+		logger.info("support resolution :" + list.size());
 		return list;
 	}
 	public boolean isSupportResolution(PhoneBrand model,Long platform_id){

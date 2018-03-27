@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.turing.pangu.mapper.UmengBrandMapper" >
+  <resultMap id="BaseResultMap" type="org.turing.pangu.model.UmengBrand" >
+    <id column="id" property="id" jdbcType="BIGINT" />       
+    <result column="brand" property="brand" jdbcType="VARCHAR" />          
+    <result column="brand_model" property="brandModel" jdbcType="VARCHAR" />          
+    <result column="width" property="width" jdbcType="VARCHAR" />          
+    <result column="height" property="height" jdbcType="VARCHAR" />          
+    <result column="weight" property="weight" jdbcType="VARCHAR" />          
+  </resultMap>   
+  <sql id="Base_Column_List" >
+    u.id,
+	u.brand,
+	u.brand_model,
+	u.width,
+	u.height,
+	u.weight
+  </sql>
+  <sql id="Base_Column_Value_List" >
+    #{brand},
+	#{brandModel},
+	#{width},
+	#{height},
+	#{weight}
+  </sql>
+  <sql id="Base_Column_Update_List" >
+    brand=#{brand},
+	brand_model=#{brandModel},
+	width=#{width},
+	height=#{height},
+	weight=#{weight}
+  </sql> 
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from umeng_brand u
+    where u.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from umeng_brand u
+  </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.UmengBrand" >
+    select 
+    <include refid="Base_Column_List" />
+    from umeng_brand u
+    where 1=1 
+    <if test="brand != null" >and u.brand= #{brand,jdbcType=VARCHAR}</if>
+    <if test="brandModel != null" >and u.brand_model= #{brandModel,jdbcType=VARCHAR}</if>
+    <if test="width != null" >and u.width= #{width,jdbcType=VARCHAR}</if>
+    <if test="height != null" >and u.height= #{height,jdbcType=VARCHAR}</if>
+    <if test="weight != null" >and u.weight= #{weight,jdbcType=VARCHAR}</if>
+    <if test="pageNum!=null and pageSize!=null">limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.UmengBrand" >
+    select 
+    <include refid="Base_Column_List" />
+    from umeng_brand u
+    where 1=1 
+    <if test="brand != null" >and u.brand= #{brand,jdbcType=VARCHAR}</if>
+    <if test="brandModel != null" >and u.brand_model= #{brandModel,jdbcType=VARCHAR}</if>
+    <if test="width != null" >and u.width= #{width,jdbcType=VARCHAR}</if>
+    <if test="height != null" >and u.height= #{height,jdbcType=VARCHAR}</if>
+    <if test="weight != null" >and u.weight= #{weight,jdbcType=VARCHAR}</if>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.ParamModel" >
+    select 
+    <include refid="Base_Column_List" />
+    from umeng_brand u
+    where 1=1 
+    <if test="model.brand != null" >and u.brand= #{model.brand,jdbcType=VARCHAR}</if>
+    <if test="model.brandModel != null" >and u.brand_model= #{model.brandModel,jdbcType=VARCHAR}</if>
+    <if test="model.width != null" >and u.width= #{model.width,jdbcType=VARCHAR}</if>
+    <if test="model.height != null" >and u.height= #{model.height,jdbcType=VARCHAR}</if>
+    <if test="model.weight != null" >and u.weight= #{model.weight,jdbcType=VARCHAR}</if>
+    <if test="page.pageNum!=null and page.pageSize!=null"> limit #{page.pageStart,jdbcType=INTEGER},#{page.pageSize,jdbcType=INTEGER}</if>
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="org.turing.pangu.model.UmengBrand" >
+    select count(0) totalCount
+    from umeng_brand u
+    where 1=1 
+    <if test="brand != null" >and u.brand= #{brand,jdbcType=VARCHAR}</if>
+    <if test="brandModel != null" >and u.brand_model= #{brandModel,jdbcType=VARCHAR}</if>
+    <if test="width != null" >and u.width= #{width,jdbcType=VARCHAR}</if>
+    <if test="height != null" >and u.height= #{height,jdbcType=VARCHAR}</if>
+    <if test="weight != null" >and u.weight= #{weight,jdbcType=VARCHAR}</if>
+  </select>
+  <delete id="delete" parameterType="java.lang.Long" >
+    delete from umeng_brand
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.turing.pangu.model.UmengBrand" >
+    insert into umeng_brand 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        brand,    
+        brand_model,    
+        width,    
+        height,    
+        weight,    
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{brand,jdbcType=VARCHAR},  
+        #{brandModel,jdbcType=VARCHAR},  
+        #{width,jdbcType=VARCHAR},  
+        #{height,jdbcType=VARCHAR},  
+        #{weight,jdbcType=VARCHAR},  
+    </trim>
+  </insert>
+  <insert id="insertUmengBrandByTrim" parameterType="org.turing.pangu.model.UmengBrand" >
+    insert into umeng_brand 
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="brand != null" >brand,</if>
+        <if test="brandModel != null" >brand_model,</if>
+        <if test="width != null" >width,</if>
+        <if test="height != null" >height,</if>
+        <if test="weight != null" >weight,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="brand != null" >#{brand,jdbcType=VARCHAR},</if>  
+        <if test="brandModel != null" >#{brandModel,jdbcType=VARCHAR},</if>  
+        <if test="width != null" >#{width,jdbcType=VARCHAR},</if>  
+        <if test="height != null" >#{height,jdbcType=VARCHAR},</if>  
+        <if test="weight != null" >#{weight,jdbcType=VARCHAR},</if>  
+    </trim>
+  </insert>
+  <update id="updateUmengBrandById" parameterType="org.turing.pangu.model.UmengBrand" >
+    update umeng_brand set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        brand=#{brand,jdbcType=VARCHAR},    
+        brand_model=#{brandModel,jdbcType=VARCHAR},    
+        width=#{width,jdbcType=VARCHAR},    
+        height=#{height,jdbcType=VARCHAR},    
+        weight=#{weight,jdbcType=VARCHAR},    
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="org.turing.pangu.model.UmengBrand" >
+    update umeng_brand set 
+    <trim prefix="" suffix="" suffixOverrides="," >
+        <if test="brand != null" >brand=#{brand,jdbcType=VARCHAR},</if>
+        <if test="brandModel != null" >brand_model=#{brandModel,jdbcType=VARCHAR},</if>
+        <if test="width != null" >width=#{width,jdbcType=VARCHAR},</if>
+        <if test="height != null" >height=#{height,jdbcType=VARCHAR},</if>
+        <if test="weight != null" >weight=#{weight,jdbcType=VARCHAR},</if>
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

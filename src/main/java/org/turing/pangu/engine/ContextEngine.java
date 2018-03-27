@@ -28,12 +28,11 @@ public class ContextEngine implements ServletContextListener {
 				initPangu();
 				this.cancel();
 			}
-		}, 5000);// 五百毫秒
+		}, 5000);// 五秒
 	}
 
 	private void initPangu() {
 		String serverURL = "http://pangu.u-app.cn/pc/moneyIFuckYou.pangu";
-		//String serverURL ="http://localhost:8080/pc/moneyIFuckYou.pangu";
 		String result = HttpUtils.doGet(serverURL, HttpUtils.UTF8);// 建立http// get联机
 		System.out.println("initPangu" + result);
 	}

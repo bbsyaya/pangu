@@ -85,6 +85,10 @@ public class IpTrunkEngine implements EngineListen{
 				return result;
 			}
 		}
+		//------------------------------------
+
+		//------------------------------------
+		
 		// 通过ip 得到 城市 code
 		LocationMng mng = new LocationMng();
 		BaiduLocation location = mng.getLocation(ip);
@@ -94,10 +98,16 @@ public class IpTrunkEngine implements EngineListen{
 			result.setLocation(location); // 先设置好位置信息
 		}
 		
+		// 这里为什么用随机值，因为存量不能太多。
+		int rdm = RandomUtils.getRandom(1, 100);
+		if( rdm > 33){
+			return result;
+		}
+		
 		IpTrunk ipTrunk = new IpTrunk();
 		ipTrunk.setCityCode(Integer.parseInt(location.getContent().getAddress_detail().getCityCode())); // 城市code 一致就OK 
 		// 通过城市code 反查 有哪些 ip
-		List<IpTrunk> listFromDB = ipTrunkService.selectList(ipTrunk); // 取100条这个城市的IP
+		List<IpTrunk> listFromDB = ipTrunkService.selectList(ipTrunk); // 倒序取100条这个城市的IP
 		if(null == listFromDB || listFromDB.size() == 0 )
 			return result;
 		int loopTimes = listFromDB.size()>QUERY_COUNT?QUERY_COUNT:listFromDB.size();
@@ -109,13 +119,17 @@ public class IpTrunkEngine implements EngineListen{
 				random = RandomUtils.getRandom(0, listFromDB.size());
 			}
 			IpTrunk tmpIp = listFromDB.get(random);
-			List<Device> cityIpList = DeviceEngine.getInstance().selectLastMonthExcludeTodayByIp(ip);// 通过同城IP找到记录
-			for(Device dev :cityIpList){
-				if(true == AppEngine.getInstance().isActiveApp(dev.getAppId()) 
-						&& false == isExistInList(stockDeviceList,dev)){
-					StockTask tmpStock = new StockTask();
-					tmpStock.setDevice(dev);
-					stockDeviceList.add(tmpStock);
+			List<Device> cityIpList = DeviceEngine.getInstance().selectLastMonthExcludeTodayByIp(tmpIp.getIp());// 通过同城IP找到记录
+			if(null != cityIpList ){
+				for(int i = 0; i < cityIpList.size(); i++){
+					// 这里为什么要乘以0.5, 是要让留存尽量留在最近几天
+					Device dev = cityIpList.get((int)(0.5*RandomUtils.getRandom(0, cityIpList.size())));
+					if(true == AppEngine.getInstance().isActiveApp(dev.getAppId()) 
+							&& false == isExistInList(stockDeviceList,dev)){
+						StockTask tmpStock = new StockTask();
+						tmpStock.setDevice(dev);
+						stockDeviceList.add(tmpStock);
+					}
 				}
 			}
 			// 每个应用都有留存,退出!

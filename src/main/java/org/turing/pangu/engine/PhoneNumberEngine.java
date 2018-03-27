@@ -26,9 +26,9 @@ public class PhoneNumberEngine implements EngineListen{
 		pn.setCity(city);
 		pn.setType(operType);
 		pn = phoneNumberService.selectOnePhoneNumber(pn);
-		if(null == pn)
-			return null;
-		
+		if(null == pn){
+			return "158" + RandomUtils.getRandomNumbers(8);
+		}
 		return ""+pn.getNum()+RandomUtils.getRandomNumbers(4);
 	}
 	@Override

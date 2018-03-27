@@ -11,6 +11,26 @@ import javax.crypto.spec.SecretKeySpec;
 
 
 public class AESUtils {
+	private static final String key = "1982198820092012";
+	public static String encryptToBase64(String data){
+		String str = "";
+		try {
+			str = encryptToBase64(data,key);
+		}catch(Exception e){
+			str =  "";
+		}
+		return str;
+	}
+
+	public static String decryptFromBase64(String data){
+		String str = "";
+		try {
+			str = decryptFromBase64(data, key);
+		}catch(Exception e){
+			str =  "";
+		}
+		return str;
+	}
 	/**
 	 * 加密
 	 * 

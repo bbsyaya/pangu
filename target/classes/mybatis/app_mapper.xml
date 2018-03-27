@@ -6,6 +6,7 @@
     <result column="user_id" property="userId" jdbcType="BIGINT" />          
     <result column="platform_id" property="platformId" jdbcType="BIGINT" />          
     <result column="app_key" property="appKey" jdbcType="VARCHAR" />          
+    <result column="configure" property="configure" jdbcType="VARCHAR" />          
     <result column="channel" property="channel" jdbcType="VARCHAR" />          
     <result column="name" property="name" jdbcType="VARCHAR" />          
     <result column="package_name" property="packageName" jdbcType="VARCHAR" />          
@@ -21,6 +22,7 @@
 	a.user_id,
 	a.platform_id,
 	a.app_key,
+	a.configure,
 	a.channel,
 	a.name,
 	a.package_name,
@@ -35,6 +37,7 @@
     #{userId},
 	#{platformId},
 	#{appKey},
+	#{configure},
 	#{channel},
 	#{name},
 	#{packageName},
@@ -49,6 +52,7 @@
     user_id=#{userId},
 	platform_id=#{platformId},
 	app_key=#{appKey},
+	configure=#{configure},
 	channel=#{channel},
 	name=#{name},
 	package_name=#{packageName},
@@ -79,6 +83,7 @@
     <if test="userId != null" >and a.user_id= #{userId,jdbcType=BIGINT}</if>
     <if test="platformId != null" >and a.platform_id= #{platformId,jdbcType=BIGINT}</if>
     <if test="appKey != null" >and a.app_key= #{appKey,jdbcType=VARCHAR}</if>
+    <if test="configure != null" >and a.configure= #{configure,jdbcType=VARCHAR}</if>
     <if test="channel != null" >and a.channel= #{channel,jdbcType=VARCHAR}</if>
     <if test="name != null" >and a.name= #{name,jdbcType=VARCHAR}</if>
     <if test="packageName != null" >and a.package_name= #{packageName,jdbcType=VARCHAR}</if>
@@ -89,6 +94,7 @@
     <if test="createDate != null" >and a.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and a.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
+  
   <select id="selectModelList" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.App" >
     select 
     <include refid="Base_Column_List" />
@@ -96,6 +102,9 @@
     where 1=1 
     <if test="userId != null" >and a.user_id= #{userId,jdbcType=BIGINT}</if>
     <if test="platformId != null" >and a.platform_id= #{platformId,jdbcType=BIGINT}</if>
+    <if test="appKey != null" >and a.app_key= #{appKey,jdbcType=VARCHAR}</if>
+    <if test="configure != null" >and a.configure= #{configure,jdbcType=VARCHAR}</if>
+    <if test="channel != null" >and a.channel= #{channel,jdbcType=VARCHAR}</if>
     <if test="name != null" >and a.name= #{name,jdbcType=VARCHAR}</if>
     <if test="packageName != null" >and a.package_name= #{packageName,jdbcType=VARCHAR}</if>
     <if test="apkPath != null" >and a.apk_path= #{apkPath,jdbcType=VARCHAR}</if>
@@ -105,6 +114,7 @@
     <if test="createDate != null" >and a.create_date= #{createDate,jdbcType=TIMESTAMP}</if>
     <if test="updateDate != null" >and a.update_date= #{updateDate,jdbcType=TIMESTAMP}</if>
   </select>
+  
   <select id="selectModel" resultMap="BaseResultMap" parameterType="org.turing.pangu.model.App" >
     select 
     <include refid="Base_Column_List" />
@@ -113,6 +123,7 @@
     <if test="userId != null" >and a.user_id= #{userId,jdbcType=BIGINT}</if>
     <if test="platformId != null" >and a.platform_id= #{platformId,jdbcType=BIGINT}</if>
     <if test="appKey != null" >and a.app_key= #{appKey,jdbcType=VARCHAR}</if>
+    <if test="configure != null" >and a.configure= #{configure,jdbcType=VARCHAR}</if>
     <if test="channel != null" >and a.channel= #{channel,jdbcType=VARCHAR}</if>
     <if test="name != null" >and a.name= #{name,jdbcType=VARCHAR}</if>
     <if test="packageName != null" >and a.package_name= #{packageName,jdbcType=VARCHAR}</if>
@@ -131,6 +142,7 @@
     <if test="model.userId != null" >and a.user_id= #{model.userId,jdbcType=BIGINT}</if>
     <if test="model.platformId != null" >and a.platform_id= #{model.platformId,jdbcType=BIGINT}</if>
     <if test="model.appKey != null" >and a.app_key= #{model.appKey,jdbcType=VARCHAR}</if>
+    <if test="model.configure != null" >and a.configure= #{model.configure,jdbcType=VARCHAR}</if>
     <if test="model.channel != null" >and a.channel= #{model.channel,jdbcType=VARCHAR}</if>
     <if test="model.name != null" >and a.name= #{model.name,jdbcType=VARCHAR}</if>
     <if test="model.packageName != null" >and a.package_name= #{model.packageName,jdbcType=VARCHAR}</if>
@@ -149,6 +161,7 @@
     <if test="userId != null" >and a.user_id= #{userId,jdbcType=BIGINT}</if>
     <if test="platformId != null" >and a.platform_id= #{platformId,jdbcType=BIGINT}</if>
     <if test="appKey != null" >and a.app_key= #{appKey,jdbcType=VARCHAR}</if>
+    <if test="configure != null" >and a.configure= #{configure,jdbcType=VARCHAR}</if>
     <if test="channel != null" >and a.channel= #{channel,jdbcType=VARCHAR}</if>
     <if test="name != null" >and a.name= #{name,jdbcType=VARCHAR}</if>
     <if test="packageName != null" >and a.package_name= #{packageName,jdbcType=VARCHAR}</if>
@@ -169,6 +182,7 @@
         user_id,    
         platform_id,    
         app_key,    
+        configure,    
         channel,    
         name,    
         package_name,    
@@ -183,6 +197,7 @@
         #{userId,jdbcType=BIGINT},  
         #{platformId,jdbcType=BIGINT},  
         #{appKey,jdbcType=VARCHAR},  
+        #{configure,jdbcType=VARCHAR},  
         #{channel,jdbcType=VARCHAR},  
         #{name,jdbcType=VARCHAR},  
         #{packageName,jdbcType=VARCHAR},  
@@ -200,6 +215,7 @@
         <if test="userId != null" >user_id,</if>
         <if test="platformId != null" >platform_id,</if>
         <if test="appKey != null" >app_key,</if>
+        <if test="configure != null" >configure,</if>
         <if test="channel != null" >channel,</if>
         <if test="name != null" >name,</if>
         <if test="packageName != null" >package_name,</if>
@@ -214,6 +230,7 @@
         <if test="userId != null" >#{userId,jdbcType=BIGINT},</if>  
         <if test="platformId != null" >#{platformId,jdbcType=BIGINT},</if>  
         <if test="appKey != null" >#{appKey,jdbcType=VARCHAR},</if>  
+        <if test="configure != null" >#{configure,jdbcType=VARCHAR},</if>  
         <if test="channel != null" >#{channel,jdbcType=VARCHAR},</if>  
         <if test="name != null" >#{name,jdbcType=VARCHAR},</if>  
         <if test="packageName != null" >#{packageName,jdbcType=VARCHAR},</if>  
@@ -231,6 +248,7 @@
         user_id=#{userId,jdbcType=BIGINT},    
         platform_id=#{platformId,jdbcType=BIGINT},    
         app_key=#{appKey,jdbcType=VARCHAR},    
+        configure=#{configure,jdbcType=VARCHAR},    
         channel=#{channel,jdbcType=VARCHAR},    
         name=#{name,jdbcType=VARCHAR},    
         package_name=#{packageName,jdbcType=VARCHAR},    
@@ -249,6 +267,7 @@
         <if test="userId != null" >user_id=#{userId,jdbcType=BIGINT},</if>
         <if test="platformId != null" >platform_id=#{platformId,jdbcType=BIGINT},</if>
         <if test="appKey != null" >app_key=#{appKey,jdbcType=VARCHAR},</if>
+        <if test="configure != null" >configure=#{configure,jdbcType=VARCHAR},</if>
         <if test="channel != null" >channel=#{channel,jdbcType=VARCHAR},</if>
         <if test="name != null" >name=#{name,jdbcType=VARCHAR},</if>
         <if test="packageName != null" >package_name=#{packageName,jdbcType=VARCHAR},</if>

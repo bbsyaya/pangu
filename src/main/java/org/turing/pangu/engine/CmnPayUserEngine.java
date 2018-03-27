@@ -8,26 +8,55 @@ import org.turing.pangu.model.CmnPayUser;
 import org.turing.pangu.service.BaseService;
 import org.turing.pangu.service.CmnPayUserService;
 import org.turing.pangu.service.CmnPayUserServiceImpl;
+import org.turing.pangu.utils.RandomUtils;
 
 public class CmnPayUserEngine implements EngineListen{
 	private static final Logger logger = Logger.getLogger(CmnPayUserEngine.class);
 	private static CmnPayUserEngine mInstance = new CmnPayUserEngine();
 	public List<CmnPayUser> userList = new ArrayList<CmnPayUser>();
 	private CmnPayUserService cmnPayUserService;
-	private final int PAY_TYPE_COUNT = 0; // 次数
-	private final int PAY_TYPE_DAY = 1;   // 日付费
-	private final int PAY_TYPE_MONTH = 2; // 月付费
-	private final int PAY_TYPE_YEAR = 3;  // 年付费
-	private final int PAY_TYPE_PERMANENT = 4; // 永久
+	
+	public static final int PAY_TYPE_ERROR = -1; // error
+	public static final int PAY_TYPE_COUNT = 0; // 次数
+	public static final int PAY_TYPE_DAY = 1;   // 日付费
+	public static final int PAY_TYPE_MONTH = 2; // 月付费
+	public static final int PAY_TYPE_YEAR = 3;  // 年付费
+	public static final int PAY_TYPE_PERMANENT = 4; // 永久
+	public static final int PAY_TYPE_FREE = 5; // 免费
+	
+	private final int TOKEN_BIT = 64;
 	public static CmnPayUserEngine getInstance()
 	{
 		if(null == mInstance)
 			mInstance = new CmnPayUserEngine();
 		return mInstance;
 	}
-
+	public String getToken(String usr,String password){
+		for(CmnPayUser user:userList ){
+			if(user.getName().equals(usr) && user.getPassword().equals(password)){
+				return user.getToken();
+			}
+		}
+		return null;
+	}
+	public boolean isValidToken(String token){
+		for(CmnPayUser user:userList ){
+			if(user.getToken().equals(token)){
+				return true;
+			}
+		}
+		return false;
+	}
 	public List<CmnPayUser> getUserList(){
 		return userList;
+	}
+	public int getUserType(String token){
+		for(CmnPayUser cpt:userList){
+			if(cpt.getToken().equals(token)){
+				return cpt.getPayType();
+			}
+		}
+		return PAY_TYPE_ERROR;
 	}
 	public long getCount(String token){
 		for(CmnPayUser cpt:userList){
@@ -97,7 +126,6 @@ public class CmnPayUserEngine implements EngineListen{
 	@Override
 	public void upDate() {
 		// TODO Auto-generated method stub
-		
 	}
 
 

@@ -1,5 +1,8 @@
 package org.turing.pangu.controller.common;
 
+import java.util.Date;
+
+import org.turing.pangu.engine.TaskEngine;
 import org.turing.pangu.model.App;
 import org.turing.pangu.phone.ChangeDeviceInfo;
 
@@ -78,6 +81,13 @@ public class PhoneTask {
 		this.isReport = isReport;
 	}
 
+	public Date getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
 	private ChangeDeviceInfo changeDeviceInfo; // 增量或存量设备信息
 	private String deviceId;
 	private String vpnToken; // 带上VPN的token
@@ -88,6 +98,7 @@ public class PhoneTask {
 	private int times = 0; // 跑的次数
 	private int spanTime; // times > 1次 以上间隔时间,单位秒
 	private int sendTimes = 0;// 下发次数
-	private int isFinished = 0; // 是否完成,1: 是 0:否
+	private int isFinished = TaskEngine.TASK_STATE_INIT; // 是否完成,1: 是  0:否
 	private int isReport = 0; // 是否上报,1: 是 0:否
+	private Date createTime = new Date();// Vpn 任务创建时间
 }

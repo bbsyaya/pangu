@@ -52,4 +52,10 @@ public class EngineMng {
 		setService();
 		setInit();
 	}
+	// 定时触发保存缓存数据至数据库中
+	public void triggerUpdateDB(){
+		for(EngineListen lst:ltnList){
+			lst.upDate();
+		}
+	}
 }

@@ -73,6 +73,7 @@ public class MobileReportController extends BaseController {
 		DeviceLoginReq req = JSON.parseObject(contentStr,
 				new TypeReference<DeviceLoginReq>() {
 				});
+		
 		DeviceLoginRsp rsp = new DeviceLoginRsp();
 		rsp.setDeviceId(req.getDeviceId());
 		if(req.getDeviceId().equals("turing")){

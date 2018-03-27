@@ -27,6 +27,7 @@ public class PhoneBrandEngine implements EngineListen{
 	private static PhoneBrandEngine mInstance = new PhoneBrandEngine();
 	private List<PhoneBrand> phoneBrandListFromDb = new ArrayList<PhoneBrand>();
 	private List<PhoneBrand> phoneBrandList = new ArrayList<PhoneBrand>();
+	private List<PhoneBrand> phoneBrandList50 = new ArrayList<PhoneBrand>();
 	private PhoneBrandService phoneBrandService = null;
 	public static final int CHINA_MOBILE = 0; // 移动
 	public static final int CHINA_UNICOM = 1; // 联通
@@ -83,9 +84,9 @@ public class PhoneBrandEngine implements EngineListen{
 			device.setSdk(Integer.valueOf(changeInfo.getBuildInfo().getSdk()));
 		
 		if(changeInfo.getImei().equals("")){
-			changeInfo.setImei("86789");
+			changeInfo.setImei("86"+RandomUtils.getRandomNumbers(4)+"02" + RandomUtils.getRandomNumbers(7));
 		}
-		device.setImeiHead(changeInfo.getImei().substring(0, 2));
+		device.setImeiHead(changeInfo.getImei());
 		
 		device.setHeight(1280);
 		if( null != changeInfo.getHeight() && !changeInfo.getHeight().equals(""))
@@ -98,6 +99,118 @@ public class PhoneBrandEngine implements EngineListen{
 		device.setCreateDate(new Date());
 		device.setUpdateDate(new Date());
 		phoneBrandService.insert(device);
+	}
+	public ChangeDeviceInfo getNewDeviceInfoExt(String remoteIp,BaiduLocation location,Boolean isVip){
+		TraceUtils.getTraceInfo();
+		ChangeDeviceInfo info = new ChangeDeviceInfo();
+		// 6:3:1
+		//1.先产生品牌随机数
+		int operator = getOperator();
+		String operStr = "移动";
+		PhoneBrand brand = null;
+		//2.确定支持运营商品牌型号机型
+		if(true == isVip){
+			logger.info("phoneBrandList.size() = " + phoneBrandList.size());
+			int rdm = RandomUtils.getRandom(0, phoneBrandList.size());
+			brand = phoneBrandList.get(rdm);
+		}else{
+			logger.info("phoneBrandList50.size() = " + phoneBrandList50.size());
+			int rdm = RandomUtils.getRandom(0, phoneBrandList50.size());
+			brand = phoneBrandList50.get(rdm);
+		}
+		
+		switch(operator){
+		case CHINA_MOBILE:
+			if(brand.getChinaMobile() == 1){
+				operStr = "移动";
+				logger.info("---移动---");
+			}
+			break;
+		case CHINA_UNICOM:
+			if(brand.getChinaUnicom() == 1){
+				operStr = "联通";
+				logger.info("---联通---");
+			}
+			break;
+		case CHINA_TELECOM:
+			if(brand.getChinaTelecom() == 1){
+				operStr = "电信";
+				logger.info("---电信---");
+			}
+			break;
+		}
+		String number = "+86"+PhoneNumberEngine.getInstance().getPhoneNumber(location.getContent().getAddress(), operStr);
+		if(null == number)
+			return null;
+		logger.info("phone number:" + number);
+		BrandBuildInfo buildInfo = JSON.parseObject(brand.getConfigure(),
+				new TypeReference<BrandBuildInfo>() {
+				});
+		info.setBuildInfo(buildInfo);
+		info.setImsi(GenerateData.getInstance().generateImsi(operator));
+		info.setImei(GenerateData.getInstance().generateImei(brand.getImeiHead()));
+		info.setPhone(number);
+		info.setHeight(brand.getHeight().toString());// 高
+		info.setWidth(brand.getWidth().toString()); // 宽
+		info.setSsid(WifiMngEngine.getInstance().getWifiName()); // wifi 名称
+		//latitude 维度 -> y
+		info.setLongitude(Double.parseDouble(location.getContent().getPoint().getX()));
+		info.setLatitude(Double.parseDouble(location.getContent().getPoint().getY()));
+		
+		info.setAndroidId(GenerateData.getInstance().generateAndroidId());
+		info.setAndroidSerial(GenerateData.getInstance().generateAndroidSerial());
+		
+		info.setBlueTooth(GenerateData.getInstance().generateBluetooth());
+		info.setBssid(info.getBlueTooth());
+		info.setMac(info.getBlueTooth());
+		info.setCarrier(GenerateData.getInstance().generateCarrier(operator));
+		info.setCarrierCode(GenerateData.getInstance().generateCarrierCode(operator));
+
+		info.setSimSerial(GenerateData.getInstance().generateSimSerial(operator));
+		info.setSimStatus("5");
+		info.setUa(GenerateData.getInstance().generateUserAgent(info.getBuildInfo().getAndroidVersion(), brand.getBrand()));
+		info.setPhoneStatus("1");
+		info.setIp(remoteIp);
+		
+		// 产生网络类型 80% wifi
+		int random = RandomUtils.getRandom(0, 10);
+		if(random < 7){
+			info.setNetworkType(NetworkType.TYPE_WIFI);
+			info.setNetworkTypeName("WIFI");
+		}
+		else{
+			info.setNetworkType(NetworkType.TYPE_MOBILE);
+			info.setNetworkTypeName("MOBILE");
+		}
+		// 3G 
+		if(random % 3 == 0){
+			info.setNetworkSubType(NetworkSubType.NETWORK_TYPE_HSPA);
+			switch(operator){
+				case CHINA_MOBILE:
+					info.setNetworkSubTypeName("TD-SCDMA");
+					break;
+				case CHINA_UNICOM:
+					info.setNetworkSubTypeName("WCDMA");
+					break;
+				case CHINA_TELECOM:
+					info.setNetworkSubTypeName("CDMA2000");
+					break;
+			}
+		}else{ // 4G
+			info.setNetworkSubType(NetworkSubType.NETWORK_TYPE_LTE);
+			switch(operator){
+			case CHINA_MOBILE:
+				info.setNetworkSubTypeName("TD-LTE");
+				break;
+			case CHINA_UNICOM:
+				info.setNetworkSubTypeName("FDD-LTE");
+				break;
+			case CHINA_TELECOM:
+				info.setNetworkSubTypeName("FDD-LTE");
+				break;
+			}
+		}
+		return info;
 	}
 	
 	public ChangeDeviceInfo getNewDeviceInfo(String remoteIp,BaiduLocation location,App app){
@@ -228,6 +341,7 @@ public class PhoneBrandEngine implements EngineListen{
 		// TODO Auto-generated method stub
 		phoneBrandList.clear();
 		phoneBrandListFromDb.clear();
+		phoneBrandList50.clear();
 		// 1. 先查出所有的品牌型号
 		if(null != phoneBrandService){
 			phoneBrandListFromDb = phoneBrandService.selectAll();
@@ -239,6 +353,11 @@ public class PhoneBrandEngine implements EngineListen{
 					phoneBrandList.add(brand); // -- 权重越大，添加越多
 				}
 			}
+		}
+		//3. 选取50部手机信息
+		for(int index = 1; index < 50;index ++){
+			PhoneBrand brand = phoneBrandList.get(RandomUtils.getRandom(0, phoneBrandList.size()));
+			phoneBrandList50.add(brand);
 		}
 	}
 	@Override

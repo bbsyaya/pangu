@@ -27,7 +27,7 @@
 		<url-pattern>*.pangu</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
-		<welcome-file>/pc/index.pangu</welcome-file>
+		<welcome-file>/index.html</welcome-file>
 	</welcome-file-list>
 	<listener>
 		<description>spring监听器</description>
